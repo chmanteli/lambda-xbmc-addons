@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addons>
+<addon id="plugin.audio.hellenic.radio" name="Hellenic Radio" version="1.0.0" provider-name="lambda">
+	<requires>
+		<import addon="xbmc.python" version="1.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>audio</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Radio stations from Greece.</summary>
+		<summary lang="el">Ραδιοφωνικοί σταθμοί από την Ελλάδα.</summary>
+		<description lang="en">Listen to your favourite radio stations from Greece.</description>
+		<description lang="el">Ακούστε τους αγαπημένους σας ραδιοφωνικούς σταθμούς από την Ελλάδα.</description>
+		<disclaimer lang="en">Τhis addon offers content available not only in Greece.</disclaimer>
+		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο όχι μόνο στην Ελλάδα.</disclaimer>
+		<platform>all</platform>
+	</extension>
+</addon>
+
+<addon id="plugin.video.antenna.gr" name="ANT1 Player" version="1.0.0" provider-name="lambda">
+	<requires>
+		<import addon="xbmc.python" version="1.0"/>
+		<import addon="script.common.plugin.cache" version="0.9.1"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Watch the latest shows from ANT1</summary>
+		<summary lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα του ANT1</summary>
+		<description lang="en">Watch the latest programs and news from ANT1.[CR]ANT1 also offers its great archive to what has been produced during the years.</description>
+		<description lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα και ειδήσεις από τον ANT1.[CR]Ο ANT1 επίσης προσφέρει το μεγάλο αρχείο του, που έχει παραχθεί κατά τη διάρκεια των ετών.</description>
+		<disclaimer lang="en">Τhis addon offers content available only in Greece.</disclaimer>
+		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο μόνο στην Ελλάδα.</disclaimer>
+		<platform>all</platform>
+	</extension>
+</addon>
+
+<addon id="plugin.video.hellenic.tv" name="Hellenic TV" version="1.0.0" provider-name="lambda">
+	<requires>
+		<import addon="xbmc.python" version="1.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Live TV from Greece.</summary>
+		<summary lang="el">Live TV από την Ελλάδα.</summary>
+		<description lang="en">Watch your favourite television networks from Greece.</description>
+		<description lang="el">Παρακολουθείστε τα αγαπημένα σας τηλεοπτικά δίκτυα από την Ελλάδα.</description>
+		<disclaimer lang="en">Τhis addon offers content available mostly in Greece.</disclaimer>
+		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο κυρίως στην Ελλάδα.</disclaimer>
+		<platform>all</platform>
+	</extension>
+</addon>
+
+<addon id="plugin.video.megatv.com" name="MEGA Replay" version="1.0.0" provider-name="lambda">
+	<requires>
+		<import addon="xbmc.python" version="1.0"/>
+		<import addon="script.common.plugin.cache" version="0.9.1"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Watch the latest shows from MEGA</summary>
+		<summary lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα του MEGA</summary>
+		<description lang="en">Watch the latest programs and news from MEGA.[CR]MEGA also offers part of programs that have been produced during the years.</description>
+		<description lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα και ειδήσεις από το MEGA.[CR]Το MEGA επίσης προσφέρει και μέρος προγράμματων που έχουν παραχθεί κατά τη διάρκεια των ετών.</description>
+		<disclaimer lang="en">Τhis addon offers content available only in Greece.</disclaimer>
+		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο μόνο στην Ελλάδα.</disclaimer>
+		<platform>all</platform>
+	</extension>
+</addon>
+
+<addon id="repository.lambda" name="lambda's XBMC Addons" version="1.0.0" provider-name="lambda">
+	<extension point="xbmc.addon.repository" name="lambda's XBMC Addon Repository">
+		<info compressed="false">https://github.com/lambda81/lambda-xbmc-addons/raw/master/addons.xml</info>
+		<checksum>https://github.com/lambda81/lambda-xbmc-addons/raw/master/addons.xml.md5</checksum>
+		<datadir zip="true">https://github.com/lambda81/lambda-xbmc-addons/raw/master/repo/</datadir>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Install lambda's Addons</summary>
+		<summary lang="el">Εγκαταστήστε τα πρόσθετα του lambda</summary>
+		<description lang="en">Download and install addons by lambda</description>
+		<description lang="el">Λήψη και εγκατάσταση προσθέτων από τον lambda</description>
+		<platform>all</platform>
+	</extension>
+</addon>
+</addons>
