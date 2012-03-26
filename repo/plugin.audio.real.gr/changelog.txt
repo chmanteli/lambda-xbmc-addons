@@ -1,5 +1,5 @@
 ------------------------
-lambda's XBMC Addons v1.0.0 (11-Mar-12)
+RealFm Podcast v1.0.0 (26-Mar-12)
 ------------------------
 
 - Initial version

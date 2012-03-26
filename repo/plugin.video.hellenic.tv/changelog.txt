@@ -1,5 +1,13 @@
+------------------------
+Hellenic TV v1.0.1 (26-Mar-12)
+------------------------
+
+- Fixed ant1 stream.
+- Added web server check.
 
 
-[B]Version 1.0.0[/B]
+------------------------
+Hellenic TV v1.0.0 (11-Mar-12)
+------------------------
 
 - Initial version
