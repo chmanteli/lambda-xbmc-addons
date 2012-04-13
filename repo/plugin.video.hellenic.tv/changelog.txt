@@ -1,4 +1,19 @@
 ------------------------
+Hellenic TV v1.0.3 (13-Apr-12)
+------------------------
+
+- Fixed MEGA, ALPHA, ET3, ANT1 CYPRUS.
+
+
+------------------------
+Hellenic TV v1.0.2 (26-Mar-12)
+------------------------
+
+- Fixed crash when skins have extra fanart in episode views enabled.
+- Fixed MEGA, ALPHA, ET3, ANT1 CYPRUS, 4E TV.
+
+
+------------------------
 Hellenic TV v1.0.1 (26-Mar-12)
 ------------------------
 

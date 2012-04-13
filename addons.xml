@@ -18,7 +18,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.audio.radio9.gr" name="Radio9 Podcast" version="1.0.0" provider-name="lambda">
+<addon id="plugin.audio.radio9.gr" name="Radio9 Podcast" version="1.0.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
@@ -37,7 +37,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.audio.real.gr" name="RealFm Podcast" version="1.0.0" provider-name="lambda">
+<addon id="plugin.audio.real.gr" name="RealFm Podcast" version="1.0.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
@@ -50,6 +50,25 @@
 		<summary lang="el">Ο Real Fm αναμεταδίδει εκπομπές των παραγωγών του.</summary>
 		<description lang="en">Real Fm broadcasts radio programmes on demand.[CR]Listen whenever you want news from Greece and the world, entertainment programs and keep being informed of all developments.</description>
 		<description lang="el">Ο Real Fm αναμεταδίδει εκπομπές των παραγωγών του.[CR]Ακούστε όταν επιθυμείτε ειδήσεις από την Ελλάδα και τον κόσμο, ενημέρωση για όλες τις εξελίξεις και ψυχαγωγικές εκπομπές.</description>
+		<disclaimer lang="en">Τhis addon offers content available not only in Greece.</disclaimer>
+		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο όχι μόνο στην Ελλάδα.</disclaimer>
+		<platform>all</platform>
+	</extension>
+</addon>
+
+<addon id="plugin.audio.skai.gr" name="SKAI Podcast" version="1.0.0" provider-name="lambda">
+	<requires>
+		<import addon="xbmc.python" version="1.0"/>
+		<import addon="script.common.plugin.cache" version="0.9.1"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>audio</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">SKAI broadcasts radio programmes on demand.</summary>
+		<summary lang="el">Ο ΣΚΑΪ αναμεταδίδει εκπομπές των παραγωγών του.</summary>
+		<description lang="en">SKAI broadcasts radio programmes on demand.[CR]Listen whenever you want news from Greece and the world, entertainment programs and keep being informed of all developments.</description>
+		<description lang="el">Ο ΣΚΑΪ αναμεταδίδει εκπομπές των παραγωγών του.[CR]Ακούστε όταν επιθυμείτε ειδήσεις από την Ελλάδα και τον κόσμο, ενημέρωση για όλες τις εξελίξεις και ψυχαγωγικές εκπομπές.</description>
 		<disclaimer lang="en">Τhis addon offers content available not only in Greece.</disclaimer>
 		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο όχι μόνο στην Ελλάδα.</disclaimer>
 		<platform>all</platform>
@@ -75,7 +94,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.hellenic.tv" name="Hellenic TV" version="1.0.2" provider-name="lambda">
+<addon id="plugin.video.hellenic.tv" name="Hellenic TV" version="1.0.3" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 	</requires>
@@ -106,6 +125,25 @@
 		<summary lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα του MEGA</summary>
 		<description lang="en">Watch the latest programs and news from MEGA.[CR]MEGA also offers part of programs that have been produced during the years.</description>
 		<description lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα και ειδήσεις από το MEGA.[CR]Το MEGA επίσης προσφέρει και μέρος προγράμματων που έχουν παραχθεί κατά τη διάρκεια των ετών.</description>
+		<disclaimer lang="en">Τhis addon offers content available only in Greece.</disclaimer>
+		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο μόνο στην Ελλάδα.</disclaimer>
+		<platform>all</platform>
+	</extension>
+</addon>
+
+<addon id="plugin.video.skai.gr" name="SKAI Player" version="1.0.0" provider-name="lambda">
+	<requires>
+		<import addon="xbmc.python" version="1.0"/>
+		<import addon="script.common.plugin.cache" version="0.9.1"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Watch the latest shows from SKAI</summary>
+		<summary lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα του ΣΚΑΪ</summary>
+		<description lang="en">Watch the latest programs and news from SKAI.[CR]SKAI also offers its archive to what has been produced during the years.</description>
+		<description lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα και ειδήσεις από τον ΣΚΑΪ.[CR]Ο ΣΚΑΪ επίσης προσφέρει το αρχείο του, που έχει παραχθεί κατά τη διάρκεια των ετών.</description>
 		<disclaimer lang="en">Τhis addon offers content available only in Greece.</disclaimer>
 		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο μόνο στην Ελλάδα.</disclaimer>
 		<platform>all</platform>
