@@ -1,4 +1,13 @@
 ------------------------
+Hellenic TV v1.0.4 (27-Apr-12)
+------------------------
+
+- Fixed MEGA, ALPHA, ET3.
+- Added code for detecting server changes of MEGA, ALPHA, ET3 (frequent updates not needed anymore).
+- Disabled RIK SAT (stream not working properly right now).
+
+
+------------------------
 Hellenic TV v1.0.3 (13-Apr-12)
 ------------------------
 

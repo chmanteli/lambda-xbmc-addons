@@ -56,7 +56,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.audio.skai.gr" name="SKAI Podcast" version="1.0.0" provider-name="lambda">
+<addon id="plugin.audio.skai.gr" name="SKAI Podcast" version="1.0.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
@@ -94,7 +94,26 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.hellenic.tv" name="Hellenic TV" version="1.0.3" provider-name="lambda">
+<addon id="plugin.video.ert.gr" name="ERT Online" version="1.0.0" provider-name="lambda">
+	<requires>
+		<import addon="xbmc.python" version="1.0"/>
+		<import addon="script.common.plugin.cache" version="0.9.1"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Watch the latest shows from ERT</summary>
+		<summary lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα της ΕΡΤ</summary>
+		<description lang="en">Watch the latest programs and news from ERT.[CR]ERT also offers its great archive to what has been produced during the years.</description>
+		<description lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα και ειδήσεις από την ΕΡΤ.[CR]Η ΕΡΤ επίσης προσφέρει το μεγάλο αρχείο της, που έχει παραχθεί κατά τη διάρκεια των ετών.</description>
+		<disclaimer lang="en">Τhis addon offers content available only in Greece.</disclaimer>
+		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο μόνο στην Ελλάδα.</disclaimer>
+		<platform>all</platform>
+	</extension>
+</addon>
+
+<addon id="plugin.video.hellenic.tv" name="Hellenic TV" version="1.0.4" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 	</requires>
@@ -131,7 +150,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.skai.gr" name="SKAI Player" version="1.0.0" provider-name="lambda">
+<addon id="plugin.video.skai.gr" name="SKAI Player" version="1.0.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>

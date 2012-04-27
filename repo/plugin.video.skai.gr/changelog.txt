@@ -1,4 +1,12 @@
 ------------------------
+SKAI Player v1.0.1 (27-Apr-12)
+------------------------
+
+- Renamed shows folder to archive.
+- Added option of Low quality thumbs (fast).
+
+
+------------------------
 SKAI Player v1.0.0 (13-Apr-12)
 ------------------------
 
