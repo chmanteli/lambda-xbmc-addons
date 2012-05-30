@@ -1,4 +1,12 @@
 ------------------------
+Hellenic TV v1.0.5 (30-May-12)
+------------------------
+
+- Fixed several channels.
+- Enabled RIK SAT and BLUE SKY.
+
+
+------------------------
 Hellenic TV v1.0.4 (27-Apr-12)
 ------------------------
 
