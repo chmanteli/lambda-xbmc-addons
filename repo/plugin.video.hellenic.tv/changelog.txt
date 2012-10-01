@@ -1,4 +1,12 @@
 ------------------------
+Hellenic TV v1.1.0 (01-Oct-12)
+------------------------
+
+- Complete re-work of the plugin (now supports more than 60 greek channels).
+- Added options to enable or disable channels from settings.
+
+
+------------------------
 Hellenic TV v1.0.5 (30-May-12)
 ------------------------
 
