@@ -1,4 +1,11 @@
 ------------------------
+ERT Online v1.1.0 (04-Oct-12)
+------------------------
+
+- Major changes caused by the complete redesign of ert.gr portal.
+
+
+------------------------
 ERT Online v1.0.0 (27-Apr-12)
 ------------------------
 
