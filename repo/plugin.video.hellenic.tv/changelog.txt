@@ -1,4 +1,14 @@
 ------------------------
+Hellenic TV v1.1.1 (12-Oct-12)
+------------------------
+
+- Added resolver for viiideo (frequent updates not needed anymore for ACTION 24, ENA TV, ACHELOOS TV, NEA TV).
+- Changes in several channels.
+- Fix Confluence views for Frodo.
+- Code clean-up.
+
+
+------------------------
 Hellenic TV v1.1.0 (01-Oct-12)
 ------------------------
 

@@ -1,4 +1,12 @@
 ------------------------
+STAR WebTV v1.0.1 (12-Oct-12)
+------------------------
+
+- Fix Confluence views for Frodo.
+- Added more metadata.
+
+
+------------------------
 STAR WebTV v1.0.0 (04-Oct-12)
 ------------------------
 

@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
+<addon id="plugin.audio.alpha989" name="Alpha Podcast" version="1.0.0" provider-name="lambda">
+	<requires>
+		<import addon="xbmc.python" version="1.0"/>
+		<import addon="script.common.plugin.cache" version="0.9.1"/>
+		<import addon="script.module.parsedom" version="0.9.1"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>audio</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Alpha 989 broadcasts radio programmes on demand.</summary>
+		<summary lang="el">Ο Alpha 989 αναμεταδίδει εκπομπές των παραγωγών του.</summary>
+		<description lang="en">Alpha 989 broadcasts radio programmes on demand.[CR]Listen whenever you want news from Greece and the world, entertainment programs and keep being informed of all developments.</description>
+		<description lang="el">Ο Alpha 989 αναμεταδίδει εκπομπές των παραγωγών του.[CR]Ακούστε όταν επιθυμείτε ειδήσεις από την Ελλάδα και τον κόσμο, ενημέρωση για όλες τις εξελίξεις και ψυχαγωγικές εκπομπές.</description>
+		<disclaimer lang="en">Τhis addon offers content available not only in Greece.</disclaimer>
+		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο όχι μόνο στην Ελλάδα.</disclaimer>
+		<platform>all</platform>
+	</extension>
+</addon>
+
 <addon id="plugin.audio.hellenic.radio" name="Hellenic Radio" version="1.0.0" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
@@ -18,10 +38,11 @@
 	</extension>
 </addon>
 
-<addon id="plugin.audio.real.gr" name="RealFm Podcast" version="1.0.1" provider-name="lambda">
+<addon id="plugin.audio.real.gr" name="RealFm Podcast" version="1.0.2" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
+		<import addon="script.module.parsedom" version="0.9.1"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="default.py">
 		<provides>audio</provides>
@@ -75,7 +96,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.ert.gr" name="ERT Online" version="1.1.0" provider-name="lambda">
+<addon id="plugin.video.ert.gr" name="ERT Online" version="1.1.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
@@ -95,7 +116,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.hellenic.tv" name="Hellenic TV" version="1.1.0" provider-name="lambda">
+<addon id="plugin.video.hellenic.tv" name="Hellenic TV" version="1.1.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 		<import addon="script.module.simplejson" version="2.0.10"/>
@@ -153,7 +174,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.startv.gr" name="STAR WebTV" version="1.0.0" provider-name="lambda">
+<addon id="plugin.video.startv.gr" name="STAR WebTV" version="1.0.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>

@@ -1,4 +1,12 @@
 ------------------------
+ERT Online v1.1.1 (12-Oct-12)
+------------------------
+
+- Fix Confluence views for Frodo.
+- Added more metadata.
+
+
+------------------------
 ERT Online v1.1.0 (04-Oct-12)
 ------------------------
 

@@ -1,4 +1,13 @@
 ------------------------
+RealFm Podcast v1.0.2 (12-Oct-12)
+------------------------
+
+- Changed html parsing to parseDOM.
+- Added more metadata.
+- Code clean-up.
+
+
+------------------------
 RealFm Podcast v1.0.1 (13-Apr-12)
 ------------------------
 
