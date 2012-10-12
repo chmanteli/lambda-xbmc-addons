@@ -18,25 +18,6 @@
 	</extension>
 </addon>
 
-<addon id="plugin.audio.radio9.gr" name="Radio9 Podcast" version="1.0.1" provider-name="lambda">
-	<requires>
-		<import addon="xbmc.python" version="1.0"/>
-		<import addon="script.common.plugin.cache" version="0.9.1"/>
-	</requires>
-	<extension point="xbmc.python.pluginsource" library="default.py">
-		<provides>audio</provides>
-	</extension>
-	<extension point="xbmc.addon.metadata">
-		<summary lang="en">Real Fm broadcasts radio programmes on demand.</summary>
-		<summary lang="el">Ο Real Fm αναμεταδίδει εκπομπές των παραγωγών του.</summary>
-		<description lang="en">Real Fm broadcasts radio programmes on demand.[CR]Listen whenever you want news from Greece and the world, entertainment programs and keep being informed of all developments.</description>
-		<description lang="el">Ο Real Fm αναμεταδίδει εκπομπές των παραγωγών του.[CR]Ακούστε όταν επιθυμείτε ειδήσεις από την Ελλάδα και τον κόσμο, ενημέρωση για όλες τις εξελίξεις και ψυχαγωγικές εκπομπές.</description>
-		<disclaimer lang="en">Τhis addon offers content available not only in Greece.</disclaimer>
-		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο όχι μόνο στην Ελλάδα.</disclaimer>
-		<platform>all</platform>
-	</extension>
-</addon>
-
 <addon id="plugin.audio.real.gr" name="RealFm Podcast" version="1.0.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
