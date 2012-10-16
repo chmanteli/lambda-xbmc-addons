@@ -1,4 +1,17 @@
 ------------------------
+SKAI Podcast v1.1.0 (17-Oct-12)
+------------------------
+
+- Changed html parsing to parseDOM.
+- Removed option of Low quality thumbs (fast).
+- Added option of Enable podcast thumbs (slow).
+- Fix retrieval of podcasts more than once.
+- Added progress in BusyDialog (Frodo).
+- Added more metadata.
+- Code clean-up.
+
+
+------------------------
 SKAI Podcast v1.0.1 (27-Apr-12)
 ------------------------
 
