@@ -1,4 +1,13 @@
 ------------------------
+Alpha Podcast v1.0.1 (17-Oct-12)
+------------------------
+
+- Added progress in BusyDialog (Frodo).
+- Tweaked addon's contextMenu.
+- Tweaked playercore check.
+
+
+------------------------
 Alpha Podcast v1.0.0 (12-Oct-12)
 ------------------------
 

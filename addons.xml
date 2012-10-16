@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="plugin.audio.alpha989" name="Alpha Podcast" version="1.0.0" provider-name="lambda">
+<addon id="plugin.audio.alpha989" name="Alpha Podcast" version="1.0.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
@@ -38,7 +38,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.audio.real.gr" name="RealFm Podcast" version="1.0.2" provider-name="lambda">
+<addon id="plugin.audio.real.gr" name="RealFm Podcast" version="1.0.3" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
@@ -58,7 +58,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.audio.skai.gr" name="SKAI Podcast" version="1.0.1" provider-name="lambda">
+<addon id="plugin.audio.skai.gr" name="SKAI Podcast" version="1.1.0" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
@@ -96,7 +96,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.ert.gr" name="ERT Online" version="1.1.1" provider-name="lambda">
+<addon id="plugin.video.ert.gr" name="ERT Online" version="1.1.2" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
@@ -116,7 +116,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.hellenic.tv" name="Hellenic TV" version="1.1.1" provider-name="lambda">
+<addon id="plugin.video.hellenic.tv" name="Hellenic TV" version="1.1.2" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 		<import addon="script.module.simplejson" version="2.0.10"/>
@@ -155,7 +155,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.skai.gr" name="SKAI Player" version="1.0.1" provider-name="lambda">
+<addon id="plugin.video.skai.gr" name="SKAI Player" version="1.1.0" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
@@ -174,7 +174,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.startv.gr" name="STAR WebTV" version="1.0.1" provider-name="lambda">
+<addon id="plugin.video.startv.gr" name="STAR WebTV" version="1.0.2" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>

@@ -1,4 +1,14 @@
 ------------------------
+Hellenic TV v1.1.2 (17-Oct-12)
+------------------------
+
+- Added resolver for skai (youtube link keeps changing).
+- Added CRETA CHANNEL.
+- Added progress in BusyDialog (Frodo).
+- Tweaked webserver check.
+
+
+------------------------
 Hellenic TV v1.1.1 (12-Oct-12)
 ------------------------
 
