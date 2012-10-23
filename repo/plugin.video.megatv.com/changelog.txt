@@ -1,4 +1,20 @@
 ------------------------
+MEGA Replay v1.1.0 (23-Oct-12)
+------------------------
+
+- Changed html parsing to parseDOM.
+- Complete re-work of the plugin.
+- Fixed decoding issues of Greek characters.
+- Added shows from MEGA's YouTube channel.
+- Added Favourites support.
+- Added progress in BusyDialog (Frodo).
+- Fix Confluence views for Frodo.
+- Changed current art.
+- Added more metadata.
+- Code clean-up.
+
+
+------------------------
 MEGA Replay v1.0.2 (21-May-12)
 ------------------------
 

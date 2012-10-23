@@ -1,4 +1,16 @@
 ------------------------
+ANT1 Player v1.1.0 (23-Oct-12)
+------------------------
+
+- Changed html parsing to parseDOM.
+- Complete re-work of the resolver.
+- Added progress in BusyDialog (Frodo).
+- Fix Confluence views for Frodo.
+- Added more metadata.
+- Code clean-up.
+
+
+------------------------
 ANT1 Player v1.0.0 (11-Mar-12)
 ------------------------
 
