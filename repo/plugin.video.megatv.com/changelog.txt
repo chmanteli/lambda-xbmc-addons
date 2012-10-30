@@ -1,4 +1,12 @@
 ------------------------
+MEGA Replay v1.1.1 (30-Oct-12)
+------------------------
+
+- Fixed resolving issues of streams in http protocol.
+- Added check if Youtube addon is not installed.
+
+
+------------------------
 MEGA Replay v1.1.0 (23-Oct-12)
 ------------------------
 

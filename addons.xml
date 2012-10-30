@@ -38,7 +38,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.audio.real.gr" name="RealFm Podcast" version="1.0.3" provider-name="lambda">
+<addon id="plugin.audio.real.gr" name="RealFm Podcast" version="1.0.4" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
@@ -58,10 +58,11 @@
 	</extension>
 </addon>
 
-<addon id="plugin.audio.skai.gr" name="SKAI Podcast" version="1.1.0" provider-name="lambda">
+<addon id="plugin.audio.skai.gr" name="SKAI Podcast" version="1.1.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
+		<import addon="script.module.parsedom" version="0.9.1"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="default.py">
 		<provides>audio</provides>
@@ -117,6 +118,28 @@
 	</extension>
 </addon>
 
+<addon id="plugin.video.greek.movies.com" name="Greek-Movies" version="1.0.0" provider-name="lambda">
+	<requires>
+		<import addon="xbmc.python" version="1.0"/>
+		<import addon="script.common.plugin.cache" version="0.9.1"/>
+		<import addon="script.module.parsedom" version="0.9.1"/>
+		<import addon="script.module.urlresolver"  version="0.0.1"/>
+		<import addon="plugin.video.youtube" version="2.9.2"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Watch greek movies from Greek-Movies</summary>
+		<summary lang="el">Δείτε ελληνικές ταινίες από το Greek-Movies</summary>
+		<description lang="en">Watch greek movies from Greek-Movies.[CR]Its great archive offers recent and classic movies.</description>
+		<description lang="el">Δείτε ελληνικές ταινίες από το Greek-Movies.[CR]Το μεγάλο αρχείο του περιλαμβάνει πρόσφατες αλλά και κλασικές ταινίες.</description>
+		<disclaimer lang="en">Τhis addon may offers content available only in Greece.</disclaimer>
+		<disclaimer lang="el">Το πρόσθετο αυτό ίσως προσφέρει περιεχόμενο διαθέσιμο μόνο στην Ελλάδα.</disclaimer>
+		<platform>all</platform>
+	</extension>
+</addon>
+
 <addon id="plugin.video.hellenic.tv" name="Hellenic TV" version="1.1.2" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
@@ -137,7 +160,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.megatv.com" name="MEGA Replay" version="1.1.0" provider-name="lambda">
+<addon id="plugin.video.megatv.com" name="MEGA Replay" version="1.1.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
@@ -158,10 +181,11 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.skai.gr" name="SKAI Player" version="1.1.0" provider-name="lambda">
+<addon id="plugin.video.skai.gr" name="SKAI Player" version="1.1.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
+		<import addon="script.module.parsedom" version="0.9.1"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="default.py">
 		<provides>video</provides>
@@ -177,7 +201,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.startv.gr" name="STAR WebTV" version="1.0.2" provider-name="lambda">
+<addon id="plugin.video.startv.gr" name="STAR WebTV" version="1.0.3" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>

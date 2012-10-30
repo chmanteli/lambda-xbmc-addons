@@ -1,4 +1,11 @@
 ------------------------
+SKAI Podcast v1.1.1 (30-Oct-12)
+------------------------
+
+- Added missing parseDOM module in addon's requires.
+
+
+------------------------
 SKAI Podcast v1.1.0 (17-Oct-12)
 ------------------------
 

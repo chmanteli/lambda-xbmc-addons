@@ -1,26 +1,36 @@
 ------------------------
-SKAI Podcast v1.1.0 (17-Oct-12)
+RealFm Podcast v1.0.4 (30-Oct-12)
+------------------------
+
+- Fixed parsing of podcasts.
+
+
+------------------------
+RealFm Podcast v1.0.3 (17-Oct-12)
+------------------------
+
+- Added progress in BusyDialog (Frodo).
+- Tweaked addon's contextMenu.
+
+
+------------------------
+RealFm Podcast v1.0.2 (12-Oct-12)
 ------------------------
 
 - Changed html parsing to parseDOM.
-- Removed option of Low quality thumbs (fast).
-- Added option of Enable podcast thumbs (slow).
-- Fix retrieval of podcasts more than once.
-- Added progress in BusyDialog (Frodo).
 - Added more metadata.
 - Code clean-up.
 
 
 ------------------------
-SKAI Podcast v1.0.1 (27-Apr-12)
+RealFm Podcast v1.0.1 (13-Apr-12)
 ------------------------
 
-- Renamed shows folder to archive.
-- Added option of Low quality thumbs (fast).
+- Fixed iconimage of podcasts.
 
 
 ------------------------
-SKAI Podcast v1.0.0 (13-Apr-12)
+RealFm Podcast v1.0.0 (26-Mar-12)
 ------------------------
 
 - Initial version

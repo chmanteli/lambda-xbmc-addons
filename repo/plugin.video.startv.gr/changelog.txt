@@ -1,4 +1,11 @@
 ------------------------
+STAR WebTV v1.0.3 (30-Oct-12)
+------------------------
+
+- Added check if Youtube addon is not installed.
+
+
+------------------------
 STAR WebTV v1.0.2 (17-Oct-12)
 ------------------------
 
