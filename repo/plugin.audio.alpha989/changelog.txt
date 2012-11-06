@@ -1,4 +1,13 @@
 ------------------------
+Alpha Podcast v1.0.2 (6-Nov-12)
+------------------------
+
+- Changed addon's content to Albums.
+- Tweaked playercore check.
+- Changed radio logo.
+
+
+------------------------
 Alpha Podcast v1.0.1 (17-Oct-12)
 ------------------------
 

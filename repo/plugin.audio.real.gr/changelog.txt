@@ -1,4 +1,12 @@
 ------------------------
+RealFm Podcast v1.0.5 (6-Nov-12)
+------------------------
+
+- Changed addon's content to Albums.
+- Changed radio logo.
+
+
+------------------------
 RealFm Podcast v1.0.4 (30-Oct-12)
 ------------------------
 

@@ -1,4 +1,17 @@
 ------------------------
+Hellenic Radio v1.1.0 (6-Nov-12)
+------------------------
+
+- Updated broken radios.
+- Added more radios (Athens and Thessaloniki).
+- Updated radio logos.
+- Added playercore check.
+- Tweaked addon's contextMenu.
+- Added more metadata.
+- Code clean-up.
+
+
+------------------------
 Hellenic Radio v1.0.0 (11-Mar-12)
 ------------------------
 

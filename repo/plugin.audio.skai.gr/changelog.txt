@@ -1,4 +1,12 @@
 ------------------------
+SKAI Podcast v1.1.2 (6-Nov-12)
+------------------------
+
+- Changed addon's content to Albums.
+- Changed radio logo.
+
+
+------------------------
 SKAI Podcast v1.1.1 (30-Oct-12)
 ------------------------
 
