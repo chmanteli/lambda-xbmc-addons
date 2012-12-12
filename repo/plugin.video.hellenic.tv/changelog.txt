@@ -1,4 +1,16 @@
 ------------------------
+Hellenic TV v1.1.4 (13-Dec-12)
+------------------------
+
+- Added MAD CYPRUS, HIGH TV and SYROS TV1.
+- Removed MTV NRG.
+- Added check if Youtube addon is not installed.
+- Updates in several channels (ANT1, MAD, RIKSAT etc).
+- Updates in several logos.
+- Code changes.
+
+
+------------------------
 Hellenic TV v1.1.3 (9-Nov-12)
 ------------------------
 
