@@ -1,4 +1,13 @@
 ------------------------
+Hellenic TV v1.1.5 (14-Dec-12)
+------------------------
+
+- Updated visionip.tv resolver (ERT WORLD, MEGA CYPRUS, SIGMA, TV PLUS etc).
+- Updated ART CHANNEL (switched to ustream).
+- Added ORT.
+
+
+------------------------
 Hellenic TV v1.1.4 (13-Dec-12)
 ------------------------
 
