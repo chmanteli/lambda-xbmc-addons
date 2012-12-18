@@ -1,4 +1,11 @@
 ------------------------
+STAR WebTV v1.0.4 (18-Dec-12)
+------------------------
+
+- Fixed an issue where certain shows could fail to load.
+
+
+------------------------
 STAR WebTV v1.0.3 (30-Oct-12)
 ------------------------
 
