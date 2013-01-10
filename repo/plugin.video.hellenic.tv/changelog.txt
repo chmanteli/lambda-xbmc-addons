@@ -1,4 +1,14 @@
 ------------------------
+Hellenic TV v1.1.7 (10-Jan-13)
+------------------------
+
+- Added BEST TV and TV12.
+- Tweaked skai resolver (use iphone link when youtube link is not available).
+- Updated ERT WORLD, MEGA CYPRUS, SIGMA, RIK SAT and ART CHANNEL.
+- Removed TV PLUS, MAD CYPRUS and BODY IN BALANCE.
+
+
+------------------------
 Hellenic TV v1.1.6 (18-Dec-12)
 ------------------------
 
