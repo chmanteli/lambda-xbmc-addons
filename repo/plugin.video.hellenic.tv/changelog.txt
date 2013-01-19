@@ -1,4 +1,14 @@
 ------------------------
+Hellenic TV v1.1.8 (19-Jan-13)
+------------------------
+
+- Updated STAR and MAD (new resolvers added).
+- Updated LEPANTO, KYDON TV and DION TV.
+- Updated ACTION 24 logo.
+- Code changes.
+
+
+------------------------
 Hellenic TV v1.1.7 (10-Jan-13)
 ------------------------
 
