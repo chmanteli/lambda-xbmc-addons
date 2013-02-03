@@ -1,4 +1,12 @@
 ------------------------
+MEGA Replay v1.2.0 (3-Feb-13)
+------------------------
+
+- Re-work of the plugin (various stuff were broken).
+- Moved classics to archive folder.
+
+
+------------------------
 MEGA Replay v1.1.2 (18-Dec-12)
 ------------------------
 

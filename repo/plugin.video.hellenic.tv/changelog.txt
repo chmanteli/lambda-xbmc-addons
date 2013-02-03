@@ -1,4 +1,11 @@
 ------------------------
+Hellenic TV v1.2.0 (3-Feb-13)
+------------------------
+
+- Updated SIGMA (now using link from sigmatv.com).
+
+
+------------------------
 Hellenic TV v1.1.9 (1-Feb-13)
 ------------------------
 
