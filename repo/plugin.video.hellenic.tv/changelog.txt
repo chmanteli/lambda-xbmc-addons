@@ -1,4 +1,13 @@
 ------------------------
+Hellenic TV v1.2.3 (2-Mar-13)
+------------------------
+
+- Added zcast resolver (for TV PLUS).
+- Added bambuser resolver (for ART CHANNEL).
+- Updated Euronews Greek (HQ stream).
+
+
+------------------------
 Hellenic TV v1.2.2 (16-Feb-13)
 ------------------------
 

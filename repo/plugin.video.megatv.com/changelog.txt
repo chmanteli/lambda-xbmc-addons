@@ -1,4 +1,12 @@
 ------------------------
+MEGA Replay v2.0.0 (2-Mar-13)
+------------------------
+
+- Major changes caused by the redesign of megatv.com portal.
+- Note: Your favourites have to be re-added.
+
+
+------------------------
 MEGA Replay v1.2.0 (3-Feb-13)
 ------------------------
 
