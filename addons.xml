@@ -140,7 +140,28 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.hellenic.tv" name="Hellenic TV" version="1.2.3" provider-name="lambda">
+<addon id="plugin.video.hellenic.toons" name="Hellenic Toons" version="1.0.0" provider-name="lambda">
+	<requires>
+		<import addon="xbmc.python" version="1.0"/>
+		<import addon="script.common.plugin.cache" version="0.9.1"/>
+		<import addon="script.module.parsedom" version="0.9.1"/>
+		<import addon="plugin.video.youtube" version="2.9.2"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Watch beloved cartoons and in Greek</summary>
+		<summary lang="el">Δείτε αγαπημένα κινούμενα σχέδια στα Ελληνικά</summary>
+		<description lang="en">Watch beloved cartoons and kid songs in Greek.[CR]All programmes are broadcasted by Nickelodeon and YouTube.</description>
+		<description lang="el">Δείτε αγαπημένα κινούμενα σχέδια και παιδικά τραγούδια στα Ελληνικά.[CR]Όλα τα προγράμματα μεταδίδονται από το Nickelodeon το YouTube.</description>
+		<disclaimer lang="en">Τhis addon offers content available in Greece.</disclaimer>
+		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο στην Ελλάδα.</disclaimer>
+		<platform>all</platform>
+	</extension>
+</addon>
+
+<addon id="plugin.video.hellenic.tv" name="Hellenic TV" version="1.2.4" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 		<import addon="script.module.simplejson" version="2.0.10"/>
