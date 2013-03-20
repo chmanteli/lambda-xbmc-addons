@@ -1,4 +1,14 @@
 ------------------------
+STAR WebTV v1.1.0 (20-Mar-13)
+------------------------
+
+- Code cosmetics.
+- Tweaked context menus.
+- Switched to YouTube API.
+- Note: Your favourites have to be re-added.
+
+
+------------------------
 STAR WebTV v1.0.4 (18-Dec-12)
 ------------------------
 

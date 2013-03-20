@@ -1,4 +1,13 @@
 ------------------------
+Hellenic Toons v1.0.2 (20-Mar-13)
+------------------------
+
+- Code cosmetics.
+- Switched to YouTube API.
+- Note: Your favourites have to be re-added.
+
+
+------------------------
 Hellenic Toons v1.0.1 (14-Mar-13)
 ------------------------
 
