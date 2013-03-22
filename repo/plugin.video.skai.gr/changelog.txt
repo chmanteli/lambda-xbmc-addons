@@ -1,4 +1,13 @@
 ------------------------
+SKAI Player v1.2.0 (23-Mar-13)
+------------------------
+
+- Fixed all issues caused by the redesign of skai.gr.
+- Code cosmetics.
+- Tweaked context menus.
+
+
+------------------------
 SKAI Player v1.1.1 (30-Oct-12)
 ------------------------
 

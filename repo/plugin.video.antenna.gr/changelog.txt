@@ -1,4 +1,14 @@
 ------------------------
+ANT1 Player v1.2.0 (23-Mar-13)
+------------------------
+
+- Redesign of shows list.
+- Added proxy support.
+- Code cosmetics.
+- Tweaked context menus.
+
+
+------------------------
 ANT1 Player v1.1.0 (23-Oct-12)
 ------------------------
 
