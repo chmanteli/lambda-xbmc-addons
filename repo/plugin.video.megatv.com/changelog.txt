@@ -1,4 +1,16 @@
 ------------------------
+MEGA Replay v2.1.0 (30-Mar-13)
+------------------------
+
+- Code cosmetics.
+- Redesign of mega tv shows list.
+- Added youtube shows list (megatv youtube channel, cinegreece.com and greek-movies.com).
+- Tweaked context menus.
+- Switched to YouTube API.
+- Note: Your favourites have to be re-added.
+
+
+------------------------
 MEGA Replay v2.0.0 (2-Mar-13)
 ------------------------
 
