@@ -1,4 +1,11 @@
 ------------------------
+MEGA Replay v2.1.1 (31-Mar-13)
+------------------------
+
+- Fixed art of youtube shows list (problem with greek characters).
+
+
+------------------------
 MEGA Replay v2.1.0 (30-Mar-13)
 ------------------------
 
