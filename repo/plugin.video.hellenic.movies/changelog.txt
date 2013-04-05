@@ -1,5 +1,5 @@
 ------------------------
-Greek-Movies v1.0.0 (30-Oct-12)
+Hellenic Movies v1.0.0 (5-Apr-13)
 ------------------------
 
 - Initial version
