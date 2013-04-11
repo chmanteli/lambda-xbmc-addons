@@ -1,4 +1,13 @@
 ------------------------
+MAD Player v1.0.2 (11-Apr-13)
+------------------------
+
+- Tweaked loading of charts.
+- Added fallback image in favourites.
+- Code cosmetics.
+
+
+------------------------
 MAD Player v1.0.1 (5-Apr-13)
 ------------------------
 
