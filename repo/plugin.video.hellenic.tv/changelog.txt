@@ -1,4 +1,16 @@
 ------------------------
+Hellenic TV v2.0.0 (23-May-13)
+------------------------
+
+- Complete re-work of the plugin.
+- Updated all channels.
+- Channels are stored in a seperate xml file.
+- Channels can be saved in favourites and added to tv guide script.
+- Disabled EPG data for now.
+- Enabled context menus.
+
+
+------------------------
 Hellenic TV v1.2.4 (13-Mar-13)
 ------------------------
 
