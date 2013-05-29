@@ -1,4 +1,12 @@
 ------------------------
+Hellenic TV v2.0.1 (29-May-13)
+------------------------
+
+- Added EPG support (disabled by default).
+- Updated ET3, MEGA CYPRUS and SIGMA.
+
+
+------------------------
 Hellenic TV v2.0.0 (23-May-13)
 ------------------------
 
