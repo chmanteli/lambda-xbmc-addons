@@ -1,4 +1,12 @@
 ------------------------
+Hellenic TV v2.0.6 (19-Jun-13)
+------------------------
+
+- Added TELE EPILOGES and OMEGA TV.
+- Updated RIK SAT.
+
+
+------------------------
 Hellenic TV v2.0.5 (15-Jun-13)
 ------------------------
 
