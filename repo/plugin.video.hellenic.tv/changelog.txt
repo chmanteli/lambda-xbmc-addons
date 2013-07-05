@@ -1,4 +1,16 @@
 ------------------------
+Hellenic TV v2.1.0 (05-Jul-13)
+------------------------
+
+- Added XMLTV support (from OTE TV and Cytavision).
+- Added EPG Info in context menu.
+- Added Refresh Info in context menu.
+- Fixed dailymotion resolver.
+- Updated NET and WEST CHANNEL.
+- Re-work of the plugin.
+
+
+------------------------
 Hellenic TV v2.0.7 (21-Jun-13)
 ------------------------
 
