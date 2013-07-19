@@ -1,4 +1,13 @@
 ------------------------
+Hellenic TV v2.1.1 (19-Jul-13)
+------------------------
+
+- Added CAPITAL and CY SPORTS.
+- Added XMLTV support for CAPITAL.
+- Updated NET and ET3.
+
+
+------------------------
 Hellenic TV v2.1.0 (05-Jul-13)
 ------------------------
 
