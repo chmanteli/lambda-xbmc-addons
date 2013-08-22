@@ -1,4 +1,12 @@
 ------------------------
+Hellenic TV v2.1.2 (22-Aug-13)
+------------------------
+
+- Fixed dailymotion resolver.
+- Updated NET, ET3, BOYLH TV and ART CHANNEL.
+
+
+------------------------
 Hellenic TV v2.1.1 (19-Jul-13)
 ------------------------
 

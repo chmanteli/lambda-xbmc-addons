@@ -161,7 +161,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.hellenic.tv" name="Hellenic TV" version="2.1.1" provider-name="lambda">
+<addon id="plugin.video.hellenic.tv" name="Hellenic TV" version="2.1.2" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.addon" version="12.0.0"/>
 		<import addon="xbmc.json" version="6.0.0"/>
