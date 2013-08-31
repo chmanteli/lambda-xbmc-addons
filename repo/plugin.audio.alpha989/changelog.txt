@@ -1,4 +1,14 @@
 ------------------------
+Alpha Podcast v2.0.0 (31-Aug-13)
+------------------------
+
+- Complete re-work of the plugin.
+- Added threading support (faster loading of shows and episodes).
+- Tweaked context menus.
+- Code cosmetics.
+
+
+------------------------
 Alpha Podcast v1.0.2 (6-Nov-12)
 ------------------------
 

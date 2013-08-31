@@ -1,4 +1,18 @@
 ------------------------
+ANT1 Player v2.0.0 (31-Aug-13)
+------------------------
+
+- Complete re-work of the plugin.
+- Added threading support (faster loading of shows and episodes).
+- Tweaked proxy support (plugin will try to find a working proxy).
+- The fallback proxy is now empty.
+- Tweaked context menus.
+- Code cosmetics.
+- Note: Your favourites have to be re-added.
+- Note: This is the last time I mess with them unless crawler demands it:)
+
+
+------------------------
 ANT1 Player v1.2.3 (11-Apr-13)
 ------------------------
 

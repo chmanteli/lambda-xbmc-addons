@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="plugin.audio.alpha989" name="Alpha Podcast" version="1.0.2" provider-name="lambda">
+<addon id="plugin.audio.alpha989" name="Alpha Podcast" version="2.0.0" provider-name="lambda">
 	<requires>
-		<import addon="xbmc.python" version="1.0"/>
+		<import addon="xbmc.addon" version="12.0.0"/>
+		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
 		<import addon="script.module.parsedom" version="0.9.1"/>
 	</requires>
@@ -14,15 +15,18 @@
 		<summary lang="el">Ο Alpha 989 αναμεταδίδει εκπομπές των παραγωγών του.</summary>
 		<description lang="en">Alpha 989 broadcasts radio programmes on demand.[CR]Listen whenever you want news from Greece and the world, entertainment programs and keep being informed of all developments.</description>
 		<description lang="el">Ο Alpha 989 αναμεταδίδει εκπομπές των παραγωγών του.[CR]Ακούστε όταν επιθυμείτε ειδήσεις από την Ελλάδα και τον κόσμο, ενημέρωση για όλες τις εξελίξεις και ψυχαγωγικές εκπομπές.</description>
-		<disclaimer lang="en">Τhis addon offers content available not only in Greece.</disclaimer>
-		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο όχι μόνο στην Ελλάδα.</disclaimer>
+		<disclaimer lang="en">Τhis addon offers content available in Greece.</disclaimer>
+		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο στην Ελλάδα.</disclaimer>
 		<platform>all</platform>
 	</extension>
 </addon>
 
-<addon id="plugin.audio.hellenic.radio" name="Hellenic Radio" version="1.1.0" provider-name="lambda">
+<addon id="plugin.audio.hellenic.radio" name="Hellenic Radio" version="2.0.0" provider-name="lambda">
 	<requires>
-		<import addon="xbmc.python" version="1.0"/>
+		<import addon="xbmc.addon" version="12.0.0"/>
+		<import addon="xbmc.python" version="2.1.0"/>
+		<import addon="script.module.parsedom" version="0.9.1"/>
+		<import addon="plugin.video.youtube" version="2.9.2"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="default.py">
 		<provides>audio</provides>
@@ -32,15 +36,16 @@
 		<summary lang="el">Ραδιοφωνικοί σταθμοί από την Ελλάδα.</summary>
 		<description lang="en">Listen to your favourite radio stations from Greece.</description>
 		<description lang="el">Ακούστε τους αγαπημένους σας ραδιοφωνικούς σταθμούς από την Ελλάδα.</description>
-		<disclaimer lang="en">Τhis addon offers content available not only in Greece.</disclaimer>
-		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο όχι μόνο στην Ελλάδα.</disclaimer>
+		<disclaimer lang="en">Τhis addon offers content available in Greece.</disclaimer>
+		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο στην Ελλάδα.</disclaimer>
 		<platform>all</platform>
 	</extension>
 </addon>
 
-<addon id="plugin.audio.real.gr" name="RealFm Podcast" version="1.0.5" provider-name="lambda">
+<addon id="plugin.audio.real.gr" name="RealFm Podcast" version="2.0.0" provider-name="lambda">
 	<requires>
-		<import addon="xbmc.python" version="1.0"/>
+		<import addon="xbmc.addon" version="12.0.0"/>
+		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
 		<import addon="script.module.parsedom" version="0.9.1"/>
 	</requires>
@@ -52,15 +57,16 @@
 		<summary lang="el">Ο Real Fm αναμεταδίδει εκπομπές των παραγωγών του.</summary>
 		<description lang="en">Real Fm broadcasts radio programmes on demand.[CR]Listen whenever you want news from Greece and the world, entertainment programs and keep being informed of all developments.</description>
 		<description lang="el">Ο Real Fm αναμεταδίδει εκπομπές των παραγωγών του.[CR]Ακούστε όταν επιθυμείτε ειδήσεις από την Ελλάδα και τον κόσμο, ενημέρωση για όλες τις εξελίξεις και ψυχαγωγικές εκπομπές.</description>
-		<disclaimer lang="en">Τhis addon offers content available not only in Greece.</disclaimer>
-		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο όχι μόνο στην Ελλάδα.</disclaimer>
+		<disclaimer lang="en">Τhis addon offers content available in Greece.</disclaimer>
+		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο στην Ελλάδα.</disclaimer>
 		<platform>all</platform>
 	</extension>
 </addon>
 
-<addon id="plugin.audio.skai.gr" name="SKAI Podcast" version="1.1.2" provider-name="lambda">
+<addon id="plugin.audio.skai.gr" name="SKAI Podcast" version="2.0.0" provider-name="lambda">
 	<requires>
-		<import addon="xbmc.python" version="1.0"/>
+		<import addon="xbmc.addon" version="12.0.0"/>
+		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
 		<import addon="script.module.parsedom" version="0.9.1"/>
 	</requires>
@@ -72,15 +78,16 @@
 		<summary lang="el">Ο ΣΚΑΪ αναμεταδίδει εκπομπές των παραγωγών του.</summary>
 		<description lang="en">SKAI broadcasts radio programmes on demand.[CR]Listen whenever you want news from Greece and the world, entertainment programs and keep being informed of all developments.</description>
 		<description lang="el">Ο ΣΚΑΪ αναμεταδίδει εκπομπές των παραγωγών του.[CR]Ακούστε όταν επιθυμείτε ειδήσεις από την Ελλάδα και τον κόσμο, ενημέρωση για όλες τις εξελίξεις και ψυχαγωγικές εκπομπές.</description>
-		<disclaimer lang="en">Τhis addon offers content available not only in Greece.</disclaimer>
-		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο όχι μόνο στην Ελλάδα.</disclaimer>
+		<disclaimer lang="en">Τhis addon offers content available in Greece.</disclaimer>
+		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο στην Ελλάδα.</disclaimer>
 		<platform>all</platform>
 	</extension>
 </addon>
 
-<addon id="plugin.video.antenna.gr" name="ANT1 Player" version="1.2.3" provider-name="lambda">
+<addon id="plugin.video.antenna.gr" name="ANT1 Player" version="2.0.0" provider-name="lambda">
 	<requires>
-		<import addon="xbmc.python" version="1.0"/>
+		<import addon="xbmc.addon" version="12.0.0"/>
+		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
 		<import addon="script.module.parsedom" version="0.9.1"/>
 	</requires>
@@ -98,9 +105,10 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.ert.gr" name="ERT Online" version="1.2.0" provider-name="lambda">
+<addon id="plugin.video.ert.gr" name="ERT Online" version="2.0.0" provider-name="lambda">
 	<requires>
-		<import addon="xbmc.python" version="1.0"/>
+		<import addon="xbmc.addon" version="12.0.0"/>
+		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
 		<import addon="script.module.parsedom" version="0.9.1"/>
 		<import addon="plugin.video.youtube" version="2.9.2"/>
@@ -186,9 +194,10 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.madtv.gr" name="MAD Player" version="1.0.2" provider-name="lambda">
+<addon id="plugin.video.madtv.gr" name="MAD Player" version="2.0.0" provider-name="lambda">
 	<requires>
-		<import addon="xbmc.python" version="1.0"/>
+		<import addon="xbmc.addon" version="12.0.0"/>
+		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
 		<import addon="script.module.parsedom" version="0.9.1"/>
 		<import addon="plugin.video.youtube" version="2.9.2"/>
@@ -207,9 +216,10 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.megatv.com" name="MEGA Replay" version="2.1.3" provider-name="lambda">
+<addon id="plugin.video.megatv.com" name="MEGA Replay" version="3.0.0" provider-name="lambda">
 	<requires>
-		<import addon="xbmc.python" version="1.0"/>
+		<import addon="xbmc.addon" version="12.0.0"/>
+		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
 		<import addon="script.module.parsedom" version="0.9.1"/>
 		<import addon="plugin.video.youtube" version="2.9.2"/>
@@ -228,9 +238,10 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.skai.gr" name="SKAI Player" version="1.2.2" provider-name="lambda">
+<addon id="plugin.video.skai.gr" name="SKAI Player" version="2.0.0" provider-name="lambda">
 	<requires>
-		<import addon="xbmc.python" version="1.0"/>
+		<import addon="xbmc.addon" version="12.0.0"/>
+		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
 		<import addon="script.module.parsedom" version="0.9.1"/>
 	</requires>
@@ -248,9 +259,10 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.startv.gr" name="STAR WebTV" version="1.1.2" provider-name="lambda">
+<addon id="plugin.video.startv.gr" name="STAR WebTV" version="2.0.0" provider-name="lambda">
 	<requires>
-		<import addon="xbmc.python" version="1.0"/>
+		<import addon="xbmc.addon" version="12.0.0"/>
+		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
 		<import addon="script.module.parsedom" version="0.9.1"/>
 		<import addon="plugin.video.youtube" version="2.9.2"/>

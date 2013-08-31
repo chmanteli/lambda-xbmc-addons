@@ -1,4 +1,17 @@
 ------------------------
+MAD Player v2.0.0 (31-Aug-13)
+------------------------
+
+- Complete re-work of the plugin.
+- Added threading support (faster loading of charts, shows and episodes).
+- Re-work of charts.
+- Tweaked context menus.
+- Code cosmetics.
+- Note: Your favourites have to be re-added.
+- Note: This is the last time I mess with them unless crawler demands it:)
+
+
+------------------------
 MAD Player v1.0.2 (11-Apr-13)
 ------------------------
 
