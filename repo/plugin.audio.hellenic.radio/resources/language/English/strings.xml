@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<!-- Settings -->
+	<string id="30000">-</string>
+	<!-- Info -->
+	<string id="30301"></string>
+	<string id="30302"> is now global</string>
+	<string id="30303">Added to "My Stations"</string>
+	<string id="30304">Removed from "My Stations"</string>
+	<string id="30305">Moved up</string>
+	<string id="30306">Moved down</string>
+	<!-- OK -->
+	<string id="30351">This channel is not available</string>
+	<string id="30352">or not supported.</string>
+	<string id="30353">YouTube addon is not installed.</string>
+	<string id="30354">This stream requires it.</string>
+	<!-- ContextMenu -->
+	<string id="30401">Set global view</string>
+	<string id="30402">Move up</string>
+	<string id="30403">Move down</string>
+	<string id="30404">Remove</string>
+	<string id="30405">Add to "My Stations"</string>
+	<string id="30406">Remove from "My Stations"</string>
+
+	<!-- Labels -->
+	<string id="30501">My Stations</string>
+	<string id="30502">All Stations</string>
+	<string id="30521">International</string>
+	<string id="30522">Eclectic</string>
+	<string id="30523">Rock</string>
+	<string id="30524">Greek</string>
+	<string id="30525">Laika</string>	
+	<string id="30526">Sports</string>
+	<string id="30527">News</string>
+	<string id="30528">Religious</string>
+	<string id="30529">Traditional</string>
+	<string id="30541">Attica</string>
+	<string id="30542">Salonica</string>
+	<string id="30543">Internet</string>
+	<string id="30544">Aegean</string>
+	<string id="30545">Epirus</string>
+	<string id="30546">Thessaly</string>
+	<string id="30547">Thrace</string>
+	<string id="30548">Ionian</string>
+	<string id="30549">Crete</string>
+	<string id="30550">Cyprus</string>
+	<string id="30551">Macedonia</string>
+	<string id="30552">Peloponnese</string>
+	<string id="30553">Central Greece</string>
+
+	<string id="30601">This category includes your favorite radio stations. Organize them in any way you want.</string>
+	<string id="30602">This category includes all radio stations regardless of genre or location.</string>
+	<string id="30621">This category includes radio stations with international music mainly. It consists several genres, including pop, dance and R&amp;B.</string>
+	<string id="30622">This category includes radio stations with international music mainly. It consists several genres, including electronic, lounge, house and ballads.</string>
+	<string id="30623">This category includes radio stations with rock music. The stations broadcast not only international rock but also Greek.</string>
+	<string id="30624">This category includes radio stations with Greek music mainly. It consists several genres, including pop, dance and R&amp;B.</string>
+	<string id="30625">This category includes radio stations with Greek laika. The stations broadcast not only modern laika but also older.</string>	
+	<string id="30626">This category includes sports radio stations. Live broadcast events, interviews, sports discussions, answers to questions that listeners have.</string>
+	<string id="30627">This category includes news radio stations. News from Greece and the world, keep being informed of all developments, entertainment and sports.</string>
+	<string id="30628">This category includes radio stations with religious programming.</string>
+	<string id="30629">This category includes radio stations with traditional Greek music.</string>
+	<string id="30641">This category includes all radio stations broadcasting from Attica.</string>
+	<string id="30642">This category includes all radio stations broadcasting from Salonica.</string>
+	<string id="30643">This category includes all internet radio stations broadcasting from Greece.</string>
+	<string id="30644">This category includes all radio stations broadcasting from Aegean.</string>
+	<string id="30645">This category includes all radio stations broadcasting from Epirus.</string>
+	<string id="30646">This category includes all radio stations broadcasting from Thessaly.</string>
+	<string id="30647">This category includes all radio stations broadcasting from Thrace.</string>
+	<string id="30648">This category includes all radio stations broadcasting from Ionian.</string>
+	<string id="30649">This category includes all radio stations broadcasting from Crete.</string>
+	<string id="30650">This category includes all radio stations broadcasting from Cyprus.</string>
+	<string id="30651">This category includes all radio stations broadcasting from Macedonia.</string>
+	<string id="30652">This category includes all radio stations broadcasting from Peloponnese.</string>
+	<string id="30653">This category includes all radio stations broadcasting from Central Greece.</string>
+
+	<string id="30721">This radio station broadcasts international music mainly. It consists several genres, including pop, dance and R&amp;B.</string>
+	<string id="30722">This radio station broadcasts international music mainly. It consists several genres, including electronic, lounge, house and ballads.</string>
+	<string id="30723">This radio station broadcasts rock music. The stations broadcast not only international rock but also Greek.</string>
+	<string id="30724">This radio station broadcasts Greek music mainly. It consists several genres, including pop, dance and R&amp;B.</string>
+	<string id="30725">This radio station broadcasts Greek laika. The stations broadcast not only modern laika but also older.</string>	
+	<string id="30726">This radio station broadcasts sports events and discussions. Live broadcast events, interviews, sports discussions, answers to questions that listeners have.</string>
+	<string id="30727">This radio station broadcasts news and current affairs. News from Greece and the world, keep being informed of all developments, entertainment and sports.</string>
+	<string id="30728">This radio station broadcasts religious programming.</string>
+	<string id="30729">This radio station broadcasts traditional Greek music.</string>
+</strings>
