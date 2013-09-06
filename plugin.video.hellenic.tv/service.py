@@ -135,26 +135,23 @@ class epg:
         epg().ote_programme("ALPHA", "132")
         epg().ote_programme("SKAI", "120")
         epg().ote_programme("MACEDONIA TV", "152")
-        #epg().ote_programme("NET", "555")
-        #epg().ote_programme("ET1", "593")
-        #epg().ote_programme("ET3", "523")
-        #epg().ote_programme("ERT HD", "594")
+        epg().ote_programme("EDT", "593")
         epg().ote_programme("BOYLH TV", "119")
         epg().ote_programme("EURONEWS", "19")
+        epg().ote_programme("NICKELODEON", "117")
+        #epg().ote_programme("MTV", "121")
         epg().ote_programme("MAD TV", "144")
         epg().ote_programme("KONTRA CHANNEL", "44")
-        epg().ote_programme("EXTRA CHANNEL", "135")
-        epg().ote_programme("GR TV", "157")
+        epg().ote_programme("EXTRA 3", "135")
         epg().ote_programme("ART CHANNEL", "156")
+        epg().ote_programme("GR TV", "157")
         epg().ote_programme("BLUE SKY", "153")
         #epg().ote_programme("SBC TV", "136")
-        #epg().ote_programme("NICKELODEON", "117")
-        #epg().ote_programme("MTV", "121")
+        epg().ote_programme("TV 100", "137")
+        epg().ote_programme("4E TV", "133")
         epg().ote_programme("STAR KENTRIKIS ELLADOS", "139")
         epg().ote_programme("EPIRUS TV1", "145")
         epg().ote_programme("KRITI TV", "138")
-        epg().ote_programme("TV 100", "137")
-        epg().ote_programme("4E TV", "133")
         epg().ote_programme("DIKTYO TV", "146")
         epg().ote_programme("DELTA TV", "147")
 
@@ -261,20 +258,22 @@ class epg:
             for i in range(0, 2400, 1200):
                 start = date.replace('-','') + '%04d' % i + '00'
                 start = epg().start_processor(start)
-                if channel == "ERT WORLD":
-                    title = 'дояужояийг еят'.decode('iso-8859-7')
-                elif channel == "RIK SAT":
+                if channel == "RIK SAT":
                     title = 'дояужояийо яий'.decode('iso-8859-7')
+                elif channel == "NICKELODEON+":
+                    title = 'паидийо пяоцяалла'.decode('iso-8859-7')
                 elif channel == "MUSIC TV":
                     title = 'лоусийо пяоцяалла'.decode('iso-8859-7')
-                elif channel == "ACTION 24":
+                elif channel == "GREEK CINEMA":
+                    title = 'еккгмийг таимиа'.decode('iso-8859-7')
+                elif channel == "CY SPORTS":
                     title = 'ахкгтийо пяоцяалла'.decode('iso-8859-7')
                 elif channel == "ODIE TV":
                     title = 'ипподяолиес'.decode('iso-8859-7')
-                elif channel == "MOVIES 1":
-                    title = 'еккгмийг таимиа'.decode('iso-8859-7')
-                elif channel == "MOVIES 2":
-                    title = 'еккгмийг таимиа'.decode('iso-8859-7')
+                elif channel == "SMILE TV":
+                    title = 'паидийо пяоцяалла'.decode('iso-8859-7')
+                elif channel == "GNOMI TV":
+                    title = 'лоусийо пяоцяалла'.decode('iso-8859-7')
                 else:
                     title = channel
                 programmeList.append({'start': start, 'title': title, 'desc': desc})

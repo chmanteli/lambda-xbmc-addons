@@ -1,4 +1,16 @@
 ------------------------
+Hellenic TV v2.2.0 (6-Sep-13)
+------------------------
+
+- Updated existing channels.
+- Added more channels (EDT, Nickelodeon etc).
+- Added fallback streams for all major channels.
+- Added new resolvers.
+- Tweaked context menus.
+- Code cosmetics.
+
+
+------------------------
 Hellenic TV v2.1.2 (22-Aug-13)
 ------------------------
 
