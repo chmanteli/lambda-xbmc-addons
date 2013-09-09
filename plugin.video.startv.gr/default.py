@@ -154,18 +154,18 @@ class Thread(threading.Thread):
         self._target(*self._args)
 
 class index:
-    def infoDialog(self, str):
-        xbmc.executebuiltin("Notification(%s,%s, 3000)" % (addonName, str))
+    def infoDialog(self, str, header=addonName):
+        xbmc.executebuiltin("Notification(%s,%s, 3000)" % (header, str))
 
-    def okDialog(self, str1, str2):
-        xbmcgui.Dialog().ok(addonName, str1, str2)
+    def okDialog(self, str1, str2, header=addonName):
+        xbmcgui.Dialog().ok(header, str1, str2)
 
-    def selectDialog(self, list):
-        select = xbmcgui.Dialog().select(addonName, list)
+    def selectDialog(self, list, header=addonName):
+        select = xbmcgui.Dialog().select(header, list)
         return select
 
-    def yesnoDialog(self, str1, str2):
-        answer = xbmcgui.Dialog().yesno(addonName, str1, str2)
+    def yesnoDialog(self, str1, str2, header=addonName):
+        answer = xbmcgui.Dialog().yesno(header, str1, str2)
         return answer
 
     def getProperty(self, str):
