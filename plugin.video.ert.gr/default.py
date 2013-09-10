@@ -91,7 +91,7 @@ class main:
         elif action == 'episodes':					episodes().get(show, url)
         elif action == 'episodes_recent':			episodes().ert_recent()
         elif action == 'episodes_news':				episodes().ert_news()
-        elif action == 'live':						player().live(url, type)
+        elif action == 'live':						player().live(name)
         elif action == 'play':						player().run(url)
 
         viewDict = {
@@ -159,18 +159,18 @@ class Thread(threading.Thread):
         self._target(*self._args)
 
 class index:
-    def infoDialog(self, str):
-        xbmc.executebuiltin("Notification(%s,%s, 3000)" % (addonName, str))
+    def infoDialog(self, str, header=addonName):
+        xbmc.executebuiltin("Notification(%s,%s, 3000)" % (header, str))
 
-    def okDialog(self, str1, str2):
-        xbmcgui.Dialog().ok(addonName, str1, str2)
+    def okDialog(self, str1, str2, header=addonName):
+        xbmcgui.Dialog().ok(header, str1, str2)
 
-    def selectDialog(self, list):
-        select = xbmcgui.Dialog().select(addonName, list)
+    def selectDialog(self, list, header=addonName):
+        select = xbmcgui.Dialog().select(header, list)
         return select
 
-    def yesnoDialog(self, str1, str2):
-        answer = xbmcgui.Dialog().yesno(addonName, str1, str2)
+    def yesnoDialog(self, str1, str2, header=addonName):
+        answer = xbmcgui.Dialog().yesno(header, str1, str2)
         return answer
 
     def getProperty(self, str):
@@ -276,10 +276,10 @@ class index:
         total = len(channelList)
         for i in channelList:
             try:
-                name, url, type = i['name'], i['url'], i['type']
+                name = i['name']
                 image = '%s/%s.png' % (addonArt, name)
-                systype, sysurl = urllib.quote_plus(type), urllib.quote_plus(url)
-                u = '%s?action=live&url=%s&type=%s' % (sys.argv[0], sysurl, systype)
+                sysname = urllib.quote_plus(name)
+                u = '%s?action=live&name=%s' % (sys.argv[0], sysname)
 
                 cm = []
                 cm.append((language(30406).encode("utf-8"), 'RunPlugin(%s?action=playlist_start)' % (sys.argv[0])))
@@ -536,8 +536,8 @@ class channels:
         self.list = []
 
     def get(self):
-        self.list.append({'name': 'NET', 'type': '', 'url': 'rtmp://live.ertopen.com:80/live/ert live=1 timeout=10'})
-        self.list.append({'name': 'ET3', 'type': 'veetle', 'url': 'http://veetle.com/index.php/channel/view#51b7cee75aed5'})
+        self.list.append({'name': 'NET'})
+        self.list.append({'name': 'ET3'})
         index().channelList(self.list)
 
 class shows:
@@ -703,14 +703,23 @@ class player:
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
         return url
 
-    def live(self, url, type):
+    def live(self, channel):
+        channelDict = {
+            'NET'				:	[{'type': '', 'url': 'rtmp://live.ertopen.com:80/live/ert live=1 timeout=10', 'type2': '', 'url2': 'rtmp://31.204.154.90/live2/live2 live=1 timeout=10'}],
+            'ET3'				:	[{'type': 'veetle', 'url': 'http://veetle.com/index.php/channel/view#51b7cee75aed5', 'type2': '', 'url2': 'rtmp://31.204.154.90/live/livestream live=1 timeout=10'}]
+        }
+
         playerDict = {
             ''					:	self.direct,
             'veetle'			:	self.veetle
         }
 
+        i = channelDict[channel][0]
+        type, url, type2, url2 = i['type'], i['url'], i['type2'], i['url2']
         url = playerDict[type](url)
+        if url is None and not type2 == "False": url = playerDict[type2](url2)
         if url is None: return
+
         item = xbmcgui.ListItem(path=url)
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
         return url

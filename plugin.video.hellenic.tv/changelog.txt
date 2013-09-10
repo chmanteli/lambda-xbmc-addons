@@ -1,4 +1,13 @@
 ------------------------
+Hellenic TV v2.3.0 (10-Sep-13)
+------------------------
+
+- Complete re-work of EPG grabber (from OTE TV and Cytavision).
+- Added fallback stream for EDT.
+- Code cosmetics.
+
+
+------------------------
 Hellenic TV v2.2.0 (6-Sep-13)
 ------------------------
 

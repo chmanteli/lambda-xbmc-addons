@@ -174,7 +174,7 @@
 			<band>106,2</band>
 			<genre>International</genre>
 			<area>Attica</area>
-			<url>http://www.youtube.com/watch?v=7CMdx8xCloY</url>
+			<url>http://www.youtube.com/user/1062madradio/</url>
 			<base>http://www.mad.gr/madradio/</base>
 		</radio>
 		<radio active="True">
@@ -381,7 +381,7 @@
 			<url>http://shout.cosmoradio.gr:8130/</url>
 			<base>http://www.cosmoradio.gr/</base>
 		</radio>
-		<radio active="False">
+		<radio active="True">
 			<name>EROTICOS</name>
 			<band>94,8</band>
 			<genre>Eclectic</genre>
@@ -410,7 +410,7 @@
 			<band>101,7</band>
 			<genre>Laika</genre>
 			<area>Salonica</area>
-			<url>mmsh://wm3.greekstream.net/kalamariafm</url>
+			<url>http://sc2.greekstream.net/</url>
 			<base>http://www.kalamariafm.gr/</base>
 		</radio>
 		<radio active="True">
@@ -466,7 +466,7 @@
 			<band>96,5</band>
 			<genre>Greek</genre>
 			<area>Salonica</area>
-			<url>mmsh://a1202.l7083147201.c70831.g.lm.akamaistream.net/D/1202/70831/v0001/reflector:47201</url>
+			<url>http://176.9.22.6:8626/</url>
 			<base>http://www.palmos965.gr/</base>
 		</radio>
 		<radio active="True">
@@ -693,7 +693,7 @@
 			<band></band>
 			<genre>International</genre>
 			<area>Internet</area>
-			<url>http://80.237.158.95:8010/stream</url>
+			<url>http://85.25.106.133:8010/stream</url>
 			<base>http://www.ifeelradio.gr/</base>
 		</radio>
 		<radio active="True">
@@ -797,7 +797,7 @@
 			<band></band>
 			<genre>Eclectic</genre>
 			<area>Internet</area>
-			<url>http://95.211.205.23:8090/u0r4t3hv87db</url>
+			<url>http://46.4.52.14/listen/u0r4t3hv87db</url>
 			<base>http://www.toradiofono.gr/</base>
 		</radio>
 		<radio active="True">
@@ -805,7 +805,7 @@
 			<band></band>
 			<genre>Rock</genre>
 			<area>Internet</area>
-			<url>http://95.211.205.23:8090/trollradio-gr</url>
+			<url>http://85.25.144.26/listen/trollradio-gr</url>
 			<base>http://www.trollradio.gr/</base>
 		</radio>
 		<radio active="True">
@@ -873,7 +873,7 @@
 			<genre>Greek</genre>
 			<area>Aegean</area>
 			<url>http://live.onestreaming.com/anemosfm</url>
-			<base></base>
+			<base/>
 		</radio>
 		<radio active="True">
 			<name>ARCHAGELOS 941</name>
@@ -977,7 +977,7 @@
 			<genre>International</genre>
 			<area>Aegean</area>
 			<url>http://s4.onweb.gr:8414/</url>
-			<base></base>
+			<base/>
 		</radio>
 		<radio active="True">
 			<name>MESOGIOS 1054</name>
@@ -993,7 +993,7 @@
 			<genre>Greek</genre>
 			<area>Aegean</area>
 			<url>http://eco.onestreaming.com:8125/</url>
-			<base></base>
+			<base/>
 		</radio>
 		<radio active="True">
 			<name>PALMOS 995</name>
@@ -1113,7 +1113,7 @@
 			<genre>News</genre>
 			<area>Aegean</area>
 			<url>mmsh://live.onestreaming.com/radiosamos</url>
-			<base></base>
+			<base/>
 		</radio>
 		<radio active="True">
 			<name>RADIOACTIVE 913</name>
@@ -1196,7 +1196,7 @@
 			<genre>Greek</genre>
 			<area>Epirus</area>
 			<url>mmsh://live.onestreaming.com/alpha981</url>
-			<base></base>
+			<base/>
 		</radio>
 		<radio active="True">
 			<name>ECHO 1027</name>
@@ -1307,7 +1307,7 @@
 			<band>104,3</band>
 			<genre>Sports</genre>
 			<area>Epirus</area>
-			<url>http://iphone-streaming.ustream.tv/uhls/333498/streams/live/iphone/playlist.m3u8</url>
+			<url>http://iphone-streaming.ustream.tv/uhls/15622327/streams/live/iphone/playlist.m3u8</url>
 			<base>http://www.super-fm.gr/</base>
 		</radio>
 	</area>
@@ -1321,12 +1321,12 @@
 			<url>http://s5.onweb.gr:8502/</url>
 			<base>http://www.angel1028.gr/</base>
 		</radio>
-		<radio active="False">
+		<radio active="True">
 			<name>ASTRA 973</name>
 			<band>97,3</band>
 			<genre>News</genre>
 			<area>Thessaly</area>
-			<url></url>
+			<url>http://88.198.13.207:8030/</url>
 			<base>http://www.astrafm.gr/</base>
 		</radio>
 		<radio active="True">
@@ -1479,7 +1479,7 @@
 			<genre>News</genre>
 			<area>Thessaly</area>
 			<url>http://eco.onestreaming.com:8374/</url>
-			<base></base>
+			<base/>
 		</radio>
 		<radio active="True">
 			<name>RADIO METEORA 903</name>
@@ -1602,7 +1602,7 @@
 			<genre>International</genre>
 			<area>Thrace</area>
 			<url>http://46.227.60.32:8052/</url>
-			<base></base>
+			<base/>
 		</radio>
 		<radio active="True">
 			<name>METHORIOS 96</name>
@@ -1738,7 +1738,7 @@
 			<genre>Greek</genre>
 			<area>Thrace</area>
 			<url>http://eco.onestreaming.com:8226/</url>
-			<base></base>
+			<base/>
 		</radio>
 		<radio active="True">
 			<name>XANTHI DEEJAY</name>
@@ -1772,7 +1772,7 @@
 			<band>89,6</band>
 			<genre>Greek</genre>
 			<area>Ionian</area>
-			<url></url>
+			<url/>
 			<base>http://www.bravofm.gr/</base>
 		</radio>
 		<radio active="True">
@@ -1804,7 +1804,7 @@
 			<band>88,6</band>
 			<genre>International</genre>
 			<area>Ionian</area>
-			<url></url>
+			<url/>
 			<base>http://www.islandfm.gr/</base>
 		</radio>
 		<radio active="True">
@@ -1975,7 +1975,7 @@
 			<band>99,8</band>
 			<genre>News</genre>
 			<area>Crete</area>
-			<url></url>
+			<url/>
 			<base>http://www.hxofm.gr/</base>
 		</radio>
 		<radio active="True">
@@ -2048,7 +2048,7 @@
 			<genre>Traditional</genre>
 			<area>Crete</area>
 			<url>http://radio.radionova.gr:8000/kritorama</url>
-			<base></base>
+			<base/>
 		</radio>
 		<radio active="True">
 			<name>LAMPSI HERACLION</name>
@@ -2299,7 +2299,7 @@
 			<genre>Greek</genre>
 			<area>Cyprus</area>
 			<url>mmsh://stream-push2.live24.gr/dromoscyprus</url>
-			<base></base>
+			<base/>
 		</radio>
 		<radio active="True">
 			<name>EROTICOS 99</name>
@@ -2315,7 +2315,7 @@
 			<genre>International</genre>
 			<area>Cyprus</area>
 			<url>mmsh://live.onestreaming.com/hotradio</url>
-			<base></base>
+			<base/>
 		</radio>
 		<radio active="True">
 			<name>KANALI 6 106</name>
@@ -2349,13 +2349,13 @@
 			<url>mmsh://golive.onestreaming.com/logos</url>
 			<base>http://www.logosradio.com.cy/</base>
 		</radio>
-		<radio active="True">
+		<radio active="False">
 			<name>LOVE RADIO CYPRUS</name>
 			<band>100,7</band>
 			<genre>Eclectic</genre>
 			<area>Cyprus</area>
-			<url>mmsh://eradio.loveradio.com.cy/loveradio</url>
-			<base></base>
+			<url>rtsp://loveradio.mydeejay.com.cy:554/loveradio</url>
+			<base/>
 		</radio>
 		<radio active="True">
 			<name>MELODY 1031</name>
@@ -2396,6 +2396,30 @@
 			<area>Cyprus</area>
 			<url>mmsh://golive.onestreaming.com/radioproto</url>
 			<base>http://www.radioproto.com.cy/</base>
+		</radio>
+		<radio active="True">
+			<name>RIK 1</name>
+			<band>97,2</band>
+			<genre>News</genre>
+			<area>Cyprus</area>
+			<url>rtmp://109.110.225.226/live/myStream</url>
+			<base>http://www.cybc.com.cy/</base>
+		</radio>
+		<radio active="True">
+			<name>RIK 3</name>
+			<band>94,8</band>
+			<genre>News</genre>
+			<area>Cyprus</area>
+			<url>rtmp://109.110.225.117/live/myStream</url>
+			<base>http://www.cybc.com.cy/</base>
+		</radio>
+		<radio active="True">
+			<name>RIK 4</name>
+			<band>88,2</band>
+			<genre>Eclectic</genre>
+			<area>Cyprus</area>
+			<url>rtmp://109.110.225.118/live/myStream</url>
+			<base>http://www.cybc.com.cy/</base>
 		</radio>
 		<radio active="True">
 			<name>ROCK FM CYPRUS</name>
@@ -2517,7 +2541,7 @@
 			<band>90,5</band>
 			<genre>Greek</genre>
 			<area>Macedonia</area>
-			<url></url>
+			<url/>
 			<base>http://enaradio.gr/</base>
 		</radio>
 		<radio active="True">
@@ -2677,7 +2701,7 @@
 			<band>93,7</band>
 			<genre>News</genre>
 			<area>Macedonia</area>
-			<url></url>
+			<url/>
 			<base>http://www.proininews.gr/proini-93-7-fm/</base>
 		</radio>
 		<radio active="True">
@@ -2702,7 +2726,7 @@
 			<genre>Greek</genre>
 			<area>Macedonia</area>
 			<url>mmsh://live.onestreaming.com/rythmos1044</url>
-			<base></base>
+			<base/>
 		</radio>
 		<radio active="True">
 			<name>SIERA 1053</name>
@@ -2781,7 +2805,7 @@
 			<band>95,3</band>
 			<genre>International</genre>
 			<area>Macedonia</area>
-			<url>http://184.154.90.186:8210/</url>
+			<url>http://shout.streamwithq.gr:4164/</url>
 			<base>http://www.vivafm.com/</base>
 		</radio>
 	</area>
@@ -2913,7 +2937,7 @@
 			<genre>International</genre>
 			<area>Peloponnese</area>
 			<url>mmsh://legacy-100-ams.servers.mediacdn.com/mfm102-7-patra</url>
-			<base></base>
+			<base/>
 		</radio>
 		<radio active="True">
 			<name>MAX 934</name>
@@ -2993,7 +3017,7 @@
 			<genre>News</genre>
 			<area>Peloponnese</area>
 			<url>mmsh://radiogamma.live24.gr/radiogamma</url>
-			<base></base>
+			<base/>
 		</radio>
 		<radio active="True">
 			<name>RADIO KRESTENA 1013</name>
@@ -3001,7 +3025,7 @@
 			<genre>Greek</genre>
 			<area>Peloponnese</area>
 			<url>http://shoutcast.24radio.gr:8006/</url>
-			<base></base>
+			<base/>
 		</radio>
 		<radio active="True">
 			<name>RADIO KYPARISSIA 936</name>
@@ -3059,12 +3083,12 @@
 			<url>http://46.4.65.194:8025/</url>
 			<base>http://www.star929.gr/</base>
 		</radio>
-		<radio active="False">
+		<radio active="True">
 			<name>STAR 941</name>
 			<band>94,1</band>
 			<genre>Eclectic</genre>
 			<area>Peloponnese</area>
-			<url></url>
+			<url>http://s1.onweb.gr:8056/</url>
 			<base>http://www.star941.gr/</base>
 		</radio>
 		<radio active="True">
@@ -3131,7 +3155,7 @@
 			<band>97,7</band>
 			<genre>International</genre>
 			<area>Central Greece</area>
-			<url>mmsh://avanti977lamia.live24.gr/avanti977lamia</url>
+			<url>http://avanti977lamia.live24.gr/avanti977lamia</url>
 			<base>http://www.avantifm.gr/977/</base>
 		</radio>
 		<radio active="True">
@@ -3156,14 +3180,14 @@
 			<genre>Greek</genre>
 			<area>Central Greece</area>
 			<url>http://eco.onestreaming.com:8412/</url>
-			<base></base>
+			<base/>
 		</radio>
 		<radio active="True">
 			<name>HIT 1035</name>
 			<band>103,5</band>
 			<genre>Greek</genre>
 			<area>Central Greece</area>
-			<url>mmsh://live.onestreaming.com/hitfm1035</url>
+			<url>http://eco.onestreaming.com:8450/</url>
 			<base>http://www.hitfm1035.gr/</base>
 		</radio>
 		<radio active="True">

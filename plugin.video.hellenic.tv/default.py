@@ -18,8 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import urllib,urllib2,re,os,shutil,threading,datetime,time,xbmc,xbmcplugin,xbmcgui,xbmcaddon
-import xmlwriter as XMLWriter
+import urllib,urllib2,re,os,threading,datetime,time,xbmc,xbmcplugin,xbmcgui,xbmcaddon
 from operator import itemgetter
 try:	import CommonFunctions
 except:	import commonfunctionsdummy as CommonFunctions
@@ -41,6 +40,7 @@ addonFanart			= os.path.join(addonPath,'fanart.jpg')
 addonLogos			= os.path.join(addonPath,'resources/logos')
 akamaiProxy			= os.path.join(addonPath,'akamaisecurehd.py')
 fallback			= os.path.join(addonPath,'resources/fallback/fallback.mp4')
+addonStrings		= os.path.join(addonPath,'resources/language/Greek/strings.xml')
 dataPath			= xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
 common				= CommonFunctions
 

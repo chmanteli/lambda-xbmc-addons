@@ -1,4 +1,13 @@
 ------------------------
+MAD Player v2.0.1 (10-Sep-13)
+------------------------
+
+- Tweaked live channels.
+- Added new resolvers.
+- Code cosmetics.
+
+
+------------------------
 MAD Player v2.0.0 (31-Aug-13)
 ------------------------
 

@@ -1,4 +1,14 @@
 ------------------------
+Hellenic Radio v2.0.1 (10-Sep-13)
+------------------------
+
+- Updated existing radios.
+- Added more radios (Cyprus).
+- Added new resolvers.
+- Code cosmetics.
+
+
+------------------------
 Hellenic Radio v2.0.0 (31-Aug-13)
 ------------------------
 

@@ -159,18 +159,18 @@ class Thread(threading.Thread):
         self._target(*self._args)
 
 class index:
-    def infoDialog(self, str):
-        xbmc.executebuiltin("Notification(%s,%s, 3000)" % (addonName, str))
+    def infoDialog(self, str, header=addonName):
+        xbmc.executebuiltin("Notification(%s,%s, 3000)" % (header, str))
 
-    def okDialog(self, str1, str2):
-        xbmcgui.Dialog().ok(addonName, str1, str2)
+    def okDialog(self, str1, str2, header=addonName):
+        xbmcgui.Dialog().ok(header, str1, str2)
 
-    def selectDialog(self, list):
-        select = xbmcgui.Dialog().select(addonName, list)
+    def selectDialog(self, list, header=addonName):
+        select = xbmcgui.Dialog().select(header, list)
         return select
 
-    def yesnoDialog(self, str1, str2):
-        answer = xbmcgui.Dialog().yesno(addonName, str1, str2)
+    def yesnoDialog(self, str1, str2, header=addonName):
+        answer = xbmcgui.Dialog().yesno(header, str1, str2)
         return answer
 
     def getProperty(self, str):
@@ -607,8 +607,6 @@ class radios:
 class player:
     def __init__(self):
         self.list = radioList().radioList
-        self.ustreamUrl			= 'http://iphone-streaming.ustream.tv'
-        self.youtubeUrl			= 'http://www.youtube.com'
 
     def run(self, radio, area):
         try:
@@ -621,10 +619,12 @@ class player:
             name, band, genre, area, desc, url = i[0]['name'], i[0]['band'], i[0]['genre'], i[0]['area'], i[0]['desc'], i[0]['url']
             image = '%s/%s/%s.png' % (addonLogos, area, name)
 
-            if url.startswith(self.youtubeUrl):
-                url = self.youtube(url)
-            elif url.startswith(self.ustreamUrl):
+            if url.startswith('http://iphone-streaming.ustream.tv'):
                 url = self.ustream(url)
+            elif url.startswith('http://www.youtube.com/user/'):
+                url = self.youtubelive(url)
+            elif url.startswith('http://www.youtube.com'):
+                url = self.youtube(url)
 
             if url is None: return
             item = xbmcgui.ListItem(path=url, iconImage=image, thumbnailImage=image)
@@ -641,6 +641,19 @@ class player:
                 index().okDialog(language(30353).encode("utf-8"), language(30354).encode("utf-8"))
                 return
             url = url.split("?v=")[-1]
+            url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % url
+            return url
+        except:
+            return
+
+    def youtubelive(self, url):
+        try:
+            if index().addon_status('plugin.video.youtube') is None:
+                index().okDialog(language(30353).encode("utf-8"), language(30354).encode("utf-8"))
+                return
+            url += '/videos?view=2&flow=grid'
+            result = getUrl(url).result
+            url = re.compile('"/watch[?]v=(.+?)"').findall(result)[0]
             url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % url
             return url
         except:

@@ -77,8 +77,9 @@
 			<name>EDT</name>
 			<type>http</type>
 			<url>http://85.196.8.204:1234/udp/225.170.87.128:1234</url>
-			<type2>http</type2>
-			<url2>http://85.196.8.204:1234/udp/225.170.94.192:1234</url2>
+			<url>http://85.196.8.204:1234/udp/225.170.94.192:1234</url>
+			<type2>visionip</type2>
+			<url2>http://tvnetwork.new.visionip.tv/Hellenic_TV/index.php?module=playlist&amp;type=jwASX&amp;broadcastid=4267</url2>
 			<base></base>
 			<epg>30509</epg>
 		</channel>
