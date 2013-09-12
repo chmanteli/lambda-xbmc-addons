@@ -1,0 +1,54 @@
+------------------------
+RealFm Podcast v2.0.0 (31-Aug-13)
+------------------------
+
+- Complete re-work of the plugin.
+- Added threading support (faster loading of shows and episodes).
+- Tweaked context menus.
+- Code cosmetics.
+
+
+------------------------
+RealFm Podcast v1.0.5 (6-Nov-12)
+------------------------
+
+- Changed addon's content to Albums.
+- Changed radio logo.
+
+
+------------------------
+RealFm Podcast v1.0.4 (30-Oct-12)
+------------------------
+
+- Fixed parsing of podcasts.
+
+
+------------------------
+RealFm Podcast v1.0.3 (17-Oct-12)
+------------------------
+
+- Added progress in BusyDialog (Frodo).
+- Tweaked addon's contextMenu.
+
+
+------------------------
+RealFm Podcast v1.0.2 (12-Oct-12)
+------------------------
+
+- Changed html parsing to parseDOM.
+- Added more metadata.
+- Code clean-up.
+
+
+------------------------
+RealFm Podcast v1.0.1 (13-Apr-12)
+------------------------
+
+- Fixed iconimage of podcasts.
+
+
+------------------------
+RealFm Podcast v1.0.0 (26-Mar-12)
+------------------------
+
+- Initial version

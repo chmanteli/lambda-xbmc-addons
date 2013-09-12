@@ -1,0 +1,63 @@
+------------------------
+ANT1 Player v2.0.0 (31-Aug-13)
+------------------------
+
+- Complete re-work of the plugin.
+- Added threading support (faster loading of shows and episodes).
+- Tweaked proxy support (plugin will try to find a working proxy).
+- The fallback proxy is now empty.
+- Tweaked context menus.
+- Code cosmetics.
+- Note: Your favourites have to be re-added.
+- Note: This is the last time I mess with them unless crawler demands it:)
+
+
+------------------------
+ANT1 Player v1.2.3 (11-Apr-13)
+------------------------
+
+- Added fallback image in favourites.
+
+
+------------------------
+ANT1 Player v1.2.2 (5-Apr-13)
+------------------------
+
+- Tweaked context menus.
+- Code cosmetics.
+
+
+------------------------
+ANT1 Player v1.2.1 (30-Mar-13)
+------------------------
+
+- Code cosmetics.
+
+
+------------------------
+ANT1 Player v1.2.0 (23-Mar-13)
+------------------------
+
+- Redesign of shows list.
+- Added proxy support.
+- Code cosmetics.
+- Tweaked context menus.
+
+
+------------------------
+ANT1 Player v1.1.0 (23-Oct-12)
+------------------------
+
+- Changed html parsing to parseDOM.
+- Complete re-work of the resolver.
+- Added progress in BusyDialog (Frodo).
+- Fix Confluence views for Frodo.
+- Added more metadata.
+- Code clean-up.
+
+
+------------------------
+ANT1 Player v1.0.0 (11-Mar-12)
+------------------------
+
+- Initial version

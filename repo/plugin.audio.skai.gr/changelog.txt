@@ -1,0 +1,53 @@
+------------------------
+SKAI Podcast v2.0.0 (31-Aug-13)
+------------------------
+
+- Complete re-work of the plugin.
+- Added threading support (faster loading of shows and episodes).
+- Tweaked context menus.
+- Code cosmetics.
+- Note: Your favourites have to be re-added.
+- Note: This is the last time I mess with them unless crawler demands it:)
+
+
+------------------------
+SKAI Podcast v1.1.2 (6-Nov-12)
+------------------------
+
+- Changed addon's content to Albums.
+- Changed radio logo.
+
+
+------------------------
+SKAI Podcast v1.1.1 (30-Oct-12)
+------------------------
+
+- Added missing parseDOM module in addon's requires.
+
+
+------------------------
+SKAI Podcast v1.1.0 (17-Oct-12)
+------------------------
+
+- Changed html parsing to parseDOM.
+- Removed option of Low quality thumbs (fast).
+- Added option of Enable podcast thumbs (slow).
+- Fix retrieval of podcasts more than once.
+- Added progress in BusyDialog (Frodo).
+- Added more metadata.
+- Code clean-up.
+
+
+------------------------
+SKAI Podcast v1.0.1 (27-Apr-12)
+------------------------
+
+- Renamed shows folder to archive.
+- Added option of Low quality thumbs (fast).
+
+
+------------------------
+SKAI Podcast v1.0.0 (13-Apr-12)
+------------------------
+
+- Initial version

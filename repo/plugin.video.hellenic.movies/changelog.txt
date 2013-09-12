@@ -1,0 +1,12 @@
+------------------------
+Hellenic Movies v1.0.1 (11-Apr-13)
+------------------------
+
+- Added fallback image in favourites.
+
+
+------------------------
+Hellenic Movies v1.0.0 (5-Apr-13)
+------------------------
+
+- Initial version

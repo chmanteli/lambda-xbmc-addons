@@ -1,0 +1,37 @@
+------------------------
+Hellenic Toons v1.0.4 (11-Apr-13)
+------------------------
+
+- Added more Nickelodeon shows.
+- Added fallback image in favourites.
+- Code cosmetics.
+
+
+------------------------
+Hellenic Toons v1.0.3 (5-Apr-13)
+------------------------
+
+- Tweaked context menus.
+
+
+------------------------
+Hellenic Toons v1.0.2 (20-Mar-13)
+------------------------
+
+- Code cosmetics.
+- Switched to YouTube API.
+- Note: Your favourites have to be re-added.
+
+
+------------------------
+Hellenic Toons v1.0.1 (14-Mar-13)
+------------------------
+
+- Description cosmetics.
+
+
+------------------------
+Hellenic Toons v1.0.0 (13-Mar-13)
+------------------------
+
+- Initial version

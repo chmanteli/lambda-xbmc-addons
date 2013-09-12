@@ -1,0 +1,118 @@
+------------------------
+MEGA Replay v3.0.0 (31-Aug-13)
+------------------------
+
+- Complete re-work of the plugin.
+- Added threading support (faster loading of shows and episodes).
+- Re-work of YouTube shows.
+- Tweaked context menus.
+- Code cosmetics.
+- Note: Your favourites have to be re-added.
+- Note: This is the last time I mess with them unless crawler demands it:)
+
+
+------------------------
+MEGA Replay v2.1.3 (11-Apr-13)
+------------------------
+
+- Added more YouTube shows.
+- Added fallback image in favourites.
+- Code cosmetics.
+
+
+------------------------
+MEGA Replay v2.1.2 (5-Apr-13)
+------------------------
+
+- Added more YouTube shows.
+- Tweaked context menus.
+
+
+------------------------
+MEGA Replay v2.1.1 (31-Mar-13)
+------------------------
+
+- Fixed art of youtube shows list (problem with greek characters).
+
+
+------------------------
+MEGA Replay v2.1.0 (30-Mar-13)
+------------------------
+
+- Code cosmetics.
+- Redesign of mega tv shows list.
+- Added youtube shows list (megatv youtube channel, cinegreece.com and greek-movies.com).
+- Tweaked context menus.
+- Switched to YouTube API.
+- Note: Your favourites have to be re-added.
+
+
+------------------------
+MEGA Replay v2.0.0 (2-Mar-13)
+------------------------
+
+- Major changes caused by the redesign of megatv.com portal.
+- Note: Your favourites have to be re-added.
+
+
+------------------------
+MEGA Replay v1.2.0 (3-Feb-13)
+------------------------
+
+- Re-work of the plugin (various stuff were broken).
+- Moved classics to archive folder.
+
+
+------------------------
+MEGA Replay v1.1.2 (18-Dec-12)
+------------------------
+
+- Fixed an issue where certain Youtube shows could fail to load.
+- Fixed all issues where certain megatv.com shows could fail to load.
+- Faster first loading of shows.
+- Fixed playback of video streams inside m3u8 playlists.
+
+
+------------------------
+MEGA Replay v1.1.1 (30-Oct-12)
+------------------------
+
+- Fixed resolving issues of streams in http protocol.
+- Added check if Youtube addon is not installed.
+
+
+------------------------
+MEGA Replay v1.1.0 (23-Oct-12)
+------------------------
+
+- Changed html parsing to parseDOM.
+- Complete re-work of the plugin.
+- Fixed decoding issues of Greek characters.
+- Added shows from MEGA's YouTube channel.
+- Added Favourites support.
+- Added progress in BusyDialog (Frodo).
+- Fix Confluence views for Frodo.
+- Changed current art.
+- Added more metadata.
+- Code clean-up.
+
+
+------------------------
+MEGA Replay v1.0.2 (21-May-12)
+------------------------
+
+- Fixed news.
+
+
+------------------------
+MEGA Replay v1.0.1 (26-Mar-12)
+------------------------
+
+- Fixed classics.
+
+
+------------------------
+MEGA Replay v1.0.0 (11-Mar-12)
+------------------------
+
+- Initial version
