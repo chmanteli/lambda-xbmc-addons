@@ -104,12 +104,15 @@ class main:
         return
 
 class getUrl(object):
-    def __init__(self, url, fetch=True, mobile=False, proxy=None, referer=None, cookie=None):
+    def __init__(self, url, fetch=True, mobile=False, proxy=None, post=None, referer=None, cookie=None):
         if not proxy is None:
             proxy_handler = urllib2.ProxyHandler({'http':'%s' % (proxy)})
             opener = urllib2.build_opener(proxy_handler, urllib2.HTTPHandler)
             opener = urllib2.install_opener(opener)
-        request = urllib2.Request(url,None)
+        if not post is None:
+            request = urllib2.Request(url, post)
+        else:
+            request = urllib2.Request(url,None)
         if not cookie is None:
             from urllib2 import Request, build_opener, HTTPCookieProcessor, HTTPHandler
             import cookielib
@@ -545,7 +548,7 @@ class shows:
                 image = image.replace(image.split("/")[-1], '0.jpg')
                 image = image.encode('utf-8')
                 if image.endswith("/00000000000/0.jpg"): continue #empty playlist
-                self.list.append({'name': name, 'url': url, 'image': image})
+                self.list.append({'name': name, 'channel': channel, 'url': url, 'image': image})
             except:
                 pass
 
