@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<channels>
+	<channel>
+		<url>http://www.youtube.com/user/sapiensgr2</url>
+		<exclude>http://www.youtube.com/playlist?list=PLB3126415BC8BCDE3</exclude>
+	</channel>
+	<channel>
+		<url>http://www.youtube.com/user/Aviosys</url>
+		<include>http://www.youtube.com/playlist?list=PL9E9CD72ED3715FEA</include>
+		<include>http://www.youtube.com/playlist?list=PL35F8EE4D9D188A0C</include>
+		<include>http://www.youtube.com/playlist?list=PLEC7CC64E658C1D7E</include>
+	</channel>
+</channels>

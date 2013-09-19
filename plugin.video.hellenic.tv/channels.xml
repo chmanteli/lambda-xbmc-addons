@@ -80,7 +80,7 @@
 			<url>http://85.196.8.204:1234/udp/225.170.94.192:1234</url>
 			<type2>visionip</type2>
 			<url2>http://tvnetwork.new.visionip.tv/Hellenic_TV/index.php?module=playlist&amp;type=jwASX&amp;broadcastid=4267</url2>
-			<base></base>
+			<base>http://www.hprt.gr/</base>
 			<epg>30509</epg>
 		</channel>
 		<channel active="True">
@@ -635,8 +635,8 @@
 	<area name="CRETE">
 		<channel active="True">
 			<name>KRITI TV</name>
-			<type>ustream</type>
-			<url>http://www.ustream.tv/channel/crete-tv</url>
+			<type></type>
+			<url>rtmp://live.cretetv.gr/cretetv/myStream live=1 timeout=10</url>
 			<base>http://www.cretetv.gr/</base>
 			<epg>30701</epg>
 		</channel>

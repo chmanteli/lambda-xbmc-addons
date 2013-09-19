@@ -1,4 +1,19 @@
 ------------------------
+Hellenic Toons v2.0.0 (19-Sep-13)
+------------------------
+
+- Complete re-work of the plugin.
+- Added threading support (faster loading of shows and episodes).
+- Re-work of YouTube shows.
+- Re-work of Nickelodeon shows.
+- Added more shows from various sources.
+- Tweaked context menus.
+- Code cosmetics.
+- Note: Your favourites have to be re-added.
+- Note: This is the last time I mess with them unless crawler demands it:)
+
+
+------------------------
 Hellenic Toons v1.0.4 (11-Apr-13)
 ------------------------
 

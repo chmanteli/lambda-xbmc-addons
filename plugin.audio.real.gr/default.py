@@ -379,54 +379,32 @@ class shows:
         self.realrecentUrl		= 'http://www.real.gr/DefaultArthro.aspx?page=category&getPaging=true&catid=50'
 
     def real(self):
-        #self.list = self.real_list()
-        self.list = cache(self.real_list)
+        self.list = self.real_list()
         index().showList(self.list)
 
     def real_list(self):
         try:
             result = getUrl(self.realshowsUrl).result
-            result = common.parseDOM(result, "td", attrs = { "id": "MIDDLE" })[0]
-            shows = common.parseDOM(result, "td", attrs = { "valign": "top" })
-            self.list.append({'url': self.realrecentUrl})
+            shows = common.parseDOM(result, "td", attrs = { "class": "CategoryHeader" })
+            self.list.append({'name': 'Πρόσφατα'.decode('iso-8859-7').encode('utf-8'), 'url': self.realrecentUrl, 'image': addonLogo.encode('utf-8')})
         except:
             return
         for show in shows:
             try:
+                name = common.parseDOM(show, "span", attrs = { "style": "color:.+?" })[0]
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
                 url = common.parseDOM(show, "a", ret="href")[0]
                 url = url.split("=")[-1]
                 url = re.sub("\D", "", url)
                 url = '%s%s' % (self.realepisodeUrl, url)
                 url = url.encode('utf-8')
-                self.list.append({'url': url})
+                image = addonLogo.encode('utf-8')
+                self.list.append({'name': name, 'url': url, 'image': image})
             except:
                 pass
 
-        threads = []
-        for i in range(0, len(self.list)):
-            threads.append(Thread(self.real_list2, self.list[i]['url'], i))
-        [i.start() for i in threads]
-        [i.join() for i in threads]
-
-        filter = [i for i in self.list if not i['name'] == '']
-        self.list = filter
         return self.list
-
-    def real_list2(self, url, i):
-        try:
-            result = getUrl(url).result
-            name = common.parseDOM(result, "tr", attrs = { "class": "CategoryTr" })[0]
-            name = common.parseDOM(name, "a")[0]
-            name = name.split("</span>")[-1].strip()
-            name = common.replaceHTMLCodes(name)
-            name = name.encode('utf-8')
-            self.list[i]['name'] = name
-            self.list[0]['name'] = 'Πρόσφατα'.decode('iso-8859-7').encode('utf-8')
-            image = addonLogo.encode('utf-8')
-            self.list[i]['image'] = image
-        except:
-            self.list[i]['name'] = ''
-            self.list[i]['image'] = ''
 
 class episodes:
     def __init__(self):

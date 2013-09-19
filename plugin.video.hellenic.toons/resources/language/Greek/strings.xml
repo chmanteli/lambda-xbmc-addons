@@ -31,7 +31,8 @@
 	<string id="30450">Δείτε αγαπημένα κινούμενα σχέδια και παιδικά τραγούδια στα Ελληνικά. Όλα τα προγράμματα μεταδίδονται από το Nickelodeon και το YouTube.</string>
 	<!-- Labels -->
 	<string id="30501">Αγαπημένα</string>
-	<string id="30502">Nickelodeon</string>
-	<string id="30503">YouTube</string>
-	<string id="30504">Τραγούδια</string>
+	<string id="30502">Διάφορα</string>
+	<string id="30503">Nickelodeon</string>
+	<string id="30504">Κλασικά</string>
+	<string id="30505">Τραγούδια</string>
 </strings>

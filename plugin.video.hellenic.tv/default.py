@@ -334,7 +334,7 @@ class player:
     def http(self, url):
         try:
             request = urllib2.Request(url)
-            response = urllib2.urlopen(request)
+            response = urllib2.urlopen(request, timeout=2)
             response.close()
             response = response.info()
             return url
