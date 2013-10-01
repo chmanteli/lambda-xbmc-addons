@@ -1,4 +1,12 @@
 ------------------------
+ERT Online v2.0.2 (1-Oct-13)
+------------------------
+
+- Tweaked Youtube resolver.
+- Tweaked info dialogs.
+
+
+------------------------
 ERT Online v2.0.1 (10-Sep-13)
 ------------------------
 

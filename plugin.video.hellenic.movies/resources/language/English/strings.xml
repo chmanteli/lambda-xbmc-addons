@@ -9,6 +9,9 @@
 	<string id="30304">Removed from Favourites</string>
 	<string id="30305">Moved up</string>
 	<string id="30306">Moved down</string>
+	<string id="30307">Item already in Favourites</string>
+	<string id="30308">No stream available.</string>
+	<string id="30309">Try to find it in</string>
 	<!-- OK -->
 	<string id="30351">YouTube addon is not installed.</string>
 	<string id="30352">This stream requires it.</string>

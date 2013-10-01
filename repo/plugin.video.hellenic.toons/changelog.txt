@@ -1,4 +1,15 @@
 ------------------------
+Hellenic Toons v2.0.1 (1-Oct-13)
+------------------------
+
+- Added more shows from various sources.
+- Added Putlocker resolver.
+- Fixed flashx resolver.
+- Tweaked Youtube resolver.
+- Tweaked info dialogs.
+
+
+------------------------
 Hellenic Toons v2.0.0 (19-Sep-13)
 ------------------------
 

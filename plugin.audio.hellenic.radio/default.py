@@ -163,7 +163,7 @@ class Thread(threading.Thread):
 
 class index:
     def infoDialog(self, str, header=addonName):
-        xbmc.executebuiltin("Notification(%s,%s, 3000)" % (header, str))
+        xbmc.executebuiltin("Notification(%s,%s, 3000, %s)" % (header, str, addonIcon))
 
     def okDialog(self, str1, str2, header=addonName):
         xbmcgui.Dialog().ok(header, str1, str2)
@@ -365,7 +365,7 @@ class contextMenu:
             file = open(favData, 'a+')
             file.write('"%s"|"%s"\n' % (name, area))
             file.close()
-            index().infoDialog(language(30303).encode("utf-8"))
+            index().infoDialog(language(30303).encode("utf-8"), name)
         except:
             return
 
@@ -382,7 +382,7 @@ class contextMenu:
             for line in re.compile('(".+?\n)').findall(read):
                 file.write(line)
             file.close()
-            index().infoDialog(language(30304).encode("utf-8"))
+            index().infoDialog(language(30304).encode("utf-8"), name)
         except:
             return
 
@@ -404,7 +404,7 @@ class contextMenu:
             for line in list:
                 file.write('%s\n' % (line))
             file.close()
-            index().infoDialog(language(30305).encode("utf-8"))
+            index().infoDialog(language(30305).encode("utf-8"), name)
         except:
             return
 
@@ -426,7 +426,7 @@ class contextMenu:
             for line in list:
                 file.write('%s\n' % (line))
             file.close()
-            index().infoDialog(language(30306).encode("utf-8"))
+            index().infoDialog(language(30306).encode("utf-8"), name)
         except:
             return
 
@@ -610,6 +610,10 @@ class radios:
 class player:
     def __init__(self):
         self.list = radioList().radioList
+        self.youtubeUrl				= 'http://www.youtube.com'
+        self.youtubeliveUrl			= 'http://www.youtube.com/user/'
+        self.youtube_infoUrl		= 'http://gdata.youtube.com/feeds/api/videos/%s?v=2'
+        self.ustreamUrl				= 'http://iphone-streaming.ustream.tv'
 
     def run(self, radio, area):
         try:
@@ -622,11 +626,11 @@ class player:
             name, band, genre, area, desc, url = i[0]['name'], i[0]['band'], i[0]['genre'], i[0]['area'], i[0]['desc'], i[0]['url']
             image = '%s/%s/%s.png' % (addonLogos, area, name)
 
-            if url.startswith('http://iphone-streaming.ustream.tv'):
+            if url.startswith(self.ustreamUrl):
                 url = self.ustream(url)
-            elif url.startswith('http://www.youtube.com/user/'):
+            elif url.startswith(self.youtubeliveUrl):
                 url = self.youtubelive(url)
-            elif url.startswith('http://www.youtube.com'):
+            elif url.startswith(self.youtubeUrl):
                 url = self.youtube(url)
 
             if url is None: return
@@ -640,24 +644,46 @@ class player:
 
     def youtube(self, url):
         try:
-            if index().addon_status('plugin.video.youtube') is None:
-                index().okDialog(language(30353).encode("utf-8"), language(30354).encode("utf-8"))
+            id = url.split("?v=")[-1]
+            state, reason = None, None
+            result = getUrl(self.youtube_infoUrl % id).result
+            try:
+                state = common.parseDOM(result, "yt:state", ret="name")[0]
+                reason = common.parseDOM(result, "yt:state", ret="reasonCode")[0]
+            except:
+                pass
+            if state == 'deleted' or state == 'rejected' or state == 'failed' or reason == 'requesterRegion' : return
+            try:
+                result = getUrl(url).result
+                alert = common.parseDOM(result, "div", attrs = { "id": "watch7-notification-area" })[0]
                 return
-            url = url.split("?v=")[-1]
-            url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % url
+            except:
+                pass
+            if index().addon_status('plugin.video.youtube') is None:
+                index().okDialog(language(30353).encode("utf-8"), language(30352).encode("utf-8"))
+                return
+            url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % id
             return url
         except:
             return
 
     def youtubelive(self, url):
         try:
-            if index().addon_status('plugin.video.youtube') is None:
-                index().okDialog(language(30353).encode("utf-8"), language(30354).encode("utf-8"))
-                return
             url += '/videos?view=2&flow=grid'
             result = getUrl(url).result
-            url = re.compile('"/watch[?]v=(.+?)"').findall(result)[0]
-            url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % url
+            id = re.compile('"/watch[?]v=(.+?)"').findall(result)[0]
+            state, reason = None, None
+            result = getUrl(self.youtube_infoUrl % id).result
+            try:
+                state = common.parseDOM(result, "yt:state", ret="name")[0]
+                reason = common.parseDOM(result, "yt:state", ret="reasonCode")[0]
+            except:
+                pass
+            if reason == 'requesterRegion' or not state == 'processing': return
+            if index().addon_status('plugin.video.youtube') is None:
+                index().okDialog(language(30353).encode("utf-8"), language(30352).encode("utf-8"))
+                return
+            url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % id
             return url
         except:
             return

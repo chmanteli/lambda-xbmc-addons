@@ -1,4 +1,12 @@
 ------------------------
+ANT1 Player v2.0.1 (1-Oct-13)
+------------------------
+
+- Bypassed proxynova's tricks.
+- Tweaked info dialogs.
+
+
+------------------------
 ANT1 Player v2.0.0 (31-Aug-13)
 ------------------------
 

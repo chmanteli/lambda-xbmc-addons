@@ -151,7 +151,7 @@ class Thread(threading.Thread):
 
 class index:
     def infoDialog(self, str, header=addonName):
-        xbmc.executebuiltin("Notification(%s,%s, 3000)" % (header, str))
+        xbmc.executebuiltin("Notification(%s,%s, 3000, %s)" % (header, str, addonIcon))
 
     def okDialog(self, str1, str2, header=addonName):
         xbmcgui.Dialog().ok(header, str1, str2)

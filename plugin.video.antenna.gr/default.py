@@ -159,7 +159,7 @@ class Thread(threading.Thread):
 
 class index:
     def infoDialog(self, str, header=addonName):
-        xbmc.executebuiltin("Notification(%s,%s, 3000)" % (header, str))
+        xbmc.executebuiltin("Notification(%s,%s, 3000, %s)" % (header, str, addonIcon))
 
     def okDialog(self, str1, str2, header=addonName):
         xbmcgui.Dialog().ok(header, str1, str2)
@@ -425,7 +425,7 @@ class contextMenu:
             file = open(favData, 'a+')
             file.write('"%s"|"%s"|"%s"\n' % (name, url, image))
             file.close()
-            index().infoDialog(language(30303).encode("utf-8"))
+            index().infoDialog(language(30303).encode("utf-8"), name)
         except:
             return
 
@@ -440,7 +440,7 @@ class contextMenu:
             for line in re.compile('(".+?\n)').findall(read):
                 file.write(line)
             file.close()
-            index().infoDialog(language(30304).encode("utf-8"))
+            index().infoDialog(language(30304).encode("utf-8"), name)
         except:
             return
 
@@ -460,7 +460,7 @@ class contextMenu:
             for line in list:
                 file.write('%s\n' % (line))
             file.close()
-            index().infoDialog(language(30305).encode("utf-8"))
+            index().infoDialog(language(30305).encode("utf-8"), name)
         except:
             return
 
@@ -480,7 +480,7 @@ class contextMenu:
             for line in list:
                 file.write('%s\n' % (line))
             file.close()
-            index().infoDialog(language(30306).encode("utf-8"))
+            index().infoDialog(language(30306).encode("utf-8"), name)
         except:
             return
 
@@ -725,26 +725,27 @@ class player:
 
     def proxynova(self):
         try:
-            proxyList = []
+            hostList = []
             url = 'http://www.proxynova.com/proxy-server-list/country-gr/'
             result = getUrl(url).result
             result = result.decode('iso-8859-1').encode('utf-8')
-            proxies = common.parseDOM(result, "tr")
+            hosts = common.parseDOM(result, "tr")
         except:
-            return proxyList
-        for proxy in proxies:
+            return []
+        for host in hosts:
             try:
-                time = common.parseDOM(proxy, "time", attrs = { "class": "time-ago recent" })[0]
-                name = common.parseDOM(proxy, "span", attrs = { "class": "row_proxy_ip" })[0]
-                name = name.split('("')[-1].split('")')[0]
-                letters, numbers = list("qrtpmbvcag"), list("0123456789")
-                for i in range(0, 10): name = name.replace(letters[i], numbers[i])
-                name = '%s.%s.%s.%s:' % (int(name) >> 24, int(name) >> 16 & 0xFF, int(name) >> 8 & 0xFF, int(name) & 0xFF)
-                name += common.parseDOM(proxy, "a")[0]
-                proxyList.append(name)
+                time = common.parseDOM(host, "time", attrs = { "class": "time-ago recent" })[0]
+                name = common.parseDOM(host, "span", attrs = { "class": "row_proxy_ip" })[0]
+                hostList.append(name)
             except:
                 pass
 
-        return proxyList[:5]
+        proxyList = []
+        hostList = uniqueList(hostList[:4]).list
+        portList = [':80', ':8080', ':3128', ':8000']
+        for port in portList:
+            for host in hostList: proxyList.append(host+port)
+
+        return proxyList
 
 main()

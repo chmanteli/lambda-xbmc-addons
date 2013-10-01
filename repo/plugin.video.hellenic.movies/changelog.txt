@@ -1,4 +1,18 @@
 ------------------------
+Hellenic Movies v2.0.0 (1-Oct-13)
+------------------------
+
+- Complete re-work of the plugin.
+- Added threading support (faster loading of movies).
+- Re-work of movie search.
+- Tweaked context menus.
+- Tweaked info dialogs.
+- Code cosmetics.
+- Note: Your favourites have to be re-added.
+- Note: This is the last time I mess with them unless crawler demands it:)
+
+
+------------------------
 Hellenic Movies v1.0.1 (11-Apr-13)
 ------------------------
 

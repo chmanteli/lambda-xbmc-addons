@@ -9,6 +9,15 @@
 		</episode>
 	</show>
 
+	<show name="9">
+		<name>9</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/1KgAtRedMe0LQwJ3KfydSxkvy5R.jpg</image>
+		<episode>
+			<name>9</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaeqaaqraqgtKexsqien6KnqA==</url>
+		</episode>
+	</show>
+
 	<show name="Angry Birds">
 		<name>Angry Birds</name>
 		<image>http://thetvdb.com/banners/fanart/original/267834-6.jpg</image>
@@ -239,6 +248,54 @@
 		</episode>
 	</show>
 
+	<show name="Coraline">
+		<name>Coraline</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/9Rbu2YylCF5qDOZrdDkAOHUTMWs.jpg</image>
+		<episode>
+			<name>Coraline - Το Σπίτι στην Ομίχλη</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnuLm3J3H39rnq-LWmJXP4OHZ2c3Wy5rV5dzfzdiU5OfY3MzF2tjb6M7Z38fHmJyp0dubxd7Pmtnj5dk=</url>
+		</episode>
+	</show>
+
+	<show name="Dino Time">
+		<name>Dino Time</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/osIssLaNObVSnRNoT2xVqUaop7F.jpg</image>
+		<episode>
+			<name>Dino Time</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfElZ6noqjIr6WlvZebtdjm3JG8z9nWnKqdlZqTrsPB4d0=</url>
+		</episode>
+	</show>
+
+	<show name="Dragon Ball Z">
+		<name>Dragon Ball Z</name>
+		<image>http://thetvdb.com/banners/fanart/original/81472-10.jpg</image>
+		<episode>
+			<name>Sleeping Princess in Devil's Castle</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaerrGYq56voaS6oqWgnp-hpw==</url>
+		</episode>
+		<episode>
+			<name>Super Android 13</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naevp-qnpafpKCqsJmarLClqA==</url>
+		</episode>
+		<episode>
+			<name>The Path to Power</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naeu7GXmaecpKeqs5agqKWosg==</url>
+		</episode>
+		<episode>
+			<name>Battle of Gods</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaesbKWmZyko7SspKmsp6Kjp7fTzdTLy-HQ6-Db19jQruPumtjQy97S3_GbxtTV0-Tf5-GSy9XZ</url>
+		</episode>
+	</show>
+
+	<show name="DuckTales">
+		<name>DuckTales</name>
+		<image>http://thetvdb.com/banners/fanart/original/75931-14.jpg</image>
+		<episode>
+			<name>Ο Θησαυρός του Χαμένου Λυχναριού</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnqijzdzgzd7TsZ6YnZWw5tLjwcXUy9_Qw-rSxdvb3tbO59PD3M7R0Lvn4NjHss3e39fMlaGfnNDOv9_JzdHL0uTc1tOWx-LaneDh0dQ=</url>
+		</episode>
+	</show>
+
 	<show name="Frankenweenie">
 		<name>Frankenweenie</name>
 		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/u19sv7CyDcr5eONL7LtemPaStXt.jpg</image>
@@ -261,9 +318,22 @@
 		</episode>
 	</show>
 
+	<show name="Iron Man">
+		<name>Iron Man</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/1kXtLaTyuUT0zNZyglhNJBTC5mM.jpg</image>
+		<episode>
+			<name>Rise of Technovore</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnuCmypmd3ujV8tTezZW1497mzLHJ1MvQweHgycfV0tDD3dDM1tXi4OHdzJaYl5_Qs86xttHWy9C26sy33cjf0J3g4dHU</url>
+		</episode>
+	</show>
+
 	<show name="Justice League">
 		<name>Justice League</name>
 		<image>http://thetvdb.com/banners/fanart/original/76320-4.jpg</image>
+		<episode>
+			<name>Crisis on Two Earths</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnu7O2M2dnqmnq9eanJW25uLs1sfNxbjW0N_iycfFr-PY69bXx9Xa0MPv3MOtx97l1-vMlpiXnNCzzrHW0daa2ePl2Q==</url>
+		</episode>
 		<episode>
 			<name>The Flashpoint</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qelmaqYv8m8sLiYtbmbu-Tr4c3Ly5m91NnU2c2TwNnUpbPQydnU4d7h29iVts3j0Nzc3JWYnKKipa-o2s_cnsfu1qiVp6-knMXWsLSrutrExc7a0Q==</url>
@@ -412,12 +482,12 @@
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qeiscC-o7inqb-dmZ-bvd7n28nhk8Dm3d3gkarHz9yc4duRqcng2t7mmpaYlp-es86xttHWmcnl4dGR08_X4OLZ480=</url>
 		</episode>
 		<episode>
-			<name>Συλλογή 2008</name>
-			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe8lpuepcPGucWrtpyb3d7n28nh2uHf1Ova097P0dTe5NnJy9rV4N2qnZSgx-La</url>
-		</episode>
-		<episode>
 			<name>Χριστούγεννα με τους Looney Tunes</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe6rJmtw8bHubW5v5qb6eHh4NjX29PW3ebO0c3a2-bi5NzT1svlnuPt28nbx-La</url>
+		</episode>
+		<episode>
+			<name>1001 Ιστορίες Λαγού</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnu_j3t7c2-Xo7qDM35Wu5tbrzKbd1NrqzuvMl9rKy77e7tbJx8WdoZ-pzLbJyM7a49fBxdTL39CgsaWWx8Wz48654sjR1cuf1-za0A==</url>
 		</episode>
 		<episode>
 			<name>Ο Ντάφι Ντακ Κυνηγός Φαντασμάτων</name>
@@ -496,6 +566,43 @@
 		<episode>
 			<name>Friday Night Frights</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qeulrCqtLK9w6-vr7Obvt7m4NjN2Jm52N_Vka7Y1dXQ8Zqy0c3U5Zy-383PzuDknKqdlZvT1-c=</url>
+		</episode>
+	</show>
+
+	<show name="One Piece">
+		<name>One Piece</name>
+		<image>http://thetvdb.com/banners/fanart/original/81797-10.jpg</image>
+		<episode>
+			<name>01. The Great Gold Pirate</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnu7nzMzH3d7gq9fJz5W65eHd1s_V1eLa1KiektXWoJ_X7NrQ</url>
+		</episode>
+		<episode>
+			<name>02. Περιπέτεια στο Κουρδιστό Νησί</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnuzXm-LLntah596ay5W65eHd1s-11eLa1Kqb0diamtnj5dk=</url>
+		</episode>
+		<episode>
+			<name>05. The Curse of the Sacred Sword</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnqveyM2X1eLjrdSYnJW65eHd1s_V1eLa1KiiktXWoJ_X7NrQ</url>
+		</episode>
+		<episode>
+			<name>06. Omatsuri Danshaku to Himitsu no Shima</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnuTaltHUoOvTrt2U3pW65eHd1s-11eLa1K6b0diamtnj5dk=</url>
+		</episode>
+		<episode>
+			<name>08. The Desert Princess and the Pirates</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnu3XyNrN1erT5aKU05W65eHd1s_V1eLa1KilktXWoJ_X7NrQ</url>
+		</episode>
+		<episode>
+			<name>09. Episode of Chopper Plus</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnquf2KCWpKKisNab2pW65eHd1s-11eLa1Kim15bT3KWd4OHR1A==</url>
+		</episode>
+		<episode>
+			<name>10. Strong World</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnuHPyprU3OiksNPS15W65eHd1s-11eLa1KmdktXWoJ_X7NrQ</url>
+		</episode>
+		<episode>
+			<name>12. Film Z</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnvKk2eLW5tKgq6Dem5W65eHd1s_V1eLa1KmfktXWoJ_X7NrQ</url>
 		</episode>
 	</show>
 
@@ -735,6 +842,28 @@
 		</episode>
 	</show>
 
+	<show name="South Park">
+		<name>South Park</name>
+		<image>http://thetvdb.com/banners/fanart/original/75897-43.jpg</image>
+		<episode>
+			<name>South Park - Bigger Longer Uncut</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnubOldPJ2unmrdPGmZW_4OTs1cO4x97czqXMptHN09bh18yw19TT1uHXzMO91M_m46bO2tGU1OXc5A==</url>
+		</episode>
+	</show>
+
+	<show name="Star Wars">
+		<name>Star Wars</name>
+		<image>http://thetvdb.com/banners/fanart/original/83268-32.jpg</image>
+		<episode>
+			<name>Star Wars - The Clone Wars</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnuDUndvc49WnrtDOy5W_5dDqzLvJ2N_QxcG2w5XFwNnU17DQ19TR0MbZ39fHxZ6hn7DMw8nYz5_Q7taS0NrZ3Q==</url>
+		</episode>
+		<episode>
+			<name>LEGO Star Wars the Empire Strikes out</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qemmMGYrsmlvKaVqpybvdTf3JG72s3jnM_O1tuTwNnUpbLR2M_e1pzL4dbR0dHknMfi2JWYnKKipbG6rMfi2g==</url>
+		</episode>
+	</show>
+
 	<show name="Top Cat">
 		<name>Top Cat</name>
 		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/hKcwz8m64E8TLjUjyYFm3yu9Bj2.jpg</image>
@@ -807,6 +936,10 @@
 		<name>Αλαντίν</name>
 		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/original/qog4yRtJeExQHkBjtVTWkp99BvF.jpg</image>
 		<episode>
+			<name>Αλαντίν</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naeqq-Wq5ygpai5rqWrmLG2pA==</url>
+		</episode>
+		<episode>
 			<name>Ο Αλαντίν και ο Βασιλιάς των Κλεφτών</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe1l6-xs7WlxcC9trSbsru5saixtJmyvbyauLCrmby4xrSRt6yZxbfBsrqtuc3n2A==</url>
 		</episode>
@@ -821,12 +954,30 @@
 		</episode>
 	</show>
 
+	<show name="Αναστασία">
+		<name>Αναστασία</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/5WGhWqksMraFwnAa2r18YONARKh.jpg</image>
+		<episode>
+			<name>Αναστασία</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaesZ6WnZavtrKosZmsmaKkow==</url>
+		</episode>
+	</show>
+
 	<show name="Απόδραση από τον Πλανήτη Γη">
 		<name>Απόδραση από τον Πλανήτη Γη</name>
 		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/w0no28UKW3Z9CIv9kTiCoan6RWl.jpg</image>
 		<episode>
 			<name>Απόδραση από τον Πλανήτη Γη</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfGt6qzrsajwLSyqbubtuLbztTNk7Lj3uWatNTH2tbjpdLF2trUo5-poLaduNXhx-7WqKunubLEvLazlaytv8O5ztrR</url>
+		</episode>
+	</show>
+
+	<show name="Άρης Καλεί Μαμά">
+		<name>Άρης Καλεί Μαμά</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/3TTP2qVda479YgtOLDWxhzaASXU.jpg</image>
+		<episode>
+			<name>Άρης Καλεί Μαμά</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaevaGaqqyjp6eqsZypqa2ptQ==</url>
 		</episode>
 	</show>
 
@@ -851,6 +1002,24 @@
 		</episode>
 	</show>
 
+	<show name="Αυτοκίνητα">
+		<name>Αυτοκίνητα</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/a1MlbLBk5Sy6YvMbSuKfwGlDVlb.jpg</image>
+		<episode>
+			<name>Αυτοκίνητα</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe6sqqYvqenvKSdr5qbtNDq4JGalpynnLzDqLrP3J7H7taolaevpJytnsXezw==</url>
+		</episode>
+	</show>
+
+	<show name="Βάλιαντ">
+		<name>Βάλιαντ</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/8s2iXxJQL8LMbNUrRad5auftoyN.jpg</image>
+		<episode>
+			<name>Βάλιαντ</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaeraGbn5qxs7OrnpefnrCypA==</url>
+		</episode>
+	</show>
+
 	<show name="Βοήθεια, Είμαι Ψάρι!!">
 		<name>Βοήθεια, Είμαι Ψάρι!!</name>
 		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/5ryEASjcPOpmksQfPj1QrO3FfQg.jpg</image>
@@ -866,6 +1035,15 @@
 		<episode>
 			<name>Βρέχει Κεφτέδες</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qeelb-7nqbEw6-YsKibtNvn4sjhk-Pa4-CaxZWp1NLd29KR18yZvtTZ4cbJ0tjknKqdlKGTsMezytbUydzV</url>
+		</episode>
+	</show>
+
+	<show name="Γάτος Σπιρουνάτος">
+		<name>Γάτος Σπιρουνάτος</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/lJD1KBpgCEtjsmvHuacjlIx8IIk.jpg</image>
+		<episode>
+			<name>Γάτος Σπιρουνάτος</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaevZ2Wn52jqaausJqan6C0oQ==</url>
 		</episode>
 	</show>
 
@@ -981,6 +1159,10 @@
 		<episode>
 			<name>Η Μεγαλύτερη Περιπέτεια του Γουϊνι</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qevpbuzuri60Lq7m66byNjm283Nk8DZ1KW909fO35685-DYla3e0t3cmqXM3NHf4-3fyZWXpaqmpbG6rLjV4dDu1g==</url>
+		</episode>
+		<episode>
+			<name>Οι Εποχές των Δώρων</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe_vJqesMa9yrGdr5qbyLjGu62tk8C5tKW9s7eumcS0ucCztrmZwLWltK2-r7q4nKmmnaGTsMezytbUlcfi2g==</url>
 		</episode>
 		<episode>
 			<name>A Very Merry Pooh Year</name>
@@ -1131,6 +1313,15 @@
 		</episode>
 	</show>
 
+	<show name="Ζουζούνια">
+		<name>Ζουζούνια</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/gOvW00ZMoEiyRwXVkHPfBictPAl.jpg</image>
+		<episode>
+			<name>Ζουζούνια</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe7vJy5nam30b-Xt56bspy64svbk7ja1d2alaGfpJ6zzrG20daZyeXhsZGpqZ-eoajO2tE=</url>
+		</episode>
+	</show>
+
 	<show name="Ζουμπαίος και Ιουλιέτα">
 		<name>Ζουμπαίος και Ιουλιέτα</name>
 		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/9eFXL1R1pi6LdGZBS4lKLxsgX1v.jpg</image>
@@ -1165,8 +1356,29 @@
 		<name>Η Εποχή των Παγετώνων</name>
 		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/4eTb1EE90BpYV8ZPLTcr1LlaFh8.jpg</image>
 		<episode>
+			<name>Η Εποχή των Παγετώνων</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnu7R3N-W1Nji4s7b4ZW1tLTXrqutxcujn6ifw5bH4tqd4OHR1A==</url>
+		</episode>
+		<episode>
+			<name>Η Εποχή των Παγετώνων 2</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnuLZ0M_Oo-Kj8OTLypW1tLTXrqutxZ6ew8Cyw7WruMWzx8Syx8WeoZ-uzJLJ3NWf1-za0A==</url>
+		</episode>
+		<episode>
+			<name>Η Εποχή των Παγετώνων 3</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnu_fyNXand7l4uWb0JW1tLTXrqutxZ-es7nEsse1stDDwLLDrK-6wMK5wra7xcujn6imw5bH4tqd4OHR1A==</url>
+		</episode>
+		<episode>
 			<name>Η Εποχή των Παγετώνων 4</name>
-			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe7q6qtxcqkxrGxt72b1t_n5czYx9PW4-fb09bK3trV7NTWydvQ2t4=</url>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnvDi2Zudo6Tl3uHO35W11NTXrsvNxa_g3ezW0s3U4NLb17HW0czg0KGonpbHxbPjzrniyNHVy5_X7NrQ</url>
+		</episode>
+	</show>
+
+	<show name="Η Ζούγκλα">
+		<name>Η Ζούγκλα</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/nsqt1fLuLwOC8CQW9b6WC4HSBjY.jpg</image>
+		<episode>
+			<name>Η Ζούγκλα</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaeqKSZm5ycpaawpp2qm62jpg==</url>
 		</episode>
 	</show>
 
@@ -1176,6 +1388,15 @@
 		<episode>
 			<name>Η Ημέρα των Κορακιών</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qemu7CuvqegrcW2wJ6bvdSlt9Pd2Jm11Ouap9fY2tbY5NnJ25OeoaCqmqq6q7q0t6Wxuqy41eGc0OPNrJOttKKlwbGqx-La</url>
+		</episode>
+	</show>
+
+	<show name="Η Ιστορία του Ντεσπερό">
+		<name>Η Ιστορία του Ντεσπερό</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/otiDe4tbyTct7hvNXVW6PsGVojZ.jpg</image>
+		<episode>
+			<name>Η Ιστορία του Ντεσπερό</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naer7Kanqevt5-upp2Zm5yonw==</url>
 		</episode>
 	</show>
 
@@ -1249,6 +1470,10 @@
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qeipZq9v6a-qp-5m7ibxdfdmrDR2uDd1KW6ydrTzdrT2ePN</url>
 		</episode>
 		<episode>
+			<name>Η Μικρή Γοργόνα 2</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaerLGlmJiktrSvn5irnaWmpQ==</url>
+		</episode>
+		<episode>
 			<name>Τα Πρώτα Χρόνια της Άριελ</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qelncG0t8PBxby7n5ibvrjDv62VrbvDtse7pbynmcHBx8Gllb6-wL3BrpG8rr-esMq2qbTH4to=</url>
 		</episode>
@@ -1289,12 +1514,108 @@
 		</episode>
 	</show>
 
+	<show name="Η Ταινία μιας Μέλισσας">
+		<name>Η Ταινία μιας Μέλισσας</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/eKXTOIqSFrfN8WTTxrzHMBNiUpB.jpg</image>
+		<episode>
+			<name>Η Ταινία μιας Μέλισσας</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naeva6Vm5uis6atsJaembKzpA==</url>
+		</episode>
+	</show>
+
+	<show name="Η Τοσοδούλα">
+		<name>Η Τοσοδούλα</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/m5SsT2w7j4IAL6HMrFMGzfjxnmB.jpg</image>
+		<episode>
+			<name>Η Τοσοδούλα</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaeuaaWmKmep6i-ppWdnK-osg==</url>
+		</episode>
+	</show>
+
+	<show name="Θάντερκατς">
+		<name>Θάντερκατς</name>
+		<image>http://thetvdb.com/banners/fanart/original/241431-2.jpg</image>
+		<episode>
+			<name>Επεισόδιο 1</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaerKWYmZ2jorS8oZWcqaClpw==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 2</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naeq66draejsqG6r52rqKKisA==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 3</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaerKaUnpukqKarr52cmpympA==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 4</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naeu6annp-eorSopZagnZ-joQ==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 5</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naeu6admZiepai8pZmhmrKisw==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 6</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaerbKdrJews6atnqacmrCmnw==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 7</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaeurKdq5qgpLOpnaWgqp60tA==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 8</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaerqSVmpuxsqSooKaZnq2psg==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 9</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaeuZ-loJefo7GospWhmJy0sw==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 10</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naeq6aZnpitt6WusZyqlqWjpg==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 11</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaesZ6XnZict7Gtppadl7G3pw==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 12</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naeqq6ooaydtqOooqegn6CisQ==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 13</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaeubCVnKyktqiqsZucn6SlsQ==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 14</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaevrOcm5mkqrWtn5urmJ6yoA==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 15</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaevrGqnJadpKe5s6idnaGpsw==</url>
+		</episode>
+	</show>
+
+	<show name="Θρύλος των Ιπτάμενων Φρουρών">
+		<name>Θρύλος των Ιπτάμενων Φρουρών</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/njjPm18whWhmvedeeJfSuPwg18Y.jpg</image>
+		<episode>
+			<name>Θρύλος των Ιπτάμενων Φρουρών</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naeq6GUoKexpaavpp2fqaOnprfTzdTLy-HQ6-Db19jQruPumtjQy97S3_GbxtTV0-Tf5-GSy9XZ</url>
+		</episode>
+	</show>
+
 	<show name="Θορ">
 		<name>Θορ</name>
 		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/eOpVdDQQVTz81vFyomtXHWk5amS.jpg</image>
 		<episode>
 			<name>Θορ - Ο Μύθος του Μαγικού Σφυριού</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe1l6y1u8Smq7ibm5ub5dfn39DNzdHf09njzQ==</url>
+		</episode>
+		<episode>
+			<name>Hulk vs Wolverine-Τhor</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnuja1MnInaHb5NXenpW05tvjzLrbxcPg2-7S1tHU0dChqJ2dx6rCteHh3ZLQ2tnd</url>
 		</episode>
 	</show>
 
@@ -1304,6 +1625,15 @@
 		<episode>
 			<name>Καρχαριομάχος</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfElra-uaLEqq6YnL6bxNfZ38-Vus3d1KWflJiambXFvL_N2Mfi2g==</url>
+		</episode>
+	</show>
+
+	<show name="Κατάστημα για Αυτοκτονίες">
+		<name>Κατάστημα για Αυτοκτονίες</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/e9lYCahe1Ag61EewWwcqdvL3Ym5.jpg</image>
+		<episode>
+			<name>Κατάστημα για Αυτοκτονίες</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaevKWcmZuvo7GtsZypm5yjpQ==</url>
 		</episode>
 	</show>
 
@@ -1320,9 +1650,30 @@
 		</episode>
 	</show>
 
+	<show name="Λόραξ">
+		<name>Λόραξ</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/7CuXAFUWcOlR5kt07ln1fZDxdHX.jpg</image>
+		<episode>
+			<name>Λόραξ</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaeuZ-lqZmvsqG7sKahn52ysA==</url>
+		</episode>
+	</show>
+
 	<show name="Λούκυ Λουκ">
 		<name>Λούκυ Λουκ</name>
 		<image>http://thetvdb.com/banners/fanart/original/71558-1.jpg</image>
+		<episode>
+			<name>Το καραβάνι</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaesbOVrZiutaS8naqZmqCiog==</url>
+		</episode>
+		<episode>
+			<name>Ντέιζι Τάουν</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qeepZu0t8SlqaW5qpmbvcS7uL2VssG8tKWxpbG5xZ7Dx8SyydzV</url>
+		</episode>
+		<episode>
+			<name>Τρελές Περιπέτειες στην Άγρια Δύση</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnq7mz9-d5OjX69yc25Wz4M7P0tfcxcuyzsTix9Pfy73k49LDqcri1t3s4tbNxZ6hn6_Mw6_Yy7Lk3NbTx5TU5dzk</url>
+		</episode>
 		<episode>
 			<name>Επεισόδιο 1</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfGnMGbt6azup-vn5mbveTb2N2VsuHc1KWvzdTS5Z6-pcHW19PR497rmqvay9Hc0O7W</url>
@@ -1437,12 +1788,25 @@
 			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnt7R1szW4uXS3J7T1pW50tPZ1MXbyc3jnaqdlJ2UsMezytbUlr7i2rOmztrRlNTl3OQ=</url>
 		</episode>
 		<episode>
+			<name>Μαδαγασκάρη 2</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaeqqKZqZuis7KxoJeqrLKpsbfTzdTLy-HQ6-Db19jQrtbZ2sXc1Zrf2ObUksvV2Q==</url>
+		</episode>
+		<episode>
 			<name>Μαδαγασκάρη 3</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qejm5yevqmwzbqVtZybvrC8rqupua-ywaWgkaq4vtrfpaSWmNaZ6aGuoZHc1dnU0Oyelg==</url>
 		</episode>
 		<episode>
 			<name>Madly Madagascar</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qelq8CnwbnCx7S9vaib3tvx2sXMyc3j0O7W</url>
+		</episode>
+	</show>
+
+	<show name="Μαίρη και Μαξ">
+		<name>Μαίρη και Μαξ</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/akUyYgdcY3Q4WfbWLDB9Ur8ttFG.jpg</image>
+		<episode>
+			<name>Μαίρη και Μαξ</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaevJ-bmpaxoaeor6qsp660oA==</url>
 		</episode>
 	</show>
 
@@ -1458,6 +1822,10 @@
 	<show name="Μικρό μου Πόνι">
 		<name>Μικρό μου Πόνι</name>
 		<image>http://thetvdb.com/banners/fanart/original/72001-1.jpg</image>
+		<episode>
+			<name>Η ανοιξιάτικη βόλτα της πριγκίπισσας</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naeu6OUmJext7CvpJuuq6CqoQ==</url>
+		</episode>
 		<episode>
 			<name>Μικρό μου Πόνι</name>
 			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnunYzNaYztTg3NPX0JXc4N3xm9LNy9-f393fzdjL4NbY3eCSmd6co53Z482WzuDe2w==</url>
@@ -1491,6 +1859,19 @@
 		<episode>
 			<name>Μπάλτο 3</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qeumqCco6fCrsKrnLObs9Dk4dOVmZnI2ObU15XV0p6y4M7Sz8uZo5-ooZGsvLDD2Oia3JqcoJ6wu6DR09w=</url>
+		</episode>
+	</show>
+
+	<show name="Μπάμπι">
+		<name>Μπάμπι</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/original/wGQ7FyQIlgGfqtyrh1HwFFQ6pbt.jpg</image>
+		<episode>
+			<name>Μπάμπι</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaevqKVmpqjpKi7sqaqrKK2oQ==</url>
+		</episode>
+		<episode>
+			<name>Μπάμπι 2</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qevl6-tsLWxsMCztpmbs9Dlz82VmJmjn6ijkay8sMPY6JrcmpygnrC7oJHLy8_a29nfzduZ</url>
 		</episode>
 	</show>
 
@@ -1591,6 +1972,22 @@
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qeuncGzo7PHrq-5sJ-bs7DMuqW2k7mywsOas66TwLm0pb2sqbTAssLFmpWhn58=</url>
 		</episode>
 		<episode>
+			<name>Η επιστροφή του Τζόκερ</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnuDg0tnP3aGf8tHUnpWu0uPlztLHqNHq3ubRw7rL4Obh5szTzsXg2dTXt9PTy97QoaidlJbO4N7b</url>
+		</episode>
+		<episode>
+			<name>Νύχτα στη Γκόθαμ</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnrDQzMuYzqal5t_XypWu0uPlztLHrdvl19naw7PU1djX7MyWmJak0M66v7bR1suin7Cd1MfFy7jh18DZytnLn9fs2tA=</url>
+		</episode>
+		<episode>
+			<name>Superman Batman Public Enemies</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaerLGlmJevobCuoaWqlqK2sg==</url>
+		</episode>
+		<episode>
+			<name>Year One</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnvHlzNrRz-ef3-PY25Wu0uPlztLHxcXW0OrMs9bLy6OfqZ7Dx63e0LDt0c3XxZrZ4-XZ</url>
+		</episode>
+		<episode>
 			<name>Ο Σκοτεινός Ιππότης Επιστρέφει Μέρος 1</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qexm8CdtKa8uaK7mrGbs9Ds2sXWk8DZ1KWxxdrRmbzd4dTM3JO-1uPt39Lbk7zS4eyekZqWnaM=</url>
 		</episode>
@@ -1662,6 +2059,15 @@
 		</episode>
 	</show>
 
+	<show name="Μυρμηγκοϊστορίες">
+		<name>Μυρμηγκοϊστορίες</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/gQ1MQIbEjBKTH5TBsnfv2vkMrJb.jpg</image>
+		<episode>
+			<name>Μυρμηγκοϊστορίες</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaesZ6Vm5ulpKO8sp2hnZ2ypA==</url>
+		</episode>
+	</show>
+
 	<show name="Νόντυ">
 		<name>Νόντυ</name>
 		<image>http://thetvdb.com/banners/fanart/original/76491-1.jpg</image>
@@ -1699,6 +2105,15 @@
 		</episode>
 	</show>
 
+	<show name="Ντάμπο το Ελεφαντάκι">
+		<name>Ντάμπο το Ελεφαντάκι</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/ioGNSMfktFnl7FTQusBzac0v8Uq.jpg</image>
+		<episode>
+			<name>Ντάμπο το Ελεφαντάκι</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naeqp-qoauhpp-tsaecnq2poA==</url>
+		</episode>
+	</show>
+
 	<show name="Ντένις ο Τρομερός">
 		<name>Ντένις ο Τρομερός</name>
 		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/original/u3W3wqBXMwEfgnuUAiuh7JnZj9o.jpg</image>
@@ -1711,6 +2126,182 @@
 	<show name="Ντόρα η Μικρή Εξερευνήτρια">
 		<name>Ντόρα η Μικρή Εξερευνήτρια</name>
 		<image>http://thetvdb.com/banners/fanart/original/74697-5.jpg</image>
+		<episode>
+			<name>Επεισόδιο 1x01</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe_sa-4ranHz5-cn5iboaClwczNk67a1qW_ycyTr9nY29jJ1sfi2g==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x02</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qeuqMCbo6Ki0MCxwaqboaGludPb2pnS3dyaqtfb2tXQ7tY=</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x03</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe1mZ69t8mlqaa2u72boaKltc3Lk67g3uWas9DO1NLl4Q==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x04</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qevlqG9ncCnxb-bmbSboaOlr8nJydTW4tnjzQ==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x05</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe0lrCts6Ohy6Sanr-boaSlxMmVp9jdnMvQ1s3H2Z6159-RscnRnrLq0sXVx-La</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x06</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qeesqCztKi6ucSvvaqboaWlsMzX1Zm01-fcxd7P</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x07</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qejlbO-ucPHqa-vta6boaalwdbNx9_m4d2ardvSzd_T2ePN</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x08</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qefl7uunaajz5-Ws76boaelwczay9Geu7CflZ_P2J6_4dTL0cvf</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x09</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe6pcGXoMqnvLuamp2boailr83Pk77a5d3fxd7P</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x10</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe6lrW9orOzz7icqpqbop-lr8na2OWet-3b2Mnc1Q==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x11</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfAuaG0pbjEscSbrJ2boqClxM3i4NjWnM_W19DL39Ll4Q==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x12</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfAmrCuwaiwzbWmwb6boqGltNbJ1NDe0LCflZ_Zmbne7eDJ</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x13</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qejvL-1pcOlz6OlupyboqKlwNna1t7a4t3O2tE=</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x14</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qehs8GztKO2urusnKeboqOlwNjRydfqnMzO1M3H4to=</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x15</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qeflpqdxbmny6Sym7WboqSlr9Pd1M_a3d-apsnS2NLl4Q==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x16</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe4l6-_ncjBrbixup-boqWlr8XL0dzS0uPO2tE=</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x17</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qeit729n6PCw56sm62boqals83bzpnA5Oya086Tw9Lj3d_F3s8=</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x18</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfEq8Cxn7KjqbuWqqeboqelr9nPzc2ese3Uy8nH4to=</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x19</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe0rKm_oLO3qrS3vZeboqiluc3c2tjWnMvhxdrH4to=</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x20</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfFtr24rsqj0bWxtZmbo5-lsdPax5nE0O7S15Xa1NacyN_N1snR0uXh</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x21</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe1uaCbv8m9rbuZmq2bo6ClstCVqdvi5OHO2tE=</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x22</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfGs6Cuo7nIv7Wcr5ibo6GlwczNk6_Z3tvc0Mna0Z7D6tLJydzV</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x23</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe1qLCuoaai0KKXsLGbo6KlwcmVp9ng0O7W</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x24</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfEuaynoLy-0L-oqp6bo6OlvcXK0tupoamk15Ws2Obj3Q==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x25</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qexnL2Yn8rCrbGvqbubo6SlwdOVutTWnMzfyc3O2-bi3c7a0Q==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1x26</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfCtsCaor-hzbi5n5ubo6WlsMXU0pne1KW61pW41dXT5NLXydzV</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 2x01</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qeinJ2opaSir8WznrSboaClrpG0y-Dl1OqaqtfYmcTm4d3J2sfi2g==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 2x02</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfCqLW5rqmzqsCaoLmboaGlrpG42NHk1Obhkc7V3p7C2dvYycfi2g==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 2x03</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qegt7-nu7ilsaWzoZ-boaKlsNDRydfS5eE=</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 2x04</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe7lZyevqnIuqCvnbOboaOlsdPL2tvjnLzc1snH4to=</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 2x05</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qeirJm5n7ygw5-3nZeboaSlssvPk7Tm3ezO2tE=</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 2x06</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qeus5qcrbPBw7GonK6boaWlstCVs-Hk2Nvcxd7P</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 2x07</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qehl6q-v6KzusaXs7GboaaltNPUytHfnL3l1NTV3tbh687a0Q==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 2x08</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qext8CXwbOjw7Wmqbuboaeltc3My5my3dyaq9eTv9bU487a0Q==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 2x09</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfGq6ydt7KwsaK9tpmboailucnX1Jnl192ap9HYz-bipdnN19TN59g=</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 2x10</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qejs8C5tMTGrMC9qZ-bop-ludPb2pm-0OjO2tE=</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 2x11</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qeitsG_sMSzzb-zvbmboqCludPb2pnE4O3SxdPfzefY</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 2x12</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfEr5-_nryjy6WdnqiboqGlvc3W2tue4-DSkbjV2uqcveXU2svf5NDu1g==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 3x01</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfCtpqeob-xy6GxsJuboaClusnN2pm12N3U08nc1Q==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 3x02</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qefpa-7w8i9zcayr56boaGlusnN2pm12N3U05WYzefY</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 3x03</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfCpbC-s8CnwLWWmruboaKlusnN2pm12N3U05WZzefY</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 3x04</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qefs727s8azwLybn5ebtd7qzpHcztGe1PDd0NfY0eOcy9LF29XanqKlnZiVutTWnLrWy5W22-XQ7NzF3s8=</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 3x05</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe7mb2_w6Ww0byxmZqbtd7qzpHcztGe1PDd0NfY0eOcy9LF29XanqKlnZmVs9HW46Wxzc3N29Ll4Q==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 3x06</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qems8CcoManury9n7-btd7qzpHcztGe1PDd0NfY0eOcy9LF29XanqKlnZqVuc3n1KXBzM2TvObf6NbJ28fi2g==</url>
+		</episode>
 		<episode>
 			<name>Η Ντόρα Σώζει τις Γοργόνες</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qeknKGasMi-q8Krtrmbtb7KrpG7p8K2wqXBrK2TubbBxa6trLnN59g=</url>
@@ -1748,6 +2339,15 @@
 		</episode>
 	</show>
 
+	<show name="Ο Απίθανος Κύριος Φοξ">
+		<name>Ο Απίθανος Κύριος Φοξ</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/uxQ1n8yLqRZgnrimiBXJ5rsaa.jpg</image>
+		<episode>
+			<name>Ο Απίθανος Κύριος Φοξ</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnq7jzsmW5t2g4OHb35Wy0t3sztfcz8-fvOqbqtfemqOfqKaSn5ic4Z2637bR1prpoa6hksGvssqd2ePNls7g3ts=</url>
+		</episode>
+	</show>
+
 	<show name="Ο Γιός του Αη Βασίλη">
 		<name>Ο Γιός του Αη Βασίλη</name>
 		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/yNTU0FHQwK0AjVVCbzQTdIDyyMx.jpg</image>
@@ -1757,12 +2357,34 @@
 		</episode>
 	</show>
 
+	<show name="Ο Δρόμος για το Ελ Ντοράντο">
+		<name>Ο Δρόμος για το Ελ Ντοράντο</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/t7NjcAUeR3xW9xdgMbDZvWZO4PA.jpg</image>
+		<episode>
+			<name>Ο Δρόμος για το Ελ Ντοράντο</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naevp2lnaqyqrOpo5agmrG3og==</url>
+		</episode>
+	</show>
+
 	<show name="Ο Ήρωας του Βυθού">
 		<name>Ο Ήρωας του Βυθού</name>
 		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/fFqbvTfBTxYQvySlnXysqAKA0AY.jpg</image>
 		<episode>
 			<name>Ο Ήρωας του Βυθού</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe6l5q1w6Wjr66ym5-bxNfZ38-VqM3a46WflJicmbXFvL_N2NPX5w==</url>
+		</episode>
+	</show>
+
+	<show name="Ο Αυτοκράτορας Έχει Κέφια">
+		<name>Ο Αυτοκράτορας Έχει Κέφια</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/O2Bfpl52PwzUh2iJs2bXF4rewS.jpg</image>
+		<episode>
+			<name>Ο Αυτοκράτορας Έχει Κέφια</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaesbCUoZ2cpbO-r5Scna2noLfTzdTLy-HQ6-Db19jQrqCqoA==</url>
+		</episode>
+		<episode>
+			<name>Ο Κρονκ Έχει Κέφια</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmntymxdzI1eXfrNLH0ZXA2dTXstHYy97g4dfgw7bL49C26tzT3svLo86qnZSdxcu44deu2czP29Cd4OHR1A==</url>
 		</episode>
 	</show>
 
@@ -1780,6 +2402,39 @@
 		<episode>
 			<name>Οι Φίλοι μου Τίγρης και Γουϊνι</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfFnb2zv6W-xaKvs5mboaKlxK22tLW2oKW6xdbfmeXX2dvP25PS4OGlsMzaz9_l3ujVydqTvuDR4duRmpPA5uHs2cnbk9rW1NyaytfYmeTf3dLIr9jR1tqlztnMz9vS5eE=</url>
+		</episode>
+	</show>
+
+	<show name="O Μικρός Νικόλας">
+		<name>O Μικρός Νικόλας</name>
+		<image>http://thetvdb.com/banners/fanart/original/246301-1.jpg</image>
+		<episode>
+			<name>1. Το Πορτοφόλι</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qejsb2coMDEuqS7qp6bqZypmrjXk9zg4ezcytfS1Q==</url>
+		</episode>
+		<episode>
+			<name>2. Τα Πατίνια</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfFsbWdtKPIv6Gss5mbqZyqmrjJk9zS4-Hbzck=</url>
+		</episode>
+		<episode>
+			<name>3. Η Ταινία</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qexpreesMCw0bSZrLWbqZyrmqyV2s3a3eHO</url>
+		</episode>
+		<episode>
+			<name>4. Ο Νικόλας Πάει για Ψώνια</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qevva-uo6WkrJ-atqibqZysmrOVtNXc3uTO15XWzdbYpdTNyZPc5N7m1sU=</url>
+		</episode>
+		<episode>
+			<name>5. Chantal</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe8lZu0s8Cxq6KcmrWbqZytmqfQx9rl0OQ=</url>
+		</episode>
+		<episode>
+			<name>6. Το Στοίχημα του Alceste</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qexvKC7xaexxsaZurSbqZyumrjXk9_l3uHlzdXHmeXe7Zql1MnR5OPd</url>
+		</episode>
+		<episode>
+			<name>7. Το Αυτοκίνητο</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qeepbCow6W6z7yaqbibqZyvmrjXk83m4-fYzdbP4OA=</url>
 		</episode>
 	</show>
 
@@ -1810,6 +2465,46 @@
 		<episode>
 			<name>Ο Περίεργος Γιωργάκης</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qeipaqfxMDHyrSbr7-btOTq1tPd2Zm41Offy80=</url>
+		</episode>
+	</show>
+
+	<show name="Ο Πλανήτης των Θησαυρών">
+		<name>Ο Πλανήτης των Θησαυρών</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/a7VP1gyko8YEx7JCpyXDYnbbk7F.jpg</image>
+		<episode>
+			<name>Ο Πλανήτης των Θησαυρών</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaeuqaloJmiqaK8sJyuqq2yow==</url>
+		</episode>
+	</show>
+
+	<show name="Ο Ποντικομικρούλης">
+		<name>Ο Ποντικομικρούλης</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/p8Z1nsE1HXSQgh8thJVAlMSSSHz.jpg</image>
+		<episode>
+			<name>Ο Ποντικομικρούλης</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnrGfydzX4t7osObN1ZW_5eTZ39jHstXl4-TSw5mfparOvMOous_c0M6_38Op29Da3tebzNzT2A==</url>
+		</episode>
+		<episode>
+			<name>Ο Ποντικομικρούλης 2</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnuikzNbW4uno29fQnpW_5eTZ39jHstXl4-TSw5rFnqGfqsyovqq-2t_XzKvaxa3m0-Hcw5bO4N7b</url>
+		</episode>
+	</show>
+
+	<show name="Ο Ρατατούης">
+		<name>Ο Ρατατούης</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/sFpGI08aeHIRKlLi9SxLyYrRyZ8.jpg</image>
+		<episode>
+			<name>Ο Ρατατούης</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaeqqaVmqeks7OqpJmdnLGhoA==</url>
+		</episode>
+	</show>
+
+	<show name="Ο Σιδερένιος Γίγαντας">
+		<name>Ο Σιδερένιος Γίγαντας</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/11XLucJQvdgtchSfO0ZTbo966pp.jpg</image>
+		<episode>
+			<name>Ο Σιδερένιος Γίγαντας</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnuDi2uDg2Ken48_T1pXA2dTXttbX1Mu42Nnb2MeXpaqo17G6rNjV4Z3g4dHU</url>
 		</episode>
 	</show>
 
@@ -1845,6 +2540,15 @@
 		<episode>
 			<name>Οι Ήρωες του Δάσους 3</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qekssG9s7O6sK6amq6bwN_d25G7y83k3uaal5WYnKKfpbG6rLjV4dDu1g==</url>
+		</episode>
+	</show>
+
+	<show name="Οι Κότες το Έσκασαν">
+		<name>Οι Κότες το Έσκασαν</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/yNF5xB9JY7UE5t4DuYntqdNqezc.jpg</image>
+		<episode>
+			<name>Οι Κότες το Έσκασαν</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naeu6CVnJayo7Ornpqem6-msg==</url>
 		</episode>
 	</show>
 
@@ -1963,6 +2667,24 @@
 		</episode>
 	</show>
 
+	<show name="Οι Σίμσονς">
+		<name>Οι Σίμσονς</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/original/5Pqe3Y2wVeh7cWdTp1VB9d87nYE.jpg</image>
+		<episode>
+			<name>The Simpsons Movie</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaevbKamaqloqKsoJSYq6Slpg==</url>
+		</episode>
+	</show>
+
+	<show name="Όλα τα Καλά Σκυλάκια Πάνε στον Παράδεισο">
+		<name>Όλα τα Καλά Σκυλάκια Πάνε στον Παράδεισο</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/46rKRjko3K3nxbmsB0lh4Z2WyUq.jpg</image>
+		<episode>
+			<name>Όλα τα Καλά Σκυλάκια Πάνε στον Παράδεισο</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnq3d25-doNLYr92Z35XX0tvZ4M_h0tXSsfHMscnb3uDiudvN1cey4OHt2pLJ3NWf1-za0A==</url>
+		</episode>
+	</show>
+
 	<show name="Παρανόρμαν μια Μεταφυσική Ιστορία">
 		<name>Παρανόρμαν μια Μεταφυσική Ιστορία</name>
 		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/tTSXZG8uHc0olcq9gOneDgLQL5G.jpg</image>
@@ -1981,12 +2703,34 @@
 		</episode>
 	</show>
 
+	<show name="Πέρα από το Φράχτη">
+		<name>Πέρα από το Φράχτη</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/vZSJZZ178D40pwzRXkKqQKjLU7X.jpg</image>
+		<episode>
+			<name>Πέρα από το Φράχτη</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaevK-brJqjp6i8naWurLC1sw==</url>
+		</episode>
+	</show>
+
 	<show name="Πήτερ Παν">
 		<name>Πήτερ Παν</name>
 		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/4yN4gLc0mZNORp9hQwj5kwdxw3q.jpg</image>
 		<episode>
 			<name>Επιστροφή στη Χώρα του Ποτέ</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe6l72-rbiiysCywbSbwbTMsraVtq2_nKqatq26wcO9pcGzlbSxx7TKuaW2qs3n2A==</url>
+		</episode>
+		<episode>
+			<name>Ο Πήτερ Παν και η Μαύρη Αρκούδα</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naeq6-Ynpuxs6Cun52al7Gzsg==</url>
+		</episode>
+	</show>
+
+	<show name="Πινόκιο">
+		<name>Πινόκιο</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/qFLDF62VbWyyxkwco9lwZqkGoMB.jpg</image>
+		<episode>
+			<name>Πινόκιο</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaeqJ-nrZmitbSunZiYqrC2pw==</url>
 		</episode>
 	</show>
 
@@ -2012,6 +2756,39 @@
 		</episode>
 	</show>
 
+	<show name="Πόκεμον">
+		<name>Πόκεμον</name>
+		<image>http://thetvdb.com/banners/fanart/original/76703-8.jpg</image>
+		<episode>
+			<name>The Ghost of Maiden's Peak</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnufVltqX0OLi7tLNnZXLwd7jzMPV1drQzszVycet1ODi7MzTzsW50tjc0tLH2cvB1NnYw5mfpanO17TWx6fh1djnzJLQ2tnd</url>
+		</episode>
+		<episode>
+			<name>Pokemon 3</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnqvP1cnR5dvU6aDd1pW84NrXzNHX1MukztfBzM3FueDl4dLDmpacoc7XtNbHp-HV2OfMktDa2d0=</url>
+		</episode>
+		<episode>
+			<name>Pokemon 4</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnrHWnMvM49ToqqLFzpW84NrXzNHX1MulztfBzM3FueDl4dLDmpaco87XtNbHp-HV2OfMktDa2d0=</url>
+		</episode>
+		<episode>
+			<name>Pokemon Heroes</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnrGdyuHU1N6krtPV1pW84NrXzNHX1Mu51OrcydvFnqGfq8zDr9jLsuTc1tPHlNTl3OQ=</url>
+		</episode>
+		<episode>
+			<name>Jirachi - Wish Maker</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnuXX093S4erhsOTT1pW84NrXzNHX1MvQueHfxcvO1dCc18TN287LvtDj0tbHmJyho9fMq9rFrebT4dzDls7g3ts=</url>
+		</episode>
+		<episode>
+			<name>Destiny Deoxys</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnurilKDg0tSk5KTbmpW84NrXzNHX1MvQs93g2NHU5dCz3dzc4dnLo5-oocPHrd7QsO3RzdfFmtnj5dk=</url>
+		</episode>
+		<episode>
+			<name>Giratina and the Sky Warrior</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnt_Pz9fMo-TesNLW3ZWz2uHZ4c3Wx8vS3dzM2NDLy8Ta8cy7ydje2t7qzJaYlqSf1eTjktDa2d0=</url>
+		</episode>
+	</show>
+
 	<show name="Ποντικούπολη">
 		<name>Ποντικούπολη</name>
 		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/bfRhOT9UO7rBpGrecaWkQqMmezw.jpg</image>
@@ -2030,6 +2807,15 @@
 		</episode>
 	</show>
 
+	<show name="Πριγκίπισσα Μονονόκε">
+		<name>Πριγκίπισσα Μονονόκε</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/8X1S5rpMzo0AUJFk0WS2DTF7ikp.jpg</image>
+		<episode>
+			<name>Πριγκίπισσα Μονονόκε</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naeq6GnoZ6dobG6pJ2ZlqS3nw==</url>
+		</episode>
+	</show>
+
 	<show name="Πτήση Πριν τα Χριστούγεννα">
 		<name>Πτήση Πριν τα Χριστούγεννα</name>
 		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/xugSbNqzz0JIUSIsE6dsnUG1Qg8.jpg</image>
@@ -2045,6 +2831,15 @@
 		<episode>
 			<name>Πως να Εκπαιδεύσετε τον Δράκο σας</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qehtqqeoLygrbGYoZybud7vmtjXk8Dj0OHbkcHV4eOcvN_Fz9XanqGonpSVqsK1weHdxd7P</url>
+		</episode>
+	</show>
+
+	<show name="Ράγκο">
+		<name>Ράγκο</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/zNXOfJvnx4TMM3rZzUwKomzKXs4.jpg</image>
+		<episode>
+			<name>Ράγκο</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaevKGWmZyetrSuspWerLCkow==</url>
 		</episode>
 	</show>
 
@@ -2076,6 +2871,15 @@
 		<episode>
 			<name>Τομ και Τζέρι και Ρομπέν των Δασών</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe1lcGew7zHrruVu76bxd7lztHYsNHj4fG_08rP2rne59HF1da02uLF0tba37ng5OvS</url>
+		</episode>
+	</show>
+
+	<show name="Ρομπότ">
+		<name>Ρομπότ</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/ghuxj8NDaJ1tpxC6pCaFPz4LWZi.jpg</image>
+		<episode>
+			<name>Ρομπότ</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnrHextDL2uXd69DV2JW-4NHn4dfHmJyhpNfMq9rFrebT4dzDls7g3ts=</url>
 		</episode>
 	</show>
 
@@ -2137,6 +2941,26 @@
 			<name>Ο Χάρτης Μυστηρίου</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qekvbWco8SxscKVrJybxLLHvKbBk7DAvqWuqL6rusXEyrK3lbq0tpzFxre8q77KnMWutJWYnKKipbG6rLjV4Q==</url>
 		</episode>
+		<episode>
+			<name>Ο Σκούμπι Ντου στο Νησί Τεράτων</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaerbGdmZyksqi6sJSYnp6hpw==</url>
+		</episode>
+		<episode>
+			<name>Που Είναι η Μούμια μου</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaerqWnn5iuqqStsaihm6SzpQ==</url>
+		</episode>
+		<episode>
+			<name>Ο Σκούμπι Ντου και ο Βασιλιάς Καλικάντζαρος</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naeq6SqoZuytKi7namama-0tQ==</url>
+		</episode>
+		<episode>
+			<name>Ο Σκούμπι Ντου και ο Θρύλος του Φαντόσαυρου</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaesK6YrZ6ipbOxr6ipqZ60qA==</url>
+		</episode>
+		<episode>
+			<name>Η Μάσκα του Μπλε Γερακιού</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaevqCVmaqvsrOwopmZp6Wzpw==</url>
+		</episode>
 	</show>
 
 	<show name="Σούπερ Ζωάκια">
@@ -2148,12 +2972,46 @@
 		</episode>
 	</show>
 
+	<show name="Σούπερμαν">
+		<name>Σούπερμαν</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/5LUOO1NLTY4B03mtqfdXn2xhG6l.jpg</image>
+		<episode>
+			<name>Ο Τελευταίος Γιός του Κρύπτον</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnuLhxteb0ajd4tKdmZW_5t_d39HJ1MvQw-DSw7TH3-XOy9zSx9XS0Lrq5tTc1drQoLGmmpbO4N7b</url>
+		</episode>
+		<episode>
+			<name>Superman Batman Public Enemies</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaerLGlmJevobCuoaWqlqK2sg==</url>
+		</episode>
+	</show>
+
 	<show name="Σπίριτ το Άγριο Άλογο">
 		<name>Σπίριτ το Άγριο Άλογο</name>
 		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/710YOiGmA6aOfEbVGphwkadDvNh.jpg</image>
 		<episode>
 			<name>Σπίριτ το Άγριο Άλογο</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qejqMCcxMO-z6KZvZqbxL_Bv628k7_l0OTZzdfUmcDVpcHMzZOv2tzZ39bX1Jmjn6if</url>
+		</episode>
+	</show>
+
+	<show name="Σρεκ">
+		<name>Σρεκ</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/nJ0TsLEeht6y30AMryc4ElQ8gzp.jpg</image>
+		<episode>
+			<name>Σρεκ</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naer6WVq5qhqLKxsaqelq6lpw==</url>
+		</episode>
+		<episode>
+			<name>Σρεκ 2</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaerKCXrKqxp7KqoqiqrKS2sw==</url>
+		</episode>
+		<episode>
+			<name>Σρεκ 3</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naeqq-bmamhtKCpopmZp6Gksg==</url>
+		</episode>
+		<episode>
+			<name>Σρεκ κι Εμείς Καλύτερα</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaesbGpqZiutKG9oaeYrK62p7fTzdTLy-HQ6-Db19jQruPumtjQy97S3_GbxtTV0-Tf5-GSy9XZ</url>
 		</episode>
 	</show>
 
@@ -2192,6 +3050,10 @@
 		<episode>
 			<name>Στρουμφάκια 2</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfAq7-zpKfHx66ot5ib5dfd4NHd2NLkoezglZs=</url>
+		</episode>
+		<episode>
+			<name>Ο Θρύλος της Στρουμφοκοιλάδας</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qext56XnaOhysCrsLWbxdfL2rjQstHA1cvarNfH4to=</url>
 		</episode>
 	</show>
 
@@ -2417,12 +3279,30 @@
 		</episode>
 	</show>
 
+	<show name="Ταρζάν">
+		<name>Ταρζάν</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/8QKEJWWKukxC7aXffbL7VSIZibW.jpg</image>
+		<episode>
+			<name>Ταρζάν 2</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnq3j0eLM5NSo7KKUyZXA0uHyztLHmMujn6iiw8et3tCw7dHN18Wa2ePl2Q==</url>
+		</episode>
+	</show>
+
 	<show name="Τζίμι Νιούτρον">
 		<name>Τζίμι Νιούτρον</name>
 		<image>http://thetvdb.com/banners/fanart/original/77612-3.jpg</image>
 		<episode>
 			<name>Win, Lose and Kaboom </name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe0l6m9n6awr6-WqrObu9jl2t22y-Hl4efbu9HUuODi3bjFytXb3g==</url>
+		</episode>
+	</show>
+
+	<show name="Τιμόν και Πούμπα">
+		<name>Τιμόν και Πούμπα</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/sTjJXGOl2Fq9rdB7GacpZ1pefed.jpg</image>
+		<episode>
+			<name>Ο Γύρος του Κόσμου με τους Τιμόν και Πούμπα</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnurgxp_S0t_hrc7JmZWt497t28jH2tTWzs_c1tTKy-jY7NXDvM_Z4N3XzMO429nT0NnMlaGfop_X7NrQ</url>
 		</episode>
 	</show>
 
@@ -2436,6 +3316,15 @@
 		<episode>
 			<name>Οι Αγώνες στο Καταφύγιο των Νεράιδων</name>
 			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnuOmx9CX4qbcqs-Y35Xa1uHZ1sjJlNza5-HSksnc1Z_X7NrQ</url>
+		</episode>
+	</show>
+
+	<show name="Το Ασχημόπαπο κι Εγώ">
+		<name>Το Ασχημόπαπο κι Εγώ</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/apeRzczakZBvqBdqH0ZecTe8YKu.jpg</image>
+		<episode>
+			<name>Το Ασχημόπαπο κι Εγώ</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaesKWcrKuyobSrppmtm56oow==</url>
 		</episode>
 	</show>
 
@@ -2470,6 +3359,33 @@
 		</episode>
 	</show>
 
+	<show name="Το Μαγικό Σπαθί">
+		<name>Το Μαγικό Σπαθί</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/6wHCKBsSRzmKM0g8Y5OQSMVOygY.jpg</image>
+		<episode>
+			<name>Αναζητώντας το Κάμελοτ</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaevaKUqqyytqWpnpapmLGqsbfTzdTLy-HQ6-Db19jQruPumtjQy97S3_GbxtTV0-Tf5-GSy9XZ</url>
+		</episode>
+	</show>
+
+	<show name="Το Μαύρο Καζάνι">
+		<name>Το Μαύρο Καζάνι</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/vb7aOVF1NEJAZRxEMCY4nlLLhCH.jpg</image>
+		<episode>
+			<name>Το Μαύρο Καζάνι</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnu2dm6DSz6rY3NjV3pXA2dTXr9DJydfQstni0MzY29_OqaacncXLuOHXrtnMz9vQneDh0dQ=</url>
+		</episode>
+	</show>
+
+	<show name="Το Μεγάλο Ποντικολαγωνικό">
+		<name>Το Μεγάλο Ποντικολαγωνικό</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/29v52BXeqhBH7qvHyhdOnclPJQ6.jpg</image>
+		<episode>
+			<name>Το Μεγάλο Ποντικολαγωνικό</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfCs5maraalsMabwZ6bs9Dr1tCVutTWnL_fycnamb7e7eDJlarR5dTb4c3ey5miqLCjxd7P</url>
+		</episode>
+	</show>
+
 	<show name="Το Μεγάλο Ταξίδι της Ζαράφα">
 		<name>Το Μεγάλο Ταξίδι της Ζαράφα</name>
 		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/b8F2xMjLBlXS34LSPbe2zZOts72.jpg</image>
@@ -2484,7 +3400,25 @@
 		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/original/v6w2o3ji8aVLph6zNgR5yDGQfmS.jpg</image>
 		<episode>
 			<name>Το Μυστικό Βασίλειο του Δάσους</name>
-			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qeivamtnqOjz7q2v7ibtt_h0JGalp2knLzDqLrP3A==</url>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qevmLu_osnB0MKmna2btt_h0JGalp2knLqxttHWmaKfsJ3UlaevnqKl5ZaemrPj1N3Ykanb0NrepeHT1cnN5aCq2s_e</url>
+		</episode>
+	</show>
+
+	<show name="Το Πολικό Εξπρές">
+		<name>Το Πολικό Εξπρές</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/mXPoxiRny3VPH0iXJWXlyTq1mjo.jpg</image>
+		<episode>
+			<name>Το Πολικό Εξπρές</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnvDclc7dz-Xi7N-WoZXA2dTXvdPUx97QtPDd1s3Z39ChqJ2Yx8Wz48654sjR1cuf1-za0A==</url>
+		</episode>
+	</show>
+
+	<show name="Το Σπαθί του Βασιλιά Αρθούρου">
+		<name>Το Σπαθί του Βασιλιά Αρθούρου</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/pxHD1xIoLLBwcCRKtwLWtbJF3lq.jpg</image>
+		<episode>
+			<name>Το Σπαθί του Βασιλιά Αρθούρου</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2NaerrGdq6ivprG-sKedqbCjtA==</url>
 		</episode>
 	</show>
 
@@ -2514,7 +3448,23 @@
 		</episode>
 		<episode>
 			<name>Μεγάλη Περιπέτεια</name>
-			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qemlay0pcCn0busmr2bxd7lrtLMsNHj4fHgq9HH2uWw3OPJ1trh49SqnZWbmqSh38-yppWquMnF4bGlq5nN59g=</url>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qe8tpu9usqkxri2nbibxb7FmqW2qpm7tMq_vbuTs7qwxsGRqarCtr3Mwratk7DHs8rW1JW-4tqzpc7a0Q==</url>
+		</episode>
+		<episode>
+			<name>Τομ και Τζέρι</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naeq6alrJiftLWopaWenK2lpA==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 1-3</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qekqLCft7W-x7W9sLObsqDo4tHYnp6ipt3akd3WmeHQ5OCWrNjb4N_x2cXWyp_l192ayeDa3tbc4dvF3NXentLn2snczpnS1tnW0g==</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 4-6</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qegt7utnqShw8aWvbibs6LfzteVyNjS4uzS1pXW4eTXrNPJydiZ4NWl09Dhz9rYpOXS19uT1NLb5JrR19vf1uE=</url>
+		</episode>
+		<episode>
+			<name>Επεισόδιο 7-9</name>
+			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfEvaCenbmly7u2wKibtKXr2cnN1tXf1qWzzczVo-XX3ZrQ19ngntPt4cfQyNvqnOXW0s2Z0ODVpdHF2suZ0tXs0tbW1dvf</url>
 		</episode>
 	</show>
 
@@ -2531,6 +3481,15 @@
 		</episode>
 	</show>
 
+	<show name="Τσιπ και Ντεϊλ">
+		<name>Τσιπ και Ντεϊλ</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/zrsRexh7eSdfBn89xK2t95TWj3g.jpg</image>
+		<episode>
+			<name>Τσιπ και Ντεϊλ</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnqznyNrLnuWm3qSWn5Wv2djozMXWxcu10OTSw5mfoKjO17TWx6fh1djnzJLQ2tnd</url>
+		</episode>
+	</show>
+
 	<show name="Φινέας και Φερμπ">
 		<name>Φινέας και Φερμπ</name>
 		<image>http://thetvdb.com/banners/fanart/original/81848-1.jpg</image>
@@ -2543,7 +3502,7 @@
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qfAu7atury2r6-Ws5ubosLt2tHN2Jmz1OTc0s_ZmcXepcbT3Q==</url>
 		</episode>
 		<episode>
-			<name>Η Κλαυτερή Τεμπέλικη Μερα</name>
+			<name>Η Καλυτερή Τεμπέλικη Μερα</name>
 			<url>zNza3Kuep9PQydnU6Z3s45Pez9DW3qehtqGZo76iqaW7t7ibo8Pg0pGqy9_lnMTO3uGTsNLopbLazdg=</url>
 		</episode>
 	</show>
@@ -2806,6 +3765,48 @@
 		</episode>
 	</show>
 
+	<show name="Χαλκ">
+		<name>Χαλκ</name>
+		<image>http://thetvdb.com/banners/fanart/original/77155-2.jpg</image>
+		<episode>
+			<name>Planet Hulk</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnuLf2KCanOvR6NedzJW83dDm0tjHruHd2teflJmWy7XFvN_N2JTU5dzk</url>
+		</episode>
+		<episode>
+			<name>Hulk vs Wolverine-Τhor</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnuja1MnInaHb5NXenpW05tvjzLrbxcPg2-7S1tHU0dChqJ2dx6rCteHh3ZLQ2tnd</url>
+		</episode>
+	</show>
+
+	<show name="Χανς Κρίστιαν Άντερσεν">
+		<name>Χανς Κρίστιαν Άντερσεν</name>
+		<image>http://thetvdb.com/banners/fanart/original/248195-3.jpg</image>
+		<episode>
+			<name>Το Αηδόνι του Αυτοκράτορα - Ο Κηπουρός - Η Πριγκίπισσα και το Ποντικάκι</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmntziz5rf3uLa296XoJXAwM65tai3tLXQw8fGw6m_wMC6yq64t7it0JzXvMOzrrzAxMq8t8eTy7nOyL-tr7G0wbjLwKXHsa26zsy8w7i1usW4w66vsZTN59im1djV0g==</url>
+		</episode>
+		<episode>
+			<name>Το Ασχημόπαπο - Ο Καθηγητής και ο Ψύλλος</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnumfl9DW0uqj46LSzJW0sr3LzKewuLXEw8GussenurW0ysCptsWZ0MPHzKW7vrS-vsiutLfFmdC-17ilvK61uLfMtbfHsa26zsfMtLuvuMDCps7a0ZTU5dzk</url>
+		</episode>
+		<episode>
+			<name>Το Μαγικό Σπιρτόκουτο - Ο Χιονάνθρωπος - Οι Άλτες</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnquk1Zibo9fn8KTIoJW0sr3LzKewuLXEw8GussenurW0ysCptsWZ0MPHzLGprbW8vtfAtLG4wMC6x8K4t8WZ0MfBvLKptMC5wc-9s7vFmdCwxMGpu5TN59im1djV0g==</url>
+		</episode>
+		<episode>
+			<name>Η Βασίλισσα του χιονιού</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnuOdxsvb1aHZrp3U05W0sr3LzKewuLXEw8GussenurW0ysCptsWZ0MLGvLvHt8G2tMbMkceuy7Owy7awsbm_ss7MxLLHvrXAvcHEspbH4tqd4OHR1A==</url>
+		</episode>
+		<episode>
+			<name>Η Τοσοδούλα - Ότι Κάνει ο Γέροντας</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnuvTl9DS5Ojn3ubGnpW0sr3LzKewuLXEw8GussenurW0ysCptsWZ0LfXwbO7tbDAxMSuw5XFu8W417iltqu10L7XtKm6tbrFsMubxd7Pmtnj5dk=</url>
+		</episode>
+		<episode>
+			<name>Μπιζέλι - Αΐντα - Μπουκάλι</name>
+			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnu7nyqHH5qHn7s7a25W0sr3LzKewuLXEw8GussenurW0ysCptsWZ0LHBx6m0r8uezrm2qKnFmdC8yLy5s6e4up3Z482WzuDe2w==</url>
+		</episode>
+	</show>
+
 	<show name="Χελώνα Εναντίον Λαγού">
 		<name>Χελώνα Εναντίον Λαγού</name>
 		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/odWuMmp7JwuoQZEoiU3sAoNosSd.jpg</image>
@@ -2904,6 +3905,15 @@
 		<episode>
 			<name>Ψηλά στον Ουρανό</name>
 			<url>zNza3Kuep-DY2svN3tLk3NnMlNHmnuqd09nU0OrbrKTHyZXBwZ2_v5Kpu7C6vqbO2tGU1OXc5A==</url>
+		</episode>
+	</show>
+
+	<show name="Ώρα για Σερφ">
+		<name>Ώρα για Σερφ</name>
+		<image>http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w780/v6cvZfSAiUjvFVCCiaPNaZLA7gk.jpg</image>
+		<episode>
+			<name>Ώρα για Σερφ</name>
+			<url>zNza3Kuep-Tb35Tc5uPk3MfTy96f0ufak87P2Naer6Cmnqifqae6pKWaqq-ipA==</url>
 		</episode>
 	</show>
 </shows>

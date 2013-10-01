@@ -22,7 +22,7 @@
 			<band>90,6</band>
 			<genre>News</genre>
 			<area>Attica</area>
-			<url>http://tv1.streampulse.eu:8080/</url>
+			<url>http://iphone-streaming.ustream.tv/uhls/16033929/streams/live/iphone/playlist.m3u8</url>
 			<base>http://www.arttv.info/</base>
 		</radio>
 		<radio active="True">
@@ -106,11 +106,19 @@
 			<base>http://www.94fm.gr/</base>
 		</radio>
 		<radio active="True">
-			<name>ERA</name>
+			<name>ERA ATHENS</name>
 			<band></band>
 			<genre>News</genre>
 			<area>Attica</area>
 			<url>http://radio.ertopen.com/erasport</url>
+			<base>http://www.ertopen.com//</base>
+		</radio>
+		<radio active="True">
+			<name>ERA TRITO</name>
+			<band></band>
+			<genre>Eclectic</genre>
+			<area>Attica</area>
+			<url>http://radio.ertopen.com/trito</url>
 			<base>http://www.ertopen.com//</base>
 		</radio>
 		<radio active="True">
@@ -134,7 +142,7 @@
 			<band>92,0</band>
 			<genre>International</genre>
 			<area>Attica</area>
-			<url>mmsh://galaxy.live24.gr/galaxy9292</url>
+			<url>http://galaxy.live24.gr/galaxy9292</url>
 			<base>http://www.galaxy92.gr/</base>
 		</radio>
 		<radio active="True">
@@ -350,6 +358,14 @@
 			<base>http://www.88miso.gr/</base>
 		</radio>
 		<radio active="True">
+			<name>ALPHA 965</name>
+			<band>96,5</band>
+			<genre>News</genre>
+			<area>Salonica</area>
+			<url>http://176.9.22.6:8626/</url>
+			<base>http://www.alpha989.com/</base>
+		</radio>
+		<radio active="True">
 			<name>ARENA SPORTS</name>
 			<band>89,4</band>
 			<genre>Sports</genre>
@@ -380,6 +396,14 @@
 			<area>Salonica</area>
 			<url>http://shout.cosmoradio.gr:8130/</url>
 			<base>http://www.cosmoradio.gr/</base>
+		</radio>
+		<radio active="True">
+			<name>ERA THESSALONIKI</name>
+			<band></band>
+			<genre>News</genre>
+			<area>Salonica</area>
+			<url>rtmp://31.204.153.190/live2/ethradio</url>
+			<base>http://www.ertopen.com//</base>
 		</radio>
 		<radio active="True">
 			<name>EROTICOS</name>
@@ -460,14 +484,6 @@
 			<area>Salonica</area>
 			<url>http://ola.isolservers.com:8300/</url>
 			<base>http://www.olafm.gr/</base>
-		</radio>
-		<radio active="True">
-			<name>PALMOS</name>
-			<band>96,5</band>
-			<genre>Greek</genre>
-			<area>Salonica</area>
-			<url>http://176.9.22.6:8626/</url>
-			<base>http://www.palmos965.gr/</base>
 		</radio>
 		<radio active="True">
 			<name>PLUS RADIO</name>
@@ -606,7 +622,7 @@
 			<base>http://www.velvet968.gr/</base>
 		</radio>
 		<radio active="True">
-			<name>VENUS</name>
+			<name>V FM</name>
 			<band>91,1</band>
 			<genre>International</genre>
 			<area>Salonica</area>
@@ -717,7 +733,7 @@
 			<band></band>
 			<genre>Eclectic</genre>
 			<area>Internet</area>
-			<url>http://37.59.25.167:8000/</url>
+			<url>http://162.13.25.174/2uh8e4akb</url>
 			<base>http://joinradio.gr/</base>
 		</radio>
 		<radio active="True">
@@ -797,7 +813,7 @@
 			<band></band>
 			<genre>Eclectic</genre>
 			<area>Internet</area>
-			<url>http://46.4.52.14/listen/u0r4t3hv87db</url>
+			<url>http://83.149.126.10/listen/u0r4t3hv87db</url>
 			<base>http://www.toradiofono.gr/</base>
 		</radio>
 		<radio active="True">
@@ -805,7 +821,7 @@
 			<band></band>
 			<genre>Rock</genre>
 			<area>Internet</area>
-			<url>http://85.25.144.26/listen/trollradio-gr</url>
+			<url>http://83.149.126.10/listen/trollradio-gr</url>
 			<base>http://www.trollradio.gr/</base>
 		</radio>
 		<radio active="True">
@@ -1187,7 +1203,7 @@
 			<band>98,2</band>
 			<genre>International</genre>
 			<area>Epirus</area>
-			<url>http://eco.onestreaming.com:8152/stream</url>
+			<url>http://eco.onestreaming.com:8153/stream</url>
 			<base>http://actionfm.webs.com/</base>
 		</radio>
 		<radio active="True">
@@ -1243,8 +1259,8 @@
 			<band>101,5</band>
 			<genre>News</genre>
 			<area>Epirus</area>
-			<url>http://78.129.163.73:3687/</url>
-			<base>http://radioarta1015.blogspot.gr/</base>
+			<url>http://eco.onestreaming.com:8460/</url>
+			<base></base>
 		</radio>
 		<radio active="True">
 			<name>RADIO EPIROS 945</name>
@@ -1470,7 +1486,7 @@
 			<band>88,4</band>
 			<genre>Greek</genre>
 			<area>Thessaly</area>
-			<url>http://shoutcast.24radio.gr:8038/</url>
+			<url>http://cast.iplayradio.net:8020/</url>
 			<base>http://elassona884.blogspot.gr/</base>
 		</radio>
 		<radio active="True">
@@ -1542,7 +1558,7 @@
 			<band>90,1</band>
 			<genre>Sports</genre>
 			<area>Thessaly</area>
-			<url>http://95.154.254.153:30421/</url>
+			<url>http://95.154.254.153:37628/</url>
 			<base>http://www.sportfm901.gr/</base>
 		</radio>
 		<radio active="True">
@@ -1625,7 +1641,7 @@
 			<band>89,9</band>
 			<genre>Greek</genre>
 			<area>Thrace</area>
-			<url>http://live.duth.gr:8000/omorfipoli-hifi</url>
+			<url>http://87.117.208.118:23127/</url>
 			<base>http://www.radio899.gr/</base>
 		</radio>
 		<radio active="True">
@@ -1761,7 +1777,7 @@
 			<band>101,4</band>
 			<genre>Laika</genre>
 			<area>Thrace</area>
-			<url>http://85.17.30.90:8206/</url>
+			<url>http://144.76.84.8:8206/</url>
 			<base>http://www.yparxwfm.gr/</base>
 		</radio>
 	</area>
@@ -2477,7 +2493,7 @@
 			<band>97,8</band>
 			<genre>International</genre>
 			<area>Macedonia</area>
-			<url>http://uk1-vn.mixstream.net:9876/</url>
+			<url>http://stream.24live.gr:9876/</url>
 			<base>http://akroamafm978.blogspot.gr/</base>
 		</radio>
 		<radio active="True">
@@ -2605,7 +2621,7 @@
 			<band>93,5</band>
 			<genre>International</genre>
 			<area>Macedonia</area>
-			<url>http://188.227.194.35:7002/</url>
+			<url>http://185.32.230.109:7002/</url>
 			<base>http://www.noizeradio.gr/</base>
 		</radio>
 		<radio active="True">
@@ -2805,7 +2821,7 @@
 			<band>95,3</band>
 			<genre>International</genre>
 			<area>Macedonia</area>
-			<url>http://shout.streamwithq.gr:4164/</url>
+			<url>http://64.237.33.50:7080/</url>
 			<base>http://www.vivafm.com/</base>
 		</radio>
 	</area>
@@ -3056,7 +3072,7 @@
 			<band>103,8</band>
 			<genre>Greek</genre>
 			<area>Peloponnese</area>
-			<url>http://83.142.229.89:8007/</url>
+			<url>http://24streams.net:8007/</url>
 			<base>http://www.rythmosweb.gr/</base>
 		</radio>
 		<radio active="True">

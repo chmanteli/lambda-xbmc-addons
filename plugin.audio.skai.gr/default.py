@@ -161,7 +161,7 @@ class Thread(threading.Thread):
 
 class index:
     def infoDialog(self, str, header=addonName):
-        xbmc.executebuiltin("Notification(%s,%s, 3000)" % (header, str))
+        xbmc.executebuiltin("Notification(%s,%s, 3000, %s)" % (header, str, addonIcon))
 
     def okDialog(self, str1, str2, header=addonName):
         xbmcgui.Dialog().ok(header, str1, str2)
@@ -432,7 +432,7 @@ class contextMenu:
             file = open(favData, 'a+')
             file.write('"%s"|"%s"|"%s"\n' % (name, url, image))
             file.close()
-            index().infoDialog(language(30303).encode("utf-8"))
+            index().infoDialog(language(30303).encode("utf-8"), name)
         except:
             return
 
@@ -447,7 +447,7 @@ class contextMenu:
             for line in re.compile('(".+?\n)').findall(read):
                 file.write(line)
             file.close()
-            index().infoDialog(language(30304).encode("utf-8"))
+            index().infoDialog(language(30304).encode("utf-8"), name)
         except:
             return
 
@@ -467,7 +467,7 @@ class contextMenu:
             for line in list:
                 file.write('%s\n' % (line))
             file.close()
-            index().infoDialog(language(30305).encode("utf-8"))
+            index().infoDialog(language(30305).encode("utf-8"), name)
         except:
             return
 
@@ -487,7 +487,7 @@ class contextMenu:
             for line in list:
                 file.write('%s\n' % (line))
             file.close()
-            index().infoDialog(language(30306).encode("utf-8"))
+            index().infoDialog(language(30306).encode("utf-8"), name)
         except:
             return
 

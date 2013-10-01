@@ -1,4 +1,12 @@
 ------------------------
+MEGA Replay v3.0.1 (1-Oct-13)
+------------------------
+
+- Tweaked Youtube resolver.
+- Tweaked info dialogs.
+
+
+------------------------
 MEGA Replay v3.0.0 (31-Aug-13)
 ------------------------
 

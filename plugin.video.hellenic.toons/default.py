@@ -186,7 +186,7 @@ class Thread(threading.Thread):
 
 class index:
     def infoDialog(self, str, header=addonName):
-        xbmc.executebuiltin("Notification(%s,%s, 3000)" % (header, str))
+        xbmc.executebuiltin("Notification(%s,%s, 3000, %s)" % (header, str, addonIcon))
 
     def okDialog(self, str1, str2, header=addonName):
         xbmcgui.Dialog().ok(header, str1, str2)
@@ -456,7 +456,7 @@ class contextMenu:
             file = open(favData, 'a+')
             file.write('"%s"|"%s"|"%s"\n' % (name, url, image))
             file.close()
-            index().infoDialog(language(30303).encode("utf-8"))
+            index().infoDialog(language(30303).encode("utf-8"), name)
         except:
             return
 
@@ -471,7 +471,7 @@ class contextMenu:
             for line in re.compile('(".+?\n)').findall(read):
                 file.write(line)
             file.close()
-            index().infoDialog(language(30304).encode("utf-8"))
+            index().infoDialog(language(30304).encode("utf-8"), name)
         except:
             return
 
@@ -491,7 +491,7 @@ class contextMenu:
             for line in list:
                 file.write('%s\n' % (line))
             file.close()
-            index().infoDialog(language(30305).encode("utf-8"))
+            index().infoDialog(language(30305).encode("utf-8"), name)
         except:
             return
 
@@ -511,7 +511,7 @@ class contextMenu:
             for line in list:
                 file.write('%s\n' % (line))
             file.close()
-            index().infoDialog(language(30306).encode("utf-8"))
+            index().infoDialog(language(30306).encode("utf-8"), name)
         except:
             return
 
@@ -880,13 +880,17 @@ class player:
         self.nickelodeonUrl		= 'http://www.nickelodeon.gr'
         self.flashxUrl			= 'http://flashx.tv'
         self.streamcloudUrl		= 'http://streamcloud.eu'
+        self.putlockerUrl		= 'http://www.putlocker.com'
         self.youtubeUrl			= 'http://www.youtube.com'
+        self.youtube_infoUrl	= 'http://gdata.youtube.com/feeds/api/videos/%s?v=2'
 
     def run(self, url):
         if url.startswith(self.flashxUrl):
             url = self.flashx(url)
         elif url.startswith(self.streamcloudUrl):
             url = self.streamcloud(url)
+        elif url.startswith(self.putlockerUrl):
+            url = self.putlocker(url)
         elif url.startswith(self.nickelodeonUrl):
             url = self.nickelodeon(url)
         elif url.startswith(self.youtubeUrl):
@@ -904,18 +908,19 @@ class player:
 
             post = ''
             result = getUrl(embedUrl).result
-            match = common.parseDOM(result, "form", attrs = { "action": "view.php" })[0]
+            php = re.compile('action="(.+?.php)"').findall(result)[0]
+            phpUrl = 'http://play.flashx.tv/player/%s' % php
+            match = common.parseDOM(result, "form", attrs = { "action": php })[0]
             match = re.compile('name="(.+?)".+?value="(.+?)"').findall(match)
             for name, value in match:
                 post += '%s=%s&' % (name, urllib.quote_plus(value))
 
-            viewUrl = 'http://play.flashx.tv/player/view.php'
-            result = getUrl(viewUrl,post=post).result
+            result = getUrl(phpUrl,post=post).result
             swfUrl = re.compile('(http://play.flashx.tv/nuevo/player/player.swf.+?)"').findall(result)[0]
             cfgUrl = swfUrl.split("?config=")[-1]
 
-            getUrl(swfUrl,referer=viewUrl).result
-            result = getUrl(cfgUrl,referer=viewUrl).result
+            getUrl(swfUrl,referer=phpUrl).result
+            result = getUrl(cfgUrl,referer=phpUrl).result
             url = common.parseDOM(result, "file")[0]
 
             return url
@@ -944,6 +949,21 @@ class player:
         except:
             return
 
+    def putlocker(self, url):
+        try:
+            import urlparse
+            try: password = urlparse.parse_qs(urlparse.urlparse(url).query)['file_password'][0]
+            except: password = ''
+            result = getUrl(url).result
+            hash = re.compile('value="(.+?)".+?name="hash"').findall(result)[0]
+            post = 'hash=%s&confirm=Continue+as+Free+User&file_password=%s' % (hash, password)
+            result = getUrl(url,post=post).result
+            url = re.compile('href="(.+?)".+?class="download_file_link"').findall(result)[0]
+            url = "http://putlocker.com%s" % url
+            return url
+        except:
+            return
+
     def nickelodeon(self, url):
         try:
             result = getUrl(url).result
@@ -956,11 +976,25 @@ class player:
 
     def youtube(self, url):
         try:
+            id = url.split("?v=")[-1]
+            state, reason = None, None
+            result = getUrl(self.youtube_infoUrl % id).result
+            try:
+                state = common.parseDOM(result, "yt:state", ret="name")[0]
+                reason = common.parseDOM(result, "yt:state", ret="reasonCode")[0]
+            except:
+                pass
+            if state == 'deleted' or state == 'rejected' or state == 'failed' or reason == 'requesterRegion' : return
+            try:
+                result = getUrl(url).result
+                alert = common.parseDOM(result, "div", attrs = { "id": "watch7-notification-area" })[0]
+                return
+            except:
+                pass
             if index().addon_status('plugin.video.youtube') is None:
                 index().okDialog(language(30351).encode("utf-8"), language(30352).encode("utf-8"))
                 return
-            url = url.split("?v=")[-1]
-            url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % url
+            url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % id
             return url
         except:
             return

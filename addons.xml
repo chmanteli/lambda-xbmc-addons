@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="plugin.audio.alpha989" name="Alpha Podcast" version="2.0.0" provider-name="lambda">
+<addon id="plugin.audio.alpha989" name="Alpha Podcast" version="2.0.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.addon" version="12.0.0"/>
 		<import addon="xbmc.python" version="2.1.0"/>
@@ -21,7 +21,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.audio.hellenic.radio" name="Hellenic Radio" version="2.0.1" provider-name="lambda">
+<addon id="plugin.audio.hellenic.radio" name="Hellenic Radio" version="2.0.2" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.addon" version="12.0.0"/>
 		<import addon="xbmc.python" version="2.1.0"/>
@@ -42,7 +42,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.audio.real.gr" name="RealFm Podcast" version="2.0.1" provider-name="lambda">
+<addon id="plugin.audio.real.gr" name="RealFm Podcast" version="2.0.2" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.addon" version="12.0.0"/>
 		<import addon="xbmc.python" version="2.1.0"/>
@@ -63,7 +63,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.audio.skai.gr" name="SKAI Podcast" version="2.0.0" provider-name="lambda">
+<addon id="plugin.audio.skai.gr" name="SKAI Podcast" version="2.0.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.addon" version="12.0.0"/>
 		<import addon="xbmc.python" version="2.1.0"/>
@@ -84,7 +84,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.antenna.gr" name="ANT1 Player" version="2.0.0" provider-name="lambda">
+<addon id="plugin.video.antenna.gr" name="ANT1 Player" version="2.0.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.addon" version="12.0.0"/>
 		<import addon="xbmc.python" version="2.1.0"/>
@@ -105,7 +105,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.ert.gr" name="ERT Online" version="2.0.1" provider-name="lambda">
+<addon id="plugin.video.ert.gr" name="ERT Online" version="2.0.2" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.addon" version="12.0.0"/>
 		<import addon="xbmc.python" version="2.1.0"/>
@@ -127,9 +127,10 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.hellenic.movies" name="Hellenic Movies" version="1.0.1" provider-name="lambda">
+<addon id="plugin.video.hellenic.movies" name="Hellenic Movies" version="2.0.0" provider-name="lambda">
 	<requires>
-		<import addon="xbmc.python" version="1.0"/>
+		<import addon="xbmc.addon" version="12.0.0"/>
+		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
 		<import addon="script.module.parsedom" version="0.9.1"/>
 		<import addon="plugin.video.youtube" version="2.9.2"/>
@@ -148,7 +149,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.hellenic.toons" name="Hellenic Toons" version="2.0.0" provider-name="lambda">
+<addon id="plugin.video.hellenic.toons" name="Hellenic Toons" version="2.0.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.addon" version="12.0.0"/>
 		<import addon="xbmc.python" version="2.1.0"/>
@@ -217,7 +218,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.megatv.com" name="MEGA Replay" version="3.0.0" provider-name="lambda">
+<addon id="plugin.video.megatv.com" name="MEGA Replay" version="3.0.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.addon" version="12.0.0"/>
 		<import addon="xbmc.python" version="2.1.0"/>
@@ -239,7 +240,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.skai.gr" name="SKAI Player" version="2.0.0" provider-name="lambda">
+<addon id="plugin.video.skai.gr" name="SKAI Player" version="2.0.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.addon" version="12.0.0"/>
 		<import addon="xbmc.python" version="2.1.0"/>
@@ -260,7 +261,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.startv.gr" name="STAR WebTV" version="2.0.0" provider-name="lambda">
+<addon id="plugin.video.startv.gr" name="STAR WebTV" version="2.0.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.addon" version="12.0.0"/>
 		<import addon="xbmc.python" version="2.1.0"/>

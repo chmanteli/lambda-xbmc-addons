@@ -158,7 +158,7 @@ class Thread(threading.Thread):
 
 class index:
     def infoDialog(self, str, header=addonName):
-        xbmc.executebuiltin("Notification(%s,%s, 3000)" % (header, str))
+        xbmc.executebuiltin("Notification(%s,%s, 3000, %s)" % (header, str, addonIcon))
 
     def okDialog(self, str1, str2, header=addonName):
         xbmcgui.Dialog().ok(header, str1, str2)
@@ -424,7 +424,7 @@ class contextMenu:
             file = open(favData, 'a+')
             file.write('"%s"|"%s"|"%s"\n' % (name, url, image))
             file.close()
-            index().infoDialog(language(30303).encode("utf-8"))
+            index().infoDialog(language(30303).encode("utf-8"), name)
         except:
             return
 
@@ -439,7 +439,7 @@ class contextMenu:
             for line in re.compile('(".+?\n)').findall(read):
                 file.write(line)
             file.close()
-            index().infoDialog(language(30304).encode("utf-8"))
+            index().infoDialog(language(30304).encode("utf-8"), name)
         except:
             return
 
@@ -459,7 +459,7 @@ class contextMenu:
             for line in list:
                 file.write('%s\n' % (line))
             file.close()
-            index().infoDialog(language(30305).encode("utf-8"))
+            index().infoDialog(language(30305).encode("utf-8"), name)
         except:
             return
 
@@ -479,7 +479,7 @@ class contextMenu:
             for line in list:
                 file.write('%s\n' % (line))
             file.close()
-            index().infoDialog(language(30306).encode("utf-8"))
+            index().infoDialog(language(30306).encode("utf-8"), name)
         except:
             return
 
@@ -650,6 +650,10 @@ class episodes:
             return
 
 class player:
+    def __init__(self):
+        self.youtubeUrl				= 'http://www.youtube.com'
+        self.youtube_infoUrl		= 'http://gdata.youtube.com/feeds/api/videos/%s?v=2'
+
     def run(self, url):
         url = self.youtube(url)
         if url is None: return
@@ -659,11 +663,25 @@ class player:
 
     def youtube(self, url):
         try:
+            id = url.split("?v=")[-1]
+            state, reason = None, None
+            result = getUrl(self.youtube_infoUrl % id).result
+            try:
+                state = common.parseDOM(result, "yt:state", ret="name")[0]
+                reason = common.parseDOM(result, "yt:state", ret="reasonCode")[0]
+            except:
+                pass
+            if state == 'deleted' or state == 'rejected' or state == 'failed' or reason == 'requesterRegion' : return
+            try:
+                result = getUrl(url).result
+                alert = common.parseDOM(result, "div", attrs = { "id": "watch7-notification-area" })[0]
+                return
+            except:
+                pass
             if index().addon_status('plugin.video.youtube') is None:
                 index().okDialog(language(30351).encode("utf-8"), language(30352).encode("utf-8"))
                 return
-            url = url.split("?v=")[-1]
-            url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % url
+            url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % id
             return url
         except:
             return
