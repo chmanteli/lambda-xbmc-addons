@@ -6,7 +6,7 @@
 			<type>http</type>
 			<url>http://85.196.8.204:1234/udp/225.170.98.128:1234</url>
 			<type2></type2>
-			<url2>rtmp://46.21.146.45:80/megaweb playpath=megaweb.sdp pageUrl=http://www.kanalia.eu/ live=1 timeout=10</url2>
+			<url2>rtmp://94.102.58.46:80/megaweb playpath=megaweb.sdp pageUrl=http://www.kanalia.eu/ live=1 timeout=10</url2>
 			<base>http://kanalia.eu/mega_channel_original.php</base>
 			<epg>30501</epg>
 		</channel>
@@ -24,7 +24,7 @@
 			<type>http</type>
 			<url>http://85.196.8.204:1234/udp/225.170.99.1:1234</url>
 			<type2></type2>
-			<url2>rtmp://46.21.146.45:80/alterweb playpath=alterweb.sdp pageUrl=http://www.kanalia.eu/ live=1 timeout=10</url2>
+			<url2>rtmp://94.102.58.46:80/alterweb playpath=alterweb.sdp pageUrl=http://www.kanalia.eu/ live=1 timeout=10</url2>
 			<base>http://kanalia.eu/star_original.php</base>
 			<epg>30503</epg>
 		</channel>
@@ -46,6 +46,13 @@
 			<base>http://www.skai.gr/player/tvlive/</base>
 			<epg>30505</epg>
 		</channel>
+		<channel active="False">
+			<name>E TV</name>
+			<type></type>
+			<url></url>
+			<base>http://www.epsilontv.gr/</base>
+			<epg>30506</epg>
+		</channel>
 		<channel active="True">
 			<name>MACEDONIA TV</name>
 			<type>http</type>
@@ -53,7 +60,7 @@
 			<type2></type2>
 			<url2>rtmp://213.16.167.55:1935/livepkgr/livestream swfUrl=http://static.ant1.gr/maktvlive.ashx pageUrl=http://www.maktv.gr/Live swfVfy=1 live=1 timeout=10</url2>
 			<base>http://www.maktv.gr/Live</base>
-			<epg>30506</epg>
+			<epg>30507</epg>
 		</channel>
 		<channel active="True">
 			<name>NET</name>
@@ -62,7 +69,7 @@
 			<type2></type2>
 			<url2>rtmp://31.204.154.90/live2/live2 live=1 timeout=10</url2>
 			<base>http://www.ertopen.com/</base>
-			<epg>30507</epg>
+			<epg>30508</epg>
 		</channel>
 		<channel active="True">
 			<name>ET3</name>
@@ -71,7 +78,7 @@
 			<type2></type2>
 			<url2>rtmp://31.204.154.90/live/livestream live=1 timeout=10</url2>
 			<base>http://www.ertopen.com/</base>
-			<epg>30508</epg>
+			<epg>30509</epg>
 		</channel>
 		<channel active="True">
 			<name>EDT</name>
@@ -81,7 +88,7 @@
 			<type2>visionip</type2>
 			<url2>http://tvnetwork.new.visionip.tv/Hellenic_TV/index.php?module=playlist&amp;type=jwASX&amp;broadcastid=4267</url2>
 			<base>http://www.hprt.gr/</base>
-			<epg>30509</epg>
+			<epg>30510</epg>
 		</channel>
 		<channel active="True">
 			<name>BOYLH TV</name>
@@ -91,14 +98,14 @@
 			<type2>hls</type2>
 			<url2>http://streamer-cache.grnet.gr/parliament/parltv.sdp/master.m3u8</url2>
 			<base>http://www.hellenicparliament.gr/Enimerosi/Vouli-Tileorasi</base>
-			<epg>30510</epg>
+			<epg>30511</epg>
 		</channel>
 		<channel active="True">
 			<name>EURONEWS</name>
 			<type></type>
 			<url>rtmp://fr-par-3.stream-relay.hexaglobe.net:1935/rtpeuronewslive/gr_video750_rtp.sdp live=1 timeout=10</url>
 			<base>http://gr.euronews.com/news/streaming-live/</base>
-			<epg>30511</epg>
+			<epg>30512</epg>
 		</channel>
 	</area>
 
@@ -115,7 +122,7 @@
 			<type></type>
 			<url>rtmp://videos.ant1.com.cy:80/livepkgr/livestream?adbe-live-event=liveevent swfUrl=http://www.ant1iwo.com/flowplayer.rtmp-3.1.3.swf pageUrl=http://www.ant1iwo.com/livestreaming/ swfVfy=1 live=1 timeout=10</url>
 			<type2></type2>
-			<url2>rtmpe://46.19.141.70:443/liveedge1 playpath=ant1cy653 swfUrl=http://hidecast.com/jwplayer/jwplayer.flash.swf pageUrl=http://hidecast.com live=1 timeout=10</url2>
+			<url2>rtmpe://strm.ukcast.tv/redirect playpath=ant1cy swfUrl=http://www.ukcast.tv/player/player.swf pageUrl=http://www.ukcast.tv live=1 timeout=10</url2>
 			<base>http://www.ant1iwo.com/livestreaming/</base>
 			<epg>30522</epg>
 		</channel>
@@ -124,14 +131,14 @@
 			<type>hls</type>
 			<url>http://188.164.200.13/hls/stream.m3u8</url>
 			<type2></type2>
-			<url2>rtmpe://46.19.141.70:443/liveedge1 playpath=sigma1678 swfUrl=http://hidecast.com/jwplayer/jwplayer.flash.swf pageUrl=http://hidecast.com live=1 timeout=10</url2>
+			<url2>rtmpe://strm.ukcast.tv/redirect playpath=sigmacy2 swfUrl=http://www.ukcast.tv/player/player.swf pageUrl=http://www.ukcast.tv live=1 timeout=10</url2>
 			<base>http://www.sigmatv.com/</base>
 			<epg>30523</epg>
 		</channel>
 		<channel active="True">
 			<name>CAPITAL</name>
 			<type></type>
-			<url>rtmpe://46.19.141.70:443/liveedge1 playpath=capitalcy447 swfUrl=http://hidecast.com/jwplayer/jwplayer.flash.swf pageUrl=http://hidecast.com live=1 timeout=10</url>
+			<url>rtmpe://strm.ukcast.tv/redirect playpath=capitalcy swfUrl=http://www.ukcast.tv/player/player.swf pageUrl=http://www.ukcast.tv live=1 timeout=10</url>
 			<base>http://www.lakatamia.tv/share/capital.html</base>
 			<epg>30524</epg>
 		</channel>
@@ -148,14 +155,14 @@
 	</area>
 
 	<area name="THEMATIC">
-		<channel active="True">
+		<channel active="False">
 			<name>NICKELODEON</name>
 			<type>http</type>
 			<url>http://85.196.8.204:1234/udp/225.170.94.96:1234</url>
 			<base>http://www.nickelodeon.gr/</base>
 			<epg>30541</epg>
 		</channel>
-		<channel active="True">
+		<channel active="False">
 			<name>NICKELODEON+</name>
 			<type>http</type>
 			<url>http://85.196.8.204:1234/udp/225.170.89.192:1234</url>
@@ -240,54 +247,61 @@
 			<epg>30564</epg>
 		</channel>
 		<channel active="True">
+			<name>ZOOM</name>
+			<type></type>
+			<url>rtmp://213.16.167.187:1935/live/mpegts_256.stream live=1 timeout=10</url>
+			<base>http://www.zoomtv.gr/</base>
+			<epg>30565</epg>
+		</channel>
+		<channel active="True">
 			<name>GR TV</name>
 			<type>hls</type>
 			<url>http://zouglahd-f.akamaihd.net/i/zougla_1@56341/index_700_av-b.m3u8</url>
 			<url>http://zouglahd-f.akamaihd.net/i/zougla_1@56341/master.m3u8</url>
 			<base>http://www.zougla.gr/zouglatv</base>
-			<epg>30565</epg>
+			<epg>30566</epg>
 		</channel>
-		<channel active="True">
+		<channel active="False">
 			<name>ATTICA TV</name>
 			<type>http</type>
 			<url>http://85.196.8.204:1234/udp/225.170.93.224:1234</url>
 			<base></base>
-			<epg>30566</epg>
+			<epg>30567</epg>
 		</channel>
-		<channel active="True">
+		<channel active="False">
 			<name>HIGH TV</name>
 			<type>http</type>
 			<url>http://85.196.8.204:1234/udp/225.170.94.64:1234</url>
 			<base>http://skaisat.com/highchannel/</base>
-			<epg>30567</epg>
+			<epg>30568</epg>
 		</channel>
 		<channel active="True">
 			<name>BLUE SKY</name>
 			<type></type>
-			<url>mmsh://78.47.26.149:8081/bluesky</url>
+			<url>mmsh://78.47.26.149:8081/blueskytv</url>
 			<base>http://www.blueskytv.gr/live-tv/</base>
-			<epg>30568</epg>
+			<epg>30569</epg>
 		</channel>
 		<channel active="False">
 			<name>CHANNEL 9</name>
 			<type>livestream</type>
 			<url>http://www.livestream.com/channel9gr</url>
 			<base>http://www.channel9.gr/livestream/</base>
-			<epg>30569</epg>
+			<epg>30570</epg>
 		</channel>
 		<channel active="False">
 			<name>SBC TV</name>
 			<type>livestream</type>
 			<url>http://www.livestream.com/sbcgr</url>
 			<base>http://www.sbctv.gr/</base>
-			<epg>30570</epg>
+			<epg>30571</epg>
 		</channel>
 		<channel active="False">
 			<name>SMILE TV</name>
 			<type></type>
 			<url></url>
 			<base></base>
-			<epg>30571</epg>
+			<epg>30572</epg>
 		</channel>
 	</area>
 
@@ -328,7 +342,7 @@
 			<base>http://verginatv.blogspot.gr/</base>
 			<epg>30584</epg>
 		</channel>
-		<channel active="True">
+		<channel active="False">
 			<name>GNOMI TV</name>
 			<type>http</type>
 			<url>http://85.196.8.204:1234/udp/225.170.92.96:1234</url>
@@ -488,7 +502,7 @@
 			<name>START TV</name>
 			<type>veetle</type>
 			<url>http://veetle.com/index.php/channel/view#5149a191525c6</url>
-			<base>http://www.startmedia.gr/start-tv.html</base>
+			<base>http://www.startmedia.gr/</base>
 			<epg>30645</epg>
 		</channel>
 		<channel active="True">

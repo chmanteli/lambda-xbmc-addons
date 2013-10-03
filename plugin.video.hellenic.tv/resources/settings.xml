@@ -7,6 +7,7 @@
 		<setting id="STAR" label="STAR" type="bool" default="true" visible="true"/>
 		<setting id="ALPHA" label="ALPHA" type="bool" default="true" visible="true"/>
 		<setting id="SKAI" label="SKAI" type="bool" default="true" visible="true"/>
+		<setting id="E TV" label="E TV" type="bool" default="true" visible="false"/>
 		<setting id="MACEDONIA TV" label="MACEDONIA TV" type="bool" default="true" visible="true"/>
 		<setting id="NET" label="NET" type="bool" default="true" visible="true"/>
 		<setting id="ET3" label="ET3" type="bool" default="true" visible="true"/>
@@ -24,8 +25,8 @@
 	</category>
 	<category label="30040">
 		<!-- THEMATIC -->
-		<setting id="NICKELODEON" label="NICKELODEON" type="bool" default="true" visible="true"/>
-		<setting id="NICKELODEON+" label="NICKELODEON+" type="bool" default="true" visible="true"/>
+		<setting id="NICKELODEON" label="NICKELODEON" type="bool" default="true" visible="false"/>
+		<setting id="NICKELODEON+" label="NICKELODEON+" type="bool" default="true" visible="false"/>
 		<setting id="MTV" label="MTV" type="bool" default="true" visible="false"/>
 		<setting id="MAD TV" label="MAD TV" type="bool" default="true" visible="true"/>
 		<setting id="MUSIC TV" label="MUSIC TV" type="bool" default="true" visible="true"/>
@@ -39,9 +40,10 @@
 		<setting id="EXTRA 3" label="EXTRA 3" type="bool" default="true" visible="true"/>
 		<setting id="ACTION 24" label="ACTION 24" type="bool" default="true" visible="true"/>
 		<setting id="ART CHANNEL" label="ART CHANNEL" type="bool" default="true" visible="true"/>
+		<setting id="ZOOM" label="ZOOM" type="bool" default="true" visible="true"/>
 		<setting id="GR TV" label="GR TV" type="bool" default="true" visible="true"/>
-		<setting id="ATTICA TV" label="ATTICA TV" type="bool" default="true" visible="true"/>
-		<setting id="HIGH TV" label="HIGH TV" type="bool" default="true" visible="true"/>
+		<setting id="ATTICA TV" label="ATTICA TV" type="bool" default="true" visible="false"/>
+		<setting id="HIGH TV" label="HIGH TV" type="bool" default="true" visible="false"/>
 		<setting id="BLUE SKY" label="BLUE SKY" type="bool" default="true" visible="true"/>
 		<setting id="CHANNEL 9" label="CHANNEL 9" type="bool" default="true" visible="false"/>
 		<setting id="SBC TV" label="SBC TV" type="bool" default="true" visible="false"/>
@@ -51,7 +53,7 @@
 		<setting id="4E TV" label="4E TV" type="bool" default="true" visible="true"/>
 		<setting id="EGNATIA TV" label="EGNATIA TV" type="bool" default="true" visible="true"/>
 		<setting id="VERGINA TV" label="VERGINA TV" type="bool" default="true" visible="true"/>
-		<setting id="GNOMI TV" label="GNOMI TV" type="bool" default="true" visible="true"/>
+		<setting id="GNOMI TV" label="GNOMI TV" type="bool" default="true" visible="false"/>
 		<setting id="EUROPE 1" label="EUROPE 1" type="bool" default="true" visible="true"/>
 		<setting id="DION TV" label="DION TV" type="bool" default="true" visible="true"/>
 		<setting id="XTV" label="XTV" type="bool" default="true" visible="false"/>

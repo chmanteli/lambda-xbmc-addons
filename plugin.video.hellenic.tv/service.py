@@ -42,6 +42,7 @@ akamaiProxy			= os.path.join(addonPath,'akamaisecurehd.py')
 fallback			= os.path.join(addonPath,'resources/fallback/fallback.mp4')
 addonStrings		= os.path.join(addonPath,'resources/language/Greek/strings.xml')
 dataPath			= xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
+tvguideDB			= xbmc.translatePath('special://profile/addon_data/script.tvguide.hellenic/source.db')
 common				= CommonFunctions
 
 
@@ -159,6 +160,8 @@ class epg:
         [i.join() for i in threads]
         self.xmltv_creator()
 
+        try: os.remove(tvguideDB)
+        except: pass
         index().clearProperty('htv_Service_Running')
 
     def get_dates(self):
@@ -432,13 +435,13 @@ class epg:
             'EDT'						:	self.ote_programme("EDT", "593"),
             'BOYLH TV'					:	self.ote_programme("BOYLH TV", "119"),
             'EURONEWS'					:	self.ote_programme("EURONEWS", "19"),
-            'NICKELODEON'				:	self.ote_programme("NICKELODEON", "117"),
+            #'NICKELODEON'				:	self.ote_programme("NICKELODEON", "117"),
             #'MTV'						:	self.ote_programme("MTV", "121"),
             'MAD TV'					:	self.ote_programme("MAD TV", "144"),
             'KONTRA CHANNEL'			:	self.ote_programme("KONTRA CHANNEL", "44"),
             'EXTRA 3'					:	self.ote_programme("EXTRA 3", "135"),
             'ART CHANNEL'				:	self.ote_programme("ART CHANNEL", "156"),
-            'GR TV'						:	self.ote_programme("GR TV", "157"),
+            'ZOOM'						:	self.ote_programme("ZOOM", "157"),
             'BLUE SKY'					:	self.ote_programme("BLUE SKY", "153"),
             #'SBC TV'					:	self.ote_programme("SBC TV", "136"),
             'TV 100'					:	self.ote_programme("TV 100", "137"),

@@ -1,4 +1,13 @@
 ------------------------
+Hellenic TV v2.3.2 (3-Oct-13)
+------------------------
+
+- Added ZOOM.
+- Updated MEGA, STAR, ANT1 CYPRUS, SIGMA, CAPITAL and BLUE SKY.
+- Removed NICKELODEON, NICKELODEON+, ATTICA TV, HIGH TV and GNOMI TV.
+
+
+------------------------
 Hellenic TV v2.3.1 (19-Sep-13)
 ------------------------
 
