@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<!-- Settings -->
+	<string id="30000">General</string>
+	<string id="30001">Sort By</string>
+	<string id="30002">Date added</string>
+	<string id="30003">Release date</string>
+	<string id="30004">Name</string>
+	<string id="30005">Rating</string>
+	<string id="30020">Meta Data</string>
+	<string id="30021">Enable Meta Data</string>
+	<string id="30022">Enable Fanart</string>
+	<string id="30040">Library</string>
+	<string id="30041">Don't forget to add this folder to media sources.</string>
+	<string id="30042">Movies Folder</string>
+	<string id="30060">Subtitles</string>
+	<string id="30061">Subtitles could be unavailable or out of sync.</string>
+	<string id="30062">In that case use your own subtitles.</string>
+	<string id="30063">Subtitles</string>
+	<string id="30064">Disabled</string>
+	<string id="30065">Greek</string>
+	<!-- Info -->
+	<string id="30301"></string>
+	<string id="30302"> is on by default</string>
+	<string id="30303">Added to Favourites</string>
+	<string id="30304">Removed from Favourites</string>
+	<string id="30305">Moved up</string>
+	<string id="30306">Moved down</string>
+	<string id="30307">Item already in Favourites</string>
+	<string id="30308">No subtitles available</string>
+	<!-- OK -->
+	<string id="30351">YouTube addon is not installed.</string>
+	<string id="30352">This stream requires it.</string>
+	<!-- ContextMenu -->
+	<string id="30401">Play</string>
+	<string id="30402">Random Play</string>
+	<string id="30403">Play from here</string>
+	<string id="30404">Queue All</string>
+	<string id="30405">Queue video</string>
+	<string id="30406">Play Queue</string>
+	<string id="30407">Now playing...</string>
+	<string id="30408">Add-on settings</string>
+	<string id="30409">Move up</string>
+	<string id="30410">Move down</string>
+	<string id="30411">Remove</string>
+	<string id="30412">Add to favourites</string>
+	<string id="30413">Remove from favourites</string>
+	<string id="30414">Set Global view</string>
+	<string id="30415">Set Movies view</string>
+	<string id="30416">Set TV Shows view</string>
+	<string id="30417">Set Seasons view</string>
+	<string id="30418">Set Episodes view</string>
+	<string id="30419">Watch Trailer</string>
+	<string id="30420">Add to Library</string>
+	<string id="30421">Movie information</string>
+	<string id="30422">TV show information</string>
+	<string id="30423">Episode information</string>
+	<!-- Description -->
+	<string id="30450">Watch a wide selection of movies from muchmovies.org</string>
+	<!-- Labels -->
+	<string id="30501">Favourites</string>
+	<string id="30502">Listings</string>
+	<string id="30503">Genres</string>
+	<string id="30504">Pages</string>
+	<string id="30505">Search</string>
+	<string id="30506">NEXT</string>
+</strings>

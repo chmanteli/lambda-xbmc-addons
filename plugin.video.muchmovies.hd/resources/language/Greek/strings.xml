@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<!-- Settings -->
+	<string id="30000">Γενικά</string>
+	<string id="30001">Μέθοδος ταξινόμησης</string>
+	<string id="30002">Ημ/νία προσθήκης</string>
+	<string id="30003">Ημ/νία κυκλοφορίας</string>
+	<string id="30004">Όνομα</string>
+	<string id="30005">Αξιολόγηση</string>
+	<string id="30020">Μεταδεδομένα</string>
+	<string id="30021">Χρήση μεταδεδομένων</string>
+	<string id="30022">Χρήση Fanart</string>
+	<string id="30040">Συλλογή</string>
+	<string id="30041">Μην ξεχάσετε να προσθέσετε το φάκελο στις πηγές πολυμέσων.</string>
+	<string id="30042">Φάκελος ταινιών</string>
+	<string id="30060">Υπότιτλοι</string>
+	<string id="30061">Οι υπότιτλοι μπορεί να είναι μη διαθέσιμοι ή ασυγχρόνιστοι.</string>
+	<string id="30062">Σε αυτή τη περίπτωση χρησιμοποιήστε τους δικούς σας.</string>
+	<string id="30063">Υπότιτλοι</string>
+	<string id="30064">Ανενεργοί</string>
+	<string id="30065">Ελληνικά</string>
+	<!-- Info -->
+	<string id="30301">Η </string>
+	<string id="30302"> είναι πλέον προεπιλεγμένη</string>
+	<string id="30303">Προστέθηκε στα Αγαπημένα</string>
+	<string id="30304">Αφαιρέθηκε από τα Αγαπημένα</string>
+	<string id="30305">Μετακινήθηκε πάνω</string>
+	<string id="30306">Μετακινήθηκε κάτω</string>
+	<string id="30307">Υπάρχει ήδη στα Αγαπημένα</string>
+	<string id="30308">Δεν υπάρχουν διαθέσιμοι υπότιτλοι</string>
+	<!-- OK -->
+	<string id="30351">Το πρόσθετο YouTube δεν έχει εγκατασταθεί.</string>
+	<string id="30352">Η ροή αυτή το απαιτεί.</string>
+	<!-- ContextMenu -->
+	<string id="30401">Αναπαραγωγή</string>
+	<string id="30402">Τυχαία Αναπαραγωγή</string>
+	<string id="30403">Αναπαραγωγή από εδώ</string>
+	<string id="30404">Όλα στην αναμονή</string>
+	<string id="30405">Βίντεο στην αναμονή</string>
+	<string id="30406">Αναπαραγωγή αναμονής</string>
+	<string id="30407">Τώρα εκτελείται...</string>
+	<string id="30408">Ρυθμίσεις πρόσθετου</string>
+	<string id="30409">Μετακίνηση πάνω</string>
+	<string id="30410">Μετακίνηση κάτω</string>
+	<string id="30411">Αφαίρεση</string>
+	<string id="30412">Προσθήκη στα αγαπημένα</string>
+	<string id="30413">Αφαίρεση από τα αγαπημένα</string>
+	<string id="30414">Ορισμός καθολικής θέασης</string>
+	<string id="30415">Ορισμός θέασης ταινιών</string>
+	<string id="30416">Ορισμός θέασης σειρών</string>
+	<string id="30417">Ορισμός θέασης κύκλων</string>
+	<string id="30418">Ορισμός θέασης επεισοδίων</string>
+	<string id="30419">Αναπαραγωγή Trailer</string>
+	<string id="30420">Προσθήκη στη βιβλιοθήκη</string>
+	<string id="30421">Πληροφορίες ταινίας</string>
+	<string id="30422">Πληροφορίες σειράς</string>
+	<string id="30423">Πληροφορίες επεισοδίου</string>
+	<!-- Description -->
+	<string id="30450">Παρακολουθήστε μια ευρεία συλλογή ταινιών από το muchmovies.org</string>
+	<!-- Labels -->
+	<string id="30501">Αγαπημένα</string>
+	<string id="30502">Καταχωρήσεις</string>
+	<string id="30503">Είδη</string>
+	<string id="30504">Σελίδες</string>
+	<string id="30505">Αναζήτηση</string>
+	<string id="30506">ΕΠΟΜΕΝΑ</string>
+</strings>
