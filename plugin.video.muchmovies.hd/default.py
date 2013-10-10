@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-    Much Movies XBMC Addon
+    Much Movies HD XBMC Addon
     Copyright (C) 2013 lambda
 
     This program is free software: you can redistribute it and/or modify
@@ -44,7 +44,7 @@ viewData            = os.path.join(dataPath,'views.cfg')
 favData             = os.path.join(dataPath,'favourites.cfg')
 metaget             = metahandlers.MetaData(preparezip=False)
 common              = CommonFunctions
-action				= None
+action              = None
 
 
 class main:
@@ -784,6 +784,7 @@ class player:
             else:
                 result = getUrl(url).result
                 url = re.compile('"http://www.youtube.com/embed/(.+?)"').findall(result)[0]
+                url = url.split("?")[0]
                 url = 'http://www.youtube.com/watch?v=%s' % url
                 url = self.youtube(url)
             if url is None: return

@@ -240,7 +240,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.muchmovies.hd" name="Much Movies" version="1.0.0" provider-name="lambda">
+<addon id="plugin.video.muchmovies.hd" name="Much Movies HD" version="1.0.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.addon" version="12.0.0"/>
 		<import addon="xbmc.python" version="2.1.0"/>
