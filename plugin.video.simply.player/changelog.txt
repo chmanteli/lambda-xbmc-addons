@@ -1,3 +1,14 @@
+------------------------
+Simply Player v1.0.1 (18-Oct-13)
+------------------------
+
+- Added downloading support.
+- Added "go to home" option in context menus.
+- Tweaked context menus.
+- Code cosmetics.
+
+
+------------------------
 Simply Player v1.0.0 (14-Oct-13)
 ------------------------
 

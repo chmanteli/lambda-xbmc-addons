@@ -13,9 +13,12 @@
 		<setting type="lsep" label="30041"/>
 	</category>
 	<category label="30060">
-		<setting id="subs" type="enum" label="30063" lvalues="30064|30065" default="0" />
+		<setting id="downloads" type="folder" label="30061" default=""/>
+	</category>
+	<category label="30080">
+		<setting id="subs" type="enum" label="30083" lvalues="30084|30085" default="0" />
 		<setting type="lsep" label="[CR]"/>
-		<setting type="lsep" label="30061"/>
-		<setting type="lsep" label="30062"/>
+		<setting type="lsep" label="30081"/>
+		<setting type="lsep" label="30082"/>
 	</category>
 </settings>
