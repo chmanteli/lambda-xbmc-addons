@@ -1,0 +1,31 @@
+------------------------
+Much Movies HD v1.0.3 (20-Oct-13)
+------------------------
+
+- Code cosmetics.
+
+
+------------------------
+Much Movies HD v1.0.2 (18-Oct-13)
+------------------------
+
+- Added downloading support.
+- Added "go to home" option in context menus.
+- Fixed issues with library integration.
+- Fixed issues with subtitles.
+- Tweaked context menus.
+- Code cosmetics.
+
+
+------------------------
+Much Movies HD v1.0.1 (11-Oct-13)
+------------------------
+
+- Renamed addon
+
+
+------------------------
+Much Movies v1.0.0 (8-Oct-13)
+------------------------
+
+- Initial version

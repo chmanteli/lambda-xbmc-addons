@@ -240,6 +240,52 @@
 	</extension>
 </addon>
 
+<addon id="plugin.video.muchmovies.hd" name="Much Movies HD" version="1.0.3" provider-name="lambda">
+	<requires>
+		<import addon="xbmc.addon" version="12.0.0"/>
+		<import addon="xbmc.python" version="2.1.0"/>
+		<import addon="script.module.metahandler" version="1.0.0"/>
+		<import addon="script.module.parsedom" version="0.9.1"/>
+		<import addon="plugin.video.youtube" version="2.9.2"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Watch a wide selection of movies from muchmovies.org</summary>
+		<summary lang="el">Παρακολουθήστε μια ευρεία συλλογή ταινιών από το muchmovies.org</summary>
+		<description lang="en">Watch a wide selection of movies from muchmovies.org</description>
+		<description lang="el">Παρακολουθήστε μια ευρεία συλλογή ταινιών από το muchmovies.org</description>
+		<disclaimer lang="en">By using this plugin you will receive NO adverts.</disclaimer>
+		<disclaimer lang="el">Με τη χρήση αυτού του πρόσθετου ΔΕΝ θα λαμβάνετε διαφημίσεις.</disclaimer>
+		<platform>all</platform>
+	</extension>
+</addon>
+
+<addon id="plugin.video.simply.player" name="Simply Player" version="1.0.2" provider-name="lambda">
+	<requires>
+		<import addon="xbmc.addon" version="12.0.0"/>
+		<import addon="xbmc.python" version="2.1.0"/>
+		<import addon="script.module.metahandler" version="1.0.0"/>
+		<import addon="script.module.parsedom" version="0.9.1"/>
+		<import addon="plugin.video.youtube" version="2.9.2"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.service" library="service.py" start="startup">
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Watch movies and tv shows from simplymovies.net</summary>
+		<summary lang="el">Παρακολουθήστε ταινίες και σειρές από το simplymovies.net</summary>
+		<description lang="en">Watch movies and tv shows from simplymovies.net</description>
+		<description lang="el">Παρακολουθήστε ταινίες και σειρές από το simplymovies.net</description>
+		<disclaimer lang="en">By using this plugin you will receive NO adverts.</disclaimer>
+		<disclaimer lang="el">Με τη χρήση αυτού του πρόσθετου ΔΕΝ θα λαμβάνετε διαφημίσεις.</disclaimer>
+		<platform>all</platform>
+	</extension>
+</addon>
+
 <addon id="plugin.video.skai.gr" name="SKAI Player" version="2.0.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.addon" version="12.0.0"/>
