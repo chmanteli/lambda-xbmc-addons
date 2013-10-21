@@ -536,7 +536,7 @@ class shows:
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
                 image = common.parseDOM(show, "img", ret="src")[0]
-                url = '%s%s' % (link().antenna_base, url)
+                image = '%s%s' % (link().antenna_base, image)
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
                 self.list.append({'name': name, 'url': url, 'image': image})
