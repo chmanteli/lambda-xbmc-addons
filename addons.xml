@@ -149,7 +149,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.hellenic.toons" name="Hellenic Toons" version="2.0.1" provider-name="lambda">
+<addon id="plugin.video.hellenic.toons" name="Hellenic Toons" version="2.0.2" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.addon" version="12.0.0"/>
 		<import addon="xbmc.python" version="2.1.0"/>
