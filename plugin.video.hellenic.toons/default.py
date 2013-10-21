@@ -916,7 +916,7 @@ class player:
                 post += '%s=%s&' % (name, urllib.quote_plus(value))
 
             result = getUrl(phpUrl,post=post).result
-            swfUrl = re.compile('(http://play.flashx.tv/nuevo/player/player.swf.+?)"').findall(result)[0]
+            swfUrl = re.compile('"nuevoplayer".+?data="(.+?)"').findall(result)[0]
             cfgUrl = swfUrl.split("?config=")[-1]
 
             getUrl(swfUrl,referer=phpUrl).result
