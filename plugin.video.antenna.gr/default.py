@@ -26,27 +26,29 @@ try:	import StorageServer
 except:	import storageserverdummy as StorageServer
 
 
-language			= xbmcaddon.Addon().getLocalizedString
-setSetting			= xbmcaddon.Addon().setSetting
-getSetting			= xbmcaddon.Addon().getSetting
-addonName			= xbmcaddon.Addon().getAddonInfo("name")
-addonVersion		= xbmcaddon.Addon().getAddonInfo("version")
-addonId				= xbmcaddon.Addon().getAddonInfo("id")
-addonPath			= xbmcaddon.Addon().getAddonInfo("path")
-addonDesc			= language(30450).encode("utf-8")
-addonIcon			= os.path.join(addonPath,'icon.png')
-addonFanart			= os.path.join(addonPath,'fanart.jpg')
-addonArt			= os.path.join(addonPath,'resources/art')
-dataPath			= xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
-viewData			= os.path.join(dataPath,'views.cfg')
-favData				= os.path.join(dataPath,'favourites2.cfg')
-cache				= StorageServer.StorageServer(addonName+addonVersion,24).cacheFunction
-cache2				= StorageServer.StorageServer(addonName+addonVersion,240).cacheFunction
-common				= CommonFunctions
+language            = xbmcaddon.Addon().getLocalizedString
+setSetting          = xbmcaddon.Addon().setSetting
+getSetting          = xbmcaddon.Addon().getSetting
+addonName           = xbmcaddon.Addon().getAddonInfo("name")
+addonVersion        = xbmcaddon.Addon().getAddonInfo("version")
+addonId             = xbmcaddon.Addon().getAddonInfo("id")
+addonPath           = xbmcaddon.Addon().getAddonInfo("path")
+addonDesc           = language(30450).encode("utf-8")
+addonIcon           = os.path.join(addonPath,'icon.png')
+addonFanart         = os.path.join(addonPath,'fanart.jpg')
+addonArt            = os.path.join(addonPath,'resources/art')
+dataPath            = xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
+viewData            = os.path.join(dataPath,'views.cfg')
+favData             = os.path.join(dataPath,'favourites2.cfg')
+cache               = StorageServer.StorageServer(addonName+addonVersion,24).cacheFunction
+cache2              = StorageServer.StorageServer(addonName+addonVersion,240).cacheFunction
+common              = CommonFunctions
+action              = None
 
 
 class main:
     def __init__(self):
+        global action
         index().container_data()
         params = {}
         splitparams = sys.argv[2][sys.argv[2].find('?') + 1:].split('&')
@@ -54,77 +56,63 @@ class main:
             if (len(param) > 0):
                 splitparam = param.split('=')
                 key = splitparam[0]
-                try:	value = splitparam[1].encode("utf-8")
-                except:	value = splitparam[1]
+                try:    value = splitparam[1].encode("utf-8")
+                except: value = splitparam[1]
                 params[key] = value
 
-        try:		action = urllib.unquote_plus(params["action"])
-        except:		action = None
-        try:		name = urllib.unquote_plus(params["name"])
-        except:		name = None
-        try:		show = urllib.unquote_plus(params["show"])
-        except:		show = None
-        try:		url = urllib.unquote_plus(params["url"])
-        except:		url = None
-        try:		image = urllib.unquote_plus(params["image"])
-        except:		image = None
+        try:        action = urllib.unquote_plus(params["action"])
+        except:     action = None
+        try:        name = urllib.unquote_plus(params["name"])
+        except:     name = None
+        try:        url = urllib.unquote_plus(params["url"])
+        except:     url = None
+        try:        image = urllib.unquote_plus(params["image"])
+        except:     image = None
+        try:        show = urllib.unquote_plus(params["show"])
+        except:     show = None
 
-        if action == None:							categories().get()
-        elif action == 'item_play':					contextMenu().item_play()
-        elif action == 'item_random_play':			contextMenu().item_random_play()
-        elif action == 'item_queue':				contextMenu().item_queue()
-        elif action == 'item_play_from_here':		contextMenu().item_play_from_here(url)
-        elif action == 'favourite_add':				contextMenu().favourite_add(name, url, image)
-        elif action == 'favourite_delete':			contextMenu().favourite_delete(name, url, image)
-        elif action == 'favourite_moveUp':			contextMenu().favourite_moveUp(name, url, image)
-        elif action == 'favourite_moveDown':		contextMenu().favourite_moveDown(name, url, image)
-        elif action == 'playlist_start':			contextMenu().playlist_start()
-        elif action == 'playlist_open':				contextMenu().playlist_open()
-        elif action == 'settings_open':				contextMenu().settings_open()
-        elif action == 'global_view':				contextMenu().global_view()
-        elif action == 'favourites':				favourites().get()
-        elif action == 'antenna_shows':				shows().antenna()
-        elif action == 'episodes':					episodes().get(show, url)
-        elif action == 'episodes_recent':			episodes().antenna_recent()
-        elif action == 'episodes_news':				episodes().antenna_news()
-        elif action == 'episodes_sports':			episodes().antenna_sports()
-        elif action == 'play':						player().run(url)
-
-        viewDict = {
-            'skin.confluence'	: 503,	'skin.aeon.nox'		: 518,	'skin.back-row'			: 529,
-            'skin.bello'		: 50,	'skin.carmichael'	: 50,	'skin.diffuse'			: 55,
-            'skin.droid'		: 50,	'skin.metropolis'	: 55,	'skin.pm3-hd'			: 58,
-            'skin.rapier'		: 68,	'skin.re-touched'	: 550,	'skin.simplicity'		: 50,
-            'skin.transparency'	: 51,	'skin.xeebo'		: 50,	'skin.xperience1080'	: 50
-            }
+        if action == None:                          categories().get()
+        elif action == 'item_play':                 contextMenu().item_play()
+        elif action == 'item_random_play':          contextMenu().item_random_play()
+        elif action == 'item_queue':                contextMenu().item_queue()
+        elif action == 'item_play_from_here':       contextMenu().item_play_from_here(url)
+        elif action == 'favourite_add':             contextMenu().favourite_add(name, url, image)
+        elif action == 'favourite_delete':          contextMenu().favourite_delete(name, url, image)
+        elif action == 'favourite_moveUp':          contextMenu().favourite_moveUp(name, url, image)
+        elif action == 'favourite_moveDown':        contextMenu().favourite_moveDown(name, url, image)
+        elif action == 'playlist_start':            contextMenu().playlist_start()
+        elif action == 'playlist_open':             contextMenu().playlist_open()
+        elif action == 'settings_open':             contextMenu().settings_open()
+        elif action == 'global_view':               contextMenu().global_view()
+        elif action == 'favourites':                favourites().get()
+        elif action == 'antenna_shows':             shows().antenna()
+        elif action == 'episodes':                  episodes().get(show, url)
+        elif action == 'episodes_recent':           episodes().antenna_recent()
+        elif action == 'episodes_news':             episodes().antenna_news()
+        elif action == 'episodes_sports':           episodes().antenna_sports()
+        elif action == 'play':                      player().run(url)
 
         xbmcplugin.setContent(int(sys.argv[1]), 'Episodes')
+        index().container_view({'skin.confluence' : 503})
         xbmcplugin.setPluginFanart(int(sys.argv[1]), addonFanart)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
-        index().container_view(viewDict)
         return
 
 class getUrl(object):
-    def __init__(self, url, fetch=True, mobile=False, proxy=None, post=None, referer=None, cookie=None):
+    def __init__(self, url, fetch=True, close=True, cookie=False, mobile=False, proxy=None, post=None, referer=None):
         if not proxy is None:
             proxy_handler = urllib2.ProxyHandler({'http':'%s' % (proxy)})
             opener = urllib2.build_opener(proxy_handler, urllib2.HTTPHandler)
+            opener = urllib2.install_opener(opener)
+        if cookie == True:
+            import cookielib
+            cookie_handler = urllib2.HTTPCookieProcessor(cookielib.LWPCookieJar())
+            opener = urllib2.build_opener(cookie_handler, urllib2.HTTPBasicAuthHandler(), urllib2.HTTPHandler())
             opener = urllib2.install_opener(opener)
         if not post is None:
             request = urllib2.Request(url, post)
         else:
             request = urllib2.Request(url,None)
-        if not cookie is None:
-            from urllib2 import Request, build_opener, HTTPCookieProcessor, HTTPHandler
-            import cookielib
-            cj = cookielib.CookieJar()
-            opener = build_opener(HTTPCookieProcessor(cj), HTTPHandler())
-            cookiereq = Request(cookie)
-            response = opener.open(cookiereq)
-            response.close()
-            for cookie in cj:
-                cookie = '%s=%s' % (cookie.name, cookie.value)
-            request.add_header('Cookie', cookie)
         if mobile == True:
             request.add_header('User-Agent', 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_0 like Mac OS X; en-us) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 Mobile/8A293 Safari/6531.22.7')
         else:
@@ -136,7 +124,8 @@ class getUrl(object):
             result = response.read()
         else:
             result = response.geturl()
-        response.close()
+        if close == True:
+            response.close()
         self.result = result
 
 class uniqueList(object):
@@ -505,12 +494,19 @@ class categories:
         catList.append({'name': 30505, 'image': 'Sports.png', 'action': 'episodes_sports'})
         index().catList(catList)
 
+class link:
+    def __init__(self):
+        self.antenna_base = 'http://www.antenna.gr'
+        self.antenna_shows = 'http://www.antenna.gr/templates/data/az?letter='
+        self.antenna_episodes = 'http://www.antenna.gr/templates/data/categories?cid='
+        self.antenna_news = 'http://www.antenna.gr/webtv/categories?cid=3067'
+        self.antenna_sports = 'http://www.antenna.gr/webtv/categories?cid=3062'
+        self.antenna_recent = 'http://www.antenna.gr/templates/data/webtvLatest?xsl=t'
+
 class shows:
     def __init__(self):
         self.list = []
         self.data = ''
-        self.antennaUrl			= 'http://www.antenna.gr'
-        self.antennaUrl2		= 'http://www.antenna.gr/webtv'
 
     def antenna(self):
         #self.list = self.antenna_list()
@@ -518,34 +514,29 @@ class shows:
         index().showList(self.list)
 
     def antenna_list(self):
-        letters =	['%u0391', '%u0392', '%u0393', '%u0394', '%u0395', '%u0396', '%u0397', '%u0398',
-					'%u0399', '%u039A', '%u039B', '%u039C', '%u039D', '%u039E', '%u039F', '%u03A0',
-					'%u03A1', '%u03A3', '%u03A4', '%u03A5', '%u03A6', '%u03A7', '%u03A8', '%u03A9',
-					'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
-					'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1-9']
         try:
             threads = []
+            letters = ['%u0391', '%u0392', '%u0393', '%u0394', '%u0395', '%u0396', '%u0397', '%u0398', '%u0399', '%u039A', '%u039B', '%u039C', '%u039D', '%u039E', '%u039F', '%u03A0', '%u03A1', '%u03A3', '%u03A4', '%u03A5', '%u03A6', '%u03A7', '%u03A8', '%u03A9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1-9']
             for letter in letters:
-                url = '%s/az?letter=%s' % (self.antennaUrl2, letter)
+                url = '%s%s' % (link().antenna_shows, letter)
                 threads.append(Thread(self.antenna_list2, url))
             [i.start() for i in threads]
             [i.join() for i in threads]
             result = self.data
-            shows = common.parseDOM(result, "div", attrs = { "class": "videoTeaser" })
+            shows = common.parseDOM(result, "dl")
         except:
             return
         for show in shows:
             try:
-                name = common.parseDOM(show, "a")[-1]
+                name = re.compile('</div>(.+?)<div').findall(show)[0]
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
                 url = common.parseDOM(show, "a", ret="href")[0]
-                url = '%s%s' % (self.antennaUrl, url)
+                url = '%s%s' % (link().antenna_base, url)
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
-                image = common.parseDOM(show, "a", ret="rel")[0]
-                image = image.split(".jpg")[0]
-                image = '%s%s.jpg' % (self.antennaUrl, image)
+                image = common.parseDOM(show, "img", ret="src")[0]
+                url = '%s%s' % (link().antenna_base, url)
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
                 self.list.append({'name': name, 'url': url, 'image': image})
@@ -566,57 +557,56 @@ class episodes:
     def __init__(self):
         self.list = []
         self.data = []
-        self.antennaUrl			= 'http://www.antenna.gr'
-        self.antennaUrl2		= 'http://www.antenna.gr/webtv'
 
     def get(self, show, url):
         self.list = self.antenna_list(show, url)
         index().episodeList(self.list)
 
     def antenna_recent(self):
-        self.list = self.antenna_list3('ANT1 TV', 'recent')
+        self.list = self.antenna_list3('ANT1 TV', link().antenna_recent)
         index().episodeList(self.list)
 
     def antenna_news(self):
-        self.list = self.antenna_list3('ANT1 TV', 'news')
+        self.list = self.antenna_list('ANT1 TV', link().antenna_news)
         index().episodeList(self.list)
 
     def antenna_sports(self):
-        self.list = self.antenna_list3('ANT1 TV', 'sports')
+        self.list = self.antenna_list('ANT1 TV', link().antenna_sports)
         index().episodeList(self.list)
 
     def antenna_list(self, show, url):
         try:
-            episodesUrl = url.replace('categories','templates/data/videocategories')
+            episodesUrl = url.split("=")[-1]
+            episodesUrl = '%s%s' % (link().antenna_episodes, episodesUrl)
             result = getUrl(episodesUrl).result
-            pages = common.parseDOM(result, "a", attrs = { "class": "paging" })
-            pages = uniqueList(pages).list
-            threads, count = [], 0
-            for page in pages:
+            count = common.parseDOM(result, "a", attrs = { "class": "paging" })[-1]
+            count = int(count)+1
+            if count > 20: count = 20
+            threads = []
+            for i in range(1, count):
                 self.data.append('')
-                url = '%s&p=%s' % (episodesUrl, page)
-                threads.append(Thread(self.antenna_list2, url, count))
-                count = count + 1
+                url = '%s&p=%s' % (episodesUrl, str(i))
+                threads.append(Thread(self.antenna_list2, url, i-1))
             [i.start() for i in threads]
             [i.join() for i in threads]
+            result = ''
             for i in self.data: result += i
 
-            episodes = common.parseDOM(result, "div", attrs = { "class": "videoTeaser" })
+            episodes = re.compile('(<div class=.+?)<div class="teasertext"').findall(result)
             episodes = uniqueList(episodes).list
         except:
             return
         for episode in episodes:
             try:
-                name = common.parseDOM(episode, "div", attrs = { "class": "greytxt.+?" })[-1]
+                name = common.parseDOM(episode, "div", attrs = { "class": "title" })[0]
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
                 url = common.parseDOM(episode, "a", ret="href")[0]
-                url = '%s%s' % (self.antennaUrl, url)
+                url = '%s%s' % (link().antenna_base, url)
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
-                image = common.parseDOM(episode, "a", ret="rel")[0]
-                image = image.split(".jpg")[0]
-                image = '%s%s.jpg' % (self.antennaUrl, image)
+                image = common.parseDOM(episode, "img", ret="src")[0]
+                image = '%s%s' % (link().antenna_base, image)
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
                 self.list.append({'name': name, 'show': show, 'url': url, 'image': image})
@@ -632,33 +622,34 @@ class episodes:
         except:
             return
 
-    def antenna_list3(self, show, mode):
+    def antenna_list3(self, show, url):
         try:
-            result = getUrl(self.antennaUrl2).result
-            if mode == 'recent':
-                episodes = common.parseDOM(result, "div", attrs = { "id": "ctl00_slidesmall_ContentDiv" })[0]
-                episodes = common.parseDOM(episodes, "div", attrs = { "class": "smallwteaser" })
-            elif mode == 'news':
-                episodes = common.parseDOM(result, "div", attrs = { "id": "ctl00_homebulletins1_contentDiv" })[0]
-                episodes = common.parseDOM(episodes, "div", attrs = { "class": "videoTeaser" })
-            elif mode == 'sports':
-                episodes = common.parseDOM(result, "div", attrs = { "id": "ctl00_homeSports1_contentDiv" })[0]
-                episodes = common.parseDOM(episodes, "div", attrs = { "class": "videoTeaser" })
+            threads = []
+            episodesUrl = url
+            for i in range(1, 8):
+                self.data.append('')
+                url = '%s&p=%s' % (episodesUrl, str(i))
+                threads.append(Thread(self.antenna_list2, url, i-1))
+            [i.start() for i in threads]
+            [i.join() for i in threads]
+            result = ''
+            for i in self.data: result += i
+
+            episodes = re.compile('(<div class=.+?)<div class="teasertext"').findall(result)
             episodes = uniqueList(episodes).list
         except:
             return
         for episode in episodes:
             try:
-                name = common.parseDOM(episode, "div", attrs = { "class": "greytxt.+?" })[-1]
+                name = common.parseDOM(episode, "div", attrs = { "class": "title" })[0]
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
                 url = common.parseDOM(episode, "a", ret="href")[0]
-                url = '%s%s' % (self.antennaUrl, url)
+                url = '%s%s' % (link().antenna_base, url)
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
-                image = common.parseDOM(episode, "a", ret="rel")[0]
-                image = image.split(".jpg")[0]
-                image = '%s%s.jpg' % (self.antennaUrl, image)
+                image = common.parseDOM(episode, "img", ret="src")[0]
+                image = '%s%s' % (link().antenna_base, image)
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
                 self.list.append({'name': name, 'show': show, 'url': url, 'image': image})

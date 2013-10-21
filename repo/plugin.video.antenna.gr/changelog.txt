@@ -1,4 +1,11 @@
 ------------------------
+ANT1 Player v2.0.2 (22-Oct-13)
+------------------------
+
+- Major changes caused by the redesign of antenna.gr portal.
+
+
+------------------------
 ANT1 Player v2.0.1 (1-Oct-13)
 ------------------------
 
