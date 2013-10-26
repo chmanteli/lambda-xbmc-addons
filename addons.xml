@@ -127,6 +127,28 @@
 	</extension>
 </addon>
 
+<addon id="plugin.video.football.today" name="Football Today" version="1.0.0" provider-name="lambda">
+	<requires>
+		<import addon="xbmc.addon" version="12.0.0"/>
+		<import addon="xbmc.python" version="2.1.0"/>
+		<import addon="script.common.plugin.cache" version="0.9.1"/>
+		<import addon="script.module.parsedom" version="0.9.1"/>
+		<import addon="plugin.video.youtube" version="2.9.2"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Watch your favourite football matches anytime you want.</summary>
+		<summary lang="el">Παρακολουθήστε όλους τους αγαπημένους σας ποδοσφαιρικούς αγώνες ότι ώρα θέλετε.</summary>
+		<description lang="en">Watch your favourite football matches anytime you want.[CR]Also watch all goals and highlights.</description>
+		<description lang="el">Παρακολουθήστε όλους τους αγαπημένους σας ποδοσφαιρικούς αγώνες ότι ώρα θέλετε.[CR]Δείτε επίσης όλα τα γκολ και τα στιγμιότυπα.</description>
+		<disclaimer lang="en">The author does not host or distribute any of the content displayed by this addon. The author does not have any affiliation with the content provider.</disclaimer>
+		<disclaimer lang="el">Ο συγγραφέας δεν φιλοξενεί ή διανέμει οποιοδήποτε περιεχόμενο που εμφανίζεται από τo πρόσθετο αυτό. Ο συγγραφέας δεν έχει καμία σχέση με τον πάροχο του περιεχομένου.</disclaimer>
+		<platform>all</platform>
+	</extension>
+</addon>
+
 <addon id="plugin.video.hellenic.movies" name="Hellenic Movies" version="2.0.0" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.addon" version="12.0.0"/>
@@ -256,8 +278,8 @@
 		<summary lang="el">Παρακολουθήστε μια ευρεία συλλογή ταινιών από το muchmovies.org</summary>
 		<description lang="en">Watch a wide selection of movies from muchmovies.org</description>
 		<description lang="el">Παρακολουθήστε μια ευρεία συλλογή ταινιών από το muchmovies.org</description>
-		<disclaimer lang="en">By using this plugin you will receive NO adverts.</disclaimer>
-		<disclaimer lang="el">Με τη χρήση αυτού του πρόσθετου ΔΕΝ θα λαμβάνετε διαφημίσεις.</disclaimer>
+		<disclaimer lang="en">The author does not host or distribute any of the content displayed by this addon. The author does not have any affiliation with the content provider.</disclaimer>
+		<disclaimer lang="el">Ο συγγραφέας δεν φιλοξενεί ή διανέμει οποιοδήποτε περιεχόμενο που εμφανίζεται από τo πρόσθετο αυτό. Ο συγγραφέας δεν έχει καμία σχέση με τον πάροχο του περιεχομένου.</disclaimer>
 		<platform>all</platform>
 	</extension>
 </addon>
@@ -280,8 +302,8 @@
 		<summary lang="el">Παρακολουθήστε ταινίες και σειρές από το simplymovies.net</summary>
 		<description lang="en">Watch movies and tv shows from simplymovies.net</description>
 		<description lang="el">Παρακολουθήστε ταινίες και σειρές από το simplymovies.net</description>
-		<disclaimer lang="en">By using this plugin you will receive NO adverts.</disclaimer>
-		<disclaimer lang="el">Με τη χρήση αυτού του πρόσθετου ΔΕΝ θα λαμβάνετε διαφημίσεις.</disclaimer>
+		<disclaimer lang="en">The author does not host or distribute any of the content displayed by this addon. The author does not have any affiliation with the content provider.</disclaimer>
+		<disclaimer lang="el">Ο συγγραφέας δεν φιλοξενεί ή διανέμει οποιοδήποτε περιεχόμενο που εμφανίζεται από τo πρόσθετο αυτό. Ο συγγραφέας δεν έχει καμία σχέση με τον πάροχο του περιεχομένου.</disclaimer>
 		<platform>all</platform>
 	</extension>
 </addon>
