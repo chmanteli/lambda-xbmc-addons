@@ -1,4 +1,17 @@
 ------------------------
+Simply Player v1.1.0 (31-Oct-13)
+------------------------
+
+- Added option to mark items as watched or unwatched (metahandler).
+- Added option to change or refresh movie and tvshow information.
+- Added option to refresh season and episode information.
+- Root folders can now be added to XBMC favourites.
+- Fixed issues about missing episode metadata.
+- Tweaked context menus.
+- Code cosmetics.
+
+
+------------------------
 Simply Player v1.0.2 (20-Oct-13)
 ------------------------
 

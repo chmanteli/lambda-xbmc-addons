@@ -1,4 +1,15 @@
 ------------------------
+Much Movies HD v1.1.0 (31-Oct-13)
+------------------------
+
+- Added option to mark items as watched or unwatched (metahandler).
+- Added option to refresh movie information.
+- Root folders can now be added to XBMC favourites.
+- Tweaked context menus.
+- Code cosmetics.
+
+
+------------------------
 Much Movies HD v1.0.3 (20-Oct-13)
 ------------------------
 
