@@ -1,4 +1,11 @@
 ------------------------
+Simply Player v1.1.2 (1-Nov-13)
+------------------------
+
+- Fixed issues about tvshow library integration.
+
+
+------------------------
 Simply Player v1.1.1 (1-Nov-13)
 ------------------------
 

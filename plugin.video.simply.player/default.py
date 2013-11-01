@@ -1011,14 +1011,14 @@ class contextMenu:
             try: os.makedirs(folder)
             except: pass
             seasonUrl = url
-            seasonList = seasons().simplymovies_list(url, ' ', ' ', ' ', ' ', ' ')
+            seasonList = seasons().simplymovies_list(url, ' ', ' ', ' ', ' ', show)
             for i in seasonList:
                 season = i['name']
                 enc_season = season.translate(None, '\/:*?"<>|')
                 seasonDir = os.path.join(folder, enc_season)
                 try: os.makedirs(seasonDir)
                 except: pass
-                episodeList = episodes().simplymovies_list(season, seasonUrl, ' ', ' ', ' ', ' ', ' ')
+                episodeList = episodes().simplymovies_list(season, seasonUrl, ' ', ' ', ' ', ' ', show)
                 for i in episodeList:
                     name, url = i['name'], i['url']
                     sysname, sysurl = urllib.quote_plus(name), urllib.quote_plus(url)
