@@ -485,7 +485,7 @@ class index:
                 title = name
 
                 sysname, sysurl, sysimage, sysimdb, sysgenre, sysplot, systitle = urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(image), urllib.quote_plus(imdb), urllib.quote_plus(genre), urllib.quote_plus(plot), urllib.quote_plus(title)
-                u = '%s?action=seasons&url=%s&image=%s&imdb=%s&genre=%s&plot=%s&show=%s&t=%s' % (sys.argv[0], sysurl, sysimage, sysimdb, sysgenre, sysplot, sysname, datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"))
+                u = '%s?action=seasons&url=%s&image=%s&imdb=%s&genre=%s&plot=%s&show=%s' % (sys.argv[0], sysurl, sysimage, sysimdb, sysgenre, sysplot, sysname)
 
                 if getSetting("meta") == 'true':
                     meta = metaget.get_meta('tvshow', title, imdb_id=imdb)
@@ -589,9 +589,10 @@ class index:
             try:
                 name, url, image = seasonList[i]['name'], seasonList[i]['url'], seasonList[i]['image']
                 sysname, sysurl, sysimage, sysimdb, sysgenre, sysplot, sysshow = urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(image), urllib.quote_plus(imdb), urllib.quote_plus(genre), urllib.quote_plus(plot), urllib.quote_plus(show)
-                u = '%s?action=episodes&name=%s&url=%s&image=%s&imdb=%s&genre=%s&plot=%s&show=%s&t=%s' % (sys.argv[0], sysname, sysurl, sysimage, sysimdb, sysgenre, sysplot, sysshow, datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"))
+                u = '%s?action=episodes&name=%s&url=%s&image=%s&imdb=%s&genre=%s&plot=%s&show=%s' % (sys.argv[0], sysname, sysurl, sysimage, sysimdb, sysgenre, sysplot, sysshow)
 
                 if getSetting("meta") == 'true':
+                    meta.update({'playcount': season_meta[i]['playcount'], 'overlay': season_meta[i]['overlay']})
                     poster = season_meta[i]['cover_url']
                     playcountMenu = language(30407).encode("utf-8")
                     if season_meta[i]['overlay'] == 6: playcountMenu = language(30408).encode("utf-8")

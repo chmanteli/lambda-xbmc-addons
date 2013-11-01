@@ -1,4 +1,11 @@
 ------------------------
+Simply Player v1.1.1 (1-Nov-13)
+------------------------
+
+- Fixed issues about season watched or unwatched ovelays.
+
+
+------------------------
 Simply Player v1.1.0 (31-Oct-13)
 ------------------------
 
