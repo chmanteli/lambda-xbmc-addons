@@ -400,7 +400,8 @@ class index:
         for i in movieList:
             try:
                 name, url, image, imdb, genre, plot = i['name'], i['url'], i['image'], i['imdb'], i['genre'], i['plot']
-                if plot == ' ': plot = addonDesc
+                if plot == '': plot = addonDesc
+                if genre == '': genre = ' '      
                 try: year = re.compile('[(](\d{4})[)]').findall(name)[-1]
                 except: year = ' '
                 title = name.replace('(%s)' % year, '').strip()
@@ -481,7 +482,8 @@ class index:
         for i in showList:
             try:
                 name, url, image, imdb, genre, plot = i['name'], i['url'], i['image'], i['imdb'], i['genre'], i['plot']
-                if plot == ' ': plot = addonDesc
+                if plot == '': plot = addonDesc
+                if genre == '': genre = ' '
                 title = name
 
                 sysname, sysurl, sysimage, sysimdb, sysgenre, sysplot, systitle = urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(image), urllib.quote_plus(imdb), urllib.quote_plus(genre), urllib.quote_plus(plot), urllib.quote_plus(title)
@@ -565,7 +567,8 @@ class index:
     def seasonList(self, seasonList):
         try:
             imdb, genre, plot, show = seasonList[0]['imdb'], seasonList[0]['genre'], seasonList[0]['plot'], seasonList[0]['show']
-            if plot == ' ': plot = addonDesc
+            if plot == '': plot = addonDesc
+            if genre == '': genre = ' '
 
             if getSetting("meta") == 'true':
                 seasons = []
@@ -632,7 +635,8 @@ class index:
             try:
                 name, url, image, imdb, genre, plot = i['name'], i['url'], i['image'], i['imdb'], i['genre'], i['plot']
                 title, show, season, episode = i['title'], i['show'], i['season'], i['episode']
-                if plot == ' ': plot = addonDesc
+                if plot == '': plot = addonDesc
+                if genre == '': genre = ' '
 
                 sysname, sysurl, sysimage = urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(image)
                 u = '%s?action=play&name=%s&url=%s&t=%s' % (sys.argv[0], sysname, sysurl, datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"))
@@ -1435,12 +1439,12 @@ class movies:
                 imdb = re.sub("[^0-9]", "", imdb.rsplit('/tt', 1)[-1])
                 imdb = imdb.encode('utf-8')
                 try: genre = common.parseDOM(movie, "p", attrs = { "class": "overlayMovieGenres" })[0]
-                except: genre = ' '
+                except: genre = ''
                 genre = genre.rsplit(',', 1)[0].replace(',', ' /')
                 genre = common.replaceHTMLCodes(genre)
                 genre = genre.encode('utf-8')
                 try: plot = common.parseDOM(movie, "p", attrs = { "class": "overlayMovieDescription" })[0]
-                except: plot = ' '
+                except: plot = ''
                 plot = common.replaceHTMLCodes(plot)
                 plot = plot.encode('utf-8')
                 self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'next': next})
@@ -1509,12 +1513,12 @@ class shows:
                 imdb = re.sub("[^0-9]", "", imdb.rsplit('/tt', 1)[-1])
                 imdb = imdb.encode('utf-8')
                 try: genre = common.parseDOM(show, "p", attrs = { "class": "overlayMovieGenres" })[0]
-                except: genre = ' '
+                except: genre = ''
                 genre = genre.rsplit(',', 1)[0].replace(',', ' /')
                 genre = common.replaceHTMLCodes(genre)
                 genre = genre.encode('utf-8')
                 try: plot = common.parseDOM(show, "p", attrs = { "class": "overlayMovieDescription" })[0]
-                except: plot = ' '
+                except: plot = ''
                 plot = common.replaceHTMLCodes(plot)
                 plot = plot.encode('utf-8')
                 self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'next': next})
