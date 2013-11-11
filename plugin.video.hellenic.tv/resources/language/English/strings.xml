@@ -6,19 +6,18 @@
 	<string id="30040">Thematic</string>
 	<string id="30060">Regional</string>
 	<!-- Info -->
-	<string id="30301">EPG retrieval is in progress.</string>
+	<string id="30301">EPG retrieval is in progress</string>
+	<string id="30302">This channel is not available</string>
 	<!-- OK -->
-	<string id="30351">This channel is not available</string>
-	<string id="30352">or not supported.</string>
-	<string id="30353">YouTube addon is not installed.</string>
-	<string id="30354">This stream requires it.</string>
+	<string id="30321">YouTube addon is not installed.</string>
+	<string id="30322">This stream requires it.</string>
+	<!-- Misc -->
+	<string id="30361">NOW</string>
 	<!-- ContextMenu -->
 	<string id="30401">EPG Information</string>
 	<string id="30402">EPG</string>
 	<string id="30403">NO PROGRAMME AVAILABLE</string>
 	<string id="30404">Refresh info</string>
-	<!-- Description -->
-	<string id="30450">NOW</string>
 
 	<!-- PANHELLENIC -->
 	<string id="30501" ch="MEGA">The programming of Mega consists mainly of Greek programmes such as comedies, dramas, news and entertainment shows.</string>
@@ -56,8 +55,8 @@
 	<string id="30562" ch="EXTRA 3">Extra 3 is an alternative news and information channel with telemarketing, news, current affairs and entertainment shows. In addition, the ratings of evening news zone are very high.</string>
 	<string id="30563" ch="ACTION 24">Action 24 is an alternative news and sports channel that exclusively broadcasts the championships of Netherlands, Belgium, Switzerland, Denmark, Ukraine and Russia.</string>
 	<string id="30564" ch="ART CHANNEL">The programming of ART consists current affairs programmes, programmes around the party that is supported by the network and music programmes.</string>
-	<string id="30565" ch="ZOOM">ZOOM is an news and information channel with telemarketing, news, current affairs and entertainment shows. The channel also broadcasts GR TV programmes in Athens.</string>
-	<string id="30566" ch="GR TV">GR TV is an news and information channel with telemarketing, news, current affairs and entertainment shows. The channel is owned by zougla.gr news portal.</string>
+	<string id="30565" ch="ZOOM">ZOOM is an news and information channel with telemarketing, news, current affairs and entertainment shows. The channel also broadcasts ZOUGLA TV programmes in Athens.</string>
+	<string id="30566" ch="ZOUGLA TV">ZOUGLA TV is an news and information channel with telemarketing, news, current affairs and entertainment shows. The channel is owned by zougla.gr news portal.</string>
 	<string id="30567" ch="ATTICA TV">ATTICA TV is a television network owned by the municipality of Aspropyrgos. The programming consists mainly of Greek programmes such as entertainment shows.</string>
 	<string id="30568" ch="HIGH TV">High TV is a television network broadcasting from Athens. The programming consists mainly of Greek programmes such as news and entertainment shows.</string>
 	<string id="30569" ch="BLUE SKY">Blue Sky is a television network that broadcasts current affairs and educational programmes, foreign tv shows and entertainment programmes.</string>

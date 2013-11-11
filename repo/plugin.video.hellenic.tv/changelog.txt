@@ -1,4 +1,15 @@
 ------------------------
+Hellenic TV v2.4.0 (11-Nov-13)
+------------------------
+
+- Added ZOUGLA TV.
+- Updated MEGA, ANT1 CYPRUS, SIGMA, CAPITAL, KYDON TV and TELE EPILOGES.
+- Removed GR TV.
+- Tweaked videoplayer labels.
+- Code cosmetics.
+
+
+------------------------
 Hellenic TV v2.3.2 (3-Oct-13)
 ------------------------
 

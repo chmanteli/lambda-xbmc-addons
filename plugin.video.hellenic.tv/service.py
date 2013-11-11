@@ -20,30 +20,30 @@
 
 import urllib,urllib2,re,os,threading,datetime,time,xbmc,xbmcplugin,xbmcgui,xbmcaddon
 from operator import itemgetter
-try:	import CommonFunctions
-except:	import commonfunctionsdummy as CommonFunctions
-try:	import json
-except:	import simplejson as json
+try:    import json
+except: import simplejson as json
+try:    import CommonFunctions
+except: import commonfunctionsdummy as CommonFunctions
 
 
-language			= xbmcaddon.Addon().getLocalizedString
-setSetting			= xbmcaddon.Addon().setSetting
-getSetting			= xbmcaddon.Addon().getSetting
-addonName			= xbmcaddon.Addon().getAddonInfo("name")
-addonVersion		= xbmcaddon.Addon().getAddonInfo("version")
-addonId				= xbmcaddon.Addon().getAddonInfo("id")
-addonPath			= xbmcaddon.Addon().getAddonInfo("path")
-addonIcon			= os.path.join(addonPath,'icon.png')
-addonChannels		= os.path.join(addonPath,'channels.xml')
-addonEPG			= os.path.join(addonPath,'xmltv.xml')
-addonFanart			= os.path.join(addonPath,'fanart.jpg')
-addonLogos			= os.path.join(addonPath,'resources/logos')
-akamaiProxy			= os.path.join(addonPath,'akamaisecurehd.py')
-fallback			= os.path.join(addonPath,'resources/fallback/fallback.mp4')
-addonStrings		= os.path.join(addonPath,'resources/language/Greek/strings.xml')
-dataPath			= xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
-tvguideDB			= xbmc.translatePath('special://profile/addon_data/script.tvguide.hellenic/source.db')
-common				= CommonFunctions
+language            = xbmcaddon.Addon().getLocalizedString
+setSetting          = xbmcaddon.Addon().setSetting
+getSetting          = xbmcaddon.Addon().getSetting
+addonName           = xbmcaddon.Addon().getAddonInfo("name")
+addonVersion        = xbmcaddon.Addon().getAddonInfo("version")
+addonId             = xbmcaddon.Addon().getAddonInfo("id")
+addonPath           = xbmcaddon.Addon().getAddonInfo("path")
+addonIcon           = os.path.join(addonPath,'icon.png')
+addonChannels       = os.path.join(addonPath,'channels.xml')
+addonEPG            = os.path.join(addonPath,'xmltv.xml')
+addonFanart         = os.path.join(addonPath,'fanart.jpg')
+addonLogos          = os.path.join(addonPath,'resources/logos')
+akamaiProxy         = os.path.join(addonPath,'akamaisecurehd.py')
+fallback            = os.path.join(addonPath,'resources/fallback/fallback.mp4')
+addonStrings        = os.path.join(addonPath,'resources/language/Greek/strings.xml')
+dataPath            = xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
+common              = CommonFunctions
+action              = None
 
 
 class main:
@@ -56,23 +56,20 @@ class main:
                 time.sleep(1)
 
 class getUrl(object):
-    def __init__(self, url, fetch=True, mobile=False, proxy=None, referer=None, cookie=None):
+    def __init__(self, url, fetch=True, close=True, cookie=False, mobile=False, proxy=None, post=None, referer=None):
         if not proxy is None:
             proxy_handler = urllib2.ProxyHandler({'http':'%s' % (proxy)})
             opener = urllib2.build_opener(proxy_handler, urllib2.HTTPHandler)
             opener = urllib2.install_opener(opener)
-        request = urllib2.Request(url,None)
-        if not cookie is None:
-            from urllib2 import Request, build_opener, HTTPCookieProcessor, HTTPHandler
+        if cookie == True:
             import cookielib
-            cj = cookielib.CookieJar()
-            opener = build_opener(HTTPCookieProcessor(cj), HTTPHandler())
-            cookiereq = Request(cookie)
-            response = opener.open(cookiereq)
-            response.close()
-            for cookie in cj:
-                cookie = '%s=%s' % (cookie.name, cookie.value)
-            request.add_header('Cookie', cookie)
+            cookie_handler = urllib2.HTTPCookieProcessor(cookielib.LWPCookieJar())
+            opener = urllib2.build_opener(cookie_handler, urllib2.HTTPBasicAuthHandler(), urllib2.HTTPHandler())
+            opener = urllib2.install_opener(opener)
+        if not post is None:
+            request = urllib2.Request(url, post)
+        else:
+            request = urllib2.Request(url,None)
         if mobile == True:
             request.add_header('User-Agent', 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_0 like Mac OS X; en-us) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 Mobile/8A293 Safari/6531.22.7')
         else:
@@ -84,7 +81,8 @@ class getUrl(object):
             result = response.read()
         else:
             result = response.geturl()
-        response.close()
+        if close == True:
+            response.close()
         self.result = result
 
 class uniqueList(object):
@@ -107,7 +105,7 @@ class Thread(threading.Thread):
 
 class index:
     def infoDialog(self, str, header=addonName):
-        xbmc.executebuiltin("Notification(%s,%s, 3000)" % (header, str))
+        xbmc.executebuiltin("Notification(%s,%s, 3000, %s)" % (header, str, addonIcon))
 
     def okDialog(self, str1, str2, header=addonName):
         xbmcgui.Dialog().ok(header, str1, str2)
@@ -135,7 +133,7 @@ class index:
         if not check == addonName: return True
 
     def container_refresh(self):
-        xbmc.executebuiltin("Container.Refresh")
+        xbmc.executebuiltin('Container.Refresh')
 
 class epg:
     def __init__(self):
@@ -360,11 +358,7 @@ class epg:
 
     def title_prettify(self, title):
         if xbmc.abortRequested == True: sys.exit()
-        acuteDict = {
-            u'\u0386': u'\u0391', u'\u0388': u'\u0395', u'\u0389': u'\u0397', u'\u038A': u'\u0399',
-            u'\u038C': u'\u039F', u'\u038E': u'\u03A5', u'\u038F': u'\u03A9', u'\u0390': u'\u03AA',
-            u'\u03B0': u'\u03AB'
-        }
+        acuteDict = {u'\u0386': u'\u0391', u'\u0388': u'\u0395', u'\u0389': u'\u0397', u'\u038A': u'\u0399', u'\u038C': u'\u039F', u'\u038E': u'\u03A5', u'\u038F': u'\u03A9', u'\u0390': u'\u03AA', u'\u03B0': u'\u03AB'}
         title = common.replaceHTMLCodes(title)
         title = title.strip().upper()
         for key in acuteDict:
@@ -391,8 +385,8 @@ class epg:
         list = sorted(list, key=itemgetter('start'))
         for i in range(0, len(list)):
             start = list[i]['start']
-            try:	stop = list[i+1]['start']
-            except:	stop = list[i]['start']
+            try: stop = list[i+1]['start']
+            except: stop = list[i]['start']
             title = list[i]['title']
             desc = list[i]['desc']
             channel, title, desc = self.xml_attrib(channel), self.xml_attrib(title), self.xml_attrib(desc)
@@ -426,50 +420,51 @@ class epg:
 
     def get_channelDict(self):
         self.channelDict = {
-            'MEGA'						:	self.ote_programme("MEGA", "90"),
-            'ANT1'						:	self.ote_programme("ANT1", "150"),
-            'STAR'						:	self.ote_programme("STAR", "98"),
-            'ALPHA'						:	self.ote_programme("ALPHA", "132"),
-            'SKAI'						:	self.ote_programme("SKAI", "120"),
-            'MACEDONIA TV'				:	self.ote_programme("MACEDONIA TV", "152"),
-            'EDT'						:	self.ote_programme("EDT", "593"),
-            'BOYLH TV'					:	self.ote_programme("BOYLH TV", "119"),
-            'EURONEWS'					:	self.ote_programme("EURONEWS", "19"),
-            #'NICKELODEON'				:	self.ote_programme("NICKELODEON", "117"),
-            #'MTV'						:	self.ote_programme("MTV", "121"),
-            'MAD TV'					:	self.ote_programme("MAD TV", "144"),
-            'KONTRA CHANNEL'			:	self.ote_programme("KONTRA CHANNEL", "44"),
-            'EXTRA 3'					:	self.ote_programme("EXTRA 3", "135"),
-            'ART CHANNEL'				:	self.ote_programme("ART CHANNEL", "156"),
-            'ZOOM'						:	self.ote_programme("ZOOM", "157"),
-            'BLUE SKY'					:	self.ote_programme("BLUE SKY", "153"),
-            #'SBC TV'					:	self.ote_programme("SBC TV", "136"),
-            'TV 100'					:	self.ote_programme("TV 100", "137"),
-            '4E TV'						:	self.ote_programme("4E TV", "133"),
-            'STAR KENTRIKIS ELLADOS'	:	self.ote_programme("STAR KENTRIKIS ELLADOS", "139"),
-            'EPIRUS TV1'				:	self.ote_programme("EPIRUS TV1", "145"),
-            'KRITI TV'					:	self.ote_programme("KRITI TV", "138"),
-            'DIKTYO TV'					:	self.ote_programme("DIKTYO TV", "146"),
-            'DELTA TV'					:	self.ote_programme("DELTA TV", "147"),
+            'MEGA'                      : self.ote_programme("MEGA", "90"),
+            'ANT1'                      : self.ote_programme("ANT1", "150"),
+            'STAR'                      : self.ote_programme("STAR", "98"),
+            'ALPHA'                     : self.ote_programme("ALPHA", "132"),
+            'SKAI'                      : self.ote_programme("SKAI", "120"),
+            'MACEDONIA TV'              : self.ote_programme("MACEDONIA TV", "152"),
+            'EDT'                       : self.ote_programme("EDT", "593"),
+            'BOYLH TV'                  : self.ote_programme("BOYLH TV", "119"),
+            'EURONEWS'                  : self.ote_programme("EURONEWS", "19"),
+            #'NICKELODEON'              : self.ote_programme("NICKELODEON", "117"),
+            #'MTV'                      : self.ote_programme("MTV", "121"),
+            'MAD TV'                    : self.ote_programme("MAD TV", "144"),
+            'KONTRA CHANNEL'            : self.ote_programme("KONTRA CHANNEL", "44"),
+            'EXTRA 3'                   : self.ote_programme("EXTRA 3", "135"),
+            'ART CHANNEL'               : self.ote_programme("ART CHANNEL", "156"),
+            'ZOOM'                      : self.ote_programme("ZOOM", "157"),
+            'BLUE SKY'                  : self.ote_programme("BLUE SKY", "153"),
+            #'SBC TV'                   : self.ote_programme("SBC TV", "136"),
+            'TV 100'                    : self.ote_programme("TV 100", "137"),
+            '4E TV'                     : self.ote_programme("4E TV", "133"),
+            'STAR KENTRIKIS ELLADOS'    : self.ote_programme("STAR KENTRIKIS ELLADOS", "139"),
+            'EPIRUS TV1'                : self.ote_programme("EPIRUS TV1", "145"),
+            'KRITI TV'                  : self.ote_programme("KRITI TV", "138"),
+            'DIKTYO TV'                 : self.ote_programme("DIKTYO TV", "146"),
+            'DELTA TV'                  : self.ote_programme("DELTA TV", "147"),
 
-            'MEGA CYPRUS'				:	self.cyta_programme("MEGA CYPRUS", "2"),
-            'ANT1 CYPRUS'				:	self.cyta_programme("ANT1 CYPRUS", "3"),
-            'SIGMA'						:	self.cyta_programme("SIGMA", "4"),
-			#'TV PLUS'					:	self.cyta_programme("TV PLUS", "5"),
-			#'EXTRA TV'					:	self.cyta_programme("EXTRA TV", "6"),
-            'CAPITAL'					:	self.cyta_programme("CAPITAL", "7")
+            'MEGA CYPRUS'               : self.cyta_programme("MEGA CYPRUS", "2"),
+            'ANT1 CYPRUS'               : self.cyta_programme("ANT1 CYPRUS", "3"),
+            'SIGMA'                     : self.cyta_programme("SIGMA", "4"),
+			#'TV PLUS'                  : self.cyta_programme("TV PLUS", "5"),
+			#'EXTRA TV'                 : self.cyta_programme("EXTRA TV", "6"),
+            'CAPITAL'                   : self.cyta_programme("CAPITAL", "7")
         }
 
     def get_titleDict(self):
         self.titleDict = {
-            'RIK SAT'					:	'ƒœ—’÷œ—… œ —… '.decode('iso-8859-7'),
-            'NICKELODEON+'				:	'–¡…ƒ… œ –—œ√—¡ÃÃ¡'.decode('iso-8859-7'),
-            'MUSIC TV'					:	'Ãœ’”… œ –—œ√—¡ÃÃ¡'.decode('iso-8859-7'),
-            'GREEK CINEMA'				:	'≈ÀÀ«Õ… « ‘¡…Õ…¡'.decode('iso-8859-7'),
-            'CY SPORTS'					:	'¡»À«‘… œ –—œ√—¡ÃÃ¡'.decode('iso-8859-7'),
-            'ODIE TV'					:	'…––œƒ—œÃ…≈”'.decode('iso-8859-7'),
-            'SMILE TV'					:	'–¡…ƒ… œ –—œ√—¡ÃÃ¡'.decode('iso-8859-7'),
-            'GNOMI TV'					:	'Ãœ’”… œ –—œ√—¡ÃÃ¡'.decode('iso-8859-7')
+            'RIK SAT'                   : 'ƒœ—’÷œ—… œ —… '.decode('iso-8859-7'),
+            'NICKELODEON+'              : '–¡…ƒ… œ –—œ√—¡ÃÃ¡'.decode('iso-8859-7'),
+            'MUSIC TV'                  : 'Ãœ’”… œ –—œ√—¡ÃÃ¡'.decode('iso-8859-7'),
+            'GREEK CINEMA'              : '≈ÀÀ«Õ… « ‘¡…Õ…¡'.decode('iso-8859-7'),
+            'CY SPORTS'                 : '¡»À«‘… œ –—œ√—¡ÃÃ¡'.decode('iso-8859-7'),
+            'ODIE TV'                   : '…––œƒ—œÃ…≈”'.decode('iso-8859-7'),
+            'SMILE TV'                  : '–¡…ƒ… œ –—œ√—¡ÃÃ¡'.decode('iso-8859-7'),
+            'GNOMI TV'                  : 'Ãœ’”… œ –—œ√—¡ÃÃ¡'.decode('iso-8859-7')
         }
+
 
 main()

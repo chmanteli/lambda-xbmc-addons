@@ -41,7 +41,7 @@
 		<setting id="ACTION 24" label="ACTION 24" type="bool" default="true" visible="true"/>
 		<setting id="ART CHANNEL" label="ART CHANNEL" type="bool" default="true" visible="true"/>
 		<setting id="ZOOM" label="ZOOM" type="bool" default="true" visible="true"/>
-		<setting id="GR TV" label="GR TV" type="bool" default="true" visible="true"/>
+		<setting id="ZOUGLA TV" label="ZOUGLA TV" type="bool" default="true" visible="true"/>
 		<setting id="ATTICA TV" label="ATTICA TV" type="bool" default="true" visible="false"/>
 		<setting id="HIGH TV" label="HIGH TV" type="bool" default="true" visible="false"/>
 		<setting id="BLUE SKY" label="BLUE SKY" type="bool" default="true" visible="true"/>

@@ -20,78 +20,77 @@
 
 import urllib,urllib2,re,os,threading,datetime,time,xbmc,xbmcplugin,xbmcgui,xbmcaddon
 from operator import itemgetter
-try:	import CommonFunctions
-except:	import commonfunctionsdummy as CommonFunctions
-try:	import json
-except:	import simplejson as json
+try:    import json
+except: import simplejson as json
+try:    import CommonFunctions
+except: import commonfunctionsdummy as CommonFunctions
 
 
-language			= xbmcaddon.Addon().getLocalizedString
-setSetting			= xbmcaddon.Addon().setSetting
-getSetting			= xbmcaddon.Addon().getSetting
-addonName			= xbmcaddon.Addon().getAddonInfo("name")
-addonVersion		= xbmcaddon.Addon().getAddonInfo("version")
-addonId				= xbmcaddon.Addon().getAddonInfo("id")
-addonPath			= xbmcaddon.Addon().getAddonInfo("path")
-addonIcon			= os.path.join(addonPath,'icon.png')
-addonChannels		= os.path.join(addonPath,'channels.xml')
-addonEPG			= os.path.join(addonPath,'xmltv.xml')
-addonFanart			= os.path.join(addonPath,'fanart.jpg')
-addonLogos			= os.path.join(addonPath,'resources/logos')
-akamaiProxy			= os.path.join(addonPath,'akamaisecurehd.py')
-fallback			= os.path.join(addonPath,'resources/fallback/fallback.mp4')
-addonStrings		= os.path.join(addonPath,'resources/language/Greek/strings.xml')
-dataPath			= xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
-common				= CommonFunctions
+language            = xbmcaddon.Addon().getLocalizedString
+setSetting          = xbmcaddon.Addon().setSetting
+getSetting          = xbmcaddon.Addon().getSetting
+addonName           = xbmcaddon.Addon().getAddonInfo("name")
+addonVersion        = xbmcaddon.Addon().getAddonInfo("version")
+addonId             = xbmcaddon.Addon().getAddonInfo("id")
+addonPath           = xbmcaddon.Addon().getAddonInfo("path")
+addonIcon           = os.path.join(addonPath,'icon.png')
+addonChannels       = os.path.join(addonPath,'channels.xml')
+addonEPG            = os.path.join(addonPath,'xmltv.xml')
+addonFanart         = os.path.join(addonPath,'fanart.jpg')
+addonLogos          = os.path.join(addonPath,'resources/logos')
+akamaiProxy         = os.path.join(addonPath,'akamaisecurehd.py')
+fallback            = os.path.join(addonPath,'resources/fallback/fallback.mp4')
+addonStrings        = os.path.join(addonPath,'resources/language/Greek/strings.xml')
+dataPath            = xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
+common              = CommonFunctions
+action              = None
 
 
 class main:
     def __init__(self):
+        global action
         params = {}
         splitparams = sys.argv[2][sys.argv[2].find('?') + 1:].split('&')
         for param in splitparams:
             if (len(param) > 0):
                 splitparam = param.split('=')
                 key = splitparam[0]
-                try:	value = splitparam[1].encode("utf-8")
-                except:	value = splitparam[1]
+                try:    value = splitparam[1].encode("utf-8")
+                except: value = splitparam[1]
                 params[key] = value
 
-        try:		action	= urllib.unquote_plus(params["action"])
-        except:		action	= None
-        try:		channel = urllib.unquote_plus(params["channel"])
-        except:		channel = None
+        try:        action = urllib.unquote_plus(params["action"])
+        except:     action = None
+        try:        channel = urllib.unquote_plus(params["channel"])
+        except:     channel = None
 
-        if action	==	None:						channels().get()
-        elif action == 'epg_menu':					contextMenu().epg(channel)
-        elif action == 'refresh':					index().container_refresh()
-        elif action	== 'play':						player().run(channel)
+        if action == None:                          channels().get()
+        elif action == 'dialog':                    channels().dialog()
+        elif action == 'epg_menu':                  contextMenu().epg(channel)
+        elif action == 'refresh':                   index().container_refresh()
+        elif action == 'play':                      player().run(channel)
+
 
         xbmcplugin.setContent(int(sys.argv[1]), 'Episodes')
         xbmcplugin.setPluginFanart(int(sys.argv[1]), addonFanart)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
+        return
 
 class getUrl(object):
-    def __init__(self, url, fetch=True, mobile=False, proxy=None, post=None, referer=None, cookie=None):
+    def __init__(self, url, fetch=True, close=True, cookie=False, mobile=False, proxy=None, post=None, referer=None):
         if not proxy is None:
             proxy_handler = urllib2.ProxyHandler({'http':'%s' % (proxy)})
             opener = urllib2.build_opener(proxy_handler, urllib2.HTTPHandler)
+            opener = urllib2.install_opener(opener)
+        if cookie == True:
+            import cookielib
+            cookie_handler = urllib2.HTTPCookieProcessor(cookielib.LWPCookieJar())
+            opener = urllib2.build_opener(cookie_handler, urllib2.HTTPBasicAuthHandler(), urllib2.HTTPHandler())
             opener = urllib2.install_opener(opener)
         if not post is None:
             request = urllib2.Request(url, post)
         else:
             request = urllib2.Request(url,None)
-        if not cookie is None:
-            from urllib2 import Request, build_opener, HTTPCookieProcessor, HTTPHandler
-            import cookielib
-            cj = cookielib.CookieJar()
-            opener = build_opener(HTTPCookieProcessor(cj), HTTPHandler())
-            cookiereq = Request(cookie)
-            response = opener.open(cookiereq)
-            response.close()
-            for cookie in cj:
-                cookie = '%s=%s' % (cookie.name, cookie.value)
-            request.add_header('Cookie', cookie)
         if mobile == True:
             request.add_header('User-Agent', 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_0 like Mac OS X; en-us) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 Mobile/8A293 Safari/6531.22.7')
         else:
@@ -103,7 +102,8 @@ class getUrl(object):
             result = response.read()
         else:
             result = response.geturl()
-        response.close()
+        if close == True:
+            response.close()
         self.result = result
 
 class uniqueList(object):
@@ -126,7 +126,7 @@ class Thread(threading.Thread):
 
 class index:
     def infoDialog(self, str, header=addonName):
-        xbmc.executebuiltin("Notification(%s,%s, 3000)" % (header, str))
+        xbmc.executebuiltin("Notification(%s,%s, 3000, %s)" % (header, str, addonIcon))
 
     def okDialog(self, str1, str2, header=addonName):
         xbmcgui.Dialog().ok(header, str1, str2)
@@ -154,7 +154,45 @@ class index:
         if not check == addonName: return True
 
     def container_refresh(self):
-        xbmc.executebuiltin("Container.Refresh")
+        xbmc.executebuiltin('Container.Refresh')
+
+    def resolve(self, title, url, image, epg):
+        item = xbmcgui.ListItem(path=url, iconImage=image, thumbnailImage=image)
+        item.setInfo( type="Video", infoLabels={ "Label": title, "Title": title, "Duration": "1440", "Plot": epg } )
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+
+    def dialogList(self, dialogList):
+        selectList = []
+        playerList = []
+        for i in dialogList:
+            try:
+                name, epg = i['name'], i['epg']
+                if getSetting(name) == "false": raise Exception()
+                title = epg.split('\n')[0].split('-', 1)[-1].rsplit('[', 1)[0].strip()
+                if title == name: title = language(30403).encode("utf-8")
+                label = "[B]%s[/B] - %s" % (name.encode("utf-8"), title)
+                playerList.append({'name': name, 'title': title, 'epg': epg})
+                selectList.append(label)
+            except:
+                pass
+
+        select = index().selectDialog(selectList)
+        if not select > -1: return
+
+        name = playerList[select]['name']
+        title = playerList[select]['title']
+        epg = playerList[select]['epg']
+        url = player().run(name)
+        meta = {"Label": title, "Title": title, "Duration": "1440", "Plot": epg}
+        image = '%s/%s.png' % (addonLogos, name)
+
+        item = xbmcgui.ListItem(path=url, iconImage=image, thumbnailImage=image)
+        item.setInfo( type="Video", infoLabels = meta )
+        item.setProperty("IsPlayable", "true")
+        playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+        playlist.clear()
+        playlist.add(url,item)
+        xbmc.Player().play(playlist)
 
     def channelList(self, channelList):
         total = len(channelList)
@@ -165,18 +203,18 @@ class index:
                 sysname = urllib.quote_plus(name.replace(' ','_'))
                 image = '%s/%s.png' % (addonLogos, name)
                 u = '%s?action=play&channel=%s' % (sys.argv[0], sysname)
+                meta = {"Label": name, "Title": name, "Duration": "1440", "Plot": epg}
 
                 cm = []
                 cm.append((language(30401).encode("utf-8"), 'RunPlugin(%s?action=epg_menu&channel=%s)' % (sys.argv[0], sysname)))
                 cm.append((language(30404).encode("utf-8"), 'RunPlugin(%s?action=refresh)' % (sys.argv[0])))
 
                 item = xbmcgui.ListItem(name, iconImage=image, thumbnailImage=image)
-                item.setInfo( type="Video", infoLabels={ "Label": name, "Title": name, "Duration": "1440", "Plot": epg } )
+                item.setInfo( type="Video", infoLabels = meta )
                 item.setProperty("IsPlayable", "true")
-                item.setProperty( "Video", "true" )
+                item.setProperty("Video", "true")
                 item.setProperty("Fanart_Image", addonFanart)
                 item.addContextMenuItems(cm, replaceItems=False)
-
                 xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=item,totalItems=total,isFolder=False)
             except:
                 pass
@@ -238,14 +276,14 @@ class channelList:
                 type = common.parseDOM(channel, "type")[0]
                 url = common.parseDOM(channel, "url")[0]
                 url = common.replaceHTMLCodes(url)
-                try:	type2 = common.parseDOM(channel, "type2")[0]
-                except:	type2 = "False"
-                try:	url2 = common.parseDOM(channel, "url2")[0]
-                except:	url2 = "False"
+                try: type2 = common.parseDOM(channel, "type2")[0]
+                except: type2 = "False"
+                try: url2 = common.parseDOM(channel, "url2")[0]
+                except: url2 = "False"
                 url2 = common.replaceHTMLCodes(url2)
                 epg = common.parseDOM(channel, "epg")[0]
-                try:	epg = self.epgList[name]
-                except:	epg = "[B][%s] - %s[/B]\n%s" % (language(30450), name, language(int(epg)))
+                try: epg = self.epgList[name]
+                except: epg = "[B][%s] - %s[/B]\n%s" % (language(30361), name, language(int(epg)))
                 epg = common.replaceHTMLCodes(epg)
                 channelList.append({'name': name, 'epg': epg, 'url': url, 'type': type, 'url2': url2, 'type2': type2})
             except:
@@ -282,12 +320,17 @@ class channelList:
                 pass
 
 class channels:
-    def get(self):
+    def __init__(self):
         if not (os.path.isfile(addonEPG) and index().getProperty("htv_Service_Running") == ''):
             index().infoDialog(language(30301).encode("utf-8"))
 
+    def get(self):
         list = channelList().channelList
         index().channelList(list)
+
+    def dialog(self):
+        list = channelList().channelList
+        index().dialogList(list)
 
 class player:
     def run(self, channel):
@@ -302,18 +345,17 @@ class player:
             image = '%s/%s.png' % (addonLogos, name)
 
             playerDict = {
-                ''					:	self.direct,
-                'http'				:	self.http,
-                'hls'				:	self.hls,
-                'visionip'			:	self.visionip,
-                'youtube'			:	self.youtube,
-                'youtubelive'		:	self.youtubelive,
-                'viiideo'			:	self.viiideo,
-                'dailymotion'		:	self.dailymotion,
-                'livestream'		:	self.livestream,
-                'ustream'			:	self.ustream,
-                'veetle'			:	self.veetle,
-                'justin'			:	self.justin
+                ''                  : self.direct,
+                'http'              : self.http,
+                'hls'               : self.hls,
+                'visionip'          : self.visionip,
+                'youtubelive'       : self.youtubelive,
+                'viiideo'           : self.viiideo,
+                'dailymotion'       : self.dailymotion,
+                'livestream'        : self.livestream,
+                'ustream'           : self.ustream,
+                'veetle'            : self.veetle,
+                'justin'            : self.justin
             }
 
             url = playerDict[type](url)
@@ -321,11 +363,11 @@ class player:
             if url is None: url = fallback
 
             if not xbmc.getInfoLabel('ListItem.Plot') == '' : epg = xbmc.getInfoLabel('ListItem.Plot')
-            item = xbmcgui.ListItem(path=url, iconImage=image, thumbnailImage=image)
-            item.setInfo( type="Video", infoLabels={ "Label": name, "Title": name, "Duration": "1440", "Plot": epg } )
-            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+            title = epg.split('\n')[0].split('-', 1)[-1].rsplit('[', 1)[0].strip()
+            index().resolve(title, url, image, epg)
+            return url
         except:
-            index().okDialog(language(30351).encode("utf-8"), language(30352).encode("utf-8"))
+            index().infoDialog(language(30302).encode("utf-8"))
             return
 
     def direct(self, url):
@@ -360,21 +402,10 @@ class player:
         except:
             return
 
-    def youtube(self, url):
-        try:
-            if index().addon_status('plugin.video.youtube') is None:
-                index().okDialog(language(30353).encode("utf-8"), language(30354).encode("utf-8"))
-                return
-            url = url.split("?v=")[-1]
-            url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % url
-            return url
-        except:
-            return
-
     def youtubelive(self, url):
         try:
             if index().addon_status('plugin.video.youtube') is None:
-                index().okDialog(language(30353).encode("utf-8"), language(30354).encode("utf-8"))
+                index().okDialog(language(30321).encode("utf-8"), language(30322).encode("utf-8"))
                 return
             url += '/videos?view=2&flow=grid'
             result = getUrl(url).result
@@ -398,14 +429,15 @@ class player:
             result = getUrl(url).result
             url = re.compile('"flashvars".+?value="(.+?)"').findall(result)[0]
             url = urllib.unquote(url).decode('utf-8').replace('\\/', '/')
-            try:	qURL = re.compile('"ldURL":"(.+?)"').findall(url)[0]
-            except:	pass
-            try:	qURL = re.compile('"sdURL":"(.+?)"').findall(url)[0]
-            except:	pass
-            try:	qURL = re.compile('"hqURL":"(.+?)"').findall(url)[0]
-            except:	pass
-            qURL += '&redirect=0'
-            url = getUrl(qURL).result
+            quality = None
+            try: quality = re.compile('"ldURL":"(.+?)"').findall(url)[0]
+            except: pass
+            try: quality = re.compile('"sdURL":"(.+?)"').findall(url)[0]
+            except: pass
+            try: quality = re.compile('"hqURL":"(.+?)"').findall(url)[0]
+            except: pass
+            quality += '&redirect=0'
+            url = getUrl(quality).result
             url = '%s live=1 timeout=10' % url
             return url
         except:
@@ -489,5 +521,6 @@ class player:
             return url
         except:
             return
+
 
 main()
