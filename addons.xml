@@ -84,49 +84,6 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.antenna.gr" name="ANT1 Player" version="2.0.3" provider-name="lambda">
-	<requires>
-		<import addon="xbmc.addon" version="12.0.0"/>
-		<import addon="xbmc.python" version="2.1.0"/>
-		<import addon="script.common.plugin.cache" version="0.9.1"/>
-		<import addon="script.module.parsedom" version="0.9.1"/>
-	</requires>
-	<extension point="xbmc.python.pluginsource" library="default.py">
-		<provides>video</provides>
-	</extension>
-	<extension point="xbmc.addon.metadata">
-		<summary lang="en">Watch the latest shows from ANT1</summary>
-		<summary lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα του ANT1</summary>
-		<description lang="en">Watch the latest programs and news from ANT1.[CR]ANT1 also offers its great archive to what has been produced during the years.</description>
-		<description lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα και ειδήσεις από τον ANT1.[CR]Ο ANT1 επίσης προσφέρει το μεγάλο αρχείο του, που έχει παραχθεί κατά τη διάρκεια των ετών.</description>
-		<disclaimer lang="en">Τhis addon offers content available in Greece.</disclaimer>
-		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο στην Ελλάδα.</disclaimer>
-		<platform>all</platform>
-	</extension>
-</addon>
-
-<addon id="plugin.video.ert.gr" name="ERT Online" version="2.0.2" provider-name="lambda">
-	<requires>
-		<import addon="xbmc.addon" version="12.0.0"/>
-		<import addon="xbmc.python" version="2.1.0"/>
-		<import addon="script.common.plugin.cache" version="0.9.1"/>
-		<import addon="script.module.parsedom" version="0.9.1"/>
-		<import addon="plugin.video.youtube" version="2.9.2"/>
-	</requires>
-	<extension point="xbmc.python.pluginsource" library="default.py">
-		<provides>video</provides>
-	</extension>
-	<extension point="xbmc.addon.metadata">
-		<summary lang="en">Watch the latest shows from ERT</summary>
-		<summary lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα της ΕΡΤ</summary>
-		<description lang="en">Watch the latest programs and news from ERT.[CR]ERT also offers its great archive to what has been produced during the years.</description>
-		<description lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα και ειδήσεις από την ΕΡΤ.[CR]Η ΕΡΤ επίσης προσφέρει το μεγάλο αρχείο της, που έχει παραχθεί κατά τη διάρκεια των ετών.</description>
-		<disclaimer lang="en">Τhis addon offers content available in Greece.</disclaimer>
-		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο στην Ελλάδα.</disclaimer>
-		<platform>all</platform>
-	</extension>
-</addon>
-
 <addon id="plugin.video.football.today" name="Football Today" version="1.0.0" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.addon" version="12.0.0"/>
@@ -165,6 +122,29 @@
 		<summary lang="el">Δείτε ελληνικές ταινίες από το Cine-Greece και το Greek-Movies</summary>
 		<description lang="en">Watch greek movies from Cine-Greece and Greek-Movies.[CR]All recent and classic movies are broadcasted by YouTube.</description>
 		<description lang="el">Δείτε ελληνικές ταινίες από το Cine-Greece και το Greek-Movies.[CR]Όλες οι πρόσφατες και κλασικές ταινίες μεταδίδονται από το YouTube.</description>
+		<disclaimer lang="en">Τhis addon offers content available in Greece.</disclaimer>
+		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο στην Ελλάδα.</disclaimer>
+		<platform>all</platform>
+	</extension>
+</addon>
+
+<addon id="plugin.video.hellenic.player" name="Hellenic Player" version="1.0.0" provider-name="lambda">
+	<requires>
+		<import addon="xbmc.addon" version="12.0.0"/>
+		<import addon="xbmc.python" version="2.1.0"/>
+		<import addon="plugin.video.hellenic.tv" version="2.4.0"/>
+		<import addon="script.common.plugin.cache" version="0.9.1"/>
+		<import addon="script.module.parsedom" version="0.9.1"/>
+		<import addon="plugin.video.youtube" version="2.9.2"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Watch the latest shows and news from all Greek networks</summary>
+		<summary lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα και ειδήσεις από όλα τα ελληνικά δίκτυα</summary>
+		<description lang="en">Watch the latest shows and news from all Greek networks.[CR]The addon also includes an archive of shows that have been produced during the years.</description>
+		<description lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα και ειδήσεις από όλα τα ελληνικά δίκτυα.[CR]Το πρόσθετο επίσης περιλαμβάνει αρχείο προγράμματων που έχουν παραχθεί κατά τη διάρκεια των ετών.</description>
 		<disclaimer lang="en">Τhis addon offers content available in Greece.</disclaimer>
 		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο στην Ελλάδα.</disclaimer>
 		<platform>all</platform>
@@ -218,50 +198,6 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.madtv.gr" name="MAD Player" version="2.0.1" provider-name="lambda">
-	<requires>
-		<import addon="xbmc.addon" version="12.0.0"/>
-		<import addon="xbmc.python" version="2.1.0"/>
-		<import addon="script.common.plugin.cache" version="0.9.1"/>
-		<import addon="script.module.parsedom" version="0.9.1"/>
-		<import addon="plugin.video.youtube" version="2.9.2"/>
-	</requires>
-	<extension point="xbmc.python.pluginsource" library="default.py">
-		<provides>video</provides>
-	</extension>
-	<extension point="xbmc.addon.metadata">
-		<summary lang="en">Watch music programs and charts from MAD and MAD Greekz</summary>
-		<summary lang="el">Δείτε μουσικά προγράμματα και charts από το MAD και το MAD Greekz</summary>
-		<description lang="en">Watch music programs and news from MAD and MAD Greekz.[CR]Τhis addon also includes all music charts of the channel.</description>
-		<description lang="el">Δείτε μουσικά προγράμματα και ειδήσεις από το MAD και το MAD Greekz.[CR]Το πρόσθετο περιλαμβάνει επίσης και όλα τα μουσικά charts του καναλιού.</description>
-		<disclaimer lang="en">Τhis addon offers content available in Greece.</disclaimer>
-		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο στην Ελλάδα.</disclaimer>
-		<platform>all</platform>
-	</extension>
-</addon>
-
-<addon id="plugin.video.megatv.com" name="MEGA Replay" version="3.0.1" provider-name="lambda">
-	<requires>
-		<import addon="xbmc.addon" version="12.0.0"/>
-		<import addon="xbmc.python" version="2.1.0"/>
-		<import addon="script.common.plugin.cache" version="0.9.1"/>
-		<import addon="script.module.parsedom" version="0.9.1"/>
-		<import addon="plugin.video.youtube" version="2.9.2"/>
-	</requires>
-	<extension point="xbmc.python.pluginsource" library="default.py">
-		<provides>video</provides>
-	</extension>
-	<extension point="xbmc.addon.metadata">
-		<summary lang="en">Watch the latest shows from MEGA</summary>
-		<summary lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα του MEGA</summary>
-		<description lang="en">Watch the latest programs and news from MEGA.[CR]MEGA also offers part of programs that have been produced during the years.</description>
-		<description lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα και ειδήσεις από το MEGA.[CR]Το MEGA επίσης προσφέρει και μέρος προγράμματων που έχουν παραχθεί κατά τη διάρκεια των ετών.</description>
-		<disclaimer lang="en">Τhis addon offers content available in Greece.</disclaimer>
-		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο στην Ελλάδα.</disclaimer>
-		<platform>all</platform>
-	</extension>
-</addon>
-
 <addon id="plugin.video.muchmovies.hd" name="Much Movies HD" version="1.1.0" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.addon" version="12.0.0"/>
@@ -304,49 +240,6 @@
 		<description lang="el">Παρακολουθήστε ταινίες και σειρές από το simplymovies.net</description>
 		<disclaimer lang="en">The author does not host or distribute any of the content displayed by this addon. The author does not have any affiliation with the content provider.</disclaimer>
 		<disclaimer lang="el">Ο συγγραφέας δεν φιλοξενεί ή διανέμει οποιοδήποτε περιεχόμενο που εμφανίζεται από τo πρόσθετο αυτό. Ο συγγραφέας δεν έχει καμία σχέση με τον πάροχο του περιεχομένου.</disclaimer>
-		<platform>all</platform>
-	</extension>
-</addon>
-
-<addon id="plugin.video.skai.gr" name="SKAI Player" version="2.0.1" provider-name="lambda">
-	<requires>
-		<import addon="xbmc.addon" version="12.0.0"/>
-		<import addon="xbmc.python" version="2.1.0"/>
-		<import addon="script.common.plugin.cache" version="0.9.1"/>
-		<import addon="script.module.parsedom" version="0.9.1"/>
-	</requires>
-	<extension point="xbmc.python.pluginsource" library="default.py">
-		<provides>video</provides>
-	</extension>
-	<extension point="xbmc.addon.metadata">
-		<summary lang="en">Watch the latest shows from SKAI</summary>
-		<summary lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα του ΣΚΑΪ</summary>
-		<description lang="en">Watch the latest programs and news from SKAI.[CR]SKAI also offers its archive to what has been produced during the years.</description>
-		<description lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα και ειδήσεις από τον ΣΚΑΪ.[CR]Ο ΣΚΑΪ επίσης προσφέρει το αρχείο του, που έχει παραχθεί κατά τη διάρκεια των ετών.</description>
-		<disclaimer lang="en">Τhis addon offers content available in Greece.</disclaimer>
-		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο στην Ελλάδα.</disclaimer>
-		<platform>all</platform>
-	</extension>
-</addon>
-
-<addon id="plugin.video.startv.gr" name="STAR WebTV" version="2.0.1" provider-name="lambda">
-	<requires>
-		<import addon="xbmc.addon" version="12.0.0"/>
-		<import addon="xbmc.python" version="2.1.0"/>
-		<import addon="script.common.plugin.cache" version="0.9.1"/>
-		<import addon="script.module.parsedom" version="0.9.1"/>
-		<import addon="plugin.video.youtube" version="2.9.2"/>
-	</requires>
-	<extension point="xbmc.python.pluginsource" library="default.py">
-		<provides>video</provides>
-	</extension>
-	<extension point="xbmc.addon.metadata">
-		<summary lang="en">Watch the latest shows from STAR</summary>
-		<summary lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα του STAR</summary>
-		<description lang="en">Watch the latest programs and news from STAR.[CR]STAR also offers its archive to what has been produced during the years.</description>
-		<description lang="el">Δείτε πρόσφατα τηλεοπτικά προγράμματα και ειδήσεις από το STAR.[CR]Το STAR επίσης προσφέρει το αρχείο του, που έχει παραχθεί κατά τη διάρκεια των ετών.</description>
-		<disclaimer lang="en">Τhis addon offers content available in Greece.</disclaimer>
-		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο στην Ελλάδα.</disclaimer>
 		<platform>all</platform>
 	</extension>
 </addon>

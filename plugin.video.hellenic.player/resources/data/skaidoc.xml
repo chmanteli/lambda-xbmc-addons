@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<shows>
+	<show name="1821">
+		<name>1821</name>
+		<poster>http://www.skai.gr/files/temp//103D3757BC656810AC691936864E49DC.jpg</poster>
+		<fanart>http://www.skai.gr/files/temp//103D3757BC656810AC691936864E49DC.jpg</fanart>
+		<url>http://www.skai.gr/player/TV/?mmid=212286</url>
+	</show>
+
+	<show name="1821 .. Σήμερα">
+		<name>1821 .. Σήμερα</name>
+		<poster>http://www.skai.gr/files/temp//E3D27CCD6D665DDFCC3E1640D5BDA3A4.jpg</poster>
+		<fanart>http://www.skai.gr/files/temp//E3D27CCD6D665DDFCC3E1640D5BDA3A4.jpg</fanart>
+		<url>http://www.skai.gr/player/TV/?mmid=212553</url>
+	</show>
+
+	<show name="Βατοπαίδι...Όλη η Ιστορία">
+		<name>Βατοπαίδι...Όλη η Ιστορία</name>
+		<poster>http://www.skai.gr/files/temp//B2CC9280E741C03798070106B70D135C.jpg</poster>
+		<fanart>http://www.skai.gr/files/temp//B2CC9280E741C03798070106B70D135C.jpg</fanart>
+		<url>http://www.skai.gr/player/TV/?mmid=222624</url>
+	</show>
+
+	<show name="Έλληνες του Πνεύματος και της Τέχνης">
+		<name>Έλληνες του Πνεύματος και της Τέχνης</name>
+		<poster>http://www.skai.gr/files/temp//EBF431B4C010691F2C413AA88EFAB970.jpg</poster>
+		<fanart>http://www.skai.gr/files/temp//EBF431B4C010691F2C413AA88EFAB970.jpg</fanart>
+		<url>http://www.skai.gr/player/TV/?mmid=237922</url>
+	</show>
+
+	<show name="Ιαπωνία: 9 ριχτερ">
+		<name>Ιαπωνία: 9 ριχτερ</name>
+		<poster>http://www.skai.gr/files/temp//536726829DB3BCD79F48A8EFBB53D66E.jpg</poster>
+		<fanart>http://www.skai.gr/files/temp//536726829DB3BCD79F48A8EFBB53D66E.jpg</fanart>
+		<url>http://www.skai.gr/player/TV/?mmid=225869</url>
+	</show>
+
+	<show name="Μάχες των Ελλήνων">
+		<name>Μάχες των Ελλήνων</name>
+		<poster>http://www.skai.gr/files/temp//DE9D8BABEB908FAD0F343AF3713EB8F4.jpg</poster>
+		<fanart>http://www.skai.gr/files/temp//DE9D8BABEB908FAD0F343AF3713EB8F4.jpg</fanart>
+		<url>http://www.skai.gr/player/TV/?mmid=215411</url>
+	</show>
+
+	<show name="Μάχες των Ελλήνων - Θεματική">
+		<name>Μάχες των Ελλήνων - Θεματική</name>
+		<poster>http://www.skai.gr/files/temp//DE9D8BABEB908FAD0F343AF3713EB8F4.jpg</poster>
+		<fanart>http://www.skai.gr/files/temp//DE9D8BABEB908FAD0F343AF3713EB8F4.jpg</fanart>
+		<url>http://www.skai.gr/player/TV/?mmid=215434</url>
+	</show>
+
+	<show name="Μεγάλοι Έλληνες">
+		<name>Μεγάλοι Έλληνες</name>
+		<poster>http://www.skai.gr/files/temp//726CDE5CBA10F5E8F7FA08D826D1DBDD.jpg</poster>
+		<fanart>http://www.skai.gr/files/temp//726CDE5CBA10F5E8F7FA08D826D1DBDD.jpg</fanart>
+		<url>http://www.skai.gr/player/TV/?mmid=240386</url>
+	</show>
+
+	<show name="Μίκης Θεοδωράκης">
+		<name>Μίκης Θεοδωράκης</name>
+		<poster>http://www.skai.gr/files/temp//779D513A0FDDA7F61C2A9F3413F655EC.jpg</poster>
+		<fanart>http://www.skai.gr/files/temp//779D513A0FDDA7F61C2A9F3413F655EC.jpg</fanart>
+		<url>http://www.skai.gr/player/TV/?mmid=102819</url>
+	</show>
+
+	<show name="Ναυτίλος">
+		<name>Ναυτίλος</name>
+		<poster>http://www.skai.gr/files/temp//B490C451013D93C9BAF99F2B343B2798.jpg</poster>
+		<fanart>http://www.skai.gr/files/temp//B490C451013D93C9BAF99F2B343B2798.jpg</fanart>
+		<url>http://www.skai.gr/player/TV/?mmid=217362</url>
+	</show>
+
+	<show name="Ξεχασμένα Βαλκάνια">
+		<name>Ξεχασμένα Βαλκάνια</name>
+		<poster>http://www.skai.gr/files/temp//50C20F6750CC31944937C60933D4B85A.jpg</poster>
+		<fanart>http://www.skai.gr/files/temp//50C20F6750CC31944937C60933D4B85A.jpg</fanart>
+		<url>http://www.skai.gr/player/TV/?mmid=226754</url>
+	</show>
+
+	<show name="Οι Δρόμοι της Ελιάς">
+		<name>Οι Δρόμοι της Ελιάς</name>
+		<poster>http://www.skai.gr/files/temp//94B08523EB84D83CBD374A7F955091C9.jpg</poster>
+		<fanart>http://www.skai.gr/files/temp//94B08523EB84D83CBD374A7F955091C9.jpg</fanart>
+		<url>http://www.skai.gr/player/TV/?mmid=102527</url>
+	</show>
+
+	<show name="Τα Παιδία Δεν Παίζει">
+		<name>Τα Παιδία Δεν Παίζει</name>
+		<poster>http://www.skai.gr/files/temp//E1C308853845C7ECD4B6F5B999D812DF.jpg</poster>
+		<fanart>http://www.skai.gr/files/temp//E1C308853845C7ECD4B6F5B999D812DF.jpg</fanart>
+		<url>http://www.skai.gr/player/TV/?mmid=215848</url>
+	</show>
+</shows>
