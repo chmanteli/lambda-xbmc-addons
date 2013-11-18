@@ -1,10 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
 	<!-- Settings -->
-	<string id="30000">General</string>
-	<string id="30001">Proxy</string>
-	<string id="30002">IP</string>
-	<string id="30003">Port</string>
+	<string id="30000">-</string>
 	<!-- Info -->
 	<string id="30301"></string>
 	<string id="30302"> is on by default</string>
@@ -77,7 +74,7 @@
 	<string id="30432">Set Archives view</string>
 	<string id="30433">Set Videos view</string>
 	<!-- Description -->
-	<string id="40450">Watch the latest shows and news from all Greek networks.[CR]The addon also includes an archive of shows that have been produced during the years.</string>
+	<string id="30450">Watch the latest shows and news from all Greek networks.[CR]The addon also includes an archive of shows that have been produced during the years.</string>
 	<!-- Labels -->
 	<string id="30501">Live</string>
 	<string id="30502">Networks</string>

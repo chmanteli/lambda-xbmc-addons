@@ -4,23 +4,22 @@
 	<string id="30000">-</string>
 	<!-- Info -->
 	<string id="30301">Η </string>
-	<string id="30302"> είναι πλέον καθολική</string>
+	<string id="30302"> είναι πλέον προεπιλεγμένη</string>
 	<string id="30303">Προστέθηκε στους "Σταθμούς μου"</string>
 	<string id="30304">Αφαιρέθηκε από τους "Σταθμούς μου"</string>
 	<string id="30305">Μετακινήθηκε πάνω</string>
 	<string id="30306">Μετακινήθηκε κάτω</string>
+	<string id="30317">Δεν υπάρχει διαθέσιμη ροή</string>
 	<!-- OK -->
-	<string id="30351">Το κανάλι δεν είναι διαθέσιμο</string>
-	<string id="30352">ή δεν υποστηρίζεται.</string>
-	<string id="30353">Το πρόσθετο Youtube δεν έχει εγκατασταθεί.</string>
-	<string id="30354">Η ροή αυτή το απαιτεί.</string>
+	<string id="30321">Το πρόσθετο Youtube δεν έχει εγκατασταθεί.</string>
+	<string id="30322">Η ροή αυτή το απαιτεί.</string>
 	<!-- ContextMenu -->
-	<string id="30401">Ορισμός καθολικής θέασης</string>
-	<string id="30402">Μετακίνηση πάνω</string>
-	<string id="30403">Μετακίνηση κάτω</string>
-	<string id="30404">Αφαίρεση</string>
-	<string id="30405">Προσθήκη στους "Σταθμούς μου"</string>
-	<string id="30406">Αφαίρεση από τους "Σταθμούς μου"</string>
+	<string id="30401">Προσθήκη στους "Σταθμούς μου"</string>
+	<string id="30402">Αφαίρεση από τους "Σταθμούς μου"</string>
+	<string id="30403">Μετακίνηση πάνω</string>
+	<string id="30404">Μετακίνηση κάτω</string>
+	<string id="30405">Αφαίρεση</string>
+	<string id="30406">Ορισμός θέασης σταθμών</string>
 
 	<!-- Labels -->
 	<string id="30501">Οι Σταθμοί μου</string>

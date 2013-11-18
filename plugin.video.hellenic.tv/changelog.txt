@@ -1,4 +1,14 @@
 ------------------------
+Hellenic TV v2.4.1 (18-Nov-13)
+------------------------
+
+- Updated ANT1 CYPRUS, SIGMA and CAPITAL.
+- Added new art.
+- Tweaked videoplayer labels.
+- Code cosmetics.
+
+
+------------------------
 Hellenic TV v2.4.0 (11-Nov-13)
 ------------------------
 

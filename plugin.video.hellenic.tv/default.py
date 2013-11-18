@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-    hellenic tv XBMC Addon
+    Hellenic TV XBMC Addon
     Copyright (C) 2013 lambda
 
     This program is free software: you can redistribute it and/or modify
@@ -38,6 +38,7 @@ addonChannels       = os.path.join(addonPath,'channels.xml')
 addonEPG            = os.path.join(addonPath,'xmltv.xml')
 addonFanart         = os.path.join(addonPath,'fanart.jpg')
 addonLogos          = os.path.join(addonPath,'resources/logos')
+addonSlideshow      = os.path.join(addonPath,'resources/slideshow')
 akamaiProxy         = os.path.join(addonPath,'akamaisecurehd.py')
 fallback            = os.path.join(addonPath,'resources/fallback/fallback.mp4')
 addonStrings        = os.path.join(addonPath,'resources/language/Greek/strings.xml')
@@ -156,9 +157,10 @@ class index:
     def container_refresh(self):
         xbmc.executebuiltin('Container.Refresh')
 
-    def resolve(self, title, url, image, epg):
+    def resolve(self, name, title, url, image, epg):
+        meta = {'label': title, 'title': title, 'studio': name, 'duration': '1440', 'plot': epg}
         item = xbmcgui.ListItem(path=url, iconImage=image, thumbnailImage=image)
-        item.setInfo( type="Video", infoLabels={ "Label": title, "Title": title, "Duration": "1440", "Plot": epg } )
+        item.setInfo( type="Video", infoLabels = meta )
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
 
     def dialogList(self, dialogList):
@@ -183,7 +185,7 @@ class index:
         title = playerList[select]['title']
         epg = playerList[select]['epg']
         url = player().run(name)
-        meta = {"Label": title, "Title": title, "Duration": "1440", "Plot": epg}
+        meta = {'label': title, 'title': title, 'studio': name, 'duration': '1440', 'plot': epg}
         image = '%s/%s.png' % (addonLogos, name)
 
         item = xbmcgui.ListItem(path=url, iconImage=image, thumbnailImage=image)
@@ -195,6 +197,7 @@ class index:
         xbmc.Player().play(playlist)
 
     def channelList(self, channelList):
+        count = 0
         total = len(channelList)
         for i in channelList:
             try:
@@ -202,8 +205,10 @@ class index:
                 if getSetting(name) == "false": raise Exception()
                 sysname = urllib.quote_plus(name.replace(' ','_'))
                 image = '%s/%s.png' % (addonLogos, name)
-                u = '%s?action=play&channel=%s' % (sys.argv[0], sysname)
-                meta = {"Label": name, "Title": name, "Duration": "1440", "Plot": epg}
+                fanart = '%s/%s.jpg' % (addonSlideshow, str(count)[-1])
+                count = count + 1
+                u = '%s?action=play&channel=%s&t=%s' % (sys.argv[0], sysname, datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"))
+                meta = {'label': name, 'title': name, 'studio': name, 'duration': '1440', 'plot': epg}
 
                 cm = []
                 cm.append((language(30401).encode("utf-8"), 'RunPlugin(%s?action=epg_menu&channel=%s)' % (sys.argv[0], sysname)))
@@ -213,7 +218,7 @@ class index:
                 item.setInfo( type="Video", infoLabels = meta )
                 item.setProperty("IsPlayable", "true")
                 item.setProperty("Video", "true")
-                item.setProperty("Fanart_Image", addonFanart)
+                item.setProperty("Fanart_Image", fanart)
                 item.addContextMenuItems(cm, replaceItems=False)
                 xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=item,totalItems=total,isFolder=False)
             except:
@@ -256,6 +261,19 @@ class contextMenu:
 
         select = index().selectDialog(epgList, header='%s - %s' % (language(30402).encode("utf-8"), channel))
         return
+
+class channels:
+    def __init__(self):
+        if not (os.path.isfile(addonEPG) and index().getProperty("htv_Service_Running") == ''):
+            index().infoDialog(language(30301).encode("utf-8"))
+
+    def get(self):
+        list = channelList().channelList
+        index().channelList(list)
+
+    def dialog(self):
+        list = channelList().channelList
+        index().dialogList(list)
 
 class channelList:
     def __init__(self):
@@ -319,19 +337,6 @@ class channelList:
             except:
                 pass
 
-class channels:
-    def __init__(self):
-        if not (os.path.isfile(addonEPG) and index().getProperty("htv_Service_Running") == ''):
-            index().infoDialog(language(30301).encode("utf-8"))
-
-    def get(self):
-        list = channelList().channelList
-        index().channelList(list)
-
-    def dialog(self):
-        list = channelList().channelList
-        index().dialogList(list)
-
 class player:
     def run(self, channel):
         try:
@@ -364,7 +369,7 @@ class player:
 
             if not xbmc.getInfoLabel('ListItem.Plot') == '' : epg = xbmc.getInfoLabel('ListItem.Plot')
             title = epg.split('\n')[0].split('-', 1)[-1].rsplit('[', 1)[0].strip()
-            index().resolve(title, url, image, epg)
+            index().resolve(name, title, url, image, epg)
             return url
         except:
             index().infoDialog(language(30302).encode("utf-8"))

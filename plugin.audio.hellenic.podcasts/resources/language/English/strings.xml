@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<!-- Settings -->
+	<string id="30000">-</string>
+	<!-- Info -->
+	<string id="30301"></string>
+	<string id="30302"> is on by default</string>
+	<string id="30317">No stream available</string>
+	<!-- ContextMenu -->
+	<string id="30401">Play</string>
+	<string id="30402">Random Play</string>
+	<string id="30403">Play from here</string>
+	<string id="30404">Queue All</string>
+	<string id="30405">Queue audio</string>
+	<string id="30409">Add-on settings</string>
+	<string id="30410">Now playing...</string>
+	<string id="30411">Home...</string>
+	<string id="30427">Set Root view</string>
+	<string id="30429">Set Programmes view</string>
+	<string id="30433">Set Podcasts view</string>
+	<!-- Description -->
+	<string id="30450">Listen the latest podcasts from Greek radio stations.[CR]The addon includes news from Greece and the world and keeps you informed of all developments.</string>
+	<!-- Labels -->
+	<string id="30501">REAL</string>
+	<string id="30502">SKAI</string>
+	<string id="30503">ALPHA</string>
+</strings>

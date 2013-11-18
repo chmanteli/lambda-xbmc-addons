@@ -1,4 +1,14 @@
 ------------------------
+Hellenic Player v1.0.1 (18-Nov-13)
+------------------------
+
+- Added new art.
+- Removed built-in proxy.
+- Note: The addon will keep trying to find a working proxy for ant1 videos.
+- Code cosmetics.
+
+
+------------------------
 Hellenic Player v1.0.0 (11-Nov-13)
 ------------------------
 

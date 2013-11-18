@@ -4,23 +4,22 @@
 	<string id="30000">-</string>
 	<!-- Info -->
 	<string id="30301"></string>
-	<string id="30302"> is now global</string>
+	<string id="30302"> is on by default</string>
 	<string id="30303">Added to "My Stations"</string>
 	<string id="30304">Removed from "My Stations"</string>
 	<string id="30305">Moved up</string>
 	<string id="30306">Moved down</string>
+	<string id="30317">No stream available</string>
 	<!-- OK -->
-	<string id="30351">This channel is not available</string>
-	<string id="30352">or not supported.</string>
-	<string id="30353">YouTube addon is not installed.</string>
-	<string id="30354">This stream requires it.</string>
+	<string id="30321">YouTube addon is not installed.</string>
+	<string id="30322">This stream requires it.</string>
 	<!-- ContextMenu -->
-	<string id="30401">Set global view</string>
-	<string id="30402">Move up</string>
-	<string id="30403">Move down</string>
-	<string id="30404">Remove</string>
-	<string id="30405">Add to "My Stations"</string>
-	<string id="30406">Remove from "My Stations"</string>
+	<string id="30401">Add to "My Stations"</string>
+	<string id="30402">Remove from "My Stations"</string>
+	<string id="30403">Move up</string>
+	<string id="30404">Move down</string>
+	<string id="30405">Remove</string>
+	<string id="30406">Set Radios view</string>
 
 	<!-- Labels -->
 	<string id="30501">My Stations</string>

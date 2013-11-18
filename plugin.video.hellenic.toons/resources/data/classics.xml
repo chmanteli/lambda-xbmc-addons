@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<channels>
+	<channel>
+		<url>http://www.youtube.com/user/GreekTvCartoon</url>
+	</channel>
+	<channel>
+		<url>http://www.youtube.com/user/oldMegaCartoons</url>
+	</channel>
+	<channel>
+		<url>http://www.youtube.com/user/GreekTvCartoons</url>
+	</channel>
+	<channel>
+		<url>http://www.youtube.com/user/ToonsFromThePast</url>
+		<exclude>http://www.youtube.com/playlist?list=PLStChvmvfcLCTv__R0DdRG95E0DC-wQik</exclude>
+		<exclude>http://www.youtube.com/playlist?list=PLStChvmvfcLBh_62uBltuminbWooSods9</exclude>
+	</channel>
+	<channel>
+		<url>http://www.youtube.com/user/Michaletosjr</url>
+	</channel>
+	<channel>
+		<url>http://www.youtube.com/user/GreekCartoonClassics</url>
+	</channel>
+	<channel>
+		<url>http://www.youtube.com/user/GPITRAL5</url>
+	</channel>
+	<channel>
+		<url>http://www.youtube.com/user/lilithvii</url>
+		<include>http://www.youtube.com/playlist?list=PL3420AA02720B05E5</include>
+		<include>http://www.youtube.com/playlist?list=PL147140D5904AFBE4</include>
+		<include>http://www.youtube.com/playlist?list=PLF191388E07E9E127</include>
+		<include>http://www.youtube.com/playlist?list=PL8F5C47492E11C109</include>
+		<include>http://www.youtube.com/playlist?list=PLAD759EE008F12C43</include>
+		<include>http://www.youtube.com/playlist?list=PLC3C3861A770162F5</include>
+		<include>http://www.youtube.com/playlist?list=PL0C994DFD3BCDAEDB</include>
+		<include>http://www.youtube.com/playlist?list=PLE3470893493CF5A8</include>
+		<include>http://www.youtube.com/playlist?list=PLD2C2707D06DA58DC</include>
+		<include>http://www.youtube.com/playlist?list=PL724AA3356D663CED</include>
+		<include>http://www.youtube.com/playlist?list=PLC34BCF01941BAC02</include>
+	</channel>
+	<channel>
+		<url>http://www.youtube.com/user/stswandersoul</url>
+		<include>http://www.youtube.com/playlist?list=PL1FDC7DF9E8F8ED46</include>
+	</channel>
+</channels>

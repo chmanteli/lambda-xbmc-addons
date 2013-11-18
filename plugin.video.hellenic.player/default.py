@@ -35,10 +35,11 @@ addonName           = xbmcaddon.Addon().getAddonInfo("name")
 addonVersion        = xbmcaddon.Addon().getAddonInfo("version")
 addonId             = xbmcaddon.Addon().getAddonInfo("id")
 addonPath           = xbmcaddon.Addon().getAddonInfo("path")
-addonDesc           = language(40450).encode("utf-8")
+addonDesc           = language(30450).encode("utf-8")
 addonIcon           = os.path.join(addonPath,'icon.png')
 addonFanart         = os.path.join(addonPath,'fanart.jpg')
 addonArt            = os.path.join(addonPath,'resources/art')
+addonSlideshow      = os.path.join(addonPath,'resources/slideshow')
 addonNickelodeon    = os.path.join(addonPath,'resources/data/nickelodeon.xml')
 addonSkaiDoc        = os.path.join(addonPath,'resources/data/skaidoc.xml')
 dataPath            = xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
@@ -276,6 +277,7 @@ class index:
             xbmc.executebuiltin('Action(Play)')
 
     def rootList(self, rootList):
+        count = 0
         total = len(rootList)
         for i in rootList:
             try:
@@ -283,16 +285,17 @@ class index:
                 image = '%s/%s' % (addonArt, i['image'])
                 action = i['action']
                 u = '%s?action=%s' % (sys.argv[0], action)
+                fanart = '%s/%s.jpg' % (addonSlideshow, str(count)[-1])
+                count = count + 1
 
                 cm = []
-
                 if action.startswith('episodes'): cm.append((language(30401).encode("utf-8"), 'RunPlugin(%s?action=item_play)' % (sys.argv[0])))
                 if action.startswith('episodes'): cm.append((language(30402).encode("utf-8"), 'RunPlugin(%s?action=item_random_play)' % (sys.argv[0])))
                 cm.append((language(30427).encode("utf-8"), 'RunPlugin(%s?action=view_root)' % (sys.argv[0])))
 
                 item = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=image)
-                item.setInfo( type="Video", infoLabels={ "Label": name, "Title": name, "Plot": addonDesc } )
-                item.setProperty("Fanart_Image", addonFanart)
+                item.setInfo( type="Video", infoLabels = {'label': name, 'title': name, 'plot': addonDesc} )
+                item.setProperty("Fanart_Image", fanart)
                 item.addContextMenuItems(cm, replaceItems=False)
                 xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=item,totalItems=total,isFolder=True)
             except:
@@ -312,7 +315,7 @@ class index:
                 cm.append((language(30409).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
                 cm.append((language(30410).encode("utf-8"), 'RunPlugin(%s?action=playlist_open)' % (sys.argv[0])))
                 item = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=image)
-                item.setInfo( type="Video", infoLabels={ "Label": name, "Title": name, "Plot": addonDesc } )
+                item.setInfo( type="Video", infoLabels = {'label': name, 'title': name, 'plot': addonDesc} )
                 item.setProperty("Fanart_Image", addonFanart)
                 item.addContextMenuItems(cm, replaceItems=True)
                 xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=item,totalItems=total,isFolder=False)
@@ -324,19 +327,24 @@ class index:
         favRead = file.read()
         file.close()
 
+        count = 0
         total = len(showList)
         for i in showList:
             try:
                 name, url, image, imdb, genre, plot = i['name'], i['url'], i['image'], i['imdb'], i['genre'], i['plot']
-                if plot == ' ': plot = addonDesc
+                if plot == '': plot = addonDesc
+                if genre == '': genre = ' '
                 title = name
 
                 sysname, sysurl, sysimage, sysimdb, sysgenre, sysplot, systitle = urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(image), urllib.quote_plus(imdb), urllib.quote_plus(genre), urllib.quote_plus(plot), urllib.quote_plus(title)
                 u = '%s?action=episodes&url=%s&image=%s&imdb=%s&genre=%s&plot=%s&show=%s' % (sys.argv[0], sysurl, sysimage, sysimdb, sysgenre, sysplot, sysname)
+                fanart = '%s/%s.jpg' % (addonSlideshow, str(count)[-1])
+                count = count + 1
+                try: fanart = i['fanart']
+                except: pass
 
                 meta = {'label': title, 'title': title, 'tvshowtitle': title, 'imdb_id' : imdb, 'genre' : genre, 'plot': plot}
                 poster, banner = image, image
-                fanart = addonFanart
                 meta.update({'art(banner)': banner, 'art(poster)': poster})
 
                 cm = []
@@ -372,21 +380,25 @@ class index:
                 pass
 
     def episodeList(self, episodeList):
+        count = 0
         total = len(episodeList)
         for i in episodeList:
             try:
                 name, url, image, imdb, genre, plot = i['name'], i['url'], i['image'], i['imdb'], i['genre'], i['plot']
                 title, show, season, episode = i['title'], i['show'], i['season'], i['episode']
-                if plot == ' ': plot = addonDesc
+                if plot == '': plot = addonDesc
 
                 sysname, sysurl, sysimage = urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(image)
                 u = '%s?action=play&name=%s&url=%s' % (sys.argv[0], sysname, sysurl)
                 if url.startswith(link().youtube_base) or url.startswith(link().youtube_search):
                     u = '%s?action=play&name=%s&url=%s&t=%s' % (sys.argv[0], sysname, sysurl, datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"))
-                meta = {'label': title, 'title': title, 'tvshowtitle': show, 'season': season, 'episode': episode, 'imdb_id' : imdb, 'genre' : genre, 'plot': plot}
+                meta = {'label': title, 'title': title, 'studio': show, 'imdb_id' : imdb, 'genre' : genre, 'plot': plot}
                 try: meta.update({'premiered': i['date']})
                 except: pass
-                fanart = addonFanart
+                fanart = '%s/%s.jpg' % (addonSlideshow, str(count)[-1])
+                count = count + 1
+                try: fanart = i['fanart']
+                except: pass
                 poster = image
 
                 cm = []
@@ -644,7 +656,7 @@ class favourites:
         file.close()
         match = re.compile('"(.+?)"[|]"(.+?)"[|]"(.+?)"[|]"(.+?)"').findall(read)
         for name, imdb, url, image in match:
-            self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': ' ', 'plot': ' '})
+            self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': 'Greek', 'plot': ''})
         index().showList(self.list)
 
 class link:
@@ -804,38 +816,38 @@ class news:
     def megatv(self):
         name = 'MEGA GEGONOTA'
         url = link().megatv_news
-        self.list = episodeList().megatv_list2(name, url, ' ', '0', 'Greek', ' ', name)
+        self.list = episodeList().megatv_list2(name, url, ' ', '0', 'Greek', '', name)
         index().episodeList(self.list)
 
     def antenna(self):
         name = 'ANT1 NEWS'
         url = link().antenna_news
-        self.list = episodeList().antenna_list(name, url, ' ', '0', 'Greek', ' ', name)
+        self.list = episodeList().antenna_list(name, url, ' ', '0', 'Greek', '', name)
         index().episodeList(self.list)
 
     def alphatv(self):
         name = 'ALPHA NEWS'
         url = link().alphatv_news
-        self.list = episodeList().alphatv_list(name, url, ' ', '0', 'Greek', ' ', name)
+        self.list = episodeList().alphatv_list(name, url, ' ', '0', 'Greek', '', name)
         index().episodeList(self.list)
 
     def star(self):
         name = 'STAR NEWS'
         url = link().star_news
         image = 'http://www.star.gr/tv/PublishingImages/2013/09/170913125528_8325.jpg'
-        self.list = episodeList().star_list(name, url, image, '0', 'Greek', ' ', name)
+        self.list = episodeList().star_list(name, url, image, '0', 'Greek', '', name)
         index().episodeList(self.list)
 
     def skai(self):
         name = 'SKAI NEWS'
         url = link().skai_news
-        self.list = episodeList().skai_list(name, url, ' ', '0', 'Greek', ' ', name)
+        self.list = episodeList().skai_list(name, url, ' ', '0', 'Greek', '', name)
         index().episodeList(self.list)
 
     def enikos(self):
         name = 'ENIKOS'
         url = link().enikos_news
-        self.list = episodeList().youtube_list(name, url, ' ', '0', 'Greek', ' ', name)
+        self.list = episodeList().youtube_list(name, url, ' ', '0', 'Greek', '', name)
         index().episodeList(self.list[:100])
 
 class sports:
@@ -845,32 +857,32 @@ class sports:
     def megatv(self):
         name = 'MEGA SPORTS'
         url = link().megatv_sports
-        self.list = episodeList().megatv_list2(name, url, ' ', '0', 'Greek', ' ', name)
+        self.list = episodeList().megatv_list2(name, url, ' ', '0', 'Greek', '', name)
         index().episodeList(self.list)
 
     def antenna(self):
         name = 'ANT1 SPORTS'
         url = link().antenna_sports
-        self.list = episodeList().antenna_list(name, url, ' ', '0', 'Greek', ' ', name)
+        self.list = episodeList().antenna_list(name, url, ' ', '0', 'Greek', '', name)
         index().episodeList(self.list)
 
     def greeksuperleague(self):
         name = 'Super League'
         channel = 'greeksuperleague'
         url = link().dailymotion_playlist % channel
-        self.list = episodeList().dailymotion_list(name, url, ' ', '0', 'Greek', ' ', name)
+        self.list = episodeList().dailymotion_list(name, url, ' ', '0', 'Greek', '', name)
         index().episodeList(self.list)
 
     def novasports(self):
         name = 'Novasports'
         url = link().novasports_series
-        self.list = episodeList().novasports_list(name, url, ' ', '0', 'Greek', ' ', name)
+        self.list = episodeList().novasports_list(name, url, ' ', '0', 'Greek', '', name)
         index().episodeList(self.list)
 
     def novasportsnews(self):
         name = 'Novasports News'
         url = link().novasports_news
-        self.list = episodeList().novasports_list(name, url, ' ', '0', 'Greek', ' ', name)
+        self.list = episodeList().novasports_list(name, url, ' ', '0', 'Greek', '', name)
         index().episodeList(self.list)
 
 class music:
@@ -887,32 +899,32 @@ class music:
 
     def madtop50(self):
         name = 'MAD Top 50'
-        self.list = episodeList().madchart_list(name, ' ', ' ', '0', 'Greek', ' ', name)
+        self.list = episodeList().madchart_list(name, ' ', ' ', '0', 'Greek', '', name)
         index().episodeList(self.list)
 
     def itunesgr(self):
         name = 'iTunes GR Chart'
-        self.list = episodeList().madchart_list(name, ' ', ' ', '0', 'Greek', ' ', name)
+        self.list = episodeList().madchart_list(name, ' ', ' ', '0', 'Greek', '', name)
         index().episodeList(self.list)
 
     def uschart(self):
         name = 'US Chart'
-        self.list = episodeList().madchart_list(name, ' ', ' ', '0', 'Greek', ' ', name)
+        self.list = episodeList().madchart_list(name, ' ', ' ', '0', 'Greek', '', name)
         index().episodeList(self.list)
 
     def itunesus(self):
         name = 'iTunes US Chart'
-        self.list = episodeList().madchart_list(name, ' ', ' ', '0', 'Greek', ' ', name)
+        self.list = episodeList().madchart_list(name, ' ', ' ', '0', 'Greek', '', name)
         index().episodeList(self.list)
 
     def ukchart(self):
         name = 'UK Chart'
-        self.list = episodeList().madchart_list(name, ' ', ' ', '0', 'Greek', ' ', name)
+        self.list = episodeList().madchart_list(name, ' ', ' ', '0', 'Greek', '', name)
         index().episodeList(self.list)
 
     def itunesuk(self):
         name = 'iTunes UK Chart'
-        self.list = episodeList().madchart_list(name, ' ', ' ', '0', 'Greek', ' ', name)
+        self.list = episodeList().madchart_list(name, ' ', ' ', '0', 'Greek', '', name)
         index().episodeList(self.list)
 
 class showList:
@@ -941,7 +953,7 @@ class showList:
                 image = common.parseDOM(show, "img", ret="src")[0]
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': 'Greek', 'plot': ' '})
+                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': 'Greek', 'plot': ''})
             except:
                 pass
 
@@ -1018,7 +1030,7 @@ class showList:
                 image = common.parseDOM(show, "img", ret="src")[0]
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': 'Greek', 'plot': ' '})
+                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': 'Greek', 'plot': ''})
             except:
                 pass
 
@@ -1044,7 +1056,7 @@ class showList:
                 image = '%s%s' % (link().star_base, image)
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': 'Greek', 'plot': ' '})
+                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': 'Greek', 'plot': ''})
             except:
                 pass
 
@@ -1125,7 +1137,7 @@ class showList:
                 image = common.parseDOM(show, "img", ret="src")[0]
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': 'Greek', 'plot': ' '})
+                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': 'Greek', 'plot': ''})
             except:
                 pass
 
@@ -1163,7 +1175,7 @@ class showList:
                 image = image.encode('utf-8')
                 if image.endswith("/00000000000/0.jpg"): raise Exception() #empty playlist
                 if any(url.endswith(i) for i in filter): raise Exception()
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': 'Greek', 'plot': ' '})
+                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': 'Greek', 'plot': '', 'channel': channel})
             except:
                 pass
 
@@ -1188,7 +1200,10 @@ class showList:
                 image = common.parseDOM(show, "poster")[0]
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': 'Greek', 'plot': ' '})
+                fanart = common.parseDOM(show, "fanart")[0]
+                fanart = common.replaceHTMLCodes(fanart)
+                fanart = fanart.encode('utf-8')
+                self.list.append({'name': name, 'url': url, 'image': image, 'fanart': fanart, 'imdb': '0', 'genre': 'Greek', 'plot': ''})
             except:
                 pass
 
@@ -1516,6 +1531,17 @@ class episodeList:
 
     def nickelodeon_list(self, name, url, image, imdb, genre, plot, show):
         try:
+            file = open(addonNickelodeon,'r')
+            result = file.read()
+            file.close()
+            result = common.parseDOM(result, "show")
+            filter = [i for i in result if url in common.replaceHTMLCodes(i)][0]
+            image = common.parseDOM(filter, "fanart")[0]
+            image = common.replaceHTMLCodes(image)
+            image = image.encode('utf-8')
+        except:
+            pass
+        try:
             count = 0
             threads = []
             result = ''
@@ -1544,7 +1570,7 @@ class episodeList:
                 url = url.encode('utf-8')
                 for i in self.list:
                     if name == i['name']: raise Exception()
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1', 'sort': sort})
+                self.list.append({'name': name, 'url': url, 'image': image, 'fanart': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1', 'sort': sort})
             except:
                 pass
 
@@ -1822,10 +1848,7 @@ class player:
             pass
 
         try:
-            proxyip, proxyport = getSetting("proxyip"), getSetting("proxyport")
-            proxies = ['%s:%s' % (proxyip, proxyport)]
-            if proxyip == '' or proxyport == '': proxies = []
-            proxies += self.proxynova()
+            proxies = self.proxynova()
             if proxies == []: raise Exception()
 
             count = 0
@@ -1847,9 +1870,6 @@ class player:
             return url
         except:
             pass
-
-        index().okDialog(language(30353).encode("utf-8"), '')
-        contextMenu().settings_open()
 
     def alphatv(self, url):
         try:
@@ -1921,7 +1941,7 @@ class player:
             if index().addon_status('plugin.video.youtube') is None:
                 index().okDialog(language(30321).encode("utf-8"), language(30322).encode("utf-8"))
                 return
-            id = url.split("?v=")[-1].split("/")[-1].split("?")[0]
+            id = url.split("?v=")[-1].split("/")[-1].split("?")[0].split("&")[0]
             state, reason = None, None
             result = getUrl(link().youtube_info % id).result
             try:

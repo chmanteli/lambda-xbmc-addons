@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-    hellenic toons XBMC Addon
+    Hellenic Toons XBMC Addon
     Copyright (C) 2013 lambda
 
     This program is free software: you can redistribute it and/or modify
@@ -18,39 +18,42 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import urllib,urllib2,re,os,threading,xbmc,xbmcplugin,xbmcgui,xbmcaddon
+import urllib,urllib2,re,os,threading,datetime,time,xbmc,xbmcplugin,xbmcgui,xbmcaddon
 from operator import itemgetter
-try:	import CommonFunctions
-except:	import commonfunctionsdummy as CommonFunctions
-try:	import StorageServer
-except:	import storageserverdummy as StorageServer
+import urlresolver
+try:    import CommonFunctions
+except: import commonfunctionsdummy as CommonFunctions
+try:    import StorageServer
+except: import storageserverdummy as StorageServer
 
 
-language			= xbmcaddon.Addon().getLocalizedString
-setSetting			= xbmcaddon.Addon().setSetting
-getSetting			= xbmcaddon.Addon().getSetting
-addonName			= xbmcaddon.Addon().getAddonInfo("name")
-addonVersion		= xbmcaddon.Addon().getAddonInfo("version")
-addonId				= xbmcaddon.Addon().getAddonInfo("id")
-addonPath			= xbmcaddon.Addon().getAddonInfo("path")
-addonDesc			= language(30450).encode("utf-8")
-addonIcon			= os.path.join(addonPath,'icon.png')
-addonFanart			= os.path.join(addonPath,'fanart.jpg')
-addonArt			= os.path.join(addonPath,'resources/art')
-addonVarious		= os.path.join(addonPath,'resources/xml/various.xml')
-addonNickelodeon	= os.path.join(addonPath,'resources/xml/nickelodeon.xml')
-addonClassics		= os.path.join(addonPath,'resources/xml/classics.xml')
-addonSongs			= os.path.join(addonPath,'resources/xml/songs.xml')
-dataPath			= xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
-viewData			= os.path.join(dataPath,'views.cfg')
-favData				= os.path.join(dataPath,'favourites3.cfg')
-cache				= StorageServer.StorageServer(addonName+addonVersion,24).cacheFunction
-cache2				= StorageServer.StorageServer(addonName+addonVersion,240).cacheFunction
-common				= CommonFunctions
+language            = xbmcaddon.Addon().getLocalizedString
+setSetting          = xbmcaddon.Addon().setSetting
+getSetting          = xbmcaddon.Addon().getSetting
+addonName           = xbmcaddon.Addon().getAddonInfo("name")
+addonVersion        = xbmcaddon.Addon().getAddonInfo("version")
+addonId             = xbmcaddon.Addon().getAddonInfo("id")
+addonPath           = xbmcaddon.Addon().getAddonInfo("path")
+addonDesc           = language(30450).encode("utf-8")
+addonIcon           = os.path.join(addonPath,'icon.png')
+addonFanart         = os.path.join(addonPath,'fanart.jpg')
+addonArt            = os.path.join(addonPath,'resources/art')
+addonSlideshow      = os.path.join(addonPath,'resources/slideshow')
+addonVarious        = os.path.join(addonPath,'resources/data/various.xml')
+addonNickelodeon    = os.path.join(addonPath,'resources/data/nickelodeon.xml')
+addonClassics       = os.path.join(addonPath,'resources/data/classics.xml')
+addonSongs        = os.path.join(addonPath,'resources/data/songs.xml')
+dataPath            = xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
+viewData            = os.path.join(dataPath,'views.cfg')
+favData             = os.path.join(dataPath,'favourites4.cfg')
+cache               = StorageServer.StorageServer(addonName+addonVersion,1).cacheFunction
+common              = CommonFunctions
+action              = None
 
 
 class main:
     def __init__(self):
+        global action
         index().container_data()
         params = {}
         splitparams = sys.argv[2][sys.argv[2].find('?') + 1:].split('&')
@@ -58,77 +61,85 @@ class main:
             if (len(param) > 0):
                 splitparam = param.split('=')
                 key = splitparam[0]
-                try:	value = splitparam[1].encode("utf-8")
-                except:	value = splitparam[1]
+                try:    value = splitparam[1].encode("utf-8")
+                except: value = splitparam[1]
                 params[key] = value
 
-        try:		action = urllib.unquote_plus(params["action"])
-        except:		action = None
-        try:		name = urllib.unquote_plus(params["name"])
-        except:		name = None
-        try:		show = urllib.unquote_plus(params["show"])
-        except:		show = None
-        try:		url = urllib.unquote_plus(params["url"])
-        except:		url = None
-        try:		image = urllib.unquote_plus(params["image"])
-        except:		image = None
+        try:        action = urllib.unquote_plus(params["action"])
+        except:     action = None
+        try:        name = urllib.unquote_plus(params["name"])
+        except:     name = None
+        try:        url = urllib.unquote_plus(params["url"])
+        except:     url = None
+        try:        image = urllib.unquote_plus(params["image"])
+        except:     image = None
+        try:        query = urllib.unquote_plus(params["query"])
+        except:     query = None
+        try:        imdb = urllib.unquote_plus(params["imdb"])
+        except:     imdb = None
+        try:        genre = urllib.unquote_plus(params["genre"])
+        except:     genre = None
+        try:        plot = urllib.unquote_plus(params["plot"])
+        except:     plot = None
+        try:        show = urllib.unquote_plus(params["show"])
+        except:     show = None
+        try:        season = urllib.unquote_plus(params["season"])
+        except:     season = None
+        try:        episode = urllib.unquote_plus(params["episode"])
+        except:     episode = None
 
-        if action == None:							categories().get()
-        elif action == 'item_play':					contextMenu().item_play()
-        elif action == 'item_random_play':			contextMenu().item_random_play()
-        elif action == 'item_queue':				contextMenu().item_queue()
-        elif action == 'item_play_from_here':		contextMenu().item_play_from_here(url)
-        elif action == 'favourite_add':				contextMenu().favourite_add(name, url, image)
-        elif action == 'favourite_delete':			contextMenu().favourite_delete(name, url, image)
-        elif action == 'favourite_moveUp':			contextMenu().favourite_moveUp(name, url, image)
-        elif action == 'favourite_moveDown':		contextMenu().favourite_moveDown(name, url, image)
-        elif action == 'playlist_start':			contextMenu().playlist_start()
-        elif action == 'playlist_open':				contextMenu().playlist_open()
-        elif action == 'settings_open':				contextMenu().settings_open()
-        elif action == 'global_view':				contextMenu().global_view()
-        elif action == 'favourites':				favourites().get()
-        elif action == 'various_shows':				shows().various()
-        elif action == 'nickelodeon_shows':			shows().nickelodeon()
-        elif action == 'classics_shows':			shows().classics()
-        elif action == 'songs_shows':				shows().songs()
-        elif action == 'episodes':					episodes().get(show, url)
-        elif action == 'play':						player().run(url)
+        if action == None:                          root().get()
+        elif action == 'item_play':                 contextMenu().item_play()
+        elif action == 'item_random_play':          contextMenu().item_random_play()
+        elif action == 'item_queue':                contextMenu().item_queue()
+        elif action == 'item_play_from_here':       contextMenu().item_play_from_here(url)
+        elif action == 'favourite_add':             contextMenu().favourite_add(favData, name, url, image, imdb)
+        elif action == 'favourite_delete':          contextMenu().favourite_delete(favData, name, url)
+        elif action == 'favourite_moveUp':          contextMenu().favourite_moveUp(favData, name, url)
+        elif action == 'favourite_moveDown':        contextMenu().favourite_moveDown(favData, name, url)
+        elif action == 'playlist_open':             contextMenu().playlist_open()
+        elif action == 'settings_open':             contextMenu().settings_open()
+        elif action == 'addon_home':                contextMenu().addon_home()
+        elif action == 'view_root':                 contextMenu().view('root')
+        elif action == 'view_tvshows':              contextMenu().view('tvshows')
+        elif action == 'view_episodes':             contextMenu().view('videos')
+        elif action == 'shows_various':             shows().various()
+        elif action == 'shows_nickelodeon':         shows().nickelodeon()
+        elif action == 'shows_classics':            shows().classics()
+        elif action == 'shows_songs':               shows().songs()
+        elif action == 'shows_favourites':          favourites().shows()
+        elif action == 'episodes':                  episodeList().get(name, url, image, imdb, genre, plot, show)
+        elif action == 'play':                      player().run(url, name)
 
-        viewDict = {
-            'skin.confluence'	: 503,	'skin.aeon.nox'		: 518,	'skin.back-row'			: 529,
-            'skin.bello'		: 50,	'skin.carmichael'	: 50,	'skin.diffuse'			: 55,
-            'skin.droid'		: 50,	'skin.metropolis'	: 55,	'skin.pm3-hd'			: 58,
-            'skin.rapier'		: 68,	'skin.re-touched'	: 550,	'skin.simplicity'		: 50,
-            'skin.transparency'	: 51,	'skin.xeebo'		: 50,	'skin.xperience1080'	: 50
-            }
 
-        xbmcplugin.setContent(int(sys.argv[1]), 'Episodes')
+        if action is None or action.startswith('root'):
+            pass
+        elif action.startswith('shows'):
+            xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
+            index().container_view('tvshows', {'skin.confluence' : 500})
+        elif action.startswith('episodes'):
+            xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+            index().container_view('videos', {'skin.confluence' : 504})
+
         xbmcplugin.setPluginFanart(int(sys.argv[1]), addonFanart)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
-        index().container_view(viewDict)
         return
 
 class getUrl(object):
-    def __init__(self, url, fetch=True, mobile=False, proxy=None, post=None, referer=None, cookie=None):
+    def __init__(self, url, fetch=True, close=True, cookie=False, mobile=False, proxy=None, post=None, referer=None):
         if not proxy is None:
             proxy_handler = urllib2.ProxyHandler({'http':'%s' % (proxy)})
             opener = urllib2.build_opener(proxy_handler, urllib2.HTTPHandler)
+            opener = urllib2.install_opener(opener)
+        if cookie == True:
+            import cookielib
+            cookie_handler = urllib2.HTTPCookieProcessor(cookielib.LWPCookieJar())
+            opener = urllib2.build_opener(cookie_handler, urllib2.HTTPBasicAuthHandler(), urllib2.HTTPHandler())
             opener = urllib2.install_opener(opener)
         if not post is None:
             request = urllib2.Request(url, post)
         else:
             request = urllib2.Request(url,None)
-        if not cookie is None:
-            from urllib2 import Request, build_opener, HTTPCookieProcessor, HTTPHandler
-            import cookielib
-            cj = cookielib.CookieJar()
-            opener = build_opener(HTTPCookieProcessor(cj), HTTPHandler())
-            cookiereq = Request(cookie)
-            response = opener.open(cookiereq)
-            response.close()
-            for cookie in cj:
-                cookie = '%s=%s' % (cookie.name, cookie.value)
-            request.add_header('Cookie', cookie)
         if mobile == True:
             request.add_header('User-Agent', 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_0 like Mac OS X; en-us) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 Mobile/8A293 Safari/6531.22.7')
         else:
@@ -140,7 +151,8 @@ class getUrl(object):
             result = response.read()
         else:
             result = response.geturl()
-        response.close()
+        if close == True:
+            response.close()
         self.result = result
 
 class cryptUrl:
@@ -214,7 +226,7 @@ class index:
         if not check == addonName: return True
 
     def container_refresh(self):
-        xbmc.executebuiltin("Container.Refresh")
+        xbmc.executebuiltin('Container.Refresh')
 
     def container_data(self):
         if not os.path.exists(dataPath):
@@ -228,13 +240,13 @@ class index:
             file.write('')
             file.close()
 
-    def container_view(self, viewDict):
+    def container_view(self, content, viewDict):
         try:
             skin = xbmc.getSkinDir()
             file = open(viewData,'r')
             read = file.read().replace('\n','')
             file.close()
-            view = re.compile('"%s"[|]"(.+?)"' % (skin)).findall(read)[0]
+            view = re.compile('"%s"[|]"%s"[|]"(.+?)"' % (skin, content)).findall(read)[0]
             xbmc.executebuiltin('Container.SetViewMode(%s)' % str(view))
         except:
             try:
@@ -243,37 +255,50 @@ class index:
             except:
                 pass
 
-    def favList(self, favList):
-        total = len(favList)
-        for i in favList:
+    def resolve(self, url):
+        try:
+            import urlparse
+            query = urlparse.urlparse(xbmc.getInfoLabel('Container.FolderPath')).query
+            base = urlparse.parse_qs(query)['url'][0]
+            if base.startswith(link().youtube_api): raise Exception()
+            poster = urlparse.parse_qs(query)['image'][0]
+        except:
+            poster = ''
+
+        item = xbmcgui.ListItem(path=url, iconImage=poster, thumbnailImage=poster)
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+        xbmc.sleep(3000)
+        if not xbmc.getCondVisibility('Player.Paused') == 0:
+            xbmc.executebuiltin('Action(Play)')
+
+    def rootList(self, rootList):
+        count = 0
+        total = len(rootList)
+        for i in rootList:
             try:
-                name, url, image = i['name'], i['url'], i['image']
-                sysname, sysurl, sysimage = urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(image)
-                u = '%s?action=episodes&show=%s&url=%s' % (sys.argv[0], sysname, sysurl)
+                name = language(i['name']).encode("utf-8")
+                image = '%s/%s' % (addonArt, i['image'])
+                action = i['action']
+                u = '%s?action=%s' % (sys.argv[0], action)
+                fanart = '%s/%s.jpg' % (addonSlideshow, str(count)[-1])
+                count = count + 1
 
                 cm = []
-                cm.append((language(30401).encode("utf-8"), 'RunPlugin(%s?action=item_play)' % (sys.argv[0])))
-                cm.append((language(30402).encode("utf-8"), 'RunPlugin(%s?action=item_random_play)' % (sys.argv[0])))
-                cm.append((language(30404).encode("utf-8"), 'RunPlugin(%s?action=item_queue)' % (sys.argv[0])))
-                cm.append((language(30406).encode("utf-8"), 'RunPlugin(%s?action=playlist_start)' % (sys.argv[0])))
-                cm.append((language(30407).encode("utf-8"), 'RunPlugin(%s?action=playlist_open)' % (sys.argv[0])))
-                cm.append((language(30408).encode("utf-8"), 'RunPlugin(%s?action=global_view)' % (sys.argv[0])))
-                #cm.append((language(30409).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
-                cm.append((language(30410).encode("utf-8"), 'RunPlugin(%s?action=favourite_moveUp&name=%s&url=%s&image=%s)' % (sys.argv[0], sysname, sysurl, sysimage)))
-                cm.append((language(30411).encode("utf-8"), 'RunPlugin(%s?action=favourite_moveDown&name=%s&url=%s&image=%s)' % (sys.argv[0], sysname, sysurl, sysimage)))
-                cm.append((language(30412).encode("utf-8"), 'RunPlugin(%s?action=favourite_delete&name=%s&url=%s&image=%s)' % (sys.argv[0], sysname, sysurl, sysimage)))
+                if action.startswith('episodes'): cm.append((language(30401).encode("utf-8"), 'RunPlugin(%s?action=item_play)' % (sys.argv[0])))
+                if action.startswith('episodes'): cm.append((language(30402).encode("utf-8"), 'RunPlugin(%s?action=item_random_play)' % (sys.argv[0])))
+                #cm.append((language(30427).encode("utf-8"), 'RunPlugin(%s?action=view_root)' % (sys.argv[0])))
 
                 item = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=image)
-                item.setInfo( type="Video", infoLabels={ "Label": name, "Title": name, "TVShowTitle": name, "Plot": addonDesc } )
-                item.setProperty("Fanart_Image", addonFanart)
-                item.addContextMenuItems(cm, replaceItems=True)
+                item.setInfo( type="Video", infoLabels = {'label': name, 'title': name, 'plot': addonDesc} )
+                item.setProperty("Fanart_Image", fanart)
+                item.addContextMenuItems(cm, replaceItems=False)
                 xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=item,totalItems=total,isFolder=True)
             except:
                 pass
 
-    def catList(self, catList):
-        total = len(catList)
-        for i in catList:
+    def itemList(self, itemList):
+        total = len(itemList)
+        for i in itemList:
             try:
                 name = language(i['name']).encode("utf-8")
                 image = '%s/%s' % (addonArt, i['image'])
@@ -281,20 +306,14 @@ class index:
                 u = '%s?action=%s' % (sys.argv[0], action)
 
                 cm = []
-                if action.startswith('episodes'):
-                    cm.append((language(30401).encode("utf-8"), 'RunPlugin(%s?action=item_play)' % (sys.argv[0])))
-                    cm.append((language(30402).encode("utf-8"), 'RunPlugin(%s?action=item_random_play)' % (sys.argv[0])))
-                    cm.append((language(30404).encode("utf-8"), 'RunPlugin(%s?action=item_queue)' % (sys.argv[0])))
-                cm.append((language(30406).encode("utf-8"), 'RunPlugin(%s?action=playlist_start)' % (sys.argv[0])))
-                cm.append((language(30407).encode("utf-8"), 'RunPlugin(%s?action=playlist_open)' % (sys.argv[0])))
-                cm.append((language(30408).encode("utf-8"), 'RunPlugin(%s?action=global_view)' % (sys.argv[0])))
-                #cm.append((language(30409).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
-
+                cm.append((language(30427).encode("utf-8"), 'RunPlugin(%s?action=view_root)' % (sys.argv[0])))
+                cm.append((language(30409).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
+                cm.append((language(30410).encode("utf-8"), 'RunPlugin(%s?action=playlist_open)' % (sys.argv[0])))
                 item = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=image)
-                item.setInfo( type="Video", infoLabels={ "Label": name, "Title": name, "TVShowTitle": name, "Plot": addonDesc } )
+                item.setInfo( type="Video", infoLabels = {'label': name, 'title': name, 'plot': addonDesc} )
                 item.setProperty("Fanart_Image", addonFanart)
                 item.addContextMenuItems(cm, replaceItems=True)
-                xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=item,totalItems=total,isFolder=True)
+                xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=item,totalItems=total,isFolder=False)
             except:
                 pass
 
@@ -303,59 +322,88 @@ class index:
         favRead = file.read()
         file.close()
 
+        count = 0
         total = len(showList)
         for i in showList:
             try:
-                try: name, url, image, fanart = i['name'], i['url'], i['image'], i['fanart']
-                except: name, url, image = i['name'], i['url'], i['image']
-                sysname, sysurl, sysimage = urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(image)
-                u = '%s?action=episodes&show=%s&url=%s' % (sys.argv[0], sysname, sysurl)
+                name, url, image, imdb, genre, plot = i['name'], i['url'], i['image'], i['imdb'], i['genre'], i['plot']
+                if plot == '': plot = addonDesc
+                if genre == '': genre = ' '
+                title = name
+
+                sysname, sysurl, sysimage, sysimdb, sysgenre, sysplot, systitle = urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(image), urllib.quote_plus(imdb), urllib.quote_plus(genre), urllib.quote_plus(plot), urllib.quote_plus(title)
+                u = '%s?action=episodes&url=%s&image=%s&imdb=%s&genre=%s&plot=%s&show=%s' % (sys.argv[0], sysurl, sysimage, sysimdb, sysgenre, sysplot, sysname)
+                fanart = '%s/%s.jpg' % (addonSlideshow, str(count)[-1])
+                count = count + 1
+                try: fanart = i['fanart']
+                except: pass
+
+                meta = {'label': title, 'title': title, 'tvshowtitle': title, 'imdb_id' : imdb, 'genre' : genre, 'plot': plot}
+                poster, banner = image, image
+                meta.update({'art(banner)': banner, 'art(poster)': poster})
 
                 cm = []
                 cm.append((language(30401).encode("utf-8"), 'RunPlugin(%s?action=item_play)' % (sys.argv[0])))
                 cm.append((language(30402).encode("utf-8"), 'RunPlugin(%s?action=item_random_play)' % (sys.argv[0])))
-                cm.append((language(30404).encode("utf-8"), 'RunPlugin(%s?action=item_queue)' % (sys.argv[0])))
-                cm.append((language(30406).encode("utf-8"), 'RunPlugin(%s?action=playlist_start)' % (sys.argv[0])))
-                cm.append((language(30407).encode("utf-8"), 'RunPlugin(%s?action=playlist_open)' % (sys.argv[0])))
-                if not url in favRead:
-                    cm.append((language(30413).encode("utf-8"), 'RunPlugin(%s?action=favourite_add&name=%s&url=%s&image=%s)' % (sys.argv[0], sysname, sysurl, sysimage)))
+                if action == 'shows_favourites':
+                    cm.append((language(30429).encode("utf-8"), 'RunPlugin(%s?action=view_tvshows)' % (sys.argv[0])))
+                    cm.append((language(30409).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
+                    cm.append((language(30419).encode("utf-8"), 'RunPlugin(%s?action=favourite_moveUp&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
+                    cm.append((language(30420).encode("utf-8"), 'RunPlugin(%s?action=favourite_moveDown&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
+                    cm.append((language(30421).encode("utf-8"), 'RunPlugin(%s?action=favourite_delete&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
                 else:
-                    cm.append((language(30414).encode("utf-8"), 'RunPlugin(%s?action=favourite_delete&name=%s&url=%s&image=%s)' % (sys.argv[0], sysname, sysurl, sysimage)))
-                cm.append((language(30408).encode("utf-8"), 'RunPlugin(%s?action=global_view)' % (sys.argv[0])))
-                #cm.append((language(30409).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
+                    if not '"%s"' % url in favRead: cm.append((language(30417).encode("utf-8"), 'RunPlugin(%s?action=favourite_add&name=%s&imdb=%s&url=%s&image=%s)' % (sys.argv[0], sysname, sysimdb, sysurl, sysimage)))
+                    else: cm.append((language(30418).encode("utf-8"), 'RunPlugin(%s?action=favourite_delete&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
+                    cm.append((language(30429).encode("utf-8"), 'RunPlugin(%s?action=view_tvshows)' % (sys.argv[0])))
+                    cm.append((language(30409).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
+                    cm.append((language(30410).encode("utf-8"), 'RunPlugin(%s?action=playlist_open)' % (sys.argv[0])))
+                    cm.append((language(30411).encode("utf-8"), 'RunPlugin(%s?action=addon_home)' % (sys.argv[0])))
 
-                item = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=image)
-                item.setInfo( type="Video", infoLabels={ "Label": name, "Title": name, "TVShowTitle": name, "Plot": addonDesc } )
-                try: item.setProperty("Fanart_Image", fanart)
-                except: item.setProperty("Fanart_Image", addonFanart)
+                item = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=poster)
+                item.setInfo( type="Video", infoLabels = meta )
+                item.setProperty("IsPlayable", "true")
+                item.setProperty("Video", "true")
+                item.setProperty("Fanart_Image", fanart)
                 item.addContextMenuItems(cm, replaceItems=True)
                 xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=item,totalItems=total,isFolder=True)
             except:
                 pass
 
     def episodeList(self, episodeList):
+        count = 0
         total = len(episodeList)
         for i in episodeList:
             try:
-                try: name, show, url, image, fanart = i['name'], i['show'], i['url'], i['image'], i['fanart']
-                except: name, show, url, image = i['name'], i['show'], i['url'], i['image']
-                sysurl = urllib.quote_plus(url)
-                u = '%s?action=play&url=%s' % (sys.argv[0], sysurl)
+                name, url, image, imdb, genre, plot = i['name'], i['url'], i['image'], i['imdb'], i['genre'], i['plot']
+                title, show, season, episode = i['title'], i['show'], i['season'], i['episode']
+                if plot == '': plot = addonDesc
+
+                sysname, sysurl, sysimage = urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(image)
+                u = '%s?action=play&name=%s&url=%s' % (sys.argv[0], sysname, sysurl)
+                if url.startswith(link().youtube_base) or url.startswith(link().youtube_search):
+                    u = '%s?action=play&name=%s&url=%s&t=%s' % (sys.argv[0], sysname, sysurl, datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"))
+                meta = {'label': title, 'title': title, 'studio': show, 'imdb_id' : imdb, 'genre' : genre, 'plot': plot}
+                try: meta.update({'premiered': i['date']})
+                except: pass
+                fanart = '%s/%s.jpg' % (addonSlideshow, str(count)[-1])
+                count = count + 1
+                try: fanart = i['fanart']
+                except: pass
+                poster = image
 
                 cm = []
                 cm.append((language(30405).encode("utf-8"), 'RunPlugin(%s?action=item_queue)' % (sys.argv[0])))
                 cm.append((language(30403).encode("utf-8"), 'RunPlugin(%s?action=item_play_from_here&url=%s)' % (sys.argv[0], sysurl)))
-                cm.append((language(30406).encode("utf-8"), 'RunPlugin(%s?action=playlist_start)' % (sys.argv[0])))
-                cm.append((language(30407).encode("utf-8"), 'RunPlugin(%s?action=playlist_open)' % (sys.argv[0])))
-                cm.append((language(30408).encode("utf-8"), 'RunPlugin(%s?action=global_view)' % (sys.argv[0])))
-                #cm.append((language(30409).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
+                cm.append((language(30431).encode("utf-8"), 'RunPlugin(%s?action=view_episodes)' % (sys.argv[0])))
+                cm.append((language(30409).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
+                cm.append((language(30410).encode("utf-8"), 'RunPlugin(%s?action=playlist_open)' % (sys.argv[0])))
+                cm.append((language(30411).encode("utf-8"), 'RunPlugin(%s?action=addon_home)' % (sys.argv[0])))
 
-                item = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=image)
-                item.setInfo( type="Video", infoLabels={ "Label": name, "Title": name, "TVShowTitle": show, "Plot": addonDesc } )
+                item = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=poster)
+                item.setInfo( type="Video", infoLabels = meta )
                 item.setProperty("IsPlayable", "true")
-                item.setProperty( "Video", "true" )
-                try: item.setProperty("Fanart_Image", fanart)
-                except: item.setProperty("Fanart_Image", addonFanart)
+                item.setProperty("Video", "true")
+                item.setProperty("Fanart_Image", fanart)
                 item.addContextMenuItems(cm, replaceItems=True)
                 xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=item,totalItems=total,isFolder=False)
             except:
@@ -380,30 +428,31 @@ class contextMenu:
         xbmc.executebuiltin('Action(Queue)')
 
     def item_play_from_here(self, url):
+        import urlparse
         playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
         playlist.clear()
         playlist.unshuffle()
         total = xbmc.getInfoLabel('Container.NumItems')
         for i in range(0, int(total)):
-            name = xbmc.getInfoLabel('ListItemNoWrap(%s).Label' % str(i))
-            if name == '': break
-            show = xbmc.getInfoLabel('ListItemNoWrap(%s).TVShowTitle' % str(i))
-            image = xbmc.getInfoLabel('ListItemNoWrap(%s).Icon' % str(i))
-            url = xbmc.getInfoLabel('ListItemNoWrap(%s).FileNameAndPath' % str(i))
-            url = url.split('?url=')[-1].split('&url=')[-1]
-            sysurl = urllib.quote_plus(url)
-            u = '%s?action=play&url=%s' % (sys.argv[0], sysurl)
-            item = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=image)
-            item.setInfo( type="Video", infoLabels={ "Label": name, "Title": name, "TVShowTitle": show, "Plot": addonDesc } )
-            item.setProperty("IsPlayable", "true")
-            item.setProperty( "Video", "true" )
-            item.setProperty("Fanart_Image", addonFanart)
-            playlist.add(u, item)
-        xbmc.Player().play(playlist)
+            i = str(i)
+            label = xbmc.getInfoLabel('ListItemNoWrap(%s).Label' % i)
+            if label == '': break
 
-    def playlist_start(self):
-        playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-        playlist.unshuffle()
+            path = xbmc.getInfoLabel('ListItemNoWrap(%s).FileNameAndPath' % i)
+            query = urlparse.urlparse(path.replace(sys.argv[0],'')).query
+            name, url = urlparse.parse_qs(query)['name'][0], urlparse.parse_qs(query)['url'][0]
+            sysname, sysurl = urllib.quote_plus(name), urllib.quote_plus(url)
+            u = '%s?action=play&name=%s&url=%s' % (sys.argv[0], sysname, sysurl)
+
+            meta = {'label' : xbmc.getInfoLabel('ListItemNoWrap(%s).title' % i), 'title' : xbmc.getInfoLabel('ListItemNoWrap(%s).title' % i), 'tvshowtitle': xbmc.getInfoLabel('ListItemNoWrap(%s).tvshowtitle' % i), 'imdb_id' : xbmc.getInfoLabel('ListItemNoWrap(%s).imdb_id' % i), 'season' : xbmc.getInfoLabel('ListItemNoWrap(%s).season' % i), 'episode' : xbmc.getInfoLabel('ListItemNoWrap(%s).episode' % i), 'writer' : xbmc.getInfoLabel('ListItemNoWrap(%s).writer' % i), 'director' : xbmc.getInfoLabel('ListItemNoWrap(%s).director' % i), 'rating' : xbmc.getInfoLabel('ListItemNoWrap(%s).rating' % i), 'duration' : xbmc.getInfoLabel('ListItemNoWrap(%s).duration' % i), 'plot' : xbmc.getInfoLabel('ListItemNoWrap(%s).plot' % i), 'premiered' : xbmc.getInfoLabel('ListItemNoWrap(%s).premiered' % i), 'genre' : xbmc.getInfoLabel('ListItemNoWrap(%s).genre' % i)}
+            poster, fanart = xbmc.getInfoLabel('ListItemNoWrap(%s).icon' % i), xbmc.getInfoLabel('ListItemNoWrap(%s).Property(Fanart_Image)' % i)
+
+            item = xbmcgui.ListItem(label, iconImage="DefaultVideo.png", thumbnailImage=poster)
+            item.setInfo( type="Video", infoLabels= meta )
+            item.setProperty("IsPlayable", "true")
+            item.setProperty("Video", "true")
+            item.setProperty("Fanart_Image", fanart)
+            playlist.add(u, item)
         xbmc.Player().play(playlist)
 
     def playlist_open(self):
@@ -412,7 +461,10 @@ class contextMenu:
     def settings_open(self):
         xbmc.executebuiltin('Addon.OpenSettings(%s)' % (addonId))
 
-    def global_view(self):
+    def addon_home(self):
+        xbmc.executebuiltin('Container.Update(plugin://%s/,replace)' % (addonId))
+
+    def view(self, content):
         try:
             skin = xbmc.getSkinDir()
             try:
@@ -442,157 +494,174 @@ class contextMenu:
             file.close()
             file = open(viewData, 'w')
             for line in re.compile('(".+?\n)').findall(read):
-                if not line.startswith('"%s"|"' % (skin)): file.write(line)
-            file.write('"%s"|"%s"\n' % (skin, str(view)))
+                if not line.startswith('"%s"|"%s"|"' % (skin, content)): file.write(line)
+            file.write('"%s"|"%s"|"%s"\n' % (skin, content, str(view)))
             file.close()
             viewName = xbmc.getInfoLabel('Container.Viewmode')
             index().infoDialog('%s%s%s' % (language(30301).encode("utf-8"), viewName, language(30302).encode("utf-8")))
         except:
             return
 
-    def favourite_add(self, name, url, image):
+    def favourite_add(self, data, name, url, image, imdb):
         try:
             index().container_refresh()
-            file = open(favData, 'a+')
-            file.write('"%s"|"%s"|"%s"\n' % (name, url, image))
+            file = open(data, 'a+')
+            file.write('"%s"|"%s"|"%s"|"%s"\n' % (name, imdb, url, image))
+            #file.write('"%s"|"%s"|"%s"\n' % (name, url, image))
             file.close()
             index().infoDialog(language(30303).encode("utf-8"), name)
         except:
             return
 
-    def favourite_delete(self, name, url, image):
+    def favourite_delete(self, data, name, url):
         try:
             index().container_refresh()
-            file = open(favData,'r')
+            file = open(data,'r')
             read = file.read()
             file.close()
-            read = read.replace('"%s"|"%s"|"%s"' % (name, url, image),'')
-            file = open(favData, 'w')
-            for line in re.compile('(".+?\n)').findall(read):
-                file.write(line)
+            line = [x for x in re.compile('(".+?)\n').findall(read) if '"%s"' % url in x][0]
+            list = re.compile('(".+?\n)').findall(read.replace(line, ''))
+            file = open(data, 'w')
+            for line in list: file.write(line)
             file.close()
             index().infoDialog(language(30304).encode("utf-8"), name)
         except:
             return
 
-    def favourite_moveUp(self, name, url, image):
+    def favourite_moveUp(self, data, name, url):
         try:
             index().container_refresh()
-            list = []
-            file = open(favData,'r')
+            file = open(data,'r')
             read = file.read()
             file.close()
-            for line in re.compile('(".+?)\n').findall(read):
-                list.append(line)
-            i = list.index('"%s"|"%s"|"%s"' % (name, url, image))
+            list = re.compile('(".+?)\n').findall(read)
+            line = [x for x in re.compile('(".+?)\n').findall(read) if '"%s"' % url in x][0]
+            i = list.index(line)
             if i == 0 : return
             list[i], list[i-1] = list[i-1], list[i]
-            file = open(favData, 'w')
-            for line in list:
-                file.write('%s\n' % (line))
+            file = open(data, 'w')
+            for line in list: file.write('%s\n' % (line))
             file.close()
             index().infoDialog(language(30305).encode("utf-8"), name)
         except:
             return
 
-    def favourite_moveDown(self, name, url, image):
+    def favourite_moveDown(self, data, name, url):
         try:
             index().container_refresh()
-            list = []
-            file = open(favData,'r')
+            file = open(data,'r')
             read = file.read()
             file.close()
-            for line in re.compile('(".+?)\n').findall(read):
-                list.append(line)
-            i = list.index('"%s"|"%s"|"%s"' % (name, url, image))
+            list = re.compile('(".+?)\n').findall(read)
+            line = [x for x in re.compile('(".+?)\n').findall(read) if '"%s"' % url in x][0]
+            i = list.index(line)
             if i+1 == len(list): return
             list[i], list[i+1] = list[i+1], list[i]
-            file = open(favData, 'w')
-            for line in list:
-                file.write('%s\n' % (line))
+            file = open(data, 'w')
+            for line in list: file.write('%s\n' % (line))
             file.close()
             index().infoDialog(language(30306).encode("utf-8"), name)
         except:
             return
 
+class root:
+    def get(self):
+        rootList = []
+        rootList.append({'name': 30501, 'image': 'Favourites.png', 'action': 'shows_favourites'})
+        rootList.append({'name': 30502, 'image': 'Various.png', 'action': 'shows_various'})
+        rootList.append({'name': 30503, 'image': 'Nickelodeon.png', 'action': 'shows_nickelodeon'})
+        rootList.append({'name': 30504, 'image': 'Classics.png', 'action': 'shows_classics'})
+        rootList.append({'name': 30505, 'image': 'Songs.png', 'action': 'shows_songs'})
+        index().rootList(rootList)
+
 class favourites:
-    def get(self):
-        favList = []
-        file = open(favData, 'r')
-        read = file.read()
-        file.close()
-        match = re.compile('"(.+?)"[|]"(.+?)"[|]"(.+?)"').findall(read)
-        for name, url, image in match:
-            favList.append({'name': name, 'url': url, 'image': image})
-        index().favList(favList)
-
-class categories:
-    def get(self):
-        catList = []
-        catList.append({'name': 30501, 'image': 'Favourites.png', 'action': 'favourites'})
-        catList.append({'name': 30502, 'image': 'Various.png', 'action': 'various_shows'})
-        catList.append({'name': 30503, 'image': 'Nickelodeon.png', 'action': 'nickelodeon_shows'})
-        catList.append({'name': 30504, 'image': 'Classics.png', 'action': 'classics_shows'})
-        catList.append({'name': 30505, 'image': 'Songs.png', 'action': 'songs_shows'})
-        index().catList(catList)
-
-class shows:
     def __init__(self):
         self.list = []
-        self.data = ''
-        self.youtubeUrl				= 'http://gdata.youtube.com'
-        self.youtube_showsUrl		= 'http://gdata.youtube.com/feeds/api/users/%s/playlists'
-        self.youtube_episodeUrl		= 'http://gdata.youtube.com/feeds/api/playlists/%s'
-        self.youtube_recentUrl		= 'http://gdata.youtube.com/feeds/api/users/%s/uploads'
-        self.youtube_searchUrl		= 'http://gdata.youtube.com/feeds/api/videos?q='
 
-    def various(self):
-        self.list = self.various_list()
-        self.list = sorted(self.list, key=itemgetter('name'))
-        index().showList(self.list)
-
-    def nickelodeon(self):
-        self.list = self.nickelodeon_list()
-        self.list = sorted(self.list, key=itemgetter('name'))
-        index().showList(self.list)
-
-    def classics(self):
-        #self.list = self.youtube_list3(addonClassics)
-        self.list = cache(self.youtube_list3, addonClassics)
-        self.list = sorted(self.list, key=itemgetter('name'))
-        index().showList(self.list)
-
-    def songs(self):
-        #self.list = self.youtube_list3(addonSongs)
-        self.list = cache(self.youtube_list3, addonSongs)
-        self.list = sorted(self.list, key=itemgetter('name'))
-        index().showList(self.list)
-
-    def various_list(self):
+    def shows(self):
+        try:
+            file = open(addonNickelodeon,'r')
+            result = file.read()
+            file.close()
+            nickelodeon_result = common.parseDOM(result, "show")
+        except:
+            pass
         try:
             file = open(addonVarious,'r')
             result = file.read()
             file.close()
-            shows = common.parseDOM(result, "show")
+            various_result = common.parseDOM(result, "show")
+        except:
+            pass
+        try:
+            file = open(favData, 'r')
+            read = file.read()
+            file.close()
         except:
             return
-        for show in shows:
+        match = re.compile('"(.+?)"[|]"(.+?)"[|]"(.+?)"[|]"(.+?)"').findall(read)
+        for name, imdb, url, image in match:
             try:
-                name = common.parseDOM(show, "name")[0]
-                name = common.replaceHTMLCodes(name)
-                name = name.encode('utf-8')
-                image = common.parseDOM(show, "image")[0]
-                image = common.replaceHTMLCodes(image)
-                image = image.encode('utf-8')
-                self.list.append({'name': name, 'url': 'various', 'image': image, 'fanart': image})
+                if url.startswith(link().youtube_api):
+                    fanart = None
+                elif url.startswith(link().nickelodeon_base):
+                    filter = [i for i in nickelodeon_result if url in common.replaceHTMLCodes(i)][0]
+                    fanart = common.parseDOM(filter, "fanart")[0]
+                    fanart = common.replaceHTMLCodes(fanart)
+                else:
+                    filter = [i for i in various_result if url in common.replaceHTMLCodes(i)][0]
+                    fanart = common.parseDOM(filter, "fanart")[0]
+                    fanart = common.replaceHTMLCodes(fanart)
             except:
-                pass
+                fanart = None
+            meta = {'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': 'Greek', 'plot': ''}
+            if not fanart == None: meta.update({'fanart': fanart})
+            self.list.append(meta)
 
-        return self.list
+        index().showList(self.list)
 
-    def nickelodeon_list(self):
+class link:
+    def __init__(self):
+        self.nickelodeon_base = 'http://www.nickelodeon.gr'
+
+        self.youtube_base = 'http://www.youtube.com'
+        self.youtube_api = 'http://gdata.youtube.com'
+        self.youtube_playlists = 'http://gdata.youtube.com/feeds/api/users/%s/playlists'
+        self.youtube_playlist = 'http://gdata.youtube.com/feeds/api/playlists/%s'
+        self.youtube_search = 'http://gdata.youtube.com/feeds/api/videos?q='
+        self.youtube_watch = 'http://www.youtube.com/watch?v=%s'
+        self.youtube_info = 'http://gdata.youtube.com/feeds/api/videos/%s?v=2'
+
+class shows:
+    def __init__(self):
+        self.list = []
+
+    def nickelodeon(self):
+        self.list = showList().data_list(addonNickelodeon)
+        index().showList(self.list)
+
+    def various(self):
+        self.list = showList().data_list(addonVarious)
+        index().showList(self.list)
+
+    def classics(self):
+        #self.list = showList().youtubedata_list(addonClassics)
+        self.list = cache(showList().youtubedata_list, addonClassics)
+        index().showList(self.list)
+
+    def songs(self):
+        #self.list = showList().youtubedata_list(addonSongs)
+        self.list = cache(showList().youtubedata_list, addonSongs)
+        index().showList(self.list)
+
+class showList:
+    def __init__(self):
+        self.list = []
+        self.data = []
+
+    def data_list(self, file):
         try:
-            file = open(addonNickelodeon,'r')
+            file = open(file,'r')
             result = file.read()
             file.close()
             shows = common.parseDOM(result, "show")
@@ -606,57 +675,21 @@ class shows:
                 url = common.parseDOM(show, "url")[0]
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
-                image = common.parseDOM(show, "image")[0]
+                image = common.parseDOM(show, "poster")[0]
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
-                self.list.append({'name': name, 'url': url, 'image': image, 'fanart': image})
+                fanart = common.parseDOM(show, "fanart")[0]
+                fanart = common.replaceHTMLCodes(fanart)
+                fanart = fanart.encode('utf-8')
+                self.list.append({'name': name, 'url': url, 'image': image, 'fanart': fanart, 'imdb': '0', 'genre': 'Greek', 'plot': ''})
             except:
                 pass
 
         return self.list
 
-    def youtube_list(self, channel):
+    def youtubedata_list(self, file):
         try:
-            threads = []
-            for i in range(1, 250, 25):
-                showsUrl = self.youtube_showsUrl % channel + '?max-results=25&start-index=%s' % str(i)
-                threads.append(Thread(self.youtube_list2, showsUrl))
-            [i.start() for i in threads]
-            [i.join() for i in threads]
-            result = self.data
-            shows = common.parseDOM(result, "entry")
-        except:
-            return
-        for show in shows:
-            try:
-                name = common.parseDOM(show, "title")[0]
-                name = common.replaceHTMLCodes(name)
-                name = name.encode('utf-8')
-                url = common.parseDOM(show, "id")[0]
-                url = self.youtube_episodeUrl % url.split("/")[-1]
-                url = common.replaceHTMLCodes(url)
-                url = url.encode('utf-8')
-                image = common.parseDOM(show, "media:thumbnail", ret="url")[0]
-                image = image.replace(image.split("/")[-1], '0.jpg')
-                image = image.encode('utf-8')
-                if image.endswith("/00000000000/0.jpg"): continue #empty playlist
-                self.list.append({'name': name, 'channel': channel, 'url': url, 'image': image})
-            except:
-                pass
-
-        self.list = sorted(self.list, key=itemgetter('name'))
-        return self.list
-
-    def youtube_list2(self, url):
-        try:
-            result = getUrl(url).result
-            self.data += result
-        except:
-            return
-
-    def youtube_list3(self, xmlFile):
-        try:
-            file = open(xmlFile,'r')
+            file = open(file,'r')
             result = file.read()
             file.close()
             shows = common.parseDOM(result, "channel")
@@ -667,7 +700,7 @@ class shows:
             try:
                 url = common.parseDOM(show, "url")[0]
                 channel = url.split("/")[-1]
-                self.youtube_list(channel)
+                self.youtube_list(channel, [])
             except:
                 pass
 
@@ -684,57 +717,94 @@ class shows:
                 includes = common.parseDOM(show, "include")
                 if includes == []: raise Exception()
                 for i in range(0, len(includes)):
-                    includes[i] = self.youtube_episodeUrl % includes[i].split("list=")[-1]
+                    includes[i] = link().youtube_playlist % includes[i].split("list=")[-1]
                 x = [i for i in self.list if not i['channel'] == channel]
                 x += [i for i in self.list if i['channel'] == channel and i['url'] in includes]
                 self.list = x
             except:
                 pass
-
         for show in shows:
             try:
                 excludes = common.parseDOM(show, "exclude")
                 if excludes == []: raise Exception()
                 for i in range(0, len(excludes)):
-                    excludes[i] = self.youtube_episodeUrl % excludes[i].split("list=")[-1]
+                    excludes[i] = link().youtube_playlist % excludes[i].split("list=")[-1]
                 x = [i for i in self.list if not i['url'] in excludes]
                 self.list = x
             except:
                 pass
 
+        self.list = sorted(self.list, key=itemgetter('name'))
         return self.list
 
-class episodes:
+    def youtube_list(self, channel, filter):
+        try:
+            count = 0
+            threads = []
+            result = ''
+            for i in range(1, 250, 25):
+                self.data.append('')
+                showsUrl = link().youtube_playlists % channel + '?max-results=25&start-index=%s' % str(i)
+                threads.append(Thread(self.thread, showsUrl, count))
+                count = count + 1
+            [i.start() for i in threads]
+            [i.join() for i in threads]
+            for i in self.data: result += i
+
+            shows = common.parseDOM(result, "entry")
+        except:
+            return
+        for show in shows:
+            try:
+                name = common.parseDOM(show, "title")[0]
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+                url = common.parseDOM(show, "id")[0]
+                url = link().youtube_playlist % url.split("/")[-1]
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+                image = common.parseDOM(show, "media:thumbnail", ret="url")[0]
+                image = image.replace(image.split("/")[-1], '0.jpg')
+                image = image.encode('utf-8')
+                if image.endswith("/00000000000/0.jpg"): raise Exception() #empty playlist
+                if any(url.endswith(i) for i in filter): raise Exception()
+                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': 'Greek', 'plot': '', 'channel': channel})
+            except:
+                pass
+
+        return self.list
+
+    def thread(self, url, i):
+        try:
+            result = getUrl(url).result
+            self.data[i] = result
+        except:
+            return
+
+class episodeList:
     def __init__(self):
         self.list = []
         self.data = []
-        self.nickelodeonUrl			= 'http://www.nickelodeon.gr'
-        self.youtubeUrl				= 'http://gdata.youtube.com'
-        self.youtube_showsUrl		= 'http://gdata.youtube.com/feeds/api/users/%s/playlists'
-        self.youtube_episodeUrl		= 'http://gdata.youtube.com/feeds/api/playlists/%s'
-        self.youtube_recentUrl		= 'http://gdata.youtube.com/feeds/api/users/%s/uploads'
-        self.youtube_searchUrl		= 'http://gdata.youtube.com/feeds/api/videos?q='
 
-    def get(self, show, url):
-        if url.startswith(self.nickelodeonUrl):
-            self.list = self.nickelodeon_list(show, url)
-        elif url.startswith(self.youtubeUrl):
-            self.list = self.youtube_list(show, url)
+    def get(self, name, url, image, imdb, genre, plot, show):
+        if url.startswith(link().youtube_api):
+            self.list = self.youtube_list(name, url, image, imdb, genre, plot, show)
+        elif url.startswith(link().nickelodeon_base):
+            self.list = self.nickelodeon_list(name, url, image, imdb, genre, plot, show)
         else:
-            self.list = self.various_list(show, url)
+            self.list = self.various_list(name, url, image, imdb, genre, plot, show)
         index().episodeList(self.list)
 
-    def various_list(self, show, url):
+
+    def various_list(self, name, url, image, imdb, genre, plot, show):
         try:
             file = open(addonVarious,'r')
             result = file.read()
             file.close()
-            quote = urllib.quote_plus(show).replace('%','').replace('+','')
-            result = result.replace('name="%s"' % show, 'name="%s"' % quote)
-            result = common.parseDOM(result, "show", attrs = { "name": quote })[0]
-
-            episodes = common.parseDOM(result, "episode")
-            image = common.parseDOM(result, "image")[0]
+            result = common.parseDOM(result, "show")
+            filter = [i for i in result if url in common.replaceHTMLCodes(i)][0]
+            episodes = common.parseDOM(filter, "episode")
+            image = common.parseDOM(filter, "fanart")[0]
             image = common.replaceHTMLCodes(image)
             image = image.encode('utf-8')
         except:
@@ -748,42 +818,40 @@ class episodes:
                 url = cryptUrl().decode(url.encode('utf-8'))
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
-                self.list.append({'name': name, 'show': show, 'url': url, 'image': image, 'fanart': image})
+                self.list.append({'name': name, 'url': url, 'image': image, 'fanart': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1'})
             except:
                 pass
 
         return self.list
 
-    def nickelodeon_list(self, show, url):
+    def nickelodeon_list(self, name, url, image, imdb, genre, plot, show):
         try:
             file = open(addonNickelodeon,'r')
             result = file.read()
             file.close()
-            quote = urllib.quote_plus(show).replace('%','').replace('+','')
-            result = result.replace('name="%s"' % show, 'name="%s"' % quote)
-            result = common.parseDOM(result, "show", attrs = { "name": quote })[0]
-
-            image = common.parseDOM(result, "image")[0]
+            result = common.parseDOM(result, "show")
+            filter = [i for i in result if url in common.replaceHTMLCodes(i)][0]
+            image = common.parseDOM(filter, "fanart")[0]
             image = common.replaceHTMLCodes(image)
             image = image.encode('utf-8')
         except:
-            return
-
+            pass
         try:
+            count = 0
             threads = []
-            result = ""
+            result = ''
             for i in range(0, 75, 15):
-                for x in range(1, 15): self.data.append('')
+                self.data.append('')
                 episodesUrl = url + '?start=%s' % str(i)
-                threads.append(Thread(self.nickelodeon_list2, episodesUrl, i))
+                threads.append(Thread(self.thread, episodesUrl, count))
+                count = count + 1
             [i.start() for i in threads]
             [i.join() for i in threads]
             for i in self.data: result += i
 
             episodes = common.parseDOM(result, "div", attrs = { "class": "catItemImageBlock" })
         except:
-            return
-
+        	return
         for episode in episodes:
             try:
                 name = common.parseDOM(episode, "a", ret="title")[0]
@@ -793,62 +861,34 @@ class episodes:
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
                 url = common.parseDOM(episode, "a", ret="href")[0]
-                url = '%s%s' % (self.nickelodeonUrl, url)
+                url = '%s%s' % (link().nickelodeon_base, url)
                 url = url.encode('utf-8')
                 for i in self.list:
                     if name == i['name']: raise Exception()
-
-                self.list.append({'name': name, 'show': show, 'sort': sort, 'url': url, 'image': image, 'fanart': image})
+                self.list.append({'name': name, 'url': url, 'image': image, 'fanart': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1', 'sort': sort})
             except:
                 pass
 
         self.list = sorted(self.list, key=itemgetter('sort'))
         return self.list
 
-    def nickelodeon_list2(self, url, i):
+    def youtube_list(self, name, url, image, imdb, genre, plot, show):
         try:
-            result = getUrl(url).result
-            self.data[i] = result
-        except:
-            return
+            count = 0
+            threads = []
+            result = ''
+            for i in range(1, 250, 25):
+                self.data.append('')
+                episodesUrl = url + '?max-results=25&start-index=%s' % str(i)
+                threads.append(Thread(self.thread, episodesUrl, count))
+                count = count + 1
+            [i.start() for i in threads]
+            [i.join() for i in threads]
+            for i in self.data: result += i
 
-    def youtube_list(self, show, url):
-        try:
-            if not url.startswith(self.youtube_searchUrl):
-                threads = []
-                result = ""
-                for i in range(1, 250, 25):
-                    for x in range(1, 25): self.data.append('')
-                    episodesUrl = url + '?max-results=25&start-index=%s' % str(i)
-                    threads.append(Thread(self.youtube_list2, episodesUrl, i))
-                [i.start() for i in threads]
-                [i.join() for i in threads]
-                for i in self.data: result += i
-                episodes = common.parseDOM(result, "entry")
-            else:
-                url = url.decode('iso-8859-7').encode('utf-8')
-                params = url.split("?")[-1]
-                params = dict(arg.split("=") for arg in params.split("&"))
-                query = params["q"]
-                match = urllib.quote_plus(query).replace('%','').replace('+','')
-                url = url.replace(query, urllib.quote_plus(query))
-                threads = []
-                result = ""
-                for i in range(1, 250, 25):
-                    for x in range(1, 25): self.data.append('')
-                    episodesUrl = url + '&max-results=25&start-index=%s' % str(i)
-                    threads.append(Thread(self.youtube_list2, episodesUrl, i))
-                [i.start() for i in threads]
-                [i.join() for i in threads]
-                for i in self.data: result += i
-                episodes = []
-                filter = common.parseDOM(result, "entry")
-                for episode in filter:
-                    name = common.parseDOM(episode, "title")[0]
-                    name = urllib.quote_plus(name.encode('utf-8')).replace('%','').replace('+','')
-                    if match in name: episodes.append(episode)
+            episodes = common.parseDOM(result, "entry")
         except:
-            return
+        	return
         for episode in episodes:
             try:
                 name = common.parseDOM(episode, "title")[0]
@@ -856,19 +896,20 @@ class episodes:
                 name = name.encode('utf-8')
                 url = common.parseDOM(episode, "media:player", ret="url")[0]
                 url = url.split("&amp;")[0].split("=")[-1]
-                url = 'http://www.youtube.com/watch?v=%s' % url
+                url = link().youtube_watch % url
                 url = url.encode('utf-8')
                 image = common.parseDOM(episode, "media:thumbnail", ret="url")[0]
                 image = image.replace(image.split("/")[-1], '0.jpg')
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
-                self.list.append({'name': name, 'show': show, 'url': url, 'image': image})
+                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1'})
             except:
                 pass
 
         return self.list
 
-    def youtube_list2(self, url, i):
+
+    def thread(self, url, i):
         try:
             result = getUrl(url).result
             self.data[i] = result
@@ -876,92 +917,15 @@ class episodes:
             return
 
 class player:
-    def __init__(self):
-        self.nickelodeonUrl		= 'http://www.nickelodeon.gr'
-        self.flashxUrl			= 'http://flashx.tv'
-        self.streamcloudUrl		= 'http://streamcloud.eu'
-        self.putlockerUrl		= 'http://www.putlocker.com'
-        self.youtubeUrl			= 'http://www.youtube.com'
-        self.youtube_infoUrl	= 'http://gdata.youtube.com/feeds/api/videos/%s?v=2'
-
-    def run(self, url):
-        if url.startswith(self.flashxUrl):
-            url = self.flashx(url)
-        elif url.startswith(self.streamcloudUrl):
-            url = self.streamcloud(url)
-        elif url.startswith(self.putlockerUrl):
-            url = self.putlocker(url)
-        elif url.startswith(self.nickelodeonUrl):
-            url = self.nickelodeon(url)
-        elif url.startswith(self.youtubeUrl):
-            url = self.youtube(url)
-
-        if url is None: return
-        item = xbmcgui.ListItem(path=url)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
-        return url
-
-    def flashx(self, url):
+    def run(self, url, name=None):
         try:
-            result = getUrl(url).result
-            embedUrl = re.compile('"(http://play.flashx.tv/player/embed.php.+?)"').findall(result)[0]
-
-            post = ''
-            result = getUrl(embedUrl).result
-            php = re.compile('action="(.+?.php)"').findall(result)[0]
-            phpUrl = 'http://play.flashx.tv/player/%s' % php
-            match = common.parseDOM(result, "form", attrs = { "action": php })[0]
-            match = re.compile('name="(.+?)".+?value="(.+?)"').findall(match)
-            for name, value in match:
-                post += '%s=%s&' % (name, urllib.quote_plus(value))
-
-            result = getUrl(phpUrl,post=post).result
-            swfUrl = re.compile('"nuevoplayer".+?data="(.+?)"').findall(result)[0]
-            cfgUrl = swfUrl.split("?config=")[-1]
-
-            getUrl(swfUrl,referer=phpUrl).result
-            result = getUrl(cfgUrl,referer=phpUrl).result
-            url = common.parseDOM(result, "file")[0]
-
-            return url
+            if url.startswith(link().nickelodeon_base): url = self.nickelodeon(url)
+            elif url.startswith(link().youtube_base): url = self.youtube(url)
+            else: url = self.urlresolver(url)
+            if url is None: raise Exception()
+            index().resolve(url)
         except:
-            return
-
-    def streamcloud(self, url):
-        try:
-            import time
-            result = getUrl(url).result
-
-            post = ''
-            match = common.parseDOM(result, "form", attrs = { "class": "proform" })[0]
-            match = re.compile('name="(.+?)".+?value="(.+?)"').findall(match)
-            for name, value in match:
-                post += '%s=%s&' % (name, urllib.quote_plus(value))
-
-            count = re.compile('var count(.+?)\n').findall(result)[0]
-            count = int(re.sub("\D", "", count)) + 1
-
-            time.sleep(count)
-            result = getUrl(url,post=post).result
-            url = re.compile('file: "(.+?)"').findall(result)[0]
-
-            return url
-        except:
-            return
-
-    def putlocker(self, url):
-        try:
-            import urlparse
-            try: password = urlparse.parse_qs(urlparse.urlparse(url).query)['file_password'][0]
-            except: password = ''
-            result = getUrl(url).result
-            hash = re.compile('value="(.+?)".+?name="hash"').findall(result)[0]
-            post = 'hash=%s&confirm=Continue+as+Free+User&file_password=%s' % (hash, password)
-            result = getUrl(url,post=post).result
-            url = re.compile('href="(.+?)".+?class="download_file_link"').findall(result)[0]
-            url = "http://putlocker.com%s" % url
-            return url
-        except:
+            index().infoDialog(language(30317).encode("utf-8"))
             return
 
     def nickelodeon(self, url):
@@ -974,11 +938,22 @@ class player:
         except:
             return
 
+    def urlresolver(self, url):
+        try:
+            host = urlresolver.HostedMediaFile(url)
+            if host: url = urlresolver.resolve(url)
+            if url: return url
+        except:
+            return
+
     def youtube(self, url):
         try:
-            id = url.split("?v=")[-1]
+            if index().addon_status('plugin.video.youtube') is None:
+                index().okDialog(language(30321).encode("utf-8"), language(30322).encode("utf-8"))
+                return
+            id = url.split("?v=")[-1].split("/")[-1].split("?")[0].split("&")[0]
             state, reason = None, None
-            result = getUrl(self.youtube_infoUrl % id).result
+            result = getUrl(link().youtube_info % id).result
             try:
                 state = common.parseDOM(result, "yt:state", ret="name")[0]
                 reason = common.parseDOM(result, "yt:state", ret="reasonCode")[0]
@@ -986,17 +961,15 @@ class player:
                 pass
             if state == 'deleted' or state == 'rejected' or state == 'failed' or reason == 'requesterRegion' : return
             try:
-                result = getUrl(url).result
+                result = getUrl(link().youtube_watch % id).result
                 alert = common.parseDOM(result, "div", attrs = { "id": "watch7-notification-area" })[0]
                 return
             except:
                 pass
-            if index().addon_status('plugin.video.youtube') is None:
-                index().okDialog(language(30351).encode("utf-8"), language(30352).encode("utf-8"))
-                return
             url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % id
             return url
         except:
             return
+
 
 main()

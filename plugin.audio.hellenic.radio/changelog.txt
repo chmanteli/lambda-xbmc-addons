@@ -1,4 +1,15 @@
 ------------------------
+Hellenic Radio v2.0.3 (18-Nov-13)
+------------------------
+
+- Added new art.
+- Updated existing radios.
+- Re-work of views.
+- Tweaked context menus.
+- Code cosmetics.
+
+
+------------------------
 Hellenic Radio v2.0.2 (1-Oct-13)
 ------------------------
 

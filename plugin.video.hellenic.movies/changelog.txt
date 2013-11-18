@@ -1,4 +1,16 @@
 ------------------------
+Hellenic Movies v2.0.1 (18-Nov-13)
+------------------------
+
+- Added search option in favourites.
+- Added new art.
+- Now using urlresolver.
+- Re-work of views.
+- Tweaked context menus.
+- Code cosmetics.
+
+
+------------------------
 Hellenic Movies v2.0.0 (1-Oct-13)
 ------------------------
 

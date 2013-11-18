@@ -1,4 +1,18 @@
 ------------------------
+Hellenic Toons v2.0.3 (18-Nov-13)
+------------------------
+
+- Added new art.
+- Added more shows from various sources.
+- Now using posters for Nickelodeon and various sources.
+- Note: Your favourites have to be re-added.
+- Now using urlresolver.
+- Re-work of views.
+- Tweaked context menus.
+- Code cosmetics.
+
+
+------------------------
 Hellenic Toons v2.0.2 (21-Oct-13)
 ------------------------
 

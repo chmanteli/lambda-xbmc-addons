@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="plugin.audio.alpha989" name="Alpha Podcast" version="2.0.1" provider-name="lambda">
+<addon id="plugin.audio.hellenic.podcasts" name="Hellenic Podcasts" version="1.0.0" provider-name="lambda">
 	<requires>
-		<import addon="xbmc.addon" version="12.0.0"/>
 		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
 		<import addon="script.module.parsedom" version="0.9.1"/>
@@ -11,19 +10,18 @@
 		<provides>audio</provides>
 	</extension>
 	<extension point="xbmc.addon.metadata">
-		<summary lang="en">Alpha 989 broadcasts radio programmes on demand.</summary>
-		<summary lang="el">Ο Alpha 989 αναμεταδίδει εκπομπές των παραγωγών του.</summary>
-		<description lang="en">Alpha 989 broadcasts radio programmes on demand.[CR]Listen whenever you want news from Greece and the world, entertainment programs and keep being informed of all developments.</description>
-		<description lang="el">Ο Alpha 989 αναμεταδίδει εκπομπές των παραγωγών του.[CR]Ακούστε όταν επιθυμείτε ειδήσεις από την Ελλάδα και τον κόσμο, ενημέρωση για όλες τις εξελίξεις και ψυχαγωγικές εκπομπές.</description>
+		<summary lang="en">Listen the latest podcasts from Greek radio stations</summary>
+		<summary lang="el">Ακούστε πρόσφατες εκπομπές από ελληνικούς ραδιοφωνικούς σταθμούς</summary>
+		<description lang="en">Listen the latest podcasts from Greek radio stations.[CR]The addon includes news from Greece and the world and keeps you informed of all developments.</description>
+		<description lang="el">Ακούστε πρόσφατες εκπομπές από ελληνικούς ραδιοφωνικούς σταθμούς.[CR]Το πρόσθετο περιλαμβάνει ειδήσεις από την Ελλάδα και τον κόσμο.</description>
 		<disclaimer lang="en">Τhis addon offers content available in Greece.</disclaimer>
 		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο στην Ελλάδα.</disclaimer>
 		<platform>all</platform>
 	</extension>
 </addon>
 
-<addon id="plugin.audio.hellenic.radio" name="Hellenic Radio" version="2.0.2" provider-name="lambda">
+<addon id="plugin.audio.hellenic.radio" name="Hellenic Radio" version="2.0.3" provider-name="lambda">
 	<requires>
-		<import addon="xbmc.addon" version="12.0.0"/>
 		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.module.parsedom" version="0.9.1"/>
 		<import addon="plugin.video.youtube" version="2.9.2"/>
@@ -36,48 +34,6 @@
 		<summary lang="el">Ραδιοφωνικοί σταθμοί από την Ελλάδα.</summary>
 		<description lang="en">Listen to your favourite radio stations from Greece.</description>
 		<description lang="el">Ακούστε τους αγαπημένους σας ραδιοφωνικούς σταθμούς από την Ελλάδα.</description>
-		<disclaimer lang="en">Τhis addon offers content available in Greece.</disclaimer>
-		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο στην Ελλάδα.</disclaimer>
-		<platform>all</platform>
-	</extension>
-</addon>
-
-<addon id="plugin.audio.real.gr" name="RealFm Podcast" version="2.0.2" provider-name="lambda">
-	<requires>
-		<import addon="xbmc.addon" version="12.0.0"/>
-		<import addon="xbmc.python" version="2.1.0"/>
-		<import addon="script.common.plugin.cache" version="0.9.1"/>
-		<import addon="script.module.parsedom" version="0.9.1"/>
-	</requires>
-	<extension point="xbmc.python.pluginsource" library="default.py">
-		<provides>audio</provides>
-	</extension>
-	<extension point="xbmc.addon.metadata">
-		<summary lang="en">Real Fm broadcasts radio programmes on demand.</summary>
-		<summary lang="el">Ο Real Fm αναμεταδίδει εκπομπές των παραγωγών του.</summary>
-		<description lang="en">Real Fm broadcasts radio programmes on demand.[CR]Listen whenever you want news from Greece and the world, entertainment programs and keep being informed of all developments.</description>
-		<description lang="el">Ο Real Fm αναμεταδίδει εκπομπές των παραγωγών του.[CR]Ακούστε όταν επιθυμείτε ειδήσεις από την Ελλάδα και τον κόσμο, ενημέρωση για όλες τις εξελίξεις και ψυχαγωγικές εκπομπές.</description>
-		<disclaimer lang="en">Τhis addon offers content available in Greece.</disclaimer>
-		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο στην Ελλάδα.</disclaimer>
-		<platform>all</platform>
-	</extension>
-</addon>
-
-<addon id="plugin.audio.skai.gr" name="SKAI Podcast" version="2.0.1" provider-name="lambda">
-	<requires>
-		<import addon="xbmc.addon" version="12.0.0"/>
-		<import addon="xbmc.python" version="2.1.0"/>
-		<import addon="script.common.plugin.cache" version="0.9.1"/>
-		<import addon="script.module.parsedom" version="0.9.1"/>
-	</requires>
-	<extension point="xbmc.python.pluginsource" library="default.py">
-		<provides>audio</provides>
-	</extension>
-	<extension point="xbmc.addon.metadata">
-		<summary lang="en">SKAI broadcasts radio programmes on demand.</summary>
-		<summary lang="el">Ο ΣΚΑΪ αναμεταδίδει εκπομπές των παραγωγών του.</summary>
-		<description lang="en">SKAI broadcasts radio programmes on demand.[CR]Listen whenever you want news from Greece and the world, entertainment programs and keep being informed of all developments.</description>
-		<description lang="el">Ο ΣΚΑΪ αναμεταδίδει εκπομπές των παραγωγών του.[CR]Ακούστε όταν επιθυμείτε ειδήσεις από την Ελλάδα και τον κόσμο, ενημέρωση για όλες τις εξελίξεις και ψυχαγωγικές εκπομπές.</description>
 		<disclaimer lang="en">Τhis addon offers content available in Greece.</disclaimer>
 		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο στην Ελλάδα.</disclaimer>
 		<platform>all</platform>
@@ -106,10 +62,10 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.hellenic.movies" name="Hellenic Movies" version="2.0.0" provider-name="lambda">
+<addon id="plugin.video.hellenic.movies" name="Hellenic Movies" version="2.0.1" provider-name="lambda">
 	<requires>
-		<import addon="xbmc.addon" version="12.0.0"/>
 		<import addon="xbmc.python" version="2.1.0"/>
+		<import addon="script.module.urlresolver" version="1.0.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
 		<import addon="script.module.parsedom" version="0.9.1"/>
 		<import addon="plugin.video.youtube" version="2.9.2"/>
@@ -128,11 +84,11 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.hellenic.player" name="Hellenic Player" version="1.0.0" provider-name="lambda">
+<addon id="plugin.video.hellenic.player" name="Hellenic Player" version="1.0.1" provider-name="lambda">
 	<requires>
-		<import addon="xbmc.addon" version="12.0.0"/>
 		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="plugin.video.hellenic.tv" version="2.4.0"/>
+		<import addon="script.module.simplejson" version="2.0.10"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
 		<import addon="script.module.parsedom" version="0.9.1"/>
 		<import addon="plugin.video.youtube" version="2.9.2"/>
@@ -151,10 +107,10 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.hellenic.toons" name="Hellenic Toons" version="2.0.2" provider-name="lambda">
+<addon id="plugin.video.hellenic.toons" name="Hellenic Toons" version="2.0.3" provider-name="lambda">
 	<requires>
-		<import addon="xbmc.addon" version="12.0.0"/>
 		<import addon="xbmc.python" version="2.1.0"/>
+		<import addon="script.module.urlresolver" version="1.0.0"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
 		<import addon="script.module.parsedom" version="0.9.1"/>
 		<import addon="plugin.video.youtube" version="2.9.2"/>
@@ -165,18 +121,16 @@
 	<extension point="xbmc.addon.metadata">
 		<summary lang="en">Watch beloved cartoons in Greek</summary>
 		<summary lang="el">Δείτε αγαπημένα κινούμενα σχέδια στα Ελληνικά</summary>
-		<description lang="en">Watch beloved cartoons and kid songs in Greek.[CR]All programmes are broadcasted by Nickelodeon and YouTube.</description>
-		<description lang="el">Δείτε αγαπημένα κινούμενα σχέδια και παιδικά τραγούδια στα Ελληνικά.[CR]Όλα τα προγράμματα μεταδίδονται από το Nickelodeon και το YouTube.</description>
-		<disclaimer lang="en">Τhis addon offers content available in Greece.</disclaimer>
-		<disclaimer lang="el">Το πρόσθετο αυτό προσφέρει περιεχόμενο διαθέσιμο στην Ελλάδα.</disclaimer>
+		<description lang="en">Watch beloved cartoons and kid songs in Greek.[CR]All programmes are broadcasted by Nickelodeon and other sources.</description>
+		<description lang="el">Δείτε αγαπημένα κινούμενα σχέδια και παιδικά τραγούδια στα Ελληνικά.[CR]Όλα τα προγράμματα μεταδίδονται από το Nickelodeon και άλλες πηγές.</description>
+		<disclaimer lang="en">The author does not host or distribute any of the content displayed by this addon. The author does not have any affiliation with the content provider.</disclaimer>
+		<disclaimer lang="el">Ο συγγραφέας δεν φιλοξενεί ή διανέμει οποιοδήποτε περιεχόμενο που εμφανίζεται από τo πρόσθετο αυτό. Ο συγγραφέας δεν έχει καμία σχέση με τον πάροχο του περιεχομένου.</disclaimer>
 		<platform>all</platform>
 	</extension>
 </addon>
 
-<addon id="plugin.video.hellenic.tv" name="Hellenic TV" version="2.4.0" provider-name="lambda">
+<addon id="plugin.video.hellenic.tv" name="Hellenic TV" version="2.4.1" provider-name="lambda">
 	<requires>
-		<import addon="xbmc.addon" version="12.0.0"/>
-		<import addon="xbmc.json" version="6.0.0"/>
 		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.module.simplejson" version="2.0.10"/>
 		<import addon="script.module.parsedom" version="0.9.1"/>

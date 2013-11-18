@@ -150,7 +150,7 @@
 			<band>90,4</band>
 			<genre>News</genre>
 			<area>Attica</area>
-			<url>rtmp://fml.A6B8.edgecastcdn.net/20A6B8/radio1</url>
+			<url>rtmp://212.205.46.42/dimospeiraia/live1.stream</url>
 			<base>http://kanaliena.gr/</base>
 		</radio>
 		<radio active="True">
@@ -335,7 +335,7 @@
 			<band>99,5</band>
 			<genre>News</genre>
 			<area>Attica</area>
-			<url>mmsh://music.vimafm995.gr/vimafm</url>
+			<url>http://vimafm.live24.gr/vimafm</url>
 			<base>http://www.tovima.gr/vimafm/</base>
 		</radio>
 	</area>
@@ -749,8 +749,8 @@
 			<band></band>
 			<genre>Eclectic</genre>
 			<area>Internet</area>
-			<url>http://159.253.149.12:9848/</url>
-			<base>http://www.karmaradio.gr/</base>
+			<url>http://109.169.27.91:24180/</url>
+			<base>http://www.karmaradio.eu/</base>
 		</radio>
 		<radio active="True">
 			<name>MORE RADIO</name>
@@ -1307,7 +1307,7 @@
 			<band>95,7</band>
 			<genre>Greek</genre>
 			<area>Epirus</area>
-			<url>http://85.17.30.90:8044/</url>
+			<url>http://144.76.84.8:8044/</url>
 			<base>http://www.starfmioannina.gr/</base>
 		</radio>
 		<radio active="True">
@@ -1641,7 +1641,7 @@
 			<band>89,9</band>
 			<genre>Greek</genre>
 			<area>Thrace</area>
-			<url>http://87.117.208.118:23127/</url>
+			<url>http://s6.myradiostream.com:4046/</url>
 			<base>http://www.radio899.gr/</base>
 		</radio>
 		<radio active="True">
@@ -2055,7 +2055,7 @@
 			<band>88,7</band>
 			<genre>Traditional</genre>
 			<area>Crete</area>
-			<url>http://s1.onweb.gr:8852/</url>
+			<url>http://50.7.77.114:8401/</url>
 			<base>http://www.kritikosfm.gr/</base>
 		</radio>
 		<radio active="True">
@@ -2199,7 +2199,7 @@
 			<band>104,5</band>
 			<genre>Greek</genre>
 			<area>Crete</area>
-			<url>mmsh://stream.1045.gr/1045fm</url>
+			<url>http://stream.1045.gr/1045fm</url>
 			<base>http://www.1045.gr/</base>
 		</radio>
 		<radio active="True">
@@ -3008,7 +3008,7 @@
 			<band>90,5</band>
 			<genre>Laika</genre>
 			<area>Peloponnese</area>
-			<url>http://72.55.149.162:21324/</url>
+			<url>http://95.154.254.157:12046/</url>
 			<base>http://nedousa.listen2myradio.com/</base>
 		</radio>
 		<radio active="True">
