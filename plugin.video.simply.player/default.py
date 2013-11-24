@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import urllib,urllib2,re,os,threading,datetime,xbmc,xbmcplugin,xbmcgui,xbmcaddon
+import urllib,urllib2,re,os,threading,datetime,xbmc,xbmcplugin,xbmcgui,xbmcaddon,xbmcvfs
 from operator import itemgetter
 try:    import CommonFunctions
 except: import commonfunctionsdummy as CommonFunctions
@@ -130,7 +130,7 @@ class main:
         elif action == 'library':                   contextMenu().library(name, url)
         elif action == 'library2':                  contextMenu().library2(name, url)
         elif action == 'download':                  contextMenu().download(name, url)
-        elif action == 'trailer':                   contextMenu().trailer(url)
+        elif action == 'trailer':                   contextMenu().trailer(name, url)
         elif action == 'movies_favourites':         favourites().movies()
         elif action == 'shows_favourites':          favourites().shows()
         elif action == 'shows_subscriptions':       subscriptions().shows()
@@ -151,7 +151,7 @@ class main:
         elif action == 'pages_shows':               pages().simplymovies_shows()
         elif action == 'genres_movies':             genres().simplymovies_movies()
         elif action == 'genres_shows':              genres().simplymovies_shows()
-        elif action == 'play':                      player().run(url, name)
+        elif action == 'play':                      resolver().run(url, name)
 
         if action is None:
             pass
@@ -219,6 +219,164 @@ class Thread(threading.Thread):
     def run(self):
         self._target(*self._args)
 
+class player(xbmc.Player):
+    def __init__ (self):
+        self.property = addonName+'player_status'
+        xbmc.Player.__init__(self)
+
+    def status(self):
+        getProperty = index().getProperty(self.property)
+        index().clearProperty(self.property)
+        if not xbmc.getInfoLabel('Container.FolderPath') == '': return
+        if getProperty == 'true': return True
+        return
+
+    def run(self, name, url):
+        if xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
+            item = xbmcgui.ListItem(path=url)
+            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+        else:
+            try: season = re.compile('S(\d{3})E\d*').findall(name)[-1]
+            except: season = None
+            try: season = re.compile('S(\d{2})E\d*').findall(name)[-1]
+            except: season = None
+            try: episode = re.compile('S%sE(\d*)' % (season)).findall(name)[-1]
+            except: episode = None
+            try: year = re.compile('[(](\d{4})[)]').findall(name)[-1]
+            except: year = None
+            try:
+                if not (season is None and episode is None):
+                	show = name.replace('S%sE%s' % (season, episode), '').strip()
+                	season, episode = '%01d' % int(season), '%01d' % int(episode)
+                	imdb = metaget.get_meta('tvshow', show)['imdb_id']
+                	imdb = re.sub("[^0-9]", "", imdb)
+                	meta = metaget.get_episode_meta('', imdb, season, episode)
+                	meta.update({'tvshowtitle': show})
+                	poster = meta['cover_url']
+                elif not year is None:
+                	title = name.replace('(%s)' % year, '').strip()
+                	meta = metaget.get_meta('movie', title ,year=year ,overlay=6)
+                	poster = meta['cover_url']
+                else: raise Exception()
+            except:
+            	meta = {'label' : name, 'title' : name}
+            	poster = ''
+            item = xbmcgui.ListItem(path=url, iconImage="DefaultVideo.png", thumbnailImage=poster)
+            item.setInfo( type="Video", infoLabels= meta )
+            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+
+        for i in range(1, 21):
+            try: self.totalTime = self.getTotalTime()
+            except: self.totalTime = 0
+            if not self.totalTime == 0: continue
+            xbmc.sleep(1000)
+        if self.totalTime == 0: return
+
+        subtitles().get(name)
+
+        self.season = str(xbmc.getInfoLabel('VideoPlayer.season'))
+        self.episode = str(xbmc.getInfoLabel('VideoPlayer.episode'))
+        if self.season == '' or self.episode == '':
+            self.content = 'movie'
+            self.imdb = metaget.get_meta('movie', xbmc.getInfoLabel('VideoPlayer.title') ,year=str(xbmc.getInfoLabel('VideoPlayer.year')))['imdb_id']
+            self.imdb = re.sub("[^0-9]", "", self.imdb)
+        else:
+            self.content = 'episode'
+            self.imdb = metaget.get_meta('tvshow', xbmc.getInfoLabel('VideoPlayer.tvshowtitle'))['imdb_id']
+            self.imdb = re.sub("[^0-9]", "", self.imdb)
+
+        while True:
+            try: self.currentTime = self.getTime()
+            except: break
+            xbmc.sleep(1000)
+
+    def onPlayBackEnded(self):
+        if xbmc.getInfoLabel('Container.FolderPath') == '': index().setProperty(self.property, 'true')
+        if not self.currentTime / self.totalTime >= .9: return
+        metaget.change_watched(self.content, '', self.imdb, season=self.season, episode=self.episode, year='', watched='')
+        index().container_refresh()
+
+    def onPlayBackStopped(self):
+        index().clearProperty(self.property)
+
+class subtitles:
+    def get(self, name):
+        subs = getSetting("subs")
+        if subs == '1': self.greek(name)
+
+    def greek(self, name):
+        try:
+            import shutil, zipfile, time
+            sub_tmp = os.path.join(dataPath,'sub_tmp')
+            sub_tmp2 = os.path.join(sub_tmp, "subs")
+            sub_stream = os.path.join(dataPath,'sub_stream')
+            sub_file = os.path.join(sub_tmp, 'sub_tmp.zip')
+            try: os.makedirs(dataPath)
+            except: pass
+            try: os.remove(sub_tmp)
+            except: pass
+            try: shutil.rmtree(sub_tmp)
+            except: pass
+            try: os.makedirs(sub_tmp)
+            except: pass
+            try: os.remove(sub_stream)
+            except: pass
+            try: shutil.rmtree(sub_stream)
+            except: pass
+            try: os.makedirs(sub_stream)
+            except: pass
+
+            subtitles = []
+            query = ''.join(e for e in name if e.isalnum() or e == ' ')
+            query = urllib.quote_plus(query)
+            url = 'http://www.greeksubtitles.info/search.php?name=' + query
+            result = getUrl(url).result
+            result = result.decode('iso-8859-7').encode('utf-8')
+            result = result.lower().replace('"',"'")
+            match = "get_greek_subtitles[.]php[?]id=(.+?)'.+?%s.+?<"
+            quality = ['bluray', 'brrip', 'bdrip', 'dvdrip', 'hdtv']
+            for q in quality:
+                subtitles += re.compile(match % q).findall(result)
+            if subtitles == []: raise Exception()
+            for subtitle in subtitles:
+                url = 'http://www.findsubtitles.eu/getp.php?id=' + subtitle
+                response = urllib.urlopen(url)
+                content = response.read()
+                response.close()
+                if content[:4] == 'PK': break
+
+            file = open(sub_file, 'wb')
+            file.write(content)
+            file.close()
+            file = zipfile.ZipFile(sub_file, 'r')
+            file.extractall(sub_tmp)
+            file.close()
+            files = os.listdir(sub_tmp2)
+            if files == []: raise Exception()
+            file = [i for i in files if i.endswith('.srt') or i.endswith('.sub')]
+            if file == []:
+                pack = [i for i in files if i.endswith('.zip') or i.endswith('.rar')]
+                pack = os.path.join(sub_tmp2, pack[0])
+                xbmc.executebuiltin('Extract("%s","%s")' % (pack, sub_tmp2))
+                time.sleep(1)
+            files = os.listdir(sub_tmp2)
+            file = [i for i in files if i.endswith('.srt') or i.endswith('.sub')][0]
+            copy = os.path.join(sub_tmp2, file)
+            shutil.copy(copy, sub_stream)
+            try: shutil.rmtree(sub_tmp)
+            except: pass
+            file = os.path.join(sub_stream, file)
+            if not os.path.isfile(file): raise Exception()
+
+            xbmc.Player().setSubtitles(file)
+        except:
+            try: shutil.rmtree(sub_tmp)
+            except: pass
+            try: shutil.rmtree(sub_stream)
+            except: pass
+            index().infoDialog(language(30316).encode("utf-8"), name)
+            return
+
 class index:
     def infoDialog(self, str, header=addonName):
         xbmc.executebuiltin("Notification(%s,%s, 3000, %s)" % (header, str, addonIcon))
@@ -252,29 +410,29 @@ class index:
         xbmc.executebuiltin("Container.Refresh")
 
     def container_data(self):
-        if not os.path.exists(dataPath):
-            os.makedirs(dataPath)
-        if not os.path.isfile(favData):
-            file = open(favData, 'w')
+        if not xbmcvfs.exists(dataPath):
+            xbmcvfs.mkdir(dataPath)
+        if not xbmcvfs.exists(favData):
+            file = xbmcvfs.File(favData, 'w')
             file.write('')
             file.close()
-        if not os.path.isfile(favData2):
-            file = open(favData2, 'w')
+        if not xbmcvfs.exists(favData2):
+            file = xbmcvfs.File(favData2, 'w')
             file.write('')
             file.close()
-        if not os.path.isfile(subData):
-            file = open(subData, 'w')
+        if not xbmcvfs.exists(subData):
+            file = xbmcvfs.File(subData, 'w')
             file.write('')
             file.close()
-        if not os.path.isfile(viewData):
-            file = open(viewData, 'w')
+        if not xbmcvfs.exists(viewData):
+            file = xbmcvfs.File(viewData, 'w')
             file.write('')
             file.close()
 
     def container_view(self, content, viewDict):
         try:
             skin = xbmc.getSkinDir()
-            file = open(viewData,'r')
+            file = xbmcvfs.File(viewData)
             read = file.read().replace('\n','')
             file.close()
             view = re.compile('"%s"[|]"%s"[|]"(.+?)"' % (skin, content)).findall(read)[0]
@@ -285,47 +443,6 @@ class index:
                 xbmc.executebuiltin('Container.SetViewMode(%s)' % id)
             except:
                 pass
-
-    def resolve_simple(self, url):
-        item = xbmcgui.ListItem(path=url)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
-
-    def resolve(self, name, url):
-        if not xbmc.getInfoLabel('ListItem.label') == '' :
-            meta = {'label' : xbmc.getInfoLabel('ListItem.label'), 'title' : xbmc.getInfoLabel('ListItem.title'), 'year' : xbmc.getInfoLabel('ListItem.year'), 'imdb_id' : xbmc.getInfoLabel('ListItem.imdb_id'), 'tmdb_id' : xbmc.getInfoLabel('ListItem.tmdb_id'), 'writer' : xbmc.getInfoLabel('ListItem.writer'), 'director' : xbmc.getInfoLabel('ListItem.director'), 'tagline' : xbmc.getInfoLabel('ListItem.tagline'), 'cast' : xbmc.getInfoLabel('ListItem.cast'), 'rating' : xbmc.getInfoLabel('ListItem.rating'), 'votes' : xbmc.getInfoLabel('ListItem.votes'), 'duration' : xbmc.getInfoLabel('ListItem.duration'), 'plot' : xbmc.getInfoLabel('ListItem.plot'), 'mpaa' : xbmc.getInfoLabel('ListItem.mpaa'), 'premiered' : xbmc.getInfoLabel('ListItem.premiered'), 'trailer' : xbmc.getInfoLabel('ListItem.trailer_url'), 'genre' : xbmc.getInfoLabel('ListItem.genre'), 'studio' : xbmc.getInfoLabel('ListItem.studio')}
-            if not xbmc.getInfoLabel('ListItem.tvshowtitle') == '' :
-                meta.update({'tvshowtitle' : xbmc.getInfoLabel('ListItem.tvshowtitle'), 'season' : xbmc.getInfoLabel('ListItem.season'), 'episode' : xbmc.getInfoLabel('ListItem.episode')})
-            poster = xbmc.getInfoLabel('ListItem.thumb')
-        else:
-            season, episode, year = None, None, None
-            try: season = re.compile('S(\d{3})E\d*').findall(name)[-1]
-            except: pass
-            try: season = re.compile('S(\d{2})E\d*').findall(name)[-1]
-            except: pass
-            try: episode = re.compile('S%sE(\d*)' % (season)).findall(name)[-1]
-            except: pass
-            try: year = re.compile('[(](\d{4})[)]').findall(name)[-1]
-            except: pass
-            if not (season is None and episode is None):
-            	show = name.replace('S%sE%s' % (season, episode), '').strip()
-            	season, episode = '%01d' % int(season), '%01d' % int(episode)
-            	imdb = metaget.get_meta('tvshow', show)['imdb_id']
-            	imdb = re.sub("[^0-9]", "", imdb)
-            	i = metaget.get_episode_meta('', imdb, season, episode)
-            	meta = {'label' : i['title'], 'title' : i['title'], 'tvshowtitle': show, 'imdb_id' : i['imdb_id'], 'season' : i['season'], 'episode' : i['episode'], 'writer' : i['writer'], 'director' : i['director'], 'rating' : i['rating'], 'duration' : i['duration'], 'plot' : i['plot'], 'premiered' : i['premiered'], 'genre' : i['genre']}
-            	poster = i['cover_url']
-            elif not year is None:
-            	title = name.replace('(%s)' % year, '').strip()
-            	i = metaget.get_meta('movie', title ,year=year)
-            	meta = {'label' : i['title'], 'title' : i['title'], 'year' : i['year'], 'imdb_id' : i['imdb_id'], 'tmdb_id' : i['tmdb_id'], 'writer' : i['writer'], 'director' : i['director'], 'tagline' : i['tagline'], 'cast' : i['cast'], 'rating' : i['rating'], 'votes' : i['votes'], 'duration' : i['duration'], 'plot' : i['plot'], 'mpaa' : i['mpaa'], 'premiered' : i['premiered'], 'trailer' : i['trailer_url'], 'genre' : i['genre'], 'studio' : i['studio']}
-            	poster = i['cover_url']
-            else:
-            	meta = {'label' : name, 'title' : name}
-            	poster = ''
-
-        item = xbmcgui.ListItem(path=url, iconImage="DefaultVideo.png", thumbnailImage=poster)
-        item.setInfo( type="Video", infoLabels= meta )
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
 
     def rootList(self, rootList):
         total = len(rootList)
@@ -392,7 +509,7 @@ class index:
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=item,isFolder=True)
 
     def movieList(self, movieList):
-        file = open(favData,'r')
+        file = xbmcvfs.File(favData)
         favRead = file.read()
         file.close()
 
@@ -442,7 +559,7 @@ class index:
                     cm.append((language(30420).encode("utf-8"), 'RunPlugin(%s?action=favourite_moveDown&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
                     cm.append((language(30421).encode("utf-8"), 'RunPlugin(%s?action=favourite_delete&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
                 elif action == 'movies_search':
-                    cm.append((language(30416).encode("utf-8"), 'RunPlugin(%s?action=trailer&url=%s)' % (sys.argv[0], trailer)))
+                    cm.append((language(30416).encode("utf-8"), 'RunPlugin(%s?action=trailer&name=%s&url=%s)' % (sys.argv[0], sysname, trailer)))
                     cm.append((language(30422).encode("utf-8"), 'RunPlugin(%s?action=library&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
                     cm.append((language(30417).encode("utf-8"), 'RunPlugin(%s?action=favourite_from_search&name=%s&imdb=%s&url=%s&image=%s)' % (sys.argv[0], sysname, sysimdb, sysurl, sysimage)))
                     cm.append((language(30428).encode("utf-8"), 'RunPlugin(%s?action=view_movies)' % (sys.argv[0])))
@@ -450,7 +567,7 @@ class index:
                     cm.append((language(30410).encode("utf-8"), 'RunPlugin(%s?action=playlist_open)' % (sys.argv[0])))
                     cm.append((language(30411).encode("utf-8"), 'RunPlugin(%s?action=addon_home)' % (sys.argv[0])))
                 else:
-                    cm.append((language(30416).encode("utf-8"), 'RunPlugin(%s?action=trailer&url=%s)' % (sys.argv[0], trailer)))
+                    cm.append((language(30416).encode("utf-8"), 'RunPlugin(%s?action=trailer&name=%s&url=%s)' % (sys.argv[0], sysname, trailer)))
                     cm.append((language(30422).encode("utf-8"), 'RunPlugin(%s?action=library&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
                     if not '"%s"' % url in favRead: cm.append((language(30417).encode("utf-8"), 'RunPlugin(%s?action=favourite_add&name=%s&imdb=%s&url=%s&image=%s)' % (sys.argv[0], sysname, sysimdb, sysurl, sysimage)))
                     else: cm.append((language(30418).encode("utf-8"), 'RunPlugin(%s?action=favourite_delete&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
@@ -471,10 +588,10 @@ class index:
                 pass
 
     def showList(self, showList):
-        file = open(favData2,'r')
+        file = xbmcvfs.File(favData2)
         favRead = file.read()
         file.close()
-        file = open(subData,'r')
+        file = xbmcvfs.File(subData)
         subRead = file.read()
         file.close()
 
@@ -743,12 +860,13 @@ class contextMenu:
     def view(self, content):
         try:
             skin = xbmc.getSkinDir()
-            try:
+            if xbmcvfs.exists(xbmc.translatePath('special://xbmc/addons/%s/addon.xml' % (skin))):
                 xml = xbmc.translatePath('special://xbmc/addons/%s/addon.xml' % (skin))
-                file = open(xml,'r')
-            except:
+            elif xbmcvfs.exists(xbmc.translatePath('special://home/addons/%s/addon.xml' % (skin))):
                 xml = xbmc.translatePath('special://home/addons/%s/addon.xml' % (skin))
-                file = open(xml,'r')
+            else:
+                return
+            file = xbmcvfs.File(xml)
             read = file.read().replace('\n','')
             file.close()
             src = os.path.dirname(xml) + '/'
@@ -757,7 +875,7 @@ class contextMenu:
             except:
                 src += re.compile('<res.+?folder="(.+?)"').findall(read)[0] + '/'
             src += 'MyVideoNav.xml'
-            file = open(src,'r')
+            file = xbmcvfs.File(src)
             read = file.read().replace('\n','')
             file.close()
             views = re.compile('<views>(.+?)</views>').findall(read)[0]
@@ -765,7 +883,7 @@ class contextMenu:
             for view in views:
                 label = xbmc.getInfoLabel('Control.GetLabel(%s)' % (view))
                 if not (label == '' or label is None): break
-            file = open(viewData, 'r')
+            file = xbmcvfs.File(viewData)
             read = file.read()
             file.close()
             file = open(viewData, 'w')
@@ -791,7 +909,7 @@ class contextMenu:
 
     def favourite_from_search(self, data, name, url, image, imdb):
         try:
-            file = open(data,'r')
+            file = xbmcvfs.File(data)
             read = file.read()
             file.close()
             if url in read:
@@ -808,7 +926,7 @@ class contextMenu:
     def favourite_delete(self, data, name, url):
         try:
             index().container_refresh()
-            file = open(data,'r')
+            file = xbmcvfs.File(data)
             read = file.read()
             file.close()
             line = [x for x in re.compile('(".+?)\n').findall(read) if '"%s"' % url in x][0]
@@ -823,7 +941,7 @@ class contextMenu:
     def favourite_moveUp(self, data, name, url):
         try:
             index().container_refresh()
-            file = open(data,'r')
+            file = xbmcvfs.File(data)
             read = file.read()
             file.close()
             list = re.compile('(".+?)\n').findall(read)
@@ -841,7 +959,7 @@ class contextMenu:
     def favourite_moveDown(self, data, name, url):
         try:
             index().container_refresh()
-            file = open(data,'r')
+            file = xbmcvfs.File(data)
             read = file.read()
             file.close()
             list = re.compile('(".+?)\n').findall(read)
@@ -873,7 +991,7 @@ class contextMenu:
 
     def subscription_delete(self, name, url, silent=False):
         try:
-            file = open(subData,'r')
+            file = xbmcvfs.File(subData)
             read = file.read()
             file.close()
             line = [x for x in re.compile('(".+?)\n').findall(read) if '"%s"' % url in x][0]
@@ -891,7 +1009,7 @@ class contextMenu:
         try:
             if getSetting("subscriptions_update") == 'true' and getSetting("subscriptions_clean") == 'true':
                 self.subscriptions_clean(silent=True)
-            file = open(subData, 'r')
+            file = xbmcvfs.File(subData)
             read = file.read()
             file.close()
             match = re.compile('"(.+?)"[|]"(.+?)"[|]"(.+?)"[|]"(.+?)"').findall(read)
@@ -907,7 +1025,7 @@ class contextMenu:
 
     def subscriptions_clean(self, silent=False):
         try:
-            file = open(subData, 'r')
+            file = xbmcvfs.File(subData)
             read = file.read()
             file.close()
             match = re.compile('"(.+?)"[|]"(.+?)"[|]"(.+?)"[|]"(.+?)"').findall(read)
@@ -952,11 +1070,13 @@ class contextMenu:
                     if sources == []: raise Exception()
                     for source in sources:
                         try:
-                            file = open(source,'r')
+                            file = xbmcvfs.File(source)
                             read = file.read()
                             file.close()
+                            line = [x for x in re.compile('(".+?)\n').findall(read) if '"%s"' % url in x][0]
+                            line2 = line.replace('"0"', '"%s"' % new_imdb).replace('"%s"' % imdb, '"%s"' % new_imdb)
                             file = open(source, 'w')
-                            file.write(read.replace('|"%s"|"%s"|' % (imdb, url), '|"%s"|"%s"|' % (new_imdb, url)))
+                            file.write(read.replace(line, line2))
                             file.close()
                         except:
                             pass
@@ -987,13 +1107,10 @@ class contextMenu:
             enc_name = name.translate(None, '\/:*?"<>|')
             folder = os.path.join(library, enc_name)
             stream = os.path.join(folder, enc_name + '.strm')
-            try: os.makedirs(dataPath)
-            except: pass
-            try: os.makedirs(library)
-            except: pass
-            try: os.makedirs(folder)
-            except: pass
-            file = open(stream, 'w')
+            xbmcvfs.mkdir(dataPath)
+            xbmcvfs.mkdir(library)
+            xbmcvfs.mkdir(folder)
+            file = xbmcvfs.File(stream, 'w')
             file.write(content)
             file.close()
             if silent == False:
@@ -1008,20 +1125,16 @@ class contextMenu:
             show = name
             enc_show = show.translate(None, '\/:*?"<>|')
             folder = os.path.join(library, enc_show)
-            try: os.makedirs(dataPath)
-            except: pass
-            try: os.makedirs(library)
-            except: pass
-            try: os.makedirs(folder)
-            except: pass
+            xbmcvfs.mkdir(dataPath)
+            xbmcvfs.mkdir(library)
+            xbmcvfs.mkdir(folder)
             seasonUrl = url
             seasonList = seasons().simplymovies_list(url, ' ', ' ', ' ', ' ', show)
             for i in seasonList:
                 season = i['name']
                 enc_season = season.translate(None, '\/:*?"<>|')
                 seasonDir = os.path.join(folder, enc_season)
-                try: os.makedirs(seasonDir)
-                except: pass
+                xbmcvfs.mkdir(seasonDir)
                 episodeList = episodes().simplymovies_list(season, seasonUrl, ' ', ' ', ' ', ' ', show)
                 for i in episodeList:
                     name, url = i['name'], i['url']
@@ -1029,7 +1142,7 @@ class contextMenu:
                     content = '%s?action=play&name=%s&url=%s' % (sys.argv[0], sysname, sysurl)
                     enc_name = name.translate(None, '\/:*?"<>|')
                     stream = os.path.join(seasonDir, enc_name + '.strm')
-                    file = open(stream, 'w')
+                    file = xbmcvfs.File(stream, 'w')
                     file.write(content)
                     file.close()
             if silent == False:
@@ -1045,164 +1158,80 @@ class contextMenu:
             	yes = index().yesnoDialog(language(30341).encode("utf-8"), language(30342).encode("utf-8"))
             	if yes: contextMenu().settings_open()
             	return
-            try: os.makedirs(dataPath)
-            except: pass
-            try: os.makedirs(download)
-            except: pass
+            xbmcvfs.mkdir(dataPath)
+            xbmcvfs.mkdir(download)
 
-            property = (addonName+name).replace(' ','').lower()
-            url = player().simplymovies(url)
+            property = (addonName+name)+'download'
+            url = resolver().run(url, name, play=False)
             if url is None: return
             ext = os.path.splitext(url)[1][1:].strip().lower()
             enc_name = name.translate(None, '\/:*?"<>|')
             stream = os.path.join(download, enc_name + '.' + ext)
             temp = stream + '.tmp'
 
-            if os.path.isfile(stream) == True:
+            if xbmcvfs.exists(stream):
             	yes = index().yesnoDialog(language(30343).encode("utf-8"), language(30344).encode("utf-8"), name)
             	if yes:
-            	    try: os.remove(stream)
-            	    except: pass
-            	    try: os.remove(temp)
-            	    except: pass
+            	    xbmcvfs.delete(stream)
+            	    xbmcvfs.delete(temp)
             	else:
             	    return
-            if os.path.isfile(temp) == True:
+            if xbmcvfs.exists(temp):
             	if index().getProperty(property) == 'open':
             	    yes = index().yesnoDialog(language(30345).encode("utf-8"), language(30346).encode("utf-8"), name)
             	    if yes: index().setProperty(property, 'cancel')
             	    return
             	else:
-            	    try: os.remove(temp)
-            	    except: pass
+            	    xbmcvfs.delete(temp)
 
+            count = 0
+            CHUNK = 16 * 1024
             request = urllib2.Request(url)
             request.add_header('User-Agent', 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_0 like Mac OS X; en-us) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 Mobile/8A293 Safari/6531.22.7')
             response = urllib2.urlopen(request, timeout=10)
-            with open(temp, 'wb') as data:
-            	count = 0
-            	CHUNK = 16 * 1024
-            	size = response.info()["Content-Length"]
-            	index().setProperty(property, 'open')
-            	index().infoDialog(language(30308).encode("utf-8"), name)
-            	while True:
-            		chunk = response.read(CHUNK)
-            		if not chunk: break
-            		if index().getProperty(property) == 'cancel': raise Exception()
-            		if xbmc.abortRequested == True: raise Exception()
-            		quota = int(100 * float(os.path.getsize(temp))/float(size))
-            		if not count == quota and count in [0,10,20,30,40,50,60,70,80,90]:
-            		    index().infoDialog(language(30309).encode("utf-8") + str(count) + '%', name)
-            		data.write(chunk)
-            		count = quota
+            size = response.info()["Content-Length"]
 
+            file = xbmcvfs.File(temp, 'w')
+            index().setProperty(property, 'open')
+            index().infoDialog(language(30308).encode("utf-8"), name)
+            while True:
+            	chunk = response.read(CHUNK)
+            	if not chunk: break
+            	if index().getProperty(property) == 'cancel': raise Exception()
+            	if xbmc.abortRequested == True: raise Exception()
+            	part = xbmcvfs.File(temp)
+            	quota = int(100 * float(part.size())/float(size))
+            	part.close()
+            	if not count == quota and count in [0,10,20,30,40,50,60,70,80,90]:
+            		index().infoDialog(language(30309).encode("utf-8") + str(count) + '%', name)
+            	file.write(chunk)
+            	count = quota
             response.close()
-            data.close()
-            os.rename(temp, stream)
+            file.close()
+
+            index().clearProperty(property)
+            xbmcvfs.rename(temp, stream)
             index().infoDialog(language(30310).encode("utf-8"), name)
-            index().clearProperty(property)
         except:
-            data.close()
+            file.close()
             index().clearProperty(property)
-            try: os.remove(temp)
-            except: pass
+            xbmcvfs.delete(temp)
             sys.exit()
             return
 
-    def trailer(self, url):
-        url = player().trailer(url)
+    def trailer(self, name, url):
+        url = resolver().trailer(name, url)
         if url is None: return
         item = xbmcgui.ListItem(path=url)
         item.setProperty("IsPlayable", "true")
-        playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-        playlist.clear()
-        playlist.add(url,item)
-        xbmc.Player().play(playlist)
-
-class subtitles:
-    def get(self, name):
-        subs = getSetting("subs")
-        if subs == '1': self.greek(name)
-
-    def greek(self, name):
-        try:
-            import shutil, zipfile, time
-            sub_tmp = os.path.join(dataPath,'sub_tmp')
-            sub_tmp2 = os.path.join(sub_tmp, "subs")
-            sub_stream = os.path.join(dataPath,'sub_stream')
-            sub_file = os.path.join(sub_tmp, 'sub_tmp.zip')
-            try: os.makedirs(dataPath)
-            except: pass
-            try: os.remove(sub_tmp)
-            except: pass
-            try: shutil.rmtree(sub_tmp)
-            except: pass
-            try: os.makedirs(sub_tmp)
-            except: pass
-            try: os.remove(sub_stream)
-            except: pass
-            try: shutil.rmtree(sub_stream)
-            except: pass
-            try: os.makedirs(sub_stream)
-            except: pass
-
-            subtitles = []
-            query = ''.join(e for e in name if e.isalnum() or e == ' ')
-            query = urllib.quote_plus(query)
-            url = 'http://www.greeksubtitles.info/search.php?name=' + query
-            result = getUrl(url).result
-            result = result.decode('iso-8859-7').encode('utf-8')
-            result = result.lower().replace('"',"'")
-            match = "get_greek_subtitles[.]php[?]id=(.+?)'.+?%s.+?<"
-            quality = ['bluray', 'brrip', 'bdrip', 'dvdrip', 'hdtv']
-            for q in quality:
-                subtitles += re.compile(match % q).findall(result)
-            if subtitles == []: raise Exception()
-            for subtitle in subtitles:
-                url = 'http://www.findsubtitles.eu/getp.php?id=' + subtitle
-                response = urllib.urlopen(url)
-                content = response.read()
-                response.close()
-                if content[:4] == 'PK': break
-
-            file = open(sub_file, 'wb')
-            file.write(content)
-            file.close()
-            file = zipfile.ZipFile(sub_file, 'r')
-            file.extractall(sub_tmp)
-            file.close()
-            files = os.listdir(sub_tmp2)
-            if files == []: raise Exception()
-            file = [i for i in files if i.endswith('.srt') or i.endswith('.sub')]
-            if file == []:
-                pack = [i for i in files if i.endswith('.zip') or i.endswith('.rar')]
-                pack = os.path.join(sub_tmp2, pack[0])
-                xbmc.executebuiltin('Extract("%s","%s")' % (pack, sub_tmp2))
-                time.sleep(1)
-            files = os.listdir(sub_tmp2)
-            file = [i for i in files if i.endswith('.srt') or i.endswith('.sub')][0]
-            copy = os.path.join(sub_tmp2, file)
-            shutil.copy(copy, sub_stream)
-            try: shutil.rmtree(sub_tmp)
-            except: pass
-            file = os.path.join(sub_stream, file)
-            if not os.path.isfile(file): raise Exception()
-
-            xbmc.Player().setSubtitles(file)
-        except:
-            try: shutil.rmtree(sub_tmp)
-            except: pass
-            try: shutil.rmtree(sub_stream)
-            except: pass
-            index().infoDialog(language(30316).encode("utf-8"), name)
-            return
+        xbmc.Player(xbmc.PLAYER_CORE_AUTO).play(url, item)
 
 class subscriptions:
     def __init__(self):
         self.list = []
 
     def shows(self):
-        file = open(subData, 'r')
+        file = xbmcvfs.File(subData)
         read = file.read()
         file.close()
         match = re.compile('"(.+?)"[|]"(.+?)"[|]"(.+?)"[|]"(.+?)"').findall(read)
@@ -1215,7 +1244,7 @@ class favourites:
         self.list = []
 
     def movies(self):
-        file = open(favData, 'r')
+        file = xbmcvfs.File(favData)
         read = file.read()
         file.close()
         match = re.compile('"(.+?)"[|]"(.+?)"[|]"(.+?)"[|]"(.+?)"').findall(read)
@@ -1224,7 +1253,7 @@ class favourites:
         index().movieList(self.list)
 
     def shows(self):
-        file = open(favData2, 'r')
+        file = xbmcvfs.File(favData2)
         read = file.read()
         file.close()
         match = re.compile('"(.+?)"[|]"(.+?)"[|]"(.+?)"[|]"(.+?)"').findall(read)
@@ -1244,7 +1273,7 @@ class root:
 
     def movies(self):
         rootList = []
-        rootList.append({'name': 30521, 'image': 'Listings.png', 'action': 'movies_title'})
+        rootList.append({'name': 30521, 'image': 'Title.png', 'action': 'movies_title'})
         rootList.append({'name': 30522, 'image': 'Views.png', 'action': 'movies_views'})
         rootList.append({'name': 30523, 'image': 'Rating.png', 'action': 'movies_rating'})
         rootList.append({'name': 30524, 'image': 'Release.png', 'action': 'movies_release'})
@@ -1256,7 +1285,7 @@ class root:
 
     def shows(self):
         rootList = []
-        rootList.append({'name': 30541, 'image': 'Listings.png', 'action': 'shows_title'})
+        rootList.append({'name': 30541, 'image': 'Title.png', 'action': 'shows_title'})
         rootList.append({'name': 30542, 'image': 'Views.png', 'action': 'shows_views'})
         rootList.append({'name': 30543, 'image': 'Rating.png', 'action': 'shows_rating'})
         rootList.append({'name': 30544, 'image': 'Pages.png', 'action': 'pages_shows'})
@@ -1296,7 +1325,10 @@ class link:
         self.simplymovies_moviegenre2 = "%25'&lastRecord=0"
         self.simplymovies_tvshowgenre = "table=tv_shows&orderBy=rating+DESC&limit=40&where=1+%26%26+genres+LIKE+'%25"
         self.simplymovies_tvshowgenre2 = "%25'&lastRecord=0"
+
         self.youtube_base = 'http://www.youtube.com'
+        self.youtube_search = 'http://gdata.youtube.com/feeds/api/videos?q='
+        self.youtube_watch = 'http://www.youtube.com/watch?v=%s'
         self.youtube_info = 'http://gdata.youtube.com/feeds/api/videos/%s?v=2'
 
 class pages:
@@ -1596,30 +1628,18 @@ class episodes:
 
         return self.list
 
-class player:
-    def run(self, url, name=None):
+class resolver:
+    def run(self, url, name=None, play=True):
         try:
+            if player().status() is True: return
             url = self.simplymovies(url)
             if url is None: raise Exception()
-            index().resolve(name, url)
-            subtitles().get(name)
-        except:
-            index().infoDialog(language(30317).encode("utf-8"))
-            return
 
-    def trailer(self, url):
-        try:
-            if url.startswith(link().youtube_base):
-                url = self.youtube(url)
-            else:
-                result = getUrl(url).result
-                url = re.compile('"http://www.youtube.com/embed/(.+?)"').findall(result)[0]
-                url = url.split("?")[0]
-                url = 'http://www.youtube.com/watch?v=%s' % url
-                url = self.youtube(url)
-            if url is None: return
+            if play == False: return url
+            player().run(name, url)
             return url
         except:
+            index().infoDialog(language(30317).encode("utf-8"))
             return
 
     def simplymovies(self, url):
@@ -1643,9 +1663,52 @@ class player:
         except:
             return
 
+    def trailer(self, name, url):
+        try:
+            if not url.startswith('http://'):
+                url = link().youtube_watch % url
+                url = self.youtube(url)
+            else:
+                try:
+                    result = getUrl(url).result
+                    url = re.compile('"http://www.youtube.com/embed/(.+?)"').findall(result)[0]
+                    url = url.split("?")[0].split("&")[0]
+                    url = link().youtube_watch % url
+                    url = self.youtube(url)
+                except:
+                    url = link().youtube_search + name + ' trailer'
+                    url = self.youtube_search(url)
+            if url is None: return
+            return url
+        except:
+            return
+
+    def youtube_search(self, url):
+        try:
+            if index().addon_status('plugin.video.youtube') is None:
+                index().okDialog(language(30321).encode("utf-8"), language(30322).encode("utf-8"))
+                return
+
+            query = url.split("?q=")[-1].split("/")[-1].split("?")[0]
+            url = url.replace(query, urllib.quote_plus(query))
+            result = getUrl(url).result
+            result = common.parseDOM(result, "entry")
+            result = common.parseDOM(result, "id")
+
+            for url in result[:5]:
+                url = url.split("/")[-1]
+                url = link().youtube_watch % url
+                url = self.youtube(url)
+                if not url is None: return url
+        except:
+            return
+
     def youtube(self, url):
         try:
-            id = url.split("?v=")[-1].split("/")[-1].split("?")[0]
+            if index().addon_status('plugin.video.youtube') is None:
+                index().okDialog(language(30321).encode("utf-8"), language(30322).encode("utf-8"))
+                return
+            id = url.split("?v=")[-1].split("/")[-1].split("?")[0].split("&")[0]
             state, reason = None, None
             result = getUrl(link().youtube_info % id).result
             try:
@@ -1655,17 +1718,15 @@ class player:
                 pass
             if state == 'deleted' or state == 'rejected' or state == 'failed' or reason == 'requesterRegion' : return
             try:
-                result = getUrl(url).result
+                result = getUrl(link().youtube_watch % id).result
                 alert = common.parseDOM(result, "div", attrs = { "id": "watch7-notification-area" })[0]
                 return
             except:
                 pass
-            if index().addon_status('plugin.video.youtube') is None:
-                index().okDialog(language(30321).encode("utf-8"), language(30322).encode("utf-8"))
-                return
             url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % id
             return url
         except:
             return
+
 
 main()

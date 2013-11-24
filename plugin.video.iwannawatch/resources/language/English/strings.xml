@@ -83,14 +83,13 @@
 	<string id="30430">Set Seasons view</string>
 	<string id="30431">Set Episodes view</string>
 	<!-- Description -->
-	<string id="40450">Watch a wide selection of movies from muchmovies.org</string>
+	<string id="40450">Watch a wide selection of movies from iwannawatch.co</string>
 	<!-- Labels -->
 	<string id="30501">Favourites</string>
 	<string id="30502">Title</string>
-	<string id="30503">Release</string>
-	<string id="30504">Recent</string>
-	<string id="30505">Rating</string>
-	<string id="30506">Genres</string>
-	<string id="30507">Pages</string>
-	<string id="30508">Search</string>
+	<string id="30503">Views</string>
+	<string id="30504">Rating</string>
+	<string id="30505">Genres</string>
+	<string id="30506">Pages</string>
+	<string id="30507">Search</string>
 </strings>

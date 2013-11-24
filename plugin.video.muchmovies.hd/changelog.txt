@@ -1,4 +1,17 @@
 ------------------------
+Much Movies HD v1.2.0 (24-Nov-13)
+------------------------
+
+- Fixed issues with watched or unwatched indicators.
+- Fixed issues with strm playback from widgets (Gotham).
+- Fixed issues with trailers (metahandler).
+- The addon will try to find trailer even if it's not available by metahandler.
+- Added support for network locations (downloads and library folder).
+- All sorting methods are now available in main window.
+- Code cosmetics.
+
+
+------------------------
 Much Movies HD v1.1.0 (31-Oct-13)
 ------------------------
 

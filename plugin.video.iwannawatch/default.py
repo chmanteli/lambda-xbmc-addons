@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-    Much Movies HD XBMC Addon
+    I Wanna Watch XBMC Addon
     Copyright (C) 2013 lambda
 
     This program is free software: you can redistribute it and/or modify
@@ -18,10 +18,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import urllib,urllib2,re,os,threading,datetime,xbmc,xbmcplugin,xbmcgui,xbmcaddon,xbmcvfs
+import urllib,urllib2,re,os,threading,datetime,time,xbmc,xbmcplugin,xbmcgui,xbmcaddon,xbmcvfs
 from operator import itemgetter
+import urlresolver
 try:    import CommonFunctions
 except: import commonfunctionsdummy as CommonFunctions
+try:    import StorageServer
+except: import storageserverdummy as StorageServer
 from metahandler import metahandlers
 from metahandler import metacontainers
 
@@ -38,12 +41,15 @@ addonIcon           = os.path.join(addonPath,'icon.png')
 addonFanart         = os.path.join(addonPath,'fanart.jpg')
 addonArt            = os.path.join(addonPath,'resources/art')
 addonDownloads      = os.path.join(addonPath,'resources/art/Downloads.png')
+addonGenres         = os.path.join(addonPath,'resources/art/Genres.png')
 addonPages          = os.path.join(addonPath,'resources/art/Pages.png')
+addonPoster         = os.path.join(addonPath,'resources/art/Poster.png')
 addonNext           = os.path.join(addonPath,'resources/art/Next.png')
 dataPath            = xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
 viewData            = os.path.join(dataPath,'views.cfg')
 favData             = os.path.join(dataPath,'favourites.cfg')
 metaget             = metahandlers.MetaData(preparezip=False)
+cache               = StorageServer.StorageServer(addonName+addonVersion,1).cacheFunction
 common              = CommonFunctions
 action              = None
 
@@ -93,16 +99,16 @@ class main:
         elif action == 'library':                   contextMenu().library(name, url)
         elif action == 'download':                  contextMenu().download(name, url)
         elif action == 'trailer':                   contextMenu().trailer(name, url)
-        elif action == 'movies':                    movies().muchmovies(url)
-        elif action == 'movies_title':              movies().muchmovies_title()
-        elif action == 'movies_release':            movies().muchmovies_release()
-        elif action == 'movies_recent':             movies().muchmovies_recent()
-        elif action == 'movies_rating':             movies().muchmovies_rating()
-        elif action == 'movies_search':             movies().muchmovies_search(query)
+        elif action == 'movies':                    movies().iwannawatch(url)
+        elif action == 'movies_title':              movies().iwannawatch_title()
+        elif action == 'movies_views':              movies().iwannawatch_views()
+        elif action == 'movies_rating':             movies().iwannawatch_rating()
+        elif action == 'movies_search':             movies().iwannawatch_search(query)
         elif action == 'movies_favourites':         favourites().movies()
-        elif action == 'pages_movies':              pages().muchmovies()
-        elif action == 'genres_movies':             genres().muchmovies()
+        elif action == 'pages_movies':              pages().iwannawatch()
+        elif action == 'genres_movies':             genres().iwannawatch()
         elif action == 'play':                      resolver().run(url, name)
+
 
         if action is None:
             pass
@@ -587,8 +593,7 @@ class contextMenu:
         try:
             index().container_refresh()
             file = open(data, 'a+')
-            #file.write('"%s"|"%s"|"%s"|"%s"\n' % (name, imdb, url, image))
-            file.write('"%s"|"%s"|"%s"\n' % (name, url, image))
+            file.write('"%s"|"%s"|"%s"|"%s"\n' % (name, imdb, url, image))
             file.close()
             index().infoDialog(language(30303).encode("utf-8"), name)
         except:
@@ -603,8 +608,7 @@ class contextMenu:
                 index().infoDialog(language(30307).encode("utf-8"), name)
                 return
             file = open(data, 'a+')
-            #file.write('"%s"|"%s"|"%s"|"%s"\n' % (name, imdb, url, image))
-            file.write('"%s"|"%s"|"%s"\n' % (name, url, image))
+            file.write('"%s"|"%s"|"%s"|"%s"\n' % (name, imdb, url, image))
             file.close()
             index().infoDialog(language(30303).encode("utf-8"), name)
         except:
@@ -663,9 +667,47 @@ class contextMenu:
 
     def metadata(self, content, name, url, imdb, season, episode):
         try:
+            list = []
             if content == 'movie' or content == 'tvshow':
-                metaget.update_meta(content, '', imdb, year='')
-                index().container_refresh()
+                if content == 'movie':
+                    search = metaget.search_movies(name)
+                elif content == 'tvshow':
+                    search = []
+                    result = metahandlers.TheTVDB().get_matching_shows(name)
+                    for i in result: search.append({'tvdb_id': i[0], 'title': i[1], 'imdb_id': i[2]})
+                for i in search:
+                    label = i['title']
+                    if 'year' in i: label += ' (%s)' % i['year']
+                    list.append(label)
+                select = index().selectDialog(list, language(30364).encode("utf-8"))
+                if select > -1:
+                    if content == 'movie':
+                        new_imdb = metaget.get_meta('movie', search[select]['title'] ,year=search[select]['year'])['imdb_id']
+                    elif content == 'tvshow':
+                        new_imdb = search[select]['imdb_id']
+                    new_imdb = re.sub("[^0-9]", "", new_imdb)
+                    sources = []
+                    try: sources.append(favData)
+                    except: pass
+                    try: sources.append(favData2)
+                    except: pass
+                    try: sources.append(subData)
+                    except: pass
+                    if sources == []: raise Exception()
+                    for source in sources:
+                        try:
+                            file = xbmcvfs.File(source)
+                            read = file.read()
+                            file.close()
+                            line = [x for x in re.compile('(".+?)\n').findall(read) if '"%s"' % url in x][0]
+                            line2 = line.replace('"0"', '"%s"' % new_imdb).replace('"%s"' % imdb, '"%s"' % new_imdb)
+                            file = open(source, 'w')
+                            file.write(read.replace(line, line2))
+                            file.close()
+                        except:
+                            pass
+                    metaget.update_meta(content, '', imdb, year='')
+                    index().container_refresh()
             elif content == 'season':
                 metaget.update_episode_meta('', imdb, season, episode)
                 index().container_refresh()
@@ -786,9 +828,9 @@ class favourites:
         file = xbmcvfs.File(favData)
         read = file.read()
         file.close()
-        match = re.compile('"(.+?)"[|]"(.+?)"[|]"(.+?)"').findall(read)
-        for name, url, image in match:
-            self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': ' ', 'plot': ' '})
+        match = re.compile('"(.+?)"[|]"(.+?)"[|]"(.+?)"[|]"(.+?)"').findall(read)
+        for name, imdb, url, image in match:
+            self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': ' ', 'plot': ' '})
         index().movieList(self.list)
 
 class root:
@@ -796,27 +838,27 @@ class root:
         rootList = []
         rootList.append({'name': 30501, 'image': 'Favourites.png', 'action': 'movies_favourites'})
         rootList.append({'name': 30502, 'image': 'Title.png', 'action': 'movies_title'})
-        rootList.append({'name': 30503, 'image': 'Release.png', 'action': 'movies_release'})
-        rootList.append({'name': 30504, 'image': 'Recent.png', 'action': 'movies_recent'})
-        rootList.append({'name': 30505, 'image': 'Rating.png', 'action': 'movies_rating'})
-        rootList.append({'name': 30506, 'image': 'Genres.png', 'action': 'genres_movies'})
-        rootList.append({'name': 30507, 'image': 'Pages.png', 'action': 'pages_movies'})
-        rootList.append({'name': 30508, 'image': 'Search.png', 'action': 'movies_search'})
+        rootList.append({'name': 30503, 'image': 'Views.png', 'action': 'movies_views'})
+        rootList.append({'name': 30504, 'image': 'Rating.png', 'action': 'movies_rating'})
+        rootList.append({'name': 30505, 'image': 'Genres.png', 'action': 'genres_movies'})
+        rootList.append({'name': 30506, 'image': 'Pages.png', 'action': 'pages_movies'})
+        rootList.append({'name': 30507, 'image': 'Search.png', 'action': 'movies_search'})
         index().rootList(rootList)
         index().downloadList()
 
 class link:
     def __init__(self):
-        self.muchmovies_base = 'http://www.muchmovies.org'
-        self.muchmovies_sort = 'http://www.muchmovies.org/session/sort'
-        self.muchmovies_title = 'http://www.muchmovies.org/movies?sort_by=title'
-        self.muchmovies_release = 'http://www.muchmovies.org/movies?sort_by=release'
-        self.muchmovies_recent = 'http://www.muchmovies.org/movies?sort_by=date_added'
-        self.muchmovies_rating = 'http://www.muchmovies.org/movies?sort_by=rating'
-        self.muchmovies_root = 'http://www.muchmovies.org/movies'
-        self.muchmovies_search = 'http://www.muchmovies.org/search'
-        self.muchmovies_genre = 'http://www.muchmovies.org/genres'
+        self.iwannawatch_base = 'http://www.iwannawatch.co'
+        self.iwannawatch_title = 'http://www.iwannawatch.co/page/1'
+        self.iwannawatch_views = 'http://www.iwannawatch.co/most-viewed'
+        self.iwannawatch_rating = 'http://www.iwannawatch.co/most-voted'
+        self.iwannawatch_search = 'http://www.iwannawatch.co/?s=%s'
+        self.iwannawatch_page = 'http://www.iwannawatch.co/page/%s'
+        self.iwannawatch_genre = 'http://www.iwannawatch.co/category/movies'
 
+        self.nobuffer_base = 'http://nobuffer.info'
+        self.videolinks_base = 'http://video-links.info'
+        self.filmshowonline_base = 'http://www.filmshowonline.net'
         self.youtube_base = 'http://www.youtube.com'
         self.youtube_search = 'http://gdata.youtube.com/feeds/api/videos?q='
         self.youtube_watch = 'http://www.youtube.com/watch?v=%s'
@@ -826,25 +868,22 @@ class pages:
     def __init__(self):
         self.list = []
 
-    def muchmovies(self):
-        self.list = self.muchmovies_list()
+    def iwannawatch(self):
+        self.list = self.iwannawatch_list()
         index().pageList(self.list)
 
-    def muchmovies_list(self):
+    def iwannawatch_list(self):
         try:
-            result = getUrl(link().muchmovies_root, mobile=True).result
-            pages = common.parseDOM(result, "div", attrs = { "class": "pagenav" })[0]
-            pages = re.compile('(<option.+?</option>)').findall(pages)
+            result = getUrl(link().iwannawatch_page % '1').result
+            pages = common.parseDOM(result, "li", attrs = { "class": "first_last_page" })[0]
+            pages = common.parseDOM(pages, "a")[0]
         except:
             return
-        for page in pages:
+        for page in range(1, int(pages)+1):
             try:
-                name = common.parseDOM(page, "option")[0]
-                name = common.replaceHTMLCodes(name)
+                name = '%s %s' % ('Page', page)
                 name = name.encode('utf-8')
-                url = common.parseDOM(page, "option", ret="value")[0]
-                url = '%s%s?sort_by=title' % (link().muchmovies_base, url)
-                url = common.replaceHTMLCodes(url)
+                url = link().iwannawatch_page % page
                 url = url.encode('utf-8')
                 image = addonPages.encode('utf-8')
                 self.list.append({'name': name, 'url': url, 'image': image})
@@ -857,30 +896,27 @@ class genres:
     def __init__(self):
         self.list = []
 
-    def muchmovies(self):
-        self.list = self.muchmovies_list()
+    def iwannawatch(self):
+        self.list = self.iwannawatch_list()
         index().pageList(self.list)
 
-    def muchmovies_list(self):
+    def iwannawatch_list(self):
         try:
-            result = getUrl(link().muchmovies_genre, mobile=True).result
-            genres = common.parseDOM(result, "ul", attrs = { "id": "genres" })
+            result = getUrl(link().iwannawatch_genre).result
+            genres = common.parseDOM(result, "div", attrs = { "class": "menu-secondary-container" })[0]
+            genres = common.parseDOM(genres, "ul", attrs = { "class": "sub-menu" })[0]
             genres = common.parseDOM(genres, "li")
         except:
             return
         for genre in genres:
             try:
-                name = common.parseDOM(genre, "h2")[0]
+                name = common.parseDOM(genre, "a")[0]
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
                 url = common.parseDOM(genre, "a", ret="href")[0]
-                url = '%s%s?sort_by=release' % (link().muchmovies_base, url)
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
-                image = common.parseDOM(genre, "img", ret="src")[0]
-                image = '%s%s' % (link().muchmovies_base, image)
-                image = common.replaceHTMLCodes(image)
-                image = image.encode('utf-8')
+                image = addonGenres.encode('utf-8')
                 self.list.append({'name': name, 'url': url, 'image': image})
             except:
                 pass
@@ -891,66 +927,58 @@ class movies:
     def __init__(self):
         self.list = []
 
-    def muchmovies(self, url):
-        self.list = self.muchmovies_list(url)
+    def iwannawatch(self, url):
+        self.list = self.iwannawatch_list(url)
         index().movieList(self.list)
         index().nextList(self.list[0]['next'])
 
-    def muchmovies_title(self):
-        self.list = self.muchmovies_list(link().muchmovies_title)
+    def iwannawatch_title(self):
+        self.list = self.iwannawatch_list(link().iwannawatch_title)
         index().movieList(self.list)
         index().nextList(self.list[0]['next'])
 
-    def muchmovies_release(self):
-        self.list = self.muchmovies_list(link().muchmovies_release)
+    def iwannawatch_views(self):
+        self.list = self.iwannawatch_list2(link().iwannawatch_views)
         index().movieList(self.list)
-        index().nextList(self.list[0]['next'])
 
-    def muchmovies_recent(self):
-        self.list = self.muchmovies_list(link().muchmovies_recent)
+    def iwannawatch_rating(self):
+        self.list = self.iwannawatch_list2(link().iwannawatch_rating)
         index().movieList(self.list)
-        index().nextList(self.list[0]['next'])
 
-    def muchmovies_rating(self):
-        self.list = self.muchmovies_list(link().muchmovies_rating)
-        index().movieList(self.list)
-        index().nextList(self.list[0]['next'])
-
-    def muchmovies_search(self, query=None):
+    def iwannawatch_search(self, query=None):
         if query is None:
             self.query = common.getUserInput(language(30362).encode("utf-8"), '')
         else:
             self.query = query
         if not (self.query is None or self.query == ''):
-            self.query = link().muchmovies_search + '/' + urllib.quote_plus(self.query.replace(' ', '-'))
-            self.list = self.muchmovies_list(self.query)
+            self.query = link().iwannawatch_search % urllib.quote_plus(self.query.replace(' ', '-'))
+            self.list = self.iwannawatch_list(self.query)
             index().movieList(self.list)
-            index().nextList(self.list[0]['next'])
 
-    def muchmovies_list(self, url):
+
+    def iwannawatch_list(self, url):
         try:
-            post = url.split('?')[-1]
-            result = getUrl(link().muchmovies_sort, post=post, mobile=True, close=False, cookie=True).result
-            result = getUrl(url, mobile=True).result
-            movies = common.parseDOM(result, "li", attrs = { "data-icon": "false" })
+            result = getUrl(url).result
+            movies = common.parseDOM(result, "table", attrs = { "class": "tblPostGrid" })[-1]
+            movies = common.parseDOM(movies, "td", attrs = { "id": ".+?" })
         except:
             return
+
         try:
-            try:
-                next = common.parseDOM(result, "a", ret="href", attrs = { "data-icon": "arrow-r", "class": "ui-disabled" })[0]
-                next = ''
-            except:
-                next = common.parseDOM(result, "a", ret="href", attrs = { "data-icon": "arrow-r" })[0]
-                next = '%s%s?%s' % (link().muchmovies_base, next, post)
+            next = common.parseDOM(result, "div", attrs = { "id": "wp_page_numbers" })[0]
+            next = common.parseDOM(next, "li")[-1]
+            name = common.parseDOM(next, "a")[0]
+            if not name == '&gt;': raise Exception()
+            next = common.parseDOM(next, "a", ret="href")[0]
         except:
             next = ''
+
         for movie in movies:
             try:
-                name = common.parseDOM(movie, "h2")[0]
+                name = common.parseDOM(movie, "img", ret="alt")[0]
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
                 url = common.parseDOM(movie, "a", ret="href")[0]
-                url = '%s%s' % (link().muchmovies_base, url)
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
                 image = common.parseDOM(movie, "img", ret="src")[0]
@@ -962,27 +990,120 @@ class movies:
 
         return self.list
 
+    def iwannawatch_list2(self, url):
+        try:
+            result = getUrl(url).result
+            movies = common.parseDOM(result, "div", attrs = { "id": "main" })[0]
+            movies = common.parseDOM(movies, "table", attrs = { "id": ".+?" })[0]
+            movies = common.parseDOM(movies, "tr")
+        except:
+            return
+        for movie in movies:
+            try:
+                name = common.parseDOM(movie, "a")[0]
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+                url = common.parseDOM(movie, "a", ret="href")[0]
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+                image = addonPoster.encode('utf-8')
+                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': ' ', 'plot': ' '})
+            except:
+                pass
+
+        return self.list
+
 class resolver:
+    def __init__(self):
+        self.list = []
+
     def run(self, url, name=None, play=True):
         try:
             if player().status() is True: return
-            url = self.muchmovies(url)
+            returnUrl = url
+            url = self.iwannawatch(url)
+            if url == 'close': return
+            if url is None: raise Exception()
+
+            url = self.urlresolver(url)
             if url is None: raise Exception()
 
             if play == False: return url
             player().run(name, url)
             return url
         except:
-            index().infoDialog(language(30317).encode("utf-8"))
+            self.run(returnUrl, name)
             return
 
-    def muchmovies(self, url):
+    def iwannawatch(self, url):
         try:
-            result = getUrl(url, mobile=True).result
-            url = common.parseDOM(result, "a", ret="href")
-            url = [i for i in url if "?action=stream" in i][0]
-            url = url.split("?")[0]
+            nameList, urlList = [], []
+            #self.list = self.iwannawatch_list(url)
+            self.list = cache(self.iwannawatch_list, url)
+
+            count = len(self.list)
+            for i in self.list:
+                nameList.append('Source #'+ str(count) + ' | ' + i['name'])
+                urlList.append(i['url'])
+                count = count - 1
+
+            select = index().selectDialog(nameList[::-1])
+            if select == -1: return 'close'
+            if not select > -1: return
+            url = urlList[::-1][select]
             return url
+        except:
+            return
+
+    def iwannawatch_list(self, url):
+        try:
+            result = getUrl(url).result
+            sources = re.compile('(<p><strong>.+?</p><p>.+?a href.+?</p>)').findall(result.replace('\n',''))
+        except:
+            return
+        for source in sources:
+            try:
+                name = common.parseDOM(source, "p")[0]
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+                name = name.replace('<strong>','').replace('</strong>','').split('–')[-1].split('Links', 1)[0].strip()
+                url = common.parseDOM(source, "a", ret="href")[0]
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+                if url.startswith(link().nobuffer_base) or url.startswith(link().videolinks_base): url = self.nobuffer(url)
+                elif url.startswith(link().filmshowonline_base): url = self.filmshowonline(url)
+                host = urlresolver.HostedMediaFile(url)
+                if not host: raise Exception()
+                self.list.append({'name': name, 'url': url})
+            except:
+                pass
+
+        return self.list
+
+    def nobuffer(self, url):
+        try:
+            url = url.replace(link().nobuffer_base, link().videolinks_base)
+            result = getUrl(url).result
+            result = result.replace('mrc_vi_play','player')
+            result = common.parseDOM(result, "div", attrs = { "id": "player" })[0]
+            url = common.parseDOM(result, "iframe", ret="src")[0]
+            return url
+        except:
+            return
+
+    def filmshowonline(self, url):
+        try:
+            result = getUrl(url).result
+            url = common.parseDOM(result, "iframe", ret="src", attrs = { "style": "overflow.+?" })[0]
+            return url
+        except:
+            return
+
+    def urlresolver(self, url):
+        try:
+            host = urlresolver.HostedMediaFile(url)
+            if host: resolver = urlresolver.resolve(url)
+            if not resolver == url: return resolver
         except:
             return
 
