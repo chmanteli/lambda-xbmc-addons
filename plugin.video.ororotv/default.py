@@ -1201,7 +1201,7 @@ class shows:
         if not (self.query is None or self.query == ''):
             self.list = self.ororo_list()
             self.query = self.query.split(" ")
-            filter = [i for i in self.list if any(x.lower() in i['name'].lower() for x in self.query)]
+            filter = [i for i in self.list if all(x.lower() in i['name'].lower() for x in self.query)]
             index().showList(filter)
 
     def ororo_list(self):
