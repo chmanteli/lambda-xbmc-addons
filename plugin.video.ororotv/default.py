@@ -655,9 +655,9 @@ class index:
                     fanart = addonFanart
 
                 cm = []
+                cm.append((language(30432).encode("utf-8"), 'RunPlugin(%s?action=sources&name=%s&url=%s&imdb=%s)' % (sys.argv[0], sysname, sysurl, sysimdb)))
                 cm.append((language(30405).encode("utf-8"), 'RunPlugin(%s?action=item_queue)' % (sys.argv[0])))
                 cm.append((language(30406).encode("utf-8"), 'RunPlugin(%s?action=download&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
-                cm.append((language(30432).encode("utf-8"), 'RunPlugin(%s?action=sources&name=%s&url=%s&imdb=%s)' % (sys.argv[0], sysname, sysurl, sysimdb)))
                 cm.append((language(30403).encode("utf-8"), 'RunPlugin(%s?action=item_play_from_here&url=%s)' % (sys.argv[0], sysurl)))
                 cm.append((language(30414).encode("utf-8"), 'Action(Info)'))
                 if getSetting("meta") == 'true': cm.append((language(30415).encode("utf-8"), 'RunPlugin(%s?action=metadata_episodes&imdb=%s&season=%s&episode=%s)' % (sys.argv[0], metaimdb, metaseason, metaepisode)))
@@ -1133,6 +1133,9 @@ class root:
 class link:
     def __init__(self):
         self.ororo_base = 'http://ororo.tv'
+        self.ororo_sign = 'http://ororo.tv/users/sign_in'
+        self.ororo_email = 'user%5Bemail%5D'
+        self.ororo_password = 'user%5Bpassword%5D'
 
         self.watchseries_base = 'http://watchseries.lt'
         self.watchseries_search = 'http://watchseries.lt/search/%s'
@@ -1250,7 +1253,12 @@ class seasons:
 
     def ororo_list(self, url, image, imdb, genre, plot, show):
         try:
+            if not (getSetting("email") == '' and getSetting("password") == ''):
+                email, password = urllib.quote_plus(getSetting("email")), urllib.quote_plus(getSetting("password"))
+                post = '%s=%s&%s=%s' % (link().ororo_email, email, link().ororo_password, password)
+                result = getUrl(link().ororo_sign, post=post, close=False, cookie=True).result
             result = getUrl(url).result
+
             result = common.parseDOM(result, "ul", attrs = { "id": "season-tabs" })[0]
             seasons = common.parseDOM(result, "li")
         except:
@@ -1281,7 +1289,13 @@ class episodes:
         try:
             season = re.sub("[^0-9]", "", name)
             season = season.encode('utf-8')
+
+            if not (getSetting("email") == '' and getSetting("password") == ''):
+                email, password = urllib.quote_plus(getSetting("email")), urllib.quote_plus(getSetting("password"))
+                post = '%s=%s&%s=%s' % (link().ororo_email, email, link().ororo_password, password)
+                result = getUrl(link().ororo_sign, post=post, close=False, cookie=True).result
             result = getUrl(url).result
+
             result = common.parseDOM(result, "div", attrs = { "class": "tab-content" })[0]
             result = common.parseDOM(result, "div", attrs = { "id": season })[0]
             episodes = common.parseDOM(result, "li")

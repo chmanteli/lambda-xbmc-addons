@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
 	<!-- Settings -->
+	<string id="30010">Sign in</string>
+	<string id="30011">In some areas you may need to sign in to ororo.tv</string>
+	<string id="30012">Email</string>
+	<string id="30013">Password</string>
 	<string id="30020">Meta Data</string>
 	<string id="30021">Enable Meta Data</string>
 	<string id="30022">Enable Fanart</string>
@@ -87,7 +91,7 @@
 	<string id="30429">Set TV Shows view</string>
 	<string id="30430">Set Seasons view</string>
 	<string id="30431">Set Episodes view</string>
-	<string id="30432">More sources</string>
+	<string id="30432">Sources</string>
 	<!-- Description -->
 	<string id="40450">Watch tv shows from ororo.tv</string>
 	<!-- Labels -->
