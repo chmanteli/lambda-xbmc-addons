@@ -1,10 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
 	<!-- Settings -->
-	<string id="30010">Είσοδος</string>
-	<string id="30011">Σε ορισμένες περιοχές ίσως είναι απαραίτητη η είδοδος στο ororo.tv</string>
-	<string id="30012">Email</string>
-	<string id="30013">Κωδικός</string>
+	<string id="30000">Γενικά</string>
+	<string id="30001">Αστερίσκος</string>
+	<string id="30002">Προσθήκη αστερίσκου σε σειρές εκτός ororo.tv</string>
+	<string id="30003">Σε ορισμένες περιοχές ίσως είναι απαραίτητη η είδοδος στο ororo.tv</string>
+	<string id="30004">Email</string>
+	<string id="30005">Κωδικός</string>
 	<string id="30020">Μεταδεδομένα</string>
 	<string id="30021">Χρήση μεταδεδομένων</string>
 	<string id="30022">Χρήση Fanart</string>
@@ -102,4 +104,6 @@
 	<string id="30505">Αγαπημένα</string>
 	<string id="30506">Συνδρομές</string>
 	<string id="30507">Αναζήτηση</string>
+	<string id="30521">Ororo</string>
+	<string id="30522">Εξωτερικό</string>
 </strings>

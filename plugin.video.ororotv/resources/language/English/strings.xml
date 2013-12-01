@@ -1,10 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
 	<!-- Settings -->
-	<string id="30010">Sign in</string>
-	<string id="30011">In some areas you may need to sign in to ororo.tv</string>
-	<string id="30012">Email</string>
-	<string id="30013">Password</string>
+	<string id="30000">General</string>
+	<string id="30001">Asterisk</string>
+	<string id="30002">Include asterisk for tv shows outside ororo.tv database</string>
+	<string id="30003">In some areas you may need to sign in to ororo.tv</string>
+	<string id="30004">Email</string>
+	<string id="30005">Password</string>
 	<string id="30020">Meta Data</string>
 	<string id="30021">Enable Meta Data</string>
 	<string id="30022">Enable Fanart</string>
@@ -102,4 +104,6 @@
 	<string id="30505">Favourites</string>
 	<string id="30506">Subscriptions</string>
 	<string id="30507">Search</string>
+	<string id="30521">Ororo</string>
+	<string id="30522">External</string>
 </strings>

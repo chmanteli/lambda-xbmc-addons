@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-	<category label="30010">
-		<setting id="email" type="text" label="30012" default=""/>
-		<setting id="password" type="text" label="30013" default=""/>
+	<category label="30000">
+		<setting type="lsep" label="30001"/>
+		<setting id="asterisk" type="bool" label="30002" default="true"/>
 		<setting type="lsep" label="[CR]"/>
-		<setting type="lsep" label="30011"/>
+		<setting type="lsep" label="30003"/>
+		<setting id="email" type="text" label="30004" default=""/>
+		<setting id="password" type="text" label="30005" default=""/>
 	</category>
 	<category label="30020">
 		<setting id="meta" type="bool" label="30021" default="true"/>

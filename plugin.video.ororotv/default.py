@@ -87,6 +87,7 @@ class main:
         except:     episode = None
 
         if action == None:                          root().get()
+        elif action == 'root_search':               root().search()
         elif action == 'item_play':                 contextMenu().item_play()
         elif action == 'item_random_play':          contextMenu().item_random_play()
         elif action == 'item_queue':                contextMenu().item_queue()
@@ -123,8 +124,9 @@ class main:
         elif action == 'shows_rating':              shows().ororo_rating()
         elif action == 'shows_genre':               shows().ororo_genre(url)
         elif action == 'shows_search':              shows().ororo_search(query)
-        elif action == 'seasons':                   seasons().ororo(url, image, imdb, genre, plot, show)
-        elif action == 'episodes':                  episodes().ororo(name, url, image, imdb, genre, plot, show)
+        elif action == 'shows_searchmore':          shows().watchseries_search(query)
+        elif action == 'seasons':                   seasons().get(url, image, imdb, genre, plot, show)
+        elif action == 'episodes':                  episodes().get(name, url, image, imdb, genre, plot, show)
         elif action == 'genres_shows':              genres().ororo_shows()
         elif action == 'play':                      resolver().run(url, name, imdb)
 
@@ -526,7 +528,7 @@ class index:
                     else: cm.append((language(30418).encode("utf-8"), 'RunPlugin(%s?action=favourite_delete&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
                     cm.append((language(30429).encode("utf-8"), 'RunPlugin(%s?action=view_tvshows)' % (sys.argv[0])))
                     cm.append((language(30409).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
-                elif action == 'shows_search':
+                elif action.startswith('shows_search'):
                     if not '"%s"' % url in subRead: cm.append((language(30423).encode("utf-8"), 'RunPlugin(%s?action=subscription_add&name=%s&imdb=%s&url=%s&image=%s)' % (sys.argv[0], sysname, sysimdb, sysurl, sysimage)))
                     else: cm.append((language(30424).encode("utf-8"), 'RunPlugin(%s?action=subscription_delete&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
                     cm.append((language(30422).encode("utf-8"), 'RunPlugin(%s?action=library2&name=%s&url=%s&imdb=%s)' % (sys.argv[0], sysname, sysurl, sysimdb)))
@@ -546,7 +548,10 @@ class index:
                     cm.append((language(30410).encode("utf-8"), 'RunPlugin(%s?action=playlist_open)' % (sys.argv[0])))
                     cm.append((language(30411).encode("utf-8"), 'RunPlugin(%s?action=addon_home)' % (sys.argv[0])))
 
-                item = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=poster)
+                if url.startswith(link().watchseries_base) and getSetting("asterisk") == 'true' and (action == 'shows_favourites' or action == 'shows_subscriptions'): label = '%s *' % name
+                else: label = name
+
+                item = xbmcgui.ListItem(label, iconImage="DefaultVideo.png", thumbnailImage=poster)
                 item.setInfo( type="Video", infoLabels = meta )
                 item.setProperty("IsPlayable", "true")
                 item.setProperty("Video", "true")
@@ -983,13 +988,13 @@ class contextMenu:
             xbmcvfs.mkdir(library)
             xbmcvfs.mkdir(folder)
             seasonUrl = url
-            seasonList = seasons().ororo_list(url, ' ', ' ', ' ', ' ', show)
+            seasonList = seasons().get(url, ' ', ' ', ' ', ' ', show, idx=False)
             for i in seasonList:
                 season = i['name']
                 enc_season = season.translate(None, '\/:*?"<>|')
                 seasonDir = os.path.join(folder, enc_season)
                 xbmcvfs.mkdir(seasonDir)
-                episodeList = episodes().ororo_list(season, seasonUrl, ' ', ' ', ' ', ' ', show)
+                episodeList = episodes().get(season, seasonUrl, ' ', ' ', ' ', ' ', show, idx=False)
                 for i in episodeList:
                     name, url = i['name'], i['url']
                     sysname, sysurl, sysimdb = urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(imdb)
@@ -1126,9 +1131,15 @@ class root:
         rootList.append({'name': 30504, 'image': 'Genres.png', 'action': 'genres_shows'})
         rootList.append({'name': 30505, 'image': 'Favourites.png', 'action': 'shows_favourites'})
         rootList.append({'name': 30506, 'image': 'Subscriptions.png', 'action': 'shows_subscriptions'})
-        rootList.append({'name': 30507, 'image': 'Search.png', 'action': 'shows_search'})
+        rootList.append({'name': 30507, 'image': 'Search.png', 'action': 'root_search'})
         index().rootList(rootList)
         index().downloadList()
+
+    def search(self):
+        rootList = []
+        rootList.append({'name': 30521, 'image': 'Search.png', 'action': 'shows_search'})
+        rootList.append({'name': 30522, 'image': 'Search+.png', 'action': 'shows_searchmore'})
+        index().rootList(rootList)
 
 class link:
     def __init__(self):
@@ -1204,6 +1215,16 @@ class shows:
             filter = [i for i in self.list if all(x.lower() in i['name'].lower() for x in self.query)]
             index().showList(filter)
 
+    def watchseries_search(self, query=None):
+        if query is None:
+            self.query = common.getUserInput(language(30362).encode("utf-8"), '')
+        else:
+            self.query = query
+        if not (self.query is None or self.query == ''):
+            self.query = link().watchseries_search % urllib.quote_plus(self.query)
+            self.list = self.watchseries_list(self.query)
+            index().showList(self.list)
+
     def ororo_list(self):
         try:
             result = getUrl(link().ororo_base).result
@@ -1243,12 +1264,55 @@ class shows:
 
         return self.list
 
+    def watchseries_list(self, url):
+        try:
+            result = getUrl(url).result
+            shows = common.parseDOM(result, "div", attrs = { "class": "episode-summary" })[0]
+            shows = shows.replace('<tr></tr>', '</tr>')
+            shows = common.parseDOM(shows, "tr")
+        except:
+            return
+        for show in shows:
+            try:
+                name = common.parseDOM(show, "a", attrs = { "title": ".+?" })[-1]
+                name = name.rsplit('</', 1)[0].split('>', 1)[-1]
+                try: year = re.compile('[(](\d{4})[)]').findall(name)[-1]
+                except: year = ''
+                name = name.replace('(%s)' % year, '').strip()
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+                url = common.parseDOM(show, "a", ret="href")[0]
+                url = '%s%s' % (link().watchseries_base, url)
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+                image = common.parseDOM(show, "img", ret="src")[0]
+                image = common.replaceHTMLCodes(image)
+                image = image.encode('utf-8')
+                try: plot = common.parseDOM(show, "td")[-1]
+                except: plot = ''
+                plot = plot.split('Description:', 1)[-1].split('>', 1)[-1].strip()
+                plot = common.replaceHTMLCodes(plot)
+                plot = plot.encode('utf-8')
+                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': '', 'plot': plot})
+            except:
+                pass
+
+        return self.list
+
 class seasons:
     def __init__(self):
         self.list = []
 
-    def ororo(self, url, image, imdb, genre, plot, show):
-        self.list = self.ororo_list(url, image, imdb, genre, plot, show)
+    def get(self, url, image, imdb, genre, plot, show, idx=True):
+        if url.startswith(link().ororo_base):
+            self.list = self.ororo_list(url, image, imdb, genre, plot, show)
+            if self.list is None:
+                self.list = []
+                url = self.watchseries_url(show, imdb)
+                self.list = self.watchseries_list(url, image, imdb, genre, plot, show)
+        else:
+            self.list = self.watchseries_list(url, image, imdb, genre, plot, show)
+        if idx == False: return self.list
         index().seasonList(self.list)
 
     def ororo_list(self, url, image, imdb, genre, plot, show):
@@ -1277,12 +1341,70 @@ class seasons:
 
         return self.list
 
+    def watchseries_url(self, show, imdb):
+        try:
+            try:
+                if imdb == '0': meta = metaget.get_meta('tvshow', show)
+                else: meta = metaget.get_meta('tvshow', show, imdb_id=imdb)
+                show, imdb = meta['title'], meta['imdb_id']
+            except:
+                pass
+
+            url = None
+            query = link().watchseries_search % urllib.quote_plus(show)
+            result = getUrl(query).result
+            shows = re.compile('href="(/serie/.+?)"').findall(result)
+            shows = uniqueList(shows).list
+
+            for show in shows[:5]:
+                try:
+                    showsUrl = '%s%s' % (link().watchseries_base, show)
+                    result = getUrl(showsUrl).result
+                    if imdb in result:
+                        url = showsUrl
+                        break
+                except:
+                    pass
+
+            if len(shows) == 0: return
+            if url == None: url = '%s%s' % (link().watchseries_base, shows[0])
+            return url
+        except:
+            return
+
+    def watchseries_list(self, url, image, imdb, genre, plot, show):
+        try:
+            result = getUrl(url).result
+            seasons = common.parseDOM(result, "h2", attrs = { "class": "lists" })
+        except:
+            return
+        for season in seasons:
+            try:
+                name = common.parseDOM(season, "a")[0]
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+                num = re.sub("[^0-9]", "", name)
+                num = num.encode('utf-8')
+                url = common.parseDOM(season, "a", ret="href")[0]
+                url = '%s%s' % (link().watchseries_base, url)
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'show': show, 'season': num})
+            except:
+                pass
+
+        return self.list
+
 class episodes:
     def __init__(self):
         self.list = []
 
-    def ororo(self, name, url, image, imdb, genre, plot, show):
-        self.list = self.ororo_list(name, url, image, imdb, genre, plot, show)
+    def get(self, name, url, image, imdb, genre, plot, show, idx=True):
+        if url.startswith(link().ororo_base):
+            self.list = self.ororo_list(name, url, image, imdb, genre, plot, show)
+        else:
+            self.list = self.watchseries_list(name, url, image, imdb, genre, plot, show)
+        if idx == False: return self.list
         index().episodeList(self.list)
 
     def ororo_list(self, name, url, image, imdb, genre, plot, show):
@@ -1328,6 +1450,44 @@ class episodes:
 
         return self.list
 
+    def watchseries_list(self, name, url, image, imdb, genre, plot, show):
+        try:
+            season = re.sub("[^0-9]", "", name)
+            season = season.encode('utf-8')
+            result = getUrl(url).result
+            result = common.parseDOM(result, "ul", attrs = { "class": "listings" })[0]
+            episodes = common.parseDOM(result, "li")
+        except:
+            return
+        for episode in episodes:
+            try:
+                date = common.parseDOM(episode, "span", attrs = { "class": "epnum" })[0]
+                d = [x for x in date.split('/')]
+                if not len(d) == 3: raise Exception()
+                today = datetime.datetime.now().strftime("%Y%m%d")
+                date = '%s%s%s' % (d[2], d[1], d[0])
+                if int(date) >  int(today): raise Exception()
+
+                label = common.parseDOM(episode, "span")[0]
+                label = common.replaceHTMLCodes(label)
+                label = label.encode('utf-8')
+                try: title = label.split("  �", 1)[-1].strip()
+                except: title = label
+                try: num = re.sub("[^0-9]", "", label.split("  �", 1)[0])
+                except: num = re.sub("[^0-9]", "", label)
+                name = show + ' S' + '%02d' % int(season) + 'E' + '%02d' % int(num)
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+                url = common.parseDOM(episode, "a", ret="href")[0]
+                url = '%s%s' % (link().watchseries_base, url)
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': title, 'show': show, 'season': season, 'episode': num})
+            except:
+                pass
+
+        return self.list
+
 class resolver:
     def __init__(self):
         self.list = []
@@ -1336,12 +1496,18 @@ class resolver:
         try:
             if player().status() is True: return
 
-            if play == False: return self.ororo_direct(url)
+            if play == False:
+                if url.startswith(link().ororo_base): return self.ororo_direct(url)
+                else: return self.watchseries(name, imdb)
 
-            if not url == 'sources': url = self.ororo(url)
-            else: url = None
+            if url.startswith(link().ororo_base):
+                url = self.ororo(url)
+                if url is None: url = self.watchseries(name, imdb)
+            elif url.startswith(link().watchseries_base):
+                url = self.watchseries(name, imdb)
+            elif url == 'sources':
+                url = self.watchseries(name, imdb)
 
-            if url is None: url = self.watchseries(name, imdb)
             if url is None: raise Exception()
             if url == 'close': return
 
@@ -1368,9 +1534,11 @@ class resolver:
             request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0')
             request.add_header('Cookie', 'video=true')
             response = urllib2.urlopen(request, timeout=10)
-            chunk = response.read(500 * 1024)
-            end = time.clock() - start
-            if not end < 2: return
+            for i in range(0, 31):
+                chunk = response.read(16 * 1024)
+                end = time.clock() - start
+                if end > 2.5: break
+            if end > 2.5: return
 
             url = '%s|Cookie=%s' % (url, urllib.quote_plus('video=true'))
             return url

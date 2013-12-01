@@ -1,4 +1,16 @@
 ------------------------
+Ororo TV v1.0.3 (1-Dec-13)
+------------------------
+
+- Episode listings will always be available even if login is required but not provided.
+- Added support for tv show search outside ororo.tv database.
+- Added asterisk for tv shows outside ororo.tv database.
+- NOTE: Asterisk can be disabled in addon settings.
+- Tweaked ororo.tv resolver.
+- Code cosmetics.
+
+
+------------------------
 Ororo TV v1.0.2 (30-Nov-13)
 ------------------------
 
