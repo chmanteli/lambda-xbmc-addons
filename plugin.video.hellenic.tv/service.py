@@ -435,7 +435,7 @@ class epg:
             'KONTRA CHANNEL'            : self.ote_programme("KONTRA CHANNEL", "44"),
             'EXTRA 3'                   : self.ote_programme("EXTRA 3", "135"),
             'ART CHANNEL'               : self.ote_programme("ART CHANNEL", "156"),
-            'ZOOM'                      : self.ote_programme("ZOOM", "157"),
+            #'ZOOM'                      : self.ote_programme("ZOOM", "157"),
             'BLUE SKY'                  : self.ote_programme("BLUE SKY", "153"),
             #'SBC TV'                   : self.ote_programme("SBC TV", "136"),
             'TV 100'                    : self.ote_programme("TV 100", "137"),

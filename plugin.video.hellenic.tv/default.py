@@ -397,8 +397,9 @@ class player:
 
     def visionip(self, url):
         try:
-            cookie = 'http://tvnetwork.new.visionip.tv/Hellenic_TV'
-            result = getUrl(url,cookie=cookie).result
+            root = 'http://tvnetwork.new.visionip.tv/Hellenic_TV'
+            result = getUrl(root, close=False, cookie=True).result
+            result = getUrl(url).result
             result = common.parseDOM(result, "entry")[0]
             streamer = common.parseDOM(result, "param", ret="value")[0]
             playPath = common.parseDOM(result, "ref", ret="href")[0]
@@ -498,9 +499,9 @@ class player:
             pageUrl = url
             name = url.split("/")[-1]
             swfUrl = 'http://www.justin.tv/widgets/live_embed_player.swf?channel=%s' % name
-            swfUrl = getUrl(swfUrl,fetch=False,referer=url).result
+            swfUrl = getUrl(swfUrl, fetch=False, referer=url).result
             data = 'http://usher.justin.tv/find/%s.json?type=any&group=&channel_subscription=' % name
-            data = getUrl(data,referer=url).result
+            data = getUrl(data, referer=url).result
             try: import json
             except: import simplejson as json
             data = json.loads(data)

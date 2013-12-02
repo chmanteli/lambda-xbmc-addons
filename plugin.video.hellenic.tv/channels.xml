@@ -36,14 +36,14 @@
 		<channel active="True">
 			<name>SKAI</name>
 			<type>hls</type>
-			<url>http://iphone.skai.gr.edgesuite.net/iphoneglobal_iphone.m3u8</url>
+			<url>http://skaihdn2-f.akamaihd.net/i/geo_2@86985/master.m3u8</url>
 			<base>http://www.skai.gr/player/tvlive/</base>
 			<epg>30505</epg>
 		</channel>
-		<channel active="False">
+		<channel active="True">
 			<name>E TV</name>
 			<type></type>
-			<url></url>
+			<url>rtmp://213.16.167.187:1935/live/mpegts_256.stream live=1 timeout=10</url>
 			<base>http://www.epsilontv.gr/</base>
 			<epg>30506</epg>
 		</channel>
@@ -54,12 +54,10 @@
 			<base>http://www.maktv.gr/Live</base>
 			<epg>30507</epg>
 		</channel>
-		<channel active="True">
+		<channel active="False">
 			<name>NET</name>
 			<type></type>
-			<url>rtmp://live.ertopen.com:80/live/ert live=1 timeout=10</url>
-			<type2></type2>
-			<url2>rtmp://31.204.154.90/live2/live2 live=1 timeout=10</url2>
+			<url></url>
 			<base>http://www.ertopen.com/</base>
 			<epg>30508</epg>
 		</channel>
@@ -68,7 +66,7 @@
 			<type>veetle</type>
 			<url>http://veetle.com/index.php/channel/view#51b7cee75aed5</url>
 			<type2></type2>
-			<url2>rtmp://31.204.154.90/live/livestream live=1 timeout=10</url2>
+			<url2>rtmp://live2.ertopen.com:443/live2 live=1 timeout=10</url2>
 			<base>http://www.ertopen.com/</base>
 			<epg>30509</epg>
 		</channel>
@@ -76,6 +74,8 @@
 			<name>EDT</name>
 			<type>visionip</type>
 			<url>http://tvnetwork.new.visionip.tv/Hellenic_TV/index.php?module=playlist&amp;type=jwASX&amp;broadcastid=4267</url>
+			<type2></type2>
+			<url2>rtmp://cp115017.live.edgefcs.net:443/live/jiplive@46638 live=1 timeout=10</url2>
 			<base>http://www.hprt.gr/</base>
 			<epg>30510</epg>
 		</channel>
@@ -164,7 +164,7 @@
 			<base>http://www.mad.tv/</base>
 			<epg>30544</epg>
 		</channel>
-		<channel active="True">
+		<channel active="False">
 			<name>MUSIC TV</name>
 			<type>hls</type>
 			<url>http://musictvstream.istoikona.net/musictv.isml/manifest(format=m3u8-aapl).m3u8</url>
@@ -223,10 +223,10 @@
 			<base>http://www.arttv.info/</base>
 			<epg>30564</epg>
 		</channel>
-		<channel active="True">
+		<channel active="False">
 			<name>ZOOM</name>
 			<type></type>
-			<url>rtmp://213.16.167.187:1935/live/mpegts_256.stream live=1 timeout=10</url>
+			<url></url>
 			<base>http://www.zoomtv.gr/</base>
 			<epg>30565</epg>
 		</channel>
@@ -754,7 +754,7 @@
 		<channel active="True">
 			<name>SYROS TV1</name>
 			<type></type>
-			<url>rtmp://159.253.143.17/2290/msg116s live=1 timeout=10</url>
+			<url>rtmp://159.253.143.17:1935/webcams/msg116s live=1 timeout=10</url>
 			<base>http://www.syrostv1.gr/</base>
 			<epg>30761</epg>
 		</channel>
@@ -815,8 +815,8 @@
 		</channel>
 		<channel active="True">
 			<name>TELE EPILOGES</name>
-			<type>hls</type>
-			<url>http://185.32.229.29/epiloges.m3u8</url>
+			<type>ustream</type>
+			<url>http://www.ustream.tv/channel/epilogestv</url>
 			<base>http://www.epiloges.tv/</base>
 			<epg>30802</epg>
 		</channel>

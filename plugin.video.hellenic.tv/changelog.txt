@@ -1,4 +1,13 @@
 ------------------------
+Hellenic TV v2.4.2 (2-Dec-13)
+------------------------
+
+- Added E TV.
+- Updated SKAI, EDT, SYROS TV1 and TELE EPILOGES.
+- Removed NET, MUSIC TV and ZOOM.
+
+
+------------------------
 Hellenic TV v2.4.1 (18-Nov-13)
 ------------------------
 
