@@ -1,4 +1,16 @@
 ------------------------
+Ororo TV v1.1.0 (4-Dec-13)
+------------------------
+
+- Added auto-play support.
+- NOTE: Can be disabled in addon's settings.
+- Added priority options for sources.
+- Tweaked tv shows outside ororo.tv database.
+- Fixed various issues.
+- Code cosmetics.
+
+
+------------------------
 Ororo TV v1.0.3 (1-Dec-13)
 ------------------------
 

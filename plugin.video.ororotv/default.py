@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import urllib,urllib2,re,os,threading,datetime,xbmc,xbmcplugin,xbmcgui,xbmcaddon,xbmcvfs
+import urllib,urllib2,re,os,threading,datetime,time,xbmc,xbmcplugin,xbmcgui,xbmcaddon,xbmcvfs
 from operator import itemgetter
 import urlresolver
 try:    import CommonFunctions
@@ -1084,8 +1084,8 @@ class contextMenu:
         meta = {'label': xbmc.getInfoLabel('ListItem.label'), 'title': xbmc.getInfoLabel('ListItem.title'), 'tvshowtitle': xbmc.getInfoLabel('ListItem.tvshowtitle'), 'season': xbmc.getInfoLabel('ListItem.season'), 'episode': xbmc.getInfoLabel('ListItem.episode'), 'imdb_id': xbmc.getInfoLabel('ListItem.imdb_id'), 'tvdb_id': xbmc.getInfoLabel('ListItem.tvdb_id'), 'episode_id': xbmc.getInfoLabel('ListItem.episode_id'), 'trailer_url': xbmc.getInfoLabel('ListItem.trailer_url'), 'premiered': xbmc.getInfoLabel('ListItem.premiered'), 'director': xbmc.getInfoLabel('ListItem.director'), 'writer': xbmc.getInfoLabel('ListItem.writer'), 'rating': xbmc.getInfoLabel('ListItem.rating'), 'overlay': xbmc.getInfoLabel('ListItem.overlay'), 'genre': xbmc.getInfoLabel('ListItem.genre'), 'plot': xbmc.getInfoLabel('ListItem.plot')}
         label, poster, fanart = xbmc.getInfoLabel('ListItem.label'), xbmc.getInfoLabel('ListItem.icon'), xbmc.getInfoLabel('ListItem.Property(Fanart_Image)')
 
-        sysname, sysimdb = urllib.quote_plus(name), urllib.quote_plus(imdb)
-        u = '%s?action=play&name=%s&url=sources&imdb=%s' % (sys.argv[0], sysname, sysimdb)
+        sysname, sysurl, sysimdb = urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(imdb)
+        u = '%s?action=play&name=%s&url=sources+%s&imdb=%s' % (sys.argv[0], sysname, sysurl, sysimdb)
 
         playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
         playlist.clear()
@@ -1208,7 +1208,7 @@ class shows:
         if query is None:
             self.query = common.getUserInput(language(30362).encode("utf-8"), '')
         else:
-            self.query = query
+            self.query = None#query
         if not (self.query is None or self.query == ''):
             self.list = self.ororo_list()
             self.query = self.query.split(" ")
@@ -1219,7 +1219,7 @@ class shows:
         if query is None:
             self.query = common.getUserInput(language(30362).encode("utf-8"), '')
         else:
-            self.query = query
+            self.query = None#query
         if not (self.query is None or self.query == ''):
             self.query = link().watchseries_search % urllib.quote_plus(self.query)
             self.list = self.watchseries_list(self.query)
@@ -1389,6 +1389,11 @@ class seasons:
                 url = '%s%s' % (link().watchseries_base, url)
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
+
+                check = re.compile('class="listings".+?"/episode/.+?_s%s_e1.html">(.+?)</span>' % num).findall(result)[0]
+                check = check.rsplit(";", 1)[-1].strip()
+                if check == '': raise Exception()
+
                 self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'show': show, 'season': num})
             except:
                 pass
@@ -1459,15 +1464,9 @@ class episodes:
             episodes = common.parseDOM(result, "li")
         except:
             return
+
         for episode in episodes:
             try:
-                date = common.parseDOM(episode, "span", attrs = { "class": "epnum" })[0]
-                d = [x for x in date.split('/')]
-                if not len(d) == 3: raise Exception()
-                today = datetime.datetime.now().strftime("%Y%m%d")
-                date = '%s%s%s' % (d[2], d[1], d[0])
-                if int(date) >  int(today): raise Exception()
-
                 label = common.parseDOM(episode, "span")[0]
                 label = common.replaceHTMLCodes(label)
                 label = label.encode('utf-8')
@@ -1482,6 +1481,23 @@ class episodes:
                 url = '%s%s' % (link().watchseries_base, url)
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
+
+                try:
+                    date = common.parseDOM(episode, "span", attrs = { "class": "epnum" })[0]
+                    d = [x for x in date.split('/')]
+                    if not len(d) == 3: raise Exception()
+                    date = '%s%s%s' % (d[2], d[1], d[0])
+                except:
+                    date = '99999999'
+                    if imdb == '0': imdb = metaget.get_meta('tvshow', show)['imdb_id']
+                    imdb = re.sub("[^0-9]", "", imdb)
+                    status = metaget.get_meta('tvshow', show, imdb_id=imdb)['status']
+                    if status == 'Ended': date = '0'
+                    else: date = metaget.get_episode_meta(title, imdb, season, num)['premiered']
+                    date = date.replace('-','')
+                today = datetime.datetime.now().strftime("%Y%m%d")
+                if int(date) + 2 >  int(today): raise Exception()
+
                 self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': title, 'show': show, 'season': season, 'episode': num})
             except:
                 pass
@@ -1497,16 +1513,29 @@ class resolver:
             if player().status() is True: return
 
             if play == False:
-                if url.startswith(link().ororo_base): return self.ororo_direct(url)
-                else: return self.watchseries(name, imdb)
+                if url.startswith(link().ororo_base):
+                    return self.ororo(url, direct=True)
+                else:
+                    url = self.watchseries_url(name, imdb)
+                    return self.watchseries(url, direct=True)
 
-            if url.startswith(link().ororo_base):
-                url = self.ororo(url)
-                if url is None: url = self.watchseries(name, imdb)
+            if url.startswith('sources '):
+                url = url.split('sources', 1)[-1].strip()
+                if url.startswith(link().ororo_base):
+                    url = self.watchseries_url(name, imdb)
+                url = self.watchseries(url)
+
+            elif url.startswith(link().ororo_base):
+                if getSetting("ororo") == '1': url = self.ororo(url)
+                else: url = None
+                if url is None:
+                    url = self.watchseries_url(name, imdb)
+                    if getSetting("autoplay") == 'true': url = self.watchseries(url, direct=True)
+                    else: url = self.watchseries(url)
+
             elif url.startswith(link().watchseries_base):
-                url = self.watchseries(name, imdb)
-            elif url == 'sources':
-                url = self.watchseries(name, imdb)
+                if getSetting("autoplay") == 'true': url = self.watchseries(url, direct=True)
+                else: url = self.watchseries(url)
 
             if url is None: raise Exception()
             if url == 'close': return
@@ -1517,7 +1546,7 @@ class resolver:
             index().infoDialog(language(30317).encode("utf-8"))
             return
 
-    def ororo(self, url):
+    def ororo(self, url, direct=False):
         try:
             result = getUrl(url).result
             url = None
@@ -1528,39 +1557,25 @@ class resolver:
             if url is None: return
             if not url.startswith('http://'): url = '%s%s' % (link().ororo_base, url)
 
-            import time
-            start = time.clock()
-            request = urllib2.Request(url)
-            request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0')
-            request.add_header('Cookie', 'video=true')
-            response = urllib2.urlopen(request, timeout=10)
-            for i in range(0, 31):
-                chunk = response.read(16 * 1024)
-                end = time.clock() - start
-                if end > 2.5: break
-            if end > 2.5: return
+            if direct == False:
+                start = time.clock()
+                request = urllib2.Request(url)
+                request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0')
+                request.add_header('Cookie', 'video=true')
+                response = urllib2.urlopen(request, timeout=10)
+                for i in range(0, 26):
+                    chunk = response.read(16 * 1024)
+                    end = time.clock() - start
+                    if end > 2.5: break
+                response.close()
+                if end > 2.5: return
 
             url = '%s|Cookie=%s' % (url, urllib.quote_plus('video=true'))
             return url
         except:
             return
 
-    def ororo_direct(self, url):
-        try:
-            result = getUrl(url).result
-            url = None
-            try: url = common.parseDOM(result, "source", ret="src", attrs = { "type": "video/webm" })[0]
-            except: pass
-            try: url = common.parseDOM(result, "source", ret="src", attrs = { "type": "video/mp4" })[0]
-            except: pass
-            if url is None: return
-            if not url.startswith('http://'): url = '%s%s' % (link().ororo_base, url)
-            url = '%s|Cookie=%s' % (url, urllib.quote_plus('video=true'))
-            return url
-        except:
-            return
-
-    def watchseries(self, name, imdb):
+    def watchseries_url(self, name, imdb):
         try:
             title = name.rsplit(' ', 1)[0]
             season = '%01d' % int(name.rsplit(' ', 1)[-1].split('S')[-1].split('E')[0])
@@ -1572,7 +1587,7 @@ class resolver:
             except:
                 pass
 
-            id = None
+            url = None
             query = link().watchseries_search % urllib.quote_plus(title)
             result = getUrl(query).result
             shows = re.compile('href="(/serie/.+?)"').findall(result)
@@ -1583,18 +1598,29 @@ class resolver:
                     showsUrl = '%s%s' % (link().watchseries_base, show)
                     result = getUrl(showsUrl).result
                     if imdb in result:
-                        id = show.split('/')[-1]
+                        url = show.split('/')[-1]
                         break
                 except:
                     pass
 
             if len(shows) == 0: return 'close'
-            if id == None: id = shows[0].split('/')[-1]
-            url = link().watchseries_episodes % (id, season, episode)
+            if url == None: url = shows[0].split('/')[-1]
+            url = link().watchseries_episodes % (url, season, episode)
+            return url
+        except:
+            return
+
+    def watchseries(self, url, direct=False):
+        try:
             result = getUrl(url).result
 
-            hosts = ['Putlocker', 'Sockshare', 'Movreel', 'Vidx', 'Flashx', 'Played', 'Streamcloud', 'BillionUploads', '180upload', 'Nowvideo', 'Filenuke', 'Novamov', 'Uploadc', 'Xvidstage', 'StageVu', 'Gorillavid', 'Divxstage', 'Moveshare', 'Sharesix', 'Movpod', 'Daclips', 'Videoweed', 'Zalaa', 'Vidxden', 'Vidbux']
-            hostDict = {'180upload' : '180upload.com', 'BillionUploads' : 'billionuploads.com', 'Daclips' : 'daclips.', 'Divxstage' : 'divxstage.eu', 'Filenuke' : 'filenuke.com', 'Flashx' : 'flashx.tv', 'Gorillavid' : 'gorillavid.', 'Moveshare' : 'moveshare.net', 'Movpod' : 'movpod.', 'Movreel' : 'movreel.com', 'Novamov' : 'novamov.com', 'Nowvideo' : 'nowvideo.co', 'Played' : 'played.to', 'Putlocker' : 'putlocker.com', 'Sharesix' : 'sharesix.com', 'Sockshare' : 'sockshare.com', 'StageVu' : 'stagevu.com', 'Streamcloud' : 'streamcloud.eu', 'Uploadc' : 'uploadc.com', 'Vidbux' : 'vidbux.com', 'Videoweed' : 'videoweed.es', 'Vidx' : 'vidx.to', 'Vidxden' : 'vidxden.com', 'Xvidstage' : 'xvidstage.com', 'Zalaa' : 'zalaa.com'}
+            hosts = ['Putlocker', 'Sockshare', 'Movreel', 'Flashx', 'Played', 'Nowvideo', 'Filenuke', 'Vidx', 'Streamcloud', 'Novamov', 'Uploadc', 'Xvidstage', 'StageVu', 'Gorillavid', 'Divxstage', 'Moveshare', 'Sharesix', 'Movpod', 'Daclips', 'Videoweed', 'Zalaa', 'Vidxden', 'Vidbux', 'BillionUploads', '180upload']
+            hostDict = {'180upload' : '180upload.com', 'BillionUploads' : 'billionuploads.com', 'Daclips' : 'daclips.com', 'Divxstage' : 'divxstage.eu', 'Filenuke' : 'filenuke.com', 'Flashx' : 'flashx.tv', 'Gorillavid' : 'gorillavid.com', 'Moveshare' : 'moveshare.net', 'Movpod' : 'movpod.net', 'Movreel' : 'movreel.com', 'Novamov' : 'novamov.com', 'Nowvideo' : 'nowvideo.co', 'Played' : 'played.to', 'Putlocker' : 'putlocker.com', 'Sharesix' : 'sharesix.com', 'Sockshare' : 'sockshare.com', 'StageVu' : 'stagevu.com', 'Streamcloud' : 'streamcloud.eu', 'Uploadc' : 'uploadc.com', 'Vidbux' : 'vidbux.com', 'Videoweed' : 'videoweed.es', 'Vidx' : 'vidx.to', 'Vidxden' : 'vidxden.com', 'Xvidstage' : 'xvidstage.com', 'Zalaa' : 'zalaa.com'}
+
+            host_rank = [getSetting("host1"), getSetting("host2"), getSetting("host3"), getSetting("host4"), getSetting("host5"), getSetting("host6"), getSetting("host7"), getSetting("host8"), getSetting("host9"), getSetting("host10")]
+            for host in host_rank[::-1]:
+                try: hosts = [[hosts[i]] + hosts[:i] + hosts[i+1:] for i in range(len(hosts)) if hosts[i] == host][0]
+                except: pass
 
             count = 1
             for host in hosts:
@@ -1606,21 +1632,35 @@ class resolver:
                     self.list.append({'name': name, 'url': url})
                     count = count + 1
 
-            nameList, urlList = [], []
-            for i in self.list:
-                nameList.append(i['name'])
-                urlList.append(i['url'])
+            if direct == True:
+                for i in self.list:
+                    try:
+                        result = getUrl(i['url']).result
+                        url = common.parseDOM(result, "a", ret="href", attrs = { "class": "myButton" })[0]
+                        url = self.urlresolver(url)
+                        xbmc.sleep(1000)
+                        if url is None: raise Exception()
+                        return url
+                    except:
+                        pass
 
-            select = index().selectDialog(nameList)
-            if select == -1: return 'close'
-            if not select > -1: return
-            url = urlList[select]
+            else:
+                nameList, urlList = [], []
+                for i in self.list:
+                    nameList.append(i['name'])
+                    urlList.append(i['url'])
 
-            result = getUrl(url).result
-            url = common.parseDOM(result, "a", ret="href", attrs = { "class": "myButton" })[0]
-            url = self.urlresolver(url)
-            if url is None: return
-            return url
+                select = index().selectDialog(nameList)
+                if select == -1: return 'close'
+                if not select > -1: return
+                url = urlList[select]
+
+                result = getUrl(url).result
+                url = common.parseDOM(result, "a", ret="href", attrs = { "class": "myButton" })[0]
+                url = self.urlresolver(url)
+                if url is None: return
+                return url
+
         except:
             return
 

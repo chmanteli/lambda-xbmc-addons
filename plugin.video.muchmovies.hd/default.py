@@ -33,7 +33,7 @@ addonName           = xbmcaddon.Addon().getAddonInfo("name")
 addonVersion        = xbmcaddon.Addon().getAddonInfo("version")
 addonId             = xbmcaddon.Addon().getAddonInfo("id")
 addonPath           = xbmcaddon.Addon().getAddonInfo("path")
-addonDesc           = language(40450).encode("utf-8")
+addonDesc           = language(30450).encode("utf-8")
 addonIcon           = os.path.join(addonPath,'icon.png')
 addonFanart         = os.path.join(addonPath,'fanart.jpg')
 addonArt            = os.path.join(addonPath,'resources/art')
@@ -920,7 +920,7 @@ class movies:
         if query is None:
             self.query = common.getUserInput(language(30362).encode("utf-8"), '')
         else:
-            self.query = query
+            self.query = None#query
         if not (self.query is None or self.query == ''):
             self.query = link().muchmovies_search + '/' + urllib.quote_plus(self.query.replace(' ', '-'))
             self.list = self.muchmovies_list(self.query)
