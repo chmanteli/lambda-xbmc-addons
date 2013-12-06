@@ -143,8 +143,7 @@ class main:
         elif action == 'episodes_ukchart':          music().ukchart()
         elif action == 'episodes_itunesuk':         music().itunesuk()
         elif action == 'episodes':                  episodeList().get(name, url, image, imdb, genre, plot, show)
-        elif action == 'play':                      player().run(url, name)
-
+        elif action == 'play':                      resolver().run(url, name)
 
         if action is None or action.startswith('root'):
             index().container_view('root', {'skin.confluence' : 500})
@@ -210,6 +209,26 @@ class Thread(threading.Thread):
     def run(self):
         self._target(*self._args)
 
+class player(xbmc.Player):
+    def __init__ (self):
+        xbmc.Player.__init__(self)
+
+    def status(self):
+        return
+
+    def run(self, name, url):
+        item = xbmcgui.ListItem(path=url)
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+        xbmc.sleep(3000)
+        if not xbmc.getCondVisibility('Player.Paused') == 0:
+            xbmc.executebuiltin('Action(Play)')
+
+    def onPlayBackEnded(self):
+        index().container_refresh()
+
+    def onPlayBackStopped(self):
+        index().container_refresh()
+
 class index:
     def infoDialog(self, str, header=addonName):
         xbmc.executebuiltin("Notification(%s,%s, 3000, %s)" % (header, str, addonIcon))
@@ -268,13 +287,6 @@ class index:
                 xbmc.executebuiltin('Container.SetViewMode(%s)' % id)
             except:
                 pass
-
-    def resolve(self, url):
-        item = xbmcgui.ListItem(path=url)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
-        xbmc.sleep(3000)
-        if not xbmc.getCondVisibility('Player.Paused') == 0:
-            xbmc.executebuiltin('Action(Play)')
 
     def rootList(self, rootList):
         count = 0
@@ -1115,9 +1127,21 @@ class showList:
 
     def cinegreece_list(self, url):
         try:
-            result = getUrl(url).result
-            shows = common.parseDOM(result, "div", attrs = { "itemprop": "articleBody" })[0]
-            shows = re.compile('(<a.+?</a>)').findall(shows)
+            showsUrl = [url]
+            for i in range(2, 5): showsUrl.append(url.replace('.html', 'p%s.html' % str(i)))
+
+            threads = []
+            result = ''
+            for i in range(0, 4):
+                self.data.append('')
+                threads.append(Thread(self.thread, showsUrl[i], i))
+            [i.start() for i in threads]
+            [i.join() for i in threads]
+            for data in self.data:
+                try: result += common.parseDOM(data, "div", attrs = { "itemprop": "articleBody" })[0]
+                except: pass
+
+            shows = re.compile('(<a.+?</a>)').findall(result)
         except:
             return
         for show in shows:
@@ -1555,6 +1579,9 @@ class episodeList:
             for i in self.data: result += i
 
             episodes = common.parseDOM(result, "div", attrs = { "class": "catItemImageBlock" })
+            if episodes == []:
+                result = getUrl(url).result
+                episodes = common.parseDOM(result, "div", attrs = { "class": "catItemImageBlock" })
         except:
         	return
         for episode in episodes:
@@ -1580,7 +1607,7 @@ class episodeList:
     def cinegreece_list(self, name, url, image, imdb, genre, plot, show):
         try:
             result = getUrl(url).result
-            image = common.parseDOM(result, "div", attrs = { "class": "separator" })[0]
+            image = common.parseDOM(result, "a", attrs = { "imageanchor": ".+?" })[0]
             image = common.parseDOM(image, "img", ret="src")[0]
             image = common.replaceHTMLCodes(image)
             image = image.encode('utf-8')
@@ -1591,6 +1618,9 @@ class episodeList:
         for episode in episodes:
             try:
                 name = common.parseDOM(episode, "button")[0]
+                try: name = common.parseDOM(name, "span")[0]
+                except: pass
+                if '#' in name: raise Exception()
                 name = name.replace('&nbsp;&nbsp;&nbsp;','-').strip()
                 name = 'Επεισόδιο '.decode('iso-8859-7') + name
                 name = common.replaceHTMLCodes(name)
@@ -1776,12 +1806,14 @@ class episodeList:
         except:
             return
 
-class player:
+class resolver:
     def __init__(self):
         self.data = []
 
-    def run(self, url, name=None):
+    def run(self, url, name=None, play=True):
         try:
+            if player().status() is True: return
+
             if url.startswith(link().megatv_hls): url = self.megatv_hls(url)
             elif url.startswith(link().megatv_base): url = self.megatv(url)
             elif url.startswith(link().antenna_base): url = self.antenna(url)
@@ -1793,11 +1825,13 @@ class player:
             elif url.startswith(link().youtube_base): url = self.youtube(url)
             elif url.startswith(link().dailymotion_base): url = self.dailymotion(url)
             if url is None: raise Exception()
-            index().resolve(url)
+
+            if play == False: return url
+            player().run(name, url)
+            return url
         except:
             index().infoDialog(language(30317).encode("utf-8"))
             return
-
 
     def megatv(self, url):
         try:
@@ -1995,6 +2029,7 @@ class player:
                 time = common.parseDOM(host, "time", attrs = { "class": "time-ago recent" })[0]
                 ip = common.parseDOM(host, "span", attrs = { "class": "row_proxy_ip" })[0]
                 ip = ip.split('(')[-1].split(')')[0].replace(' ','').replace('"','').replace('+','')
+                ip = common.replaceHTMLCodes(ip)
                 port = common.parseDOM(host, "a", attrs = { "href": ".+?" })[0]
                 proxyList.append(ip+':'+port)
             except:

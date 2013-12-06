@@ -4,7 +4,7 @@ Hellenic Movies XBMC Addon
 
 About
 -----
-Watch greek movies from Cine-Greece and Greek-Movies
+Watch your favourite greek movies anytime you want
 
 
 Attributions

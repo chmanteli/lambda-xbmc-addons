@@ -74,11 +74,12 @@
 	<string id="30432">Ορισμός θέασης αρχείου</string>
 	<string id="30433">Ορισμός θέασης βίντεο</string>
 	<!-- Description -->
-	<string id="30450">Δείτε ελληνικές ταινίες από το Cine-Greece και το Greek-Movies. Όλες οι πρόσφατες και κλασικές ταινίες μεταδίδονται από το YouTube.</string>
+	<string id="30450">Παρακολουθήστε όλες τις αγαπημένες σας ελληνικές ταινίες ότι ώρα θέλετε. Το πρόσθετο περιλαμβάνει αρχείο πρόσφατων και κλασικών ελληνικών ταινιών.</string>
 	<!-- Labels -->
 	<string id="30501">Αγαπημένα</string>
-	<string id="30502">Cine-Greece</string>
-	<string id="30503">Greek-Movies</string>
-	<string id="30504">Πρόσφατα</string>
-	<string id="30505">Αναζήτηση</string>
+	<string id="30502">Είδη</string>
+	<string id="30503">Έτη</string>
+	<string id="30504">Σελίδες</string>
+	<string id="30505">Πρόσφατα</string>
+	<string id="30506">Αναζήτηση</string>
 </strings>

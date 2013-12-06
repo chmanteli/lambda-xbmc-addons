@@ -73,12 +73,13 @@
 	<string id="30431">Set Episodes view</string>
 	<string id="30432">Set Archives view</string>
 	<string id="30433">Set Videos view</string>
-	<!-- Description -->
-	<string id="30450">Watch greek movies from Cine-Greece and Greek-Movies. All recent and classic movies are broadcasted by YouTube.</string>
+	<!-- Description --> 
+	<string id="30450">Watch your favourite greek movies anytime you want. The addon includes an archive of recent and classic greek movies.</string>
 	<!-- Labels -->
 	<string id="30501">Favourites</string>
-	<string id="30502">Cine-Greece</string>
-	<string id="30503">Greek-Movies</string>
-	<string id="30504">Recent</string>
-	<string id="30505">Search</string>
+	<string id="30502">Genres</string>
+	<string id="30503">Years</string>
+	<string id="30504">Pages</string>
+	<string id="30505">Recent</string>
+	<string id="30506">Search</string>
 </strings>

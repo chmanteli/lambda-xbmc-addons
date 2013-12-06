@@ -1,4 +1,17 @@
 ------------------------
+Hellenic Movies v2.1.0 (6-Dec-13)
+------------------------
+
+- Complete re-work of the plugin (website changes of Cine-Greece).
+- Removed movies from Greek-Movies (Cine-Greece is more than enough now).
+- NOTE: Your favourites have to be re-added.
+- Added section for genres.
+- Added section for years.
+- Tweaked context menus.
+- Code cosmetics.
+
+
+------------------------
 Hellenic Movies v2.0.1 (18-Nov-13)
 ------------------------
 
