@@ -87,6 +87,8 @@ class main:
         except:     season = None
         try:        episode = urllib.unquote_plus(params["episode"])
         except:     episode = None
+        try:        size = urllib.unquote_plus(params["size"])
+        except:     size = None
 
         if action == None:                          root().get()
         elif action == 'item_play':                 contextMenu().item_play()
@@ -109,7 +111,7 @@ class main:
         elif action == 'shows_songs':               shows().songs()
         elif action == 'shows_favourites':          favourites().shows()
         elif action == 'episodes':                  episodeList().get(name, url, image, imdb, genre, plot, show)
-        elif action == 'play':                      player().run(url, name)
+        elif action == 'play':                      resolver().run(url, size, name)
 
 
         if action is None or action.startswith('root'):
@@ -196,6 +198,35 @@ class Thread(threading.Thread):
     def run(self):
         self._target(*self._args)
 
+class player(xbmc.Player):
+    def __init__ (self):
+        xbmc.Player.__init__(self)
+
+    def status(self):
+        return
+
+    def run(self, name, url):
+        try:
+            import urlparse
+            query = urlparse.urlparse(xbmc.getInfoLabel('Container.FolderPath')).query
+            base = urlparse.parse_qs(query)['url'][0]
+            if base.startswith(link().youtube_api): raise Exception()
+            poster = urlparse.parse_qs(query)['image'][0]
+        except:
+            poster = ''
+
+        item = xbmcgui.ListItem(path=url, iconImage=poster, thumbnailImage=poster)
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+        xbmc.sleep(3000)
+        if not xbmc.getCondVisibility('Player.Paused') == 0:
+            xbmc.executebuiltin('Action(Play)')
+
+    def onPlayBackEnded(self):
+        index().container_refresh()
+
+    def onPlayBackStopped(self):
+        index().container_refresh()
+
 class index:
     def infoDialog(self, str, header=addonName):
         xbmc.executebuiltin("Notification(%s,%s, 3000, %s)" % (header, str, addonIcon))
@@ -255,22 +286,6 @@ class index:
             except:
                 pass
 
-    def resolve(self, url):
-        try:
-            import urlparse
-            query = urlparse.urlparse(xbmc.getInfoLabel('Container.FolderPath')).query
-            base = urlparse.parse_qs(query)['url'][0]
-            if base.startswith(link().youtube_api): raise Exception()
-            poster = urlparse.parse_qs(query)['image'][0]
-        except:
-            poster = ''
-
-        item = xbmcgui.ListItem(path=url, iconImage=poster, thumbnailImage=poster)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
-        xbmc.sleep(3000)
-        if not xbmc.getCondVisibility('Player.Paused') == 0:
-            xbmc.executebuiltin('Action(Play)')
-
     def rootList(self, rootList):
         count = 0
         total = len(rootList)
@@ -293,27 +308,6 @@ class index:
                 item.setProperty("Fanart_Image", fanart)
                 item.addContextMenuItems(cm, replaceItems=False)
                 xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=item,totalItems=total,isFolder=True)
-            except:
-                pass
-
-    def itemList(self, itemList):
-        total = len(itemList)
-        for i in itemList:
-            try:
-                name = language(i['name']).encode("utf-8")
-                image = '%s/%s' % (addonArt, i['image'])
-                action = i['action']
-                u = '%s?action=%s' % (sys.argv[0], action)
-
-                cm = []
-                cm.append((language(30427).encode("utf-8"), 'RunPlugin(%s?action=view_root)' % (sys.argv[0])))
-                cm.append((language(30409).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
-                cm.append((language(30410).encode("utf-8"), 'RunPlugin(%s?action=playlist_open)' % (sys.argv[0])))
-                item = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=image)
-                item.setInfo( type="Video", infoLabels = {'label': name, 'title': name, 'plot': addonDesc} )
-                item.setProperty("Fanart_Image", addonFanart)
-                item.addContextMenuItems(cm, replaceItems=True)
-                xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=item,totalItems=total,isFolder=False)
             except:
                 pass
 
@@ -377,11 +371,13 @@ class index:
                 name, url, image, imdb, genre, plot = i['name'], i['url'], i['image'], i['imdb'], i['genre'], i['plot']
                 title, show, season, episode = i['title'], i['show'], i['season'], i['episode']
                 if plot == '': plot = addonDesc
+                try: size = i['size']
+                except: size = '0'
 
-                sysname, sysurl, sysimage = urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(image)
-                u = '%s?action=play&name=%s&url=%s' % (sys.argv[0], sysname, sysurl)
+                sysname, sysurl, syssize = urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(size)
+                u = '%s?action=play&name=%s&url=%s&size=%s' % (sys.argv[0], sysname, sysurl, syssize)
                 if url.startswith(link().youtube_base) or url.startswith(link().youtube_search):
-                    u = '%s?action=play&name=%s&url=%s&t=%s' % (sys.argv[0], sysname, sysurl, datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"))
+                    u = '%s?action=play&name=%s&url=%s&size=%s&t=%s' % (sys.argv[0], sysname, sysurl, syssize, datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"))
                 meta = {'label': title, 'title': title, 'studio': show, 'imdb_id' : imdb, 'genre' : genre, 'plot': plot}
                 try: meta.update({'premiered': i['date']})
                 except: pass
@@ -507,7 +503,6 @@ class contextMenu:
             index().container_refresh()
             file = open(data, 'a+')
             file.write('"%s"|"%s"|"%s"|"%s"\n' % (name, imdb, url, image))
-            #file.write('"%s"|"%s"|"%s"\n' % (name, url, image))
             file.close()
             index().infoDialog(language(30303).encode("utf-8"), name)
         except:
@@ -818,7 +813,10 @@ class episodeList:
                 url = cryptUrl().decode(url.encode('utf-8'))
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
-                self.list.append({'name': name, 'url': url, 'image': image, 'fanart': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1'})
+                size = common.parseDOM(episode, "size")[0]
+                size = common.replaceHTMLCodes(size)
+                size = size.encode('utf-8')
+                self.list.append({'name': name, 'url': url, 'image': image, 'fanart': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1', 'size': size})
             except:
                 pass
 
@@ -850,6 +848,9 @@ class episodeList:
             for i in self.data: result += i
 
             episodes = common.parseDOM(result, "div", attrs = { "class": "catItemImageBlock" })
+            if episodes == []:
+                result = getUrl(url).result
+                episodes = common.parseDOM(result, "div", attrs = { "class": "catItemImageBlock" })
         except:
         	return
         for episode in episodes:
@@ -916,14 +917,23 @@ class episodeList:
         except:
             return
 
-class player:
-    def run(self, url, name=None):
+class resolver:
+    def run(self, url, size, name=None, play=True):
         try:
+            if player().status() is True: return
+
             if url.startswith(link().nickelodeon_base): url = self.nickelodeon(url)
             elif url.startswith(link().youtube_base): url = self.youtube(url)
             else: url = self.urlresolver(url)
             if url is None: raise Exception()
-            index().resolve(url)
+
+            if not size == '0':
+                size_new = self.size(url)
+                if not size == size_new: raise Exception()
+
+            if play == False: return url
+            player().run(name, url)
+            return url
         except:
             index().infoDialog(language(30317).encode("utf-8"))
             return
@@ -938,11 +948,13 @@ class player:
         except:
             return
 
-    def urlresolver(self, url):
+    def size(self, url):
         try:
-            host = urlresolver.HostedMediaFile(url)
-            if host: url = urlresolver.resolve(url)
-            if url: return url
+            request = urllib2.Request(url)
+            request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0')
+            response = urllib2.urlopen(request, timeout=30)
+            size = response.info()["Content-Length"]
+            return size
         except:
             return
 
@@ -968,6 +980,14 @@ class player:
                 pass
             url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % id
             return url
+        except:
+            return
+
+    def urlresolver(self, url):
+        try:
+            host = urlresolver.HostedMediaFile(url)
+            if host: resolver = urlresolver.resolve(url)
+            if not resolver == url: return resolver
         except:
             return
 

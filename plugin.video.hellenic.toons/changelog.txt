@@ -1,4 +1,15 @@
 ------------------------
+Hellenic Toons v2.1.0 (9-Dec-13)
+------------------------
+
+- Added detection of replaced streams from various sources.
+- Added more shows from various sources.
+- Cleaned shows from various sources.
+- Added more nickelodeon shows.
+- Code cosmetics.
+
+
+------------------------
 Hellenic Toons v2.0.3 (18-Nov-13)
 ------------------------
 
