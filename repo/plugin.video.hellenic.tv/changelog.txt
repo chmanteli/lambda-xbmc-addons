@@ -1,4 +1,14 @@
 ------------------------
+Hellenic TV v2.5.0 (12-Dec-13)
+------------------------
+
+- Added TVControl EPG Source.
+- Removed Cyta EPG Source.
+- Added EPG for E TV, ACTION 24, CORFU CHANNEL, BEST TV and TV AIGAIO.
+- Code cosmetics.
+
+
+------------------------
 Hellenic TV v2.4.3 (10-Dec-13)
 ------------------------
 

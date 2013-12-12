@@ -683,12 +683,12 @@ class link:
         self.megatv_info = 'http://www.megatv.com/XML/jw/videolists.asp?catid=%s&attributes=0&nostore=true'
 
         self.antenna_base = 'http://www.antenna.gr'
-        self.antenna_beta = 'http://beta.antenna.gr'
-        self.antenna_minisites = 'http://www.antenna.gr/minisites'
-        self.antenna_shows = 'http://www.antenna.gr/tv/shows'
-        self.antenna_episodes = 'http://www.antenna.gr/templates/data/episodes?cid='
-        self.antenna_news = 'http://www.antenna.gr/webtv/categories?cid=3067'
-        self.antenna_sports = 'http://www.antenna.gr/webtv/categories?cid=3062'
+        self.antenna_img = 'http://www.antenna.gr/imgHandler/326'
+        self.antenna_shows = 'http://www.antenna.gr/tv/doubleip/shows?version=3.0'
+        self.antenna_episodes = 'http://www.antenna.gr/tv/doubleip/show?version=3.0&sid='
+        self.antenna_episodes2 = 'http://www.antenna.gr/tv/doubleip/categories?version=3.0&howmany=100&cid='
+        self.antenna_news = 'http://www.antenna.gr/tv/doubleip/show?version=3.0&sid=222903'
+        self.antenna_sports = 'http://www.antenna.gr/tv/doubleip/categories?version=3.0&howmany=100&cid=3062'
         self.antenna_watch = 'http://www.antenna.gr/webtv/watch?cid=%s'
         self.antenna_info = 'http://www.antenna.gr/webtv/templates/data/player?cid=%s'
 
@@ -698,9 +698,10 @@ class link:
         self.alphatv_news = 'http://www.alphatv.gr/shows/informative/news'
 
         self.star_base = 'http://www.star.gr'
-        self.star_shows = 'http://www.star.gr/tv/el'
-        self.star_page = 'http://www.star.gr/tv/el/Pages/'
-        self.star_news = 'http://www.star.gr/tv/el/Pages/News.aspx?artId=9&artTitle=kentriko_deltio_eidiseon'
+        self.star_shows = 'http://www.star.gr/_layouts/handlers/tv/feeds.program.ashx?catTitle=hosts'
+        self.star_episodes = 'http://www.star.gr/_layouts/handlers/tv/feeds.program.ashx?catTitle=%s&artId=%s'
+        self.star_news = 'http://www.star.gr/_layouts/handlers/tv/feeds.program.ashx?catTitle=News&artId=9'
+        self.star_watch = 'http://cdnapi.kaltura.com/p/21154092/sp/2115409200/playManifest/entryId/%s/flavorId/%s/format/url/protocol/http/a.mp4'
 
         self.skai_base = 'http://www.skai.gr'
         self.skai_shows = 'http://www.skai.gr/Ajax.aspx?m=Skai.TV.ProgramListView&la=0&Type=TV&Day=%s'
@@ -710,6 +711,7 @@ class link:
         self.nickelodeon_base = 'http://www.nickelodeon.gr'
 
         self.enikos_news = 'http://gdata.youtube.com/feeds/api/users/enikosgr/uploads'
+        self.enikos_show = 'http://gdata.youtube.com/feeds/api/users/enikoslive/uploads'
 
         self.novasports_base = 'http://www.novasports.gr'
         self.novasports_episodes = 'http://www.novasports.gr/LiveWebTV.aspx%s'
@@ -846,8 +848,8 @@ class news:
     def star(self):
         name = 'STAR NEWS'
         url = link().star_news
-        image = 'http://www.star.gr/tv/PublishingImages/2013/09/170913125528_8325.jpg'
-        self.list = episodeList().star_list(name, url, image, '0', 'Greek', '', name)
+        image = 'http://www.star.gr/tv/PublishingImages/160913114342_2118.jpg'
+        self.list = episodeList().star_list(name, url, image, '0', 'Greek', ' ', name)
         index().episodeList(self.list)
 
     def skai(self):
@@ -973,32 +975,26 @@ class showList:
 
     def antenna_list(self):
         try:
-            result = getUrl(link().antenna_shows).result
-            result = common.parseDOM(result, "div", attrs = { "id": "showsTeasers" })[0]
-            shows = common.parseDOM(result, "div", attrs = { "rel": ".+?" })
+            result = getUrl(link().antenna_shows, mobile=True).result
+            shows = re.compile('({.+?})').findall(result)
+            self.list.append({'name': 'ANT1 NEWS', 'url': link().antenna_news, 'image': 'http://www.antenna.gr/imgHandler/326/5a7c9f1a-79b6-47e0-b8ac-304d4e84c591.jpg', 'imdb': '0', 'genre': 'Greek', 'plot': ''})
         except:
             return
         for show in shows:
             try:
-                name = common.parseDOM(show, "div", attrs = { "class": "title" })[0]
-                name = name.split('<')[0].strip()
+                i = json.loads(show)
+                name = i['teasertitle'].strip()
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
-                image = common.parseDOM(show, "img", ret="rel")[0]
-                image = '%s%s' % (link().antenna_base, image)
+                image = i['webpath'].strip()
+                image = '%s/%s' % (link().antenna_img, image)
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
-                url = common.parseDOM(show, "a", ret="href")[0]
-                if url == '/tv/show/222903': url = '/webtv/categories?cid=3067'
-                #stupid ant1
-                if '00328af7477f' in image: url = '/webtv/categories?cid=4074'#’√≈…¡ –¡ÕŸ ¡–í œÀ¡
-                elif '103d6a97ce9c' in image: url = '/webtv/categories?cid=4084'#¬¡À” Ã≈ 12 »≈œ’”
-                elif '51a506db6937' in image: url = '/tv/show/260289'#‘Ô ·Ï‹ÒÙÁÏ· ÙÁÚ ÏÁÙÒ¸Ú ÏÔı
-                elif '9cd983101bf8' in image: url = '/minisites/kardasians'#‘¡  ¡—Õ‘¡”…¡Õ”
-                url = '%s%s' % (link().antenna_base, url)
+                url = i['id'].strip()
+                url = link().antenna_episodes + url
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
-                try: plot = common.parseDOM(show, "div", attrs = { "class": "teasertext" })[0]
+                try: plot = i['teasertext'].strip()
                 except: plot = ' '
                 plot = common.replaceHTMLCodes(plot)
                 plot = plot.encode('utf-8')
@@ -1050,27 +1046,31 @@ class showList:
 
     def star_list(self):
         try:
-            result = getUrl(link().star_shows).result
-            result = common.parseDOM(result, "div", attrs = { "id": "shows" })[0]
-            shows = common.parseDOM(result, "li")
+            result = getUrl(link().star_shows, mobile=True).result
+            result = json.loads(result)
+            shows = result['hosts']
         except:
             return
         for show in shows:
             try:
-                name = common.parseDOM(show, "a", attrs = { "href": ".+?" })[0]
+                i = show
+                name = i['Title'].strip()
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
-                url = common.parseDOM(show, "a", ret="href")[0]
-                url = '%s%s' % (link().star_page, url)
-                url = common.replaceHTMLCodes(url)
-                url = url.encode('utf-8')
-                image = common.parseDOM(show, "img", ret="src")[0]
+                image = i['Image'].strip()
                 image = '%s%s' % (link().star_base, image)
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': 'Greek', 'plot': ''})
+                id = i['ProgramId']
+                cat = i['ProgramCat'].strip()
+                url = link().star_episodes % (cat, id)
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': 'Greek', 'plot': ' '})
             except:
                 pass
+
+        self.list.append({'name': 'STON ENIKO', 'url': link().enikos_show, 'image': '%s/STON ENIKO.jpg' % addonArt, 'imdb': '0', 'genre': 'Greek', 'plot': 'STON ENIKO'})
 
         return self.list
 
@@ -1336,115 +1336,43 @@ class episodeList:
 
     def antenna_list(self, name, url, image, imdb, genre, plot, show):
         try:
-        	more = False
-        	resolved = False
-        	result = getUrl(url).result
-        	episodes = ''
-        except:
-        	return
+            result = getUrl(url, mobile=True).result
 
-        try:
-        	#new beta.antenna.gr method
-        	if resolved == True: raise Exception()
-        	redirect = common.parseDOM(result, "a", ret="href", attrs = { "title": "VIDEOS" })[0]
-        	redirect = link().antenna_beta + redirect
-        	redirect = getUrl(redirect).result
-        	redirect = redirect.replace('class="videosHome"', 'class="episodesThumbs"')
-        	episodes = common.parseDOM(redirect, "div", attrs = { "class": "episodesThumbs" })[0]
-        	more = re.compile('/templates/data/episodes[?]cid=(.+?)&').findall(episodes.replace('\n',''))
-        	episodes = re.compile('(<a .+?</a>)').findall(episodes.replace('\n',''))
-        	resolved = True
-        except:
-        	pass
+            if url.startswith(link().antenna_episodes):
+                id = json.loads(result)
+                id = id['feed']['show']['videolib']
+                if url.endswith('sid=223077'): id = '3110'#EUROPA LEAGUE
+                elif url.endswith('sid=318756'): id = '3246'#œÀ¡ ‘—≈À¡
+            elif url.startswith(link().antenna_episodes2):
+                id = ''
 
-        try:
-        	#new minisites method
-        	if resolved == True: raise Exception()
-        	redirect = re.compile('href="/minisites/css/(.+?).css"').findall(result)[0]
-        	redirect = '%s/%s/videos' % (link().antenna_minisites, redirect)
-        	redirect = getUrl(redirect).result
-        	episodes = common.parseDOM(redirect, "div", attrs = { "class": "LibraryBox2" })[0]
-        	episodes += common.parseDOM(redirect, "div", attrs = { "class": "LibraryBox" })[0]
-        	more = re.compile('/templates/data/episodes[?]cid=(.+?)&').findall(episodes.replace('\n',''))
-        	episodes = re.compile('(<a .+?</a>)').findall(episodes.replace('\n',''))
-        	resolved = True
+            if id == '':
+                episodes = result.replace("'",'"').replace('"title"','"caption"').replace('"image"','"webpath"').replace('"trailer_contentid"','"contentid"')
+                episodes = re.compile('({.+?})').findall(episodes)
+            else:
+                url = link().antenna_episodes2 + id
+                episodes = getUrl(url, mobile=True).result
+                episodes = re.compile('({.+?})').findall(episodes)
         except:
-        	pass
-
-        try:
-        	#new webtv method
-        	if resolved == True: raise Exception()
-        	redirect = common.parseDOM(result, "li", attrs = { "id": "subWebtv" })[0]
-        	redirect = common.parseDOM(redirect, "a", ret="href")[0]
-        	redirect = redirect.split('cid=')[-1].split('&')[0]
-        	more = [redirect]
-        	redirect = '%s%s&p=1' % (link().antenna_episodes, redirect)
-        	redirect = getUrl(redirect).result
-        	episodes = re.compile('(<a .+?</a>)').findall(redirect.replace('\n',''))
-        	resolved = True
-        except:
-        	pass
-
-        try:
-        	#pure webtv method
-        	if resolved == True: raise Exception()
-        	if not 'cid=' in url: raise Exception()
-        	redirect = url.split('cid=')[-1].split('&')[0]
-        	more = [redirect]
-        	redirect = '%s%s&p=1' % (link().antenna_episodes, redirect)
-        	redirect = getUrl(redirect).result
-        	episodes = re.compile('(<a .+?</a>)').findall(redirect.replace('\n',''))
-        	resolved = True
-        except:
-        	pass
-
-        try:
-        	#old webtv method
-        	if resolved == True: raise Exception()
-        	redirect = common.parseDOM(result, "div", attrs = { "class": "uparea" })[0]
-        	redirect = common.parseDOM(redirect, "a", ret="href")[0]
-        	redirect = link().antenna_base + redirect
-        	redirect = getUrl(redirect).result
-        	episodes = common.parseDOM(redirect, "div", attrs = { "id": "categoriesList" })[0]
-        	more = re.compile('/templates/data/videos[?]cid=(.+?)&').findall(episodes.replace('\n',''))
-        	episodes = common.parseDOM(episodes, "div", attrs = { "style": "width.+?" })
-        	resolved = True
-        except:
-        	pass
-
-        try:
-        	#more method
-        	if more == False: raise Exception()
-        	moreUrl = '%s%s&p=%s' % (link().antenna_episodes, more[0], '2')
-        	result = getUrl(moreUrl).result
-        	episodes += re.compile('(<a .+?</a>)').findall(result.replace('\n',''))
-        except:
-        	pass
+            return
 
         for episode in episodes:
-        	try:
-        	    #new minisites or more method
-        	    try: name = common.parseDOM(episode, "div", attrs = { "class": "title" })[0].split('<')[0]
-        	    except: pass
-        	    #old webtv method
-        	    try: name = common.parseDOM(episode, "div", attrs = { "class": "blacktxt.+?" })[0]
-        	    except: pass
-        	    #new beta.antenna.gr method
-        	    try: name = common.parseDOM(episode, "img", ret="alt")[0]
-        	    except: pass
-        	    name = common.replaceHTMLCodes(name)
-        	    name = name.encode('utf-8')
-        	    url = common.parseDOM(episode, "a", ret="href")[-1]
-        	    url = '%s%s' % (link().antenna_base, url)
-        	    url = common.replaceHTMLCodes(url)
-        	    url = url.encode('utf-8')
-        	    image = common.parseDOM(episode, "img", ret="src")[-1]
-        	    image = '%s%s' % (link().antenna_base, image)
-        	    image = common.replaceHTMLCodes(image)
-        	    image = image.encode('utf-8')
-        	    self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1'})
-        	except:
-        	    pass
+            try:
+                i = json.loads(episode)
+                name = i['caption'].strip()
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+                image = i['webpath'].strip()
+                image = '%s/%s' % (link().antenna_img, image)
+                image = common.replaceHTMLCodes(image)
+                image = image.encode('utf-8')
+                url = i['contentid'].strip()
+                url = link().antenna_watch % url
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1'})
+            except:
+                pass
 
         return self.list
 
@@ -1492,18 +1420,25 @@ class episodeList:
 
     def star_list(self, name, url, image, imdb, genre, plot, show):
         try:
-            result = getUrl(url).result
-            result = common.parseDOM(result, "ul", attrs = { "class": "videoList" })[0]
-            episodes = common.parseDOM(result, "li")
+            result = getUrl(url, mobile=True).result
+            result = json.loads(result)
+
+            try: plot = result['programme']['StoryLinePlain'].strip()
+            except: plot = ' '
+            plot = common.replaceHTMLCodes(plot)
+            plot = plot.encode('utf-8')
+
+            episodes = result['videosprogram']
         except:
         	return
         for episode in episodes:
             try:
-                name = common.parseDOM(episode, "a")[0]
+                i = episode
+                name = i['Title'].strip()
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
-                url = common.parseDOM(episode, "a", ret="href")[0]
-                url = '%s%s' % (link().star_base, url)
+                url = i['VideoID'].strip()
+                url = link().star_watch % (url, url)
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
                 self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1'})
@@ -1818,7 +1753,6 @@ class resolver:
             elif url.startswith(link().megatv_base): url = self.megatv(url)
             elif url.startswith(link().antenna_base): url = self.antenna(url)
             elif url.startswith(link().alphatv_base): url = self.alphatv(url)
-            elif url.startswith(link().star_base): url = self.star(url)
             elif url.startswith(link().nickelodeon_base): url = self.nickelodeon(url)
             elif url.startswith(link().novasports_base): url = self.novasports(url)
             elif url.startswith(link().youtube_search): url = self.youtube_search(url)
@@ -1918,16 +1852,6 @@ class resolver:
 
             url = re.compile('playlist:.+?"(rtmp[:].+?)"').findall(result)[0]
             url += ' timeout=10'
-            return url
-        except:
-            return
-
-    def star(self, url):
-        try:
-            result = getUrl(url).result
-            partnerId = re.compile('http://www.kaltura.com/p/(.+?)/').findall(result)[0]
-            entryId = re.compile('"http://www.kaltura.com/index.php/kwidget/.+?/entry_id/(.+?)"').findall(result)[0]
-            url = 'http://cdnapi.kaltura.com/p/%s/sp/%s00/playManifest/entryId/%s/flavorId/%s/format/url/protocol/http/a.mp4' % (partnerId, partnerId, entryId, entryId)
             return url
         except:
             return

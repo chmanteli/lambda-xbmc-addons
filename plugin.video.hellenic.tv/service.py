@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-    hellenic tv XBMC Addon
+    Hellenic TV XBMC Addon
     Copyright (C) 2013 lambda
 
     This program is free software: you can redistribute it and/or modify
@@ -153,13 +153,10 @@ class epg:
         self.get_channels()
         threads = []
         threads.append(Thread(self.ote_data))
-        threads.append(Thread(self.cyta_data))
         [i.start() for i in threads]
         [i.join() for i in threads]
         self.xmltv_creator()
 
-        try: os.remove(tvguideDB)
-        except: pass
         index().clearProperty('htv_Service_Running')
 
     def get_dates(self):
@@ -217,42 +214,6 @@ class epg:
         except:
             return
 
-    def cyta_data(self):
-        if xbmc.abortRequested == True: sys.exit()
-        threads = []
-        self.cytaData = []
-        for i in range(0, 3):
-            date = self.dates[i].replace('-','')
-            url = 'http://data.cytavision.com.cy/epg/?category=3&lang=el&day=%s' % str(i)
-            threads.append(Thread(self.cyta_data2, date, url))
-        [i.start() for i in threads]
-        [i.join() for i in threads]
-
-    def cyta_data2(self, date, url):
-        if xbmc.abortRequested == True: sys.exit()
-        try:
-            result = getUrl(url).result
-            result = result.decode('iso-8859-7').encode('utf-8')
-            self.cytaData.append({'date': date, 'value': result})
-        except:
-            return
-
-    def dummy_programme(self, channel):
-        if xbmc.abortRequested == True: sys.exit()
-        programmeList = []
-        desc = self.dummyData[channel]
-        self.get_titleDict()
-
-        for date in self.dates:
-            for i in range(0, 2400, 1200):
-                start = date.replace('-','') + '%04d' % i + '00'
-                start = self.start_processor(start)
-                try: title = self.titleDict[channel]
-                except: title = channel
-                programmeList.append({'start': start, 'title': title, 'desc': desc})
-
-        self.programme_creator(channel, programmeList)
-
     def ote_programme(self, channel, id):
         if xbmc.abortRequested == True: sys.exit()
         programmes = []
@@ -287,17 +248,37 @@ class epg:
 
         self.programme_creator(channel, programmeList)
 
-    def cyta_programme(self, channel, id):
+    def tvc_data(self, id):
         if xbmc.abortRequested == True: sys.exit()
+        threads = []
+        self.tvcData = []
+        for date in self.dates:
+            url = 'http://www.tvcontrol.gr/Ajax_ListingsPerChannel.php?channel_id=%s&dateDayValue=%s' % (id, date)
+            date = date.replace('-','')
+            threads.append(Thread(self.tvc_data2, date, url))
+        [i.start() for i in threads]
+        [i.join() for i in threads]
+
+    def tvc_data2(self, date, url):
+        if xbmc.abortRequested == True: sys.exit()
+        try:
+            result = getUrl(url).result
+            self.tvcData.append({'date': date, 'value': result})
+        except:
+            return
+
+    def tvc_programme(self, channel, id):
+        if xbmc.abortRequested == True: sys.exit()
+        self.tvc_data(id)
+        self.tvcData = sorted(self.tvcData, key=itemgetter('date'))
         programmes = []
         programmeList = []
 
-        for data in self.cytaData:
+        for data in self.tvcData:
             try:
                 date = data["date"]
                 data = data["value"]
-                data = common.parseDOM(data, "div", attrs = { "class": "epgrow clearfix" })[int(id)]
-                data = common.parseDOM(data, "div", attrs = { "class": "program" })
+                data = json.loads(data)
                 [programmes.append({'date': date, 'value': value}) for value in data]
             except:
                 pass
@@ -306,19 +287,33 @@ class epg:
             try:
                 date = programme["date"]
                 programme = programme["value"]
-                title = common.parseDOM(programme, "span", attrs = { "class": "program_title" })[0]
-                title = self.title_prettify(title)
-                start = common.parseDOM(programme, "h4")[0]
-                start = re.split('\s+', start)[0]
-                start = start.replace(':','')
+                start = programme["time"]
                 start = date + str('%04d' % int(start)) + '00'
                 start = self.start_processor(start)
-                desc = common.parseDOM(programme, "div", attrs = { "class": "data" })[0]
-                desc = desc.split("</h4>")[-1]
+                title = common.parseDOM(programme["html"], "div", attrs = { "class": "ListingBubbleTitle" })[0]
+                title = self.title_prettify(title)
+                desc = common.parseDOM(programme["html"], "div", attrs = { "id": "BubbleDescriptionHeight.+?" })[0]
+                desc = desc.split("</div>", 1)[-1].split("<div", 1)[0]
                 desc = self.desc_prettify(desc)
                 programmeList.append({'start': start, 'title': title, 'desc': desc})
             except:
                 pass
+
+        self.programme_creator(channel, programmeList)
+
+    def dummy_programme(self, channel):
+        if xbmc.abortRequested == True: sys.exit()
+        programmeList = []
+        desc = self.dummyData[channel]
+        self.get_titleDict()
+
+        for date in self.dates:
+            for i in range(0, 2400, 1200):
+                start = date.replace('-','') + '%04d' % i + '00'
+                start = self.start_processor(start)
+                try: title = self.titleDict[channel]
+                except: title = channel
+                programmeList.append({'start': start, 'title': title, 'desc': desc})
 
         self.programme_creator(channel, programmeList)
 
@@ -435,23 +430,29 @@ class epg:
             'KONTRA CHANNEL'            : self.ote_programme("KONTRA CHANNEL", "44"),
             'EXTRA 3'                   : self.ote_programme("EXTRA 3", "135"),
             'ART CHANNEL'               : self.ote_programme("ART CHANNEL", "156"),
-            #'ZOOM'                      : self.ote_programme("ZOOM", "157"),
+            #'ZOOM'                     : self.ote_programme("ZOOM", "157"),
             'BLUE SKY'                  : self.ote_programme("BLUE SKY", "153"),
+            #'CHANNEL 9'                : self.ote_programme("CHANNEL 9", "163"),
             #'SBC TV'                   : self.ote_programme("SBC TV", "136"),
             'TV 100'                    : self.ote_programme("TV 100", "137"),
             '4E TV'                     : self.ote_programme("4E TV", "133"),
             'STAR KENTRIKIS ELLADOS'    : self.ote_programme("STAR KENTRIKIS ELLADOS", "139"),
             'EPIRUS TV1'                : self.ote_programme("EPIRUS TV1", "145"),
+            'CORFU CHANNEL'             : self.ote_programme("CORFU CHANNEL", "166"),
+            'BEST TV'                   : self.ote_programme("BEST TV", "165"),
             'KRITI TV'                  : self.ote_programme("KRITI TV", "138"),
+            'TV AIGAIO'                 : self.ote_programme("TV AIGAIO", "164"),
             'DIKTYO TV'                 : self.ote_programme("DIKTYO TV", "146"),
             'DELTA TV'                  : self.ote_programme("DELTA TV", "147"),
 
-            'MEGA CYPRUS'               : self.cyta_programme("MEGA CYPRUS", "2"),
-            'ANT1 CYPRUS'               : self.cyta_programme("ANT1 CYPRUS", "3"),
-            'SIGMA'                     : self.cyta_programme("SIGMA", "4"),
-			#'TV PLUS'                  : self.cyta_programme("TV PLUS", "5"),
-			#'EXTRA TV'                 : self.cyta_programme("EXTRA TV", "6"),
-            'CAPITAL'                   : self.cyta_programme("CAPITAL", "7")
+            'E TV'                      : self.tvc_programme("E TV", "326"),
+            'ACTION 24'                 : self.tvc_programme("ACTION 24", "189"),
+            'MEGA CYPRUS'               : self.tvc_programme("MEGA CYPRUS", "306"),
+            'ANT1 CYPRUS'               : self.tvc_programme("ANT1 CYPRUS", "258"),
+            'SIGMA'                     : self.tvc_programme("SIGMA", "305"),
+            #'TV PLUS'                  : self.tvc_programme("TV PLUS", "289"),
+            #'EXTRA TV'                 : self.tvc_programme("EXTRA TV", "290"),
+            'CAPITAL'                   : self.tvc_programme("CAPITAL", "282")
         }
 
     def get_titleDict(self):
