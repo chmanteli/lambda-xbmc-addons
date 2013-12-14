@@ -1,4 +1,14 @@
 ------------------------
+Ororo TV v1.1.1 (14-Dec-13)
+------------------------
+
+- Fixed login issues with shows.
+- Fixed issues with backup sources.
+- Tweaked addon's settings.
+- Code cosmetics.
+
+
+------------------------
 Ororo TV v1.1.0 (4-Dec-13)
 ------------------------
 

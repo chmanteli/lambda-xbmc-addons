@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import urllib,urllib2,re,os,threading,datetime,time,xbmc,xbmcplugin,xbmcgui,xbmcaddon,xbmcvfs
+import urllib,urllib2,re,os,threading,datetime,time,base64,xbmc,xbmcplugin,xbmcgui,xbmcaddon,xbmcvfs
 from operator import itemgetter
 import urlresolver
 try:    import CommonFunctions
@@ -1106,7 +1106,7 @@ class subscriptions:
         file.close()
         match = re.compile('"(.+?)"[|]"(.+?)"[|]"(.+?)"[|]"(.+?)"').findall(read)
         for name, imdb, url, image in match:
-            self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': ' ', 'plot': ' '})
+            self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': '', 'plot': ''})
         index().showList(self.list)
 
 class favourites:
@@ -1119,7 +1119,7 @@ class favourites:
         file.close()
         match = re.compile('"(.+?)"[|]"(.+?)"[|]"(.+?)"[|]"(.+?)"').findall(read)
         for name, imdb, url, image in match:
-            self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': ' ', 'plot': ' '})
+            self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': '', 'plot': ''})
         index().showList(self.list)
 
 class root:
@@ -1227,7 +1227,19 @@ class shows:
 
     def ororo_list(self):
         try:
-            result = getUrl(link().ororo_base).result
+            if not (getSetting("email") == '' and getSetting("password") == ''):
+                email, password = urllib.quote_plus(getSetting("email")), urllib.quote_plus(getSetting("password"))
+                post = '%s=%s&%s=%s' % (link().ororo_email, email, link().ororo_password, password)
+                result = getUrl(link().ororo_sign, post=post, close=False, cookie=True).result
+                result = getUrl(link().ororo_base).result
+            else:
+                result = getUrl(link().ororo_base).result
+
+            if 'alert alert-error' in result:
+                post = '%s=%s&%s=%s' % (link().ororo_email, base64.urlsafe_b64decode("YzI2NTEzNTYlNDBkcmRyYi5jb20="), link().ororo_password, base64.urlsafe_b64decode("YzI2NTEzNTY="))
+                result = getUrl(link().ororo_sign, post=post, close=False, cookie=True).result
+                result = getUrl(link().ororo_base).result
+
             shows = common.parseDOM(result, "div", attrs = { "class": "shows" })[0]
             shows = shows.replace("'index show'", "'index show'><a")
             shows = common.parseDOM(shows, "div", attrs = { "class": "index show" })
@@ -1360,7 +1372,7 @@ class seasons:
                 try:
                     showsUrl = '%s%s' % (link().watchseries_base, show)
                     result = getUrl(showsUrl).result
-                    if imdb in result:
+                    if str(imdb) in result:
                         url = showsUrl
                         break
                 except:
@@ -1526,7 +1538,7 @@ class resolver:
                 url = self.watchseries(url)
 
             elif url.startswith(link().ororo_base):
-                if getSetting("ororo") == '1': url = self.ororo(url)
+                if getSetting("ororo_host") == 'true': url = self.ororo(url)
                 else: url = None
                 if url is None:
                     url = self.watchseries_url(name, imdb)
@@ -1597,7 +1609,7 @@ class resolver:
                 try:
                     showsUrl = '%s%s' % (link().watchseries_base, show)
                     result = getUrl(showsUrl).result
-                    if imdb in result:
+                    if str(imdb) in result:
                         url = show.split('/')[-1]
                         break
                 except:

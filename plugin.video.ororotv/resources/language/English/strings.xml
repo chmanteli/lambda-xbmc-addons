@@ -9,9 +9,7 @@
 	<string id="30005">Password</string>
 	<string id="30020">Sources</string>
 	<string id="30021">Auto-play</string>
-	<string id="30022">Disabled</string>
-	<string id="30023">Enabled</string>
-	<string id="30024">Ororo</string>
+	<string id="30022">Ororo stream when Available</string>
 	<string id="30031">Priority 1</string>
 	<string id="30032">Priority 2</string>
 	<string id="30033">Priority 3</string>
@@ -22,6 +20,7 @@
 	<string id="30038">Priority 8</string>
 	<string id="30039">Priority 9</string>
 	<string id="30040">Priority 10</string>
+	<string id="30050">Disabled</string>
 	<string id="30051">Putlocker</string>
 	<string id="30052">Sockshare</string>
 	<string id="30053">Movreel</string>

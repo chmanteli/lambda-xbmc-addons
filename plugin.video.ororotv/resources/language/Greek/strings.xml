@@ -9,9 +9,7 @@
 	<string id="30005">Κωδικός</string>
 	<string id="30020">Πηγές</string>
 	<string id="30021">Αυτόματη αναπαραγωγή</string>
-	<string id="30022">Ανενεργό</string>
-	<string id="30023">Ενεργό</string>
-	<string id="30024">Ororo</string>
+	<string id="30022">Ροή Ororo όταν είναι διαθέσιμη</string>
 	<string id="30031">Προτεραιότητα 1</string>
 	<string id="30032">Προτεραιότητα 2</string>
 	<string id="30033">Προτεραιότητα 3</string>
@@ -22,6 +20,7 @@
 	<string id="30038">Προτεραιότητα 8</string>
 	<string id="30039">Προτεραιότητα 9</string>
 	<string id="30040">Προτεραιότητα 10</string>
+	<string id="30050">Ανενεργό</string>
 	<string id="30051">Putlocker</string>
 	<string id="30052">Sockshare</string>
 	<string id="30053">Movreel</string>
