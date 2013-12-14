@@ -1023,8 +1023,8 @@ class contextMenu:
             property = (addonName+name)+'download'
             url = resolver().run(url, name, '0', play=False)
             if url is None: return
-            url = url.rsplit('|', 1)[0] #remove cookie
-            ext = os.path.splitext(url)[1][1:].strip().lower()
+            ext = url.rsplit('/', 1)[-1].rsplit('?', 1)[0].rsplit('|', 1)[0].strip().lower()
+            ext = os.path.splitext(ext)[1][1:]
             enc_name = name.translate(None, '\/:*?"<>|')
             stream = os.path.join(download, enc_name + '.' + ext)
             temp = stream + '.tmp'
