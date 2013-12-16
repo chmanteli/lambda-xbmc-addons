@@ -5,7 +5,7 @@
 		<setting id="fanart"   type="bool" label="30022" default="true" enable="!eq(-1,false)"/>
 	</category>
 	<category label="30040">
-		<setting id="movie_library" type="folder" label="30042" default="special://userdata/addon_data/plugin.video.muchmovies.hd/Movies"/>
+		<setting id="movie_library" type="folder" label="30042" default="special://userdata/addon_data/plugin.video.yifymovies.hd/Movies"/>
 		<setting type="lsep" label="[CR]"/>
 		<setting type="lsep" label="30041"/>
 	</category>

@@ -4,7 +4,7 @@ Yify Movies HD XBMC Addon
 
 About
 -----
-Watch a selection of movies from yify.tv
+Watch a wide selection of movies from yify.tv
 
 
 Attributions

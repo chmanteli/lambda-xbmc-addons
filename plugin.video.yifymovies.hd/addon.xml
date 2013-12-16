@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.yifymovies.hd" name="Yify Movies HD" version="1.0.0" provider-name="lambda">
+<addon id="plugin.video.yifymovies.hd" name="Yify Movies HD" version="1.0.9" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.module.metahandler" version="1.0.0"/>
@@ -10,10 +10,10 @@
 		<provides>video</provides>
 	</extension>
 	<extension point="xbmc.addon.metadata">
-		<summary lang="en">Watch a selection of movies from yify.tv</summary>
-		<summary lang="el">Παρακολουθήστε μια συλλογή ταινιών από το yify.tv</summary>
-		<description lang="en">Watch a selection of movies from yify.tv</description>
-		<description lang="el">Παρακολουθήστε μια συλλογή ταινιών από το yify.tv</description>
+		<summary lang="en">Watch a wide selection of movies from yify.tv</summary>
+		<summary lang="el">Παρακολουθήστε μια ευρεία συλλογή ταινιών από το yify.tv</summary>
+		<description lang="en">Watch a wide selection of movies from yify.tv</description>
+		<description lang="el">Παρακολουθήστε μια ευρεία συλλογή ταινιών από το yify.tv</description>
 		<disclaimer lang="en">The author does not host or distribute any of the content displayed by this addon. The author does not have any affiliation with the content provider.</disclaimer>
 		<disclaimer lang="el">Ο συγγραφέας δεν φιλοξενεί ή διανέμει οποιοδήποτε περιεχόμενο που εμφανίζεται από τo πρόσθετο αυτό. Ο συγγραφέας δεν έχει καμία σχέση με τον πάροχο του περιεχομένου.</disclaimer>
 		<forum>http://www.xbmchub.com/forums/lambdas-xbmc-repository/</forum>

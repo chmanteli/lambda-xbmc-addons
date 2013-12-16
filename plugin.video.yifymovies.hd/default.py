@@ -39,6 +39,8 @@ addonFanart         = os.path.join(addonPath,'fanart.jpg')
 addonArt            = os.path.join(addonPath,'resources/art')
 addonDownloads      = os.path.join(addonPath,'resources/art/Downloads.png')
 addonPages          = os.path.join(addonPath,'resources/art/Pages.png')
+addonGenres         = os.path.join(addonPath,'resources/art/Genres.png')
+addonYears          = os.path.join(addonPath,'resources/art/Years.png')
 addonNext           = os.path.join(addonPath,'resources/art/Next.png')
 dataPath            = xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
 viewData            = os.path.join(dataPath,'views.cfg')
@@ -95,8 +97,16 @@ class main:
         elif action == 'trailer':                   contextMenu().trailer(name, url)
         elif action == 'movies':                    movies().yify(url)
         elif action == 'movies_title':              movies().yify_title()
-        elif action == 'movies_search':             movies().yify_search(query)
+        elif action == 'movies_release':            movies().yify_release()
+        elif action == 'movies_imdb':               movies().yify_imdb()
+        elif action == 'movies_added':              movies().yify_added()
+        elif action == 'movies_rating':             movies().yify_rating()
+        elif action == 'movies_views':              movies().yify_views()
+        elif action == 'pages_movies':              pages().yify()
+        elif action == 'genres_movies':             genres().yify()
+        elif action == 'years_movies':              years().yify()
         elif action == 'movies_favourites':         favourites().movies()
+        elif action == 'movies_search':             movies().yify_search(query)
         elif action == 'play':                      resolver().run(url, name)
 
         if action is None:
@@ -391,16 +401,15 @@ class index:
                 pass
 
     def pageList(self, pageList):
+        if pageList == None: return
+
         total = len(pageList)
         for i in pageList:
             try:
                 name, url, image = i['name'], i['url'], i['image']
                 sysname, sysurl, sysimage = urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(image)
 
-                if action.endswith('movies'):
-                    u = '%s?action=movies&url=%s' % (sys.argv[0], sysurl)
-                elif action.endswith('shows'):
-                    u = '%s?action=shows&url=%s' % (sys.argv[0], sysurl)
+                u = '%s?action=movies&url=%s' % (sys.argv[0], sysurl)
 
                 item = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=image)
                 item.setInfo( type="Video", infoLabels={ "Label": name, "Title": name, "Plot": addonDesc } )
@@ -410,7 +419,9 @@ class index:
             except:
                 pass
 
-    def nextList(self, next):
+    def nextList(self, nextList):
+        try: next = nextList[0]['next']
+        except: return
         if next == '': return
         name, url, image = language(30361).encode("utf-8"), next, addonNext
         sysurl = urllib.quote_plus(url)
@@ -438,6 +449,8 @@ class index:
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=item,isFolder=True)
 
     def movieList(self, movieList):
+        if movieList == None: return
+
         file = xbmcvfs.File(favData)
         favRead = file.read()
         file.close()
@@ -446,7 +459,8 @@ class index:
         for i in movieList:
             try:
                 name, url, image, imdb, genre, plot = i['name'], i['url'], i['image'], i['imdb'], i['genre'], i['plot']
-                if plot == ' ': plot = addonDesc
+                if plot == '': plot = addonDesc
+                if genre == '': genre = ' '
                 try: year = re.compile('[(](\d{4})[)]').findall(name)[-1]
                 except: year = ' '
                 title = name.replace('(%s)' % year, '').strip()
@@ -474,7 +488,7 @@ class index:
                 cm = []
                 cm.append((language(30405).encode("utf-8"), 'RunPlugin(%s?action=item_queue)' % (sys.argv[0])))
                 cm.append((language(30406).encode("utf-8"), 'RunPlugin(%s?action=download&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
-                if getSetting("meta") == 'true': cm.append((language(30412).encode("utf-8"), 'Action(Info)'))
+                cm.append((language(30412).encode("utf-8"), 'Action(Info)'))
                 if action == 'movies_favourites':
                     if getSetting("meta") == 'true': cm.append((language(30415).encode("utf-8"), 'RunPlugin(%s?action=metadata_movies&name=%s&url=%s&imdb=%s)' % (sys.argv[0], systitle, sysurl, metaimdb)))
                     if getSetting("meta") == 'true': cm.append((playcountMenu, 'RunPlugin(%s?action=playcount_movies&imdb=%s)' % (sys.argv[0], metaimdb)))
@@ -747,8 +761,7 @@ class contextMenu:
             property = (addonName+name)+'download'
             url = resolver().run(url, name, play=False)
             if url is None: return
-            ext = url.rsplit('/', 1)[-1].rsplit('?', 1)[0].rsplit('|', 1)[0].strip().lower()
-            ext = os.path.splitext(ext)[1][1:]
+            ext = 'mp4'
             enc_name = name.translate(None, '\/:*?"<>|')
             stream = os.path.join(download, enc_name + '.' + ext)
             temp = stream + '.tmp'
@@ -818,30 +831,143 @@ class favourites:
         file = xbmcvfs.File(favData)
         read = file.read()
         file.close()
-        match = re.compile('"(.+?)"[|]"(.+?)"[|]"(.+?)"').findall(read)
-        for name, url, image in match:
-            self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': ' ', 'plot': ' '})
+        match = re.compile('"(.+?)"[|]"(.+?)"[|]"(.+?)"[|]"(.+?)"').findall(read)
+        for name, imdb, url, image in match:
+            self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': '', 'plot': ''})
         index().movieList(self.list)
 
 class root:
     def get(self):
         rootList = []
-        rootList.append({'name': 30501, 'image': 'Favourites.png', 'action': 'movies_favourites'})
-        rootList.append({'name': 30502, 'image': 'Title.png', 'action': 'movies_title'})
-        rootList.append({'name': 30503, 'image': 'Search.png', 'action': 'movies_search'})
+        rootList.append({'name': 30501, 'image': 'Title.png', 'action': 'movies_title'})
+        rootList.append({'name': 30502, 'image': 'Release.png', 'action': 'movies_release'})
+        rootList.append({'name': 30503, 'image': 'IMDB.png', 'action': 'movies_imdb'})
+        rootList.append({'name': 30504, 'image': 'Added.png', 'action': 'movies_added'})
+        rootList.append({'name': 30505, 'image': 'Rating.png', 'action': 'movies_rating'})
+        rootList.append({'name': 30506, 'image': 'Views.png', 'action': 'movies_views'})
+        rootList.append({'name': 30507, 'image': 'Pages.png', 'action': 'pages_movies'})
+        rootList.append({'name': 30508, 'image': 'Genres.png', 'action': 'genres_movies'})
+        rootList.append({'name': 30509, 'image': 'Years.png', 'action': 'years_movies'})
+        rootList.append({'name': 30510, 'image': 'Favourites.png', 'action': 'movies_favourites'})
+        rootList.append({'name': 30511, 'image': 'Search.png', 'action': 'movies_search'})
         index().rootList(rootList)
         index().downloadList()
 
 class link:
     def __init__(self):
         self.yify_base = 'http://yify.tv'
-        self.yify_title = 'http://yify.tv/files/releases/?orderby=title'
+        self.yify_post = '?meta_key=imdbRating&orderby=meta_value&order=desc'
+        self.yify_title = 'http://yify.tv/files/movies/?orderby=title&order=asc'
+        self.yify_release = 'http://yify.tv/files/releases/?no&order=desc'
+        self.yify_imdb = 'http://yify.tv/files/movies/?meta_key=imdbRating&orderby=meta_value&order=desc'
+        self.yify_added = 'http://yify.tv/files/movies/?no&order=desc'
+        self.yify_rating = 'http://yify.tv/files/movies/?meta_key=rating&orderby=meta_value&order=desc'
+        self.yify_views = 'http://yify.tv/files/movies/?meta_key=votes&orderby=meta_value&order=desc'
+        self.yify_page = 'http://yify.tv/files/movies/page/%s/?orderby=title&order=asc'
+        self.yify_genre = 'http://yify.tv/genres'
+        self.yify_year = 'http://yify.tv/years'
         self.yify_search = 'http://yify.tv/?s='
 
         self.youtube_base = 'http://www.youtube.com'
         self.youtube_search = 'http://gdata.youtube.com/feeds/api/videos?q='
         self.youtube_watch = 'http://www.youtube.com/watch?v=%s'
         self.youtube_info = 'http://gdata.youtube.com/feeds/api/videos/%s?v=2'
+
+class pages:
+    def __init__(self):
+        self.list = []
+
+    def yify(self):
+        self.list = self.yify_list()
+        index().pageList(self.list)
+
+    def yify_list(self):
+        try:
+            result = getUrl(link().yify_page % '1').result
+            result = common.parseDOM(result, "div", attrs = { "class": "contenedor_page" })[0]
+            count = common.parseDOM(result, "a", ret="href", attrs = { "class": "last" })[0]
+            count = re.compile('/(\d+)/').findall(count)[0]
+        except:
+            return
+        for i in range(1, int(count) + 1):
+            try:
+                name = '%s %s' % ('Page', str(i))
+                name = name.encode('utf-8')
+                url = link().yify_page % str(i)
+                url = url.encode('utf-8')
+                image = addonPages.encode('utf-8')
+                self.list.append({'name': name, 'url': url, 'image': image})
+            except:
+                pass
+
+        return self.list
+
+class genres:
+    def __init__(self):
+        self.list = []
+
+    def yify(self):
+        self.list = self.yify_list()
+        self.list = sorted(self.list, key=itemgetter('name'))
+        index().pageList(self.list)
+
+    def yify_list(self):
+        try:
+            result = getUrl(link().yify_genre).result
+            result = common.parseDOM(result, "div", attrs = { "class": "datagrid" })[0]
+            genres = re.compile('(<a.+?</a>)').findall(result)
+        except:
+            return
+        for genre in genres:
+            try:
+                name = common.parseDOM(genre, "a")[0]
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+                url = common.parseDOM(genre, "a", ret="href")[0]
+                if not url.startswith('/genre/'): raise Exception()
+                url = '%s%s%s' % (link().yify_base, url, link().yify_post)
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+                image = addonGenres.encode('utf-8')
+                self.list.append({'name': name, 'url': url, 'image': image})
+            except:
+                pass
+
+        return self.list
+
+class years:
+    def __init__(self):
+        self.list = []
+
+    def yify(self):
+        self.list = self.yify_list()
+        self.list = sorted(self.list, key=itemgetter('name'))
+        self.list = self.list[::-1]
+        index().pageList(self.list)
+
+    def yify_list(self):
+        try:
+            result = getUrl(link().yify_year).result
+            result = common.parseDOM(result, "div", attrs = { "class": "datagrid" })[0]
+            years = re.compile('(<a.+?</a>)').findall(result)
+        except:
+            return
+        for year in years:
+            try:
+                name = common.parseDOM(year, "a")[0]
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+                url = common.parseDOM(year, "a", ret="href")[0]
+                if not url.startswith('/years/'): raise Exception()
+                url = '%s%s%s' % (link().yify_base, url, link().yify_post)
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+                image = addonYears.encode('utf-8')
+                self.list.append({'name': name, 'url': url, 'image': image})
+            except:
+                pass
+
+        return self.list
 
 class movies:
     def __init__(self):
@@ -850,12 +976,37 @@ class movies:
     def yify(self, url):
         self.list = self.yify_list(url)
         index().movieList(self.list)
-        index().nextList(self.list[0]['next'])
+        index().nextList(self.list)
 
     def yify_title(self):
         self.list = self.yify_list(link().yify_title)
         index().movieList(self.list)
-        index().nextList(self.list[0]['next'])
+        index().nextList(self.list)
+
+    def yify_release(self):
+        self.list = self.yify_list(link().yify_release)
+        index().movieList(self.list)
+        index().nextList(self.list)
+
+    def yify_imdb(self):
+        self.list = self.yify_list(link().yify_imdb)
+        index().movieList(self.list)
+        index().nextList(self.list)
+
+    def yify_added(self):
+        self.list = self.yify_list(link().yify_added)
+        index().movieList(self.list)
+        index().nextList(self.list)
+
+    def yify_rating(self):
+        self.list = self.yify_list(link().yify_rating)
+        index().movieList(self.list)
+        index().nextList(self.list)
+
+    def yify_views(self):
+        self.list = self.yify_list(link().yify_views)
+        index().movieList(self.list)
+        index().nextList(self.list)
 
     def yify_search(self, query=None):
         if query is None:
@@ -875,17 +1026,22 @@ class movies:
             return
         try:
             next = common.parseDOM(result, "a", ret="href", attrs = { "class": "nextpostslink" })[0]
+            next = common.replaceHTMLCodes(next)
+            next = next.encode('utf-8')
         except:
             next = ''
         for movie in movies:
             try:
                 label = common.parseDOM(movie, "h2")[0]
                 title = label.split('<', 1)[0].strip()
+                title = title.encode('utf-8')
+                title = title.replace("&#8217;", "'")
                 year = common.parseDOM(label, "a", attrs = { "rel": "tag" })[0]
+                year = year.encode('utf-8')
 
                 name = '%s (%s)' % (title, year)
-                name = name.encode('utf-8')
                 name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
                 url = common.parseDOM(movie, "a", ret="href")[0]
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
@@ -899,13 +1055,13 @@ class movies:
                     genre = common.replaceHTMLCodes(genre)
                     genre = genre.encode('utf-8')
                 except:
-                    genre = ' '
+                    genre = ''
                 try:
                     plot = common.parseDOM(movie, "h1")[0]
                     plot = common.replaceHTMLCodes(plot)
                     plot = plot.encode('utf-8')
                 except:
-                    plot = ' '
+                    plot = ''
                 self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': genre, 'plot': plot, 'next': next})
             except:
                 pass

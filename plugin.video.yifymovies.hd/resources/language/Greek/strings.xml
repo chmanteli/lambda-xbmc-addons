@@ -83,9 +83,17 @@
 	<string id="30430">Ορισμός θέασης κύκλων</string>
 	<string id="30431">Ορισμός θέασης επεισοδίων</string>
 	<!-- Description -->
-	<string id="30450">Παρακολουθήστε μια συλλογή ταινιών από το yify.tv</string>
+	<string id="30450">Παρακολουθήστε μια ευρεία συλλογή ταινιών από το yify.tv</string>
 	<!-- Labels -->
-	<string id="30501">Αγαπημένα</string>
-	<string id="30502">Τίτλος</string>
-	<string id="30503">Αναζήτηση</string>
+	<string id="30501">Τίτλος</string>
+	<string id="30502">Κυκλοφορία</string>
+	<string id="30503">IMDB</string>
+	<string id="30504">Προσθήκες</string>
+	<string id="30505">Αξιολόγηση</string>
+	<string id="30506">Προβολές</string>
+	<string id="30507">Σελίδες</string>
+	<string id="30508">Είδη</string>
+	<string id="30509">Έτη</string>
+	<string id="30510">Αγαπημένα</string>
+	<string id="30511">Αναζήτηση</string>
 </strings>

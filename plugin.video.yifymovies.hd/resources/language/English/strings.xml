@@ -83,9 +83,17 @@
 	<string id="30430">Set Seasons view</string>
 	<string id="30431">Set Episodes view</string>
 	<!-- Description -->
-	<string id="30450">Watch a selection of movies from yify.tv</string>
+	<string id="30450">Watch a wide selection of movies from yify.tv</string>
 	<!-- Labels -->
-	<string id="30501">Favourites</string>
-	<string id="30502">Title</string>
-	<string id="30503">Search</string>
+	<string id="30501">Title</string>
+	<string id="30502">Release</string>
+	<string id="30503">IMDB</string>
+	<string id="30504">Added</string>
+	<string id="30505">Rating</string>
+	<string id="30506">Views</string>
+	<string id="30507">Pages</string>
+	<string id="30508">Genres</string>
+	<string id="30509">Years</string>
+	<string id="30510">Favourites</string>
+	<string id="30511">Search</string>
 </strings>
