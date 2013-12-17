@@ -1,4 +1,13 @@
 ------------------------
+Hellenic TV v2.5.1 (17-Dec-13)
+------------------------
+
+- Added resolver for ANT1.
+- Fixed justin.tv resolver.
+- Removed ART CHANNEL.
+
+
+------------------------
 Hellenic TV v2.5.0 (12-Dec-13)
 ------------------------
 

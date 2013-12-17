@@ -353,6 +353,7 @@ class player:
                 ''                  : self.direct,
                 'http'              : self.http,
                 'hls'               : self.hls,
+                'ant1'              : self.ant1,
                 'visionip'          : self.visionip,
                 'youtubelive'       : self.youtubelive,
                 'viiideo'           : self.viiideo,
@@ -390,6 +391,16 @@ class player:
 
     def hls(self, url):
         try:
+            result = getUrl(url).result
+            if "EXTM3U" in result: return url
+        except:
+            return
+
+    def ant1(self, url):
+        try:
+            root = 'http://www.antenna.gr/webtv/doubleip/live?version=3.0'
+            result = getUrl(root).result
+            url = re.compile('"streampath":"(.+?)"').findall(result)[0]
             result = getUrl(url).result
             if "EXTM3U" in result: return url
         except:
@@ -495,35 +506,23 @@ class player:
 
     def justin(self, url):
         try:
-            streams = []
-            pageUrl = url
             name = url.split("/")[-1]
-            swfUrl = 'http://www.justin.tv/widgets/live_embed_player.swf?channel=%s' % name
-            swfUrl = getUrl(swfUrl, fetch=False, referer=url).result
-            data = 'http://usher.justin.tv/find/%s.json?type=any&group=&channel_subscription=' % name
-            data = getUrl(data, referer=url).result
-            try: import json
-            except: import simplejson as json
-            data = json.loads(data)
-            for i in data:
-                token = None
-                token = ' jtv='+i['token'].replace('\\','\\5c').replace(' ','\\20').replace('"','\\22')
-                if i['needed_info'] == 'private': token = 'private'
-                rtmp = i['connect']+'/'+i['play']
-                try:
-                    if i['type'] == "live": streamer = rtmp+token
-                    else: streams.append((i['type'], rtmp, token))
-                except:
-                    continue
-            if len(streams) < 1: pass
-            elif len(streams) == 1: streamer = streams[0][1]+streams[0][2]
-            else:
-                for i in range(len(s_type)):
-                    quality = s_type[str(i)]
-                    for q in streams:
-                        if q[0] == quality: streamer = (q[1]+q[2])
-                        else: continue
-            url = '%s swfUrl=%s pageUrl=%s swfVfy=1 live=1 timeout=10' % (streamer, swfUrl, pageUrl)
+            result = 'http://api.twitch.tv/api/channels/%s/access_token?as3=t' % name
+            result = getUrl(result, referer=url).result
+
+            token = re.compile('"token":"(.+?)","').findall(result)[0]
+            token = token.replace('\\', '')
+            token = urllib.quote_plus(token).decode('utf-8')
+            sig = re.compile('"sig":"(.+?)"').findall(result)[0]
+            sig = sig.replace('\\', '')
+
+            url = 'http://usher.twitch.tv/select/%s.json?allow_source=true&player=jtvweb&type=any&nauth=%s&nauthsig=%s' % (name, token, sig)
+            result = getUrl(url).result
+
+            url = result.replace('\n', '').split('#EXT-X-MEDIA:TYPE=VIDEO', 1)[-1].rsplit('#EXT-X-MEDIA:TYPE=VIDEO', 1)[0].split('http://', 1)[-1]
+            if url == "[]": raise Exception()
+            url = 'http://' + url
+
             return url
         except:
             return

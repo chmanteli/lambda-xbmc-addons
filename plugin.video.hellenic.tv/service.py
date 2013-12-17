@@ -429,7 +429,7 @@ class epg:
             'MAD TV'                    : self.ote_programme("MAD TV", "144"),
             'KONTRA CHANNEL'            : self.ote_programme("KONTRA CHANNEL", "44"),
             'EXTRA 3'                   : self.ote_programme("EXTRA 3", "135"),
-            'ART CHANNEL'               : self.ote_programme("ART CHANNEL", "156"),
+            #'ART CHANNEL'              : self.ote_programme("ART CHANNEL", "156"),
             #'ZOOM'                     : self.ote_programme("ZOOM", "157"),
             'BLUE SKY'                  : self.ote_programme("BLUE SKY", "153"),
             #'CHANNEL 9'                : self.ote_programme("CHANNEL 9", "163"),
