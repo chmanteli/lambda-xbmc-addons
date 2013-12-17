@@ -1378,19 +1378,15 @@ class episodeList:
 
     def alphatv_list(self, name, url, image, imdb, genre, plot, show):
         try:
-        	result = getUrl(url).result
-        	i = url.split(link().alphatv_base)[-1]
-        	filter = [i + '/webtv/shows', i + '/webtv/episodes', i + '/webtv/news']
-        	redirect = [x for x in filter if x in result]
-        	try: redirect = redirect[0]
-        	except: redirect = filter[0]
+        	redirects = [url + '/webtv/shows?page=0', url + '/webtv/shows?page=1' , url + '/webtv/episodes?page=0', url + '/webtv/episodes?page=1', url + '/webtv/news?page=0', url + '/webtv/news?page=1']
 
+        	count = 0
         	threads = []
         	result = ''
-        	for i in range(0, 2):
+        	for redirect in redirects:
         	    self.data.append('')
-        	    episodesUrl = '%s%s?page=%s' % (link().alphatv_base, redirect, str(i))
-        	    threads.append(Thread(self.thread, episodesUrl, i))
+        	    threads.append(Thread(self.thread, redirect, count))
+        	    count = count + 1
         	[i.start() for i in threads]
         	[i.join() for i in threads]
         	for i in self.data: result += i
@@ -1408,8 +1404,9 @@ class episodeList:
         	    url = '%s%s' % (link().alphatv_base, url)
         	    url = common.replaceHTMLCodes(url)
         	    url = url.encode('utf-8')
+        	    if url in str(self.list): raise Exception()
         	    image = common.parseDOM(episode, "img", ret="src")[-1]
-        	    image = '%s%s' % (link().alphatv_base, image)
+        	    if not image.startswith('http://'): image = '%s%s' % (link().alphatv_base, image)
         	    image = common.replaceHTMLCodes(image)
         	    image = image.encode('utf-8')
         	    self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1'})

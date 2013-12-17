@@ -1,4 +1,12 @@
 ------------------------
+Hellenic Player v1.2.1 (18-Dec-13)
+------------------------
+
+- Fixed issues of alpha episodes.
+- Code cosmetics.
+
+
+------------------------
 Hellenic Player v1.2.0 (12-Dec-13)
 ------------------------
 
