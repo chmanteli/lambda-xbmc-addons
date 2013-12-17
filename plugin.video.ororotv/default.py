@@ -432,6 +432,8 @@ class index:
                 pass
 
     def pageList(self, pageList):
+        if pageList == None: return
+
         total = len(pageList)
         for i in pageList:
             try:
@@ -460,6 +462,8 @@ class index:
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=item,isFolder=True)
 
     def showList(self, showList):
+        if showList == None: return
+
         file = xbmcvfs.File(favData)
         favRead = file.read()
         file.close()
@@ -562,6 +566,8 @@ class index:
                 pass
 
     def seasonList(self, seasonList):
+        if seasonList == None: return
+
         try:
             imdb, genre, plot, show = seasonList[0]['imdb'], seasonList[0]['genre'], seasonList[0]['plot'], seasonList[0]['show']
             if plot == '': plot = addonDesc
@@ -627,6 +633,8 @@ class index:
                 pass
 
     def episodeList(self, episodeList):
+        if episodeList == None: return
+
         total = len(episodeList)
         for i in episodeList:
             try:
@@ -987,10 +995,10 @@ class contextMenu:
             xbmcvfs.mkdir(dataPath)
             xbmcvfs.mkdir(library)
             xbmcvfs.mkdir(folder)
-            seasonUrl = url
             seasonList = seasons().get(url, ' ', ' ', ' ', ' ', show, idx=False)
             for i in seasonList:
                 season = i['name']
+                seasonUrl = i['url']
                 enc_season = season.translate(None, '\/:*?"<>|')
                 seasonDir = os.path.join(folder, enc_season)
                 xbmcvfs.mkdir(seasonDir)
