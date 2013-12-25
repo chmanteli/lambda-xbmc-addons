@@ -6,7 +6,7 @@
 			<type>hls</type>
 			<url>http://megahdlive1-f.akamaihd.net/i/live_1@105260/master.m3u8</url>
 			<type2></type2>
-			<url2>rtmp://94.102.58.46:80/megaweb playpath=megaweb.sdp pageUrl=http://www.kanalia.eu/ live=1 timeout=10</url2>
+			<url2>rtmp://46.21.146.45:80/megaweb playpath=megaweb.sdp pageUrl=http://www.kanalia.eu/ live=1 timeout=10</url2>
 			<base>http://kanalia.eu/mega_channel_original.php</base>
 			<epg>30501</epg>
 		</channel>
@@ -22,7 +22,7 @@
 		<channel active="True">
 			<name>STAR</name>
 			<type></type>
-			<url>rtmp://94.102.58.46:80/alterweb playpath=alterweb.sdp pageUrl=http://www.kanalia.eu/ live=1 timeout=10</url>
+			<url>rtmp://46.21.146.45:80/alterweb playpath=alterweb.sdp pageUrl=http://www.kanalia.eu/ live=1 timeout=10</url>
 			<base>http://kanalia.eu/star_original.php</base>
 			<epg>30503</epg>
 		</channel>
@@ -176,7 +176,7 @@
 		<channel active="True">
 			<name>GREEK CINEMA</name>
 			<type></type>
-			<url>rtmp://94.102.58.46:80/cinema playpath=cinema.sdp pageUrl=http://www.kanalia.eu/ live=1 timeout=10</url>
+			<url>rtmp://46.21.146.45:80/cinema playpath=cinema.sdp pageUrl=http://www.kanalia.eu/ live=1 timeout=10</url>
 			<base>http://kanalia.eu/player/player.php?channel=105</base>
 			<epg>30546</epg>
 		</channel>
