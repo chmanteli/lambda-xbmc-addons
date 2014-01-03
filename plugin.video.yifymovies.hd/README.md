@@ -9,6 +9,7 @@ Watch a wide selection of movies from yify.tv
 
 Attributions
 ---------------------
+- Main icon and fanart by jokster | http://www.xbmchub.com
 - Main icon set is based on work done by DryIcons | http://dryicons.com
 - Additional icons are based on work done by David Lanham | http://www.dlanham.com
 

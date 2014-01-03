@@ -1,14 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
 	<!-- Settings -->
-	<string id="30020">Meta Data</string>
-	<string id="30021">Enable Meta Data</string>
-	<string id="30022">Enable Fanart</string>
+	<string id="30000">General</string>
+	<string id="30001">Enable Meta Data</string>
+	<string id="30002">Enable Fanart</string>
+	<string id="30003">Favourites</string>
+	<string id="30004">Sort by: Title</string>
+	<string id="30005">Sort by: Year</string>
+	<string id="30006">Sort by: Added</string>
+	<string id="30007">Downloads</string>
 	<string id="30040">Library</string>
 	<string id="30041">Don't forget to add this folder to media sources.</string>
 	<string id="30042">Movies Folder</string>
-	<string id="30060">Downloads</string>
-	<string id="30061">Folder</string>
 	<string id="30080">Subtitles</string>
 	<string id="30081">Subtitles could be unavailable or out of sync.</string>
 	<string id="30082">In that case use your own subtitles.</string>
@@ -31,8 +34,9 @@
 	<string id="30313">Removed from Subscriptions</string>
 	<string id="30314">Subscriptions updated</string>
 	<string id="30315">Subscriptions cleaned up</string>
-	<string id="30316">No subtitles available</string>
-	<string id="30317">No stream available</string>
+	<string id="30316">Item already in Subscriptions</string>
+	<string id="30317">No subtitles available</string>
+	<string id="30318">No stream available</string>
 	<!-- OK -->
 	<string id="30321">YouTube addon is not installed.</string>
 	<string id="30322">This stream requires it.</string>
@@ -82,6 +86,7 @@
 	<string id="30429">Set TV Shows view</string>
 	<string id="30430">Set Seasons view</string>
 	<string id="30431">Set Episodes view</string>
+	<string id="30432">Sources</string>
 	<!-- Description -->
 	<string id="30450">Watch a wide selection of movies from yify.tv</string>
 	<!-- Labels -->
