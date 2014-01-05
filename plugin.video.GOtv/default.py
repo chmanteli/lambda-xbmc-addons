@@ -544,8 +544,8 @@ class index:
                     else: cm.append((language(30424).encode("utf-8"), 'RunPlugin(%s?action=subscription_delete&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
                     cm.append((language(30422).encode("utf-8"), 'RunPlugin(%s?action=library&name=%s&url=%s&imdb=%s&year=%s)' % (sys.argv[0], sysname, sysurl, sysimdb, sysyear)))
                     cm.append((language(30429).encode("utf-8"), 'RunPlugin(%s?action=view_tvshows)' % (sys.argv[0])))
-                    cm.append((language(30419).encode("utf-8"), 'RunPlugin(%s?action=favourite_moveUp&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
-                    cm.append((language(30420).encode("utf-8"), 'RunPlugin(%s?action=favourite_moveDown&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
+                    if getSetting("fav_sort") == '2': cm.append((language(30419).encode("utf-8"), 'RunPlugin(%s?action=favourite_moveUp&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
+                    if getSetting("fav_sort") == '2': cm.append((language(30420).encode("utf-8"), 'RunPlugin(%s?action=favourite_moveDown&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
                     cm.append((language(30421).encode("utf-8"), 'RunPlugin(%s?action=favourite_delete&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
                 elif action == 'shows_subscriptions':
                     if getSetting("meta") == 'true': cm.append((language(30415).encode("utf-8"), 'RunPlugin(%s?action=metadata_tvshows&imdb=%s)' % (sys.argv[0], metaimdb)))
@@ -1189,7 +1189,22 @@ class favourites:
         file.close()
         match = re.compile('"(.+?)"[|]"(.+?)"[|]"(.+?)"[|]"(.+?)"[|]"(.+?)"').findall(read)
         for name, year, imdb, url, image in match:
-            self.list.append({'name': name, 'url': url, 'image': image, 'year': year, 'imdb': imdb, 'genre': '', 'plot': ''})
+            if getSetting("fav_sort") == '1':
+                try: status = metaget.get_meta('tvshow', name, imdb_id=imdb)['status']
+                except: status = ''
+            else:
+                status = ''
+            self.list.append({'name': name, 'url': url, 'image': image, 'year': year, 'imdb': imdb, 'genre': '', 'plot': '', 'status': status})
+
+        if getSetting("fav_sort") == '0':
+            self.list = sorted(self.list, key=itemgetter('name'))
+        elif getSetting("fav_sort") == '1':
+            filter = []
+            self.list = sorted(self.list, key=itemgetter('name'))
+            filter += [i for i in self.list if not i['status'] == 'Ended']
+            filter += [i for i in self.list if i['status'] == 'Ended']
+            self.list = filter
+
         index().showList(self.list)
 
 class root:
@@ -1455,18 +1470,23 @@ class episodes:
                 desc = common.replaceHTMLCodes(desc)
                 desc = desc.encode('utf-8')
 
-                date = common.parseDOM(episode, "div", attrs = { "class": "airdate" })[0]
-                d1 = re.compile('(\d{4})').findall(date)[0]
-                date = date.replace(d1,'').strip()
-                d3 = re.sub("[^0-9]", "", date)
-                date = date.replace(d3,'').strip()
-                d3 = '%02d' % int(d3)
-                date = date.replace('Jan','01').replace('Feb','02').replace('Mar','03').replace('Apr','04').replace('May','05').replace('Jun','06').replace('Jul','07').replace('Aug','08').replace('Sep','09').replace('Oct','10').replace('Nov','11').replace('Dec','12').strip()
-                d2 = re.sub("[^0-9]", "", date)
-                d2 = '%02d' % int(d2)
-                date = '%s-%s-%s' % (d1, d2, d3)
-                date = date.encode('utf-8')
-                if int(date.replace('-','')) + 2 >  int(datetime.datetime.now().strftime("%Y%m%d")): raise Exception()
+                try:
+                    date = common.parseDOM(episode, "div", attrs = { "class": "airdate" })[0]
+                    d1 = re.compile('(\d{4})').findall(date)[0]
+                    date = date.replace(d1,'').strip()
+                    d3 = re.sub("[^0-9]", "", date)
+                    date = date.replace(d3,'').strip()
+                    d3 = '%02d' % int(d3)
+                    date = date.replace('Jan','01').replace('Feb','02').replace('Mar','03').replace('Apr','04').replace('May','05').replace('Jun','06').replace('Jul','07').replace('Aug','08').replace('Sep','09').replace('Oct','10').replace('Nov','11').replace('Dec','12').strip()
+                    d2 = re.sub("[^0-9]", "", date)
+                    d2 = '%02d' % int(d2)
+                    date = '%s-%s-%s' % (d1, d2, d3)
+                    date = date.encode('utf-8')
+                except:
+                    date = metaget.get_episode_meta(show, imdb, season, num)['premiered']
+                    date = date.encode('utf-8')
+
+                if int(date.replace('-','')) > int((datetime.datetime.utcnow() - datetime.timedelta(hours = 5)).strftime("%Y%m%d")): raise Exception()
 
                 self.list.append({'name': name, 'url': name, 'image': image, 'date': date, 'year': year, 'imdb': imdb, 'genre': genre, 'plot': desc, 'title': title, 'show': show, 'season': season, 'episode': num})
             except:
@@ -1629,7 +1649,7 @@ class resolver:
         'Flashx' : 'flashx.tv',
         'Gorillavid' : 'gorillavid.com',
         'Hostingbulk' : 'hostingbulk.com',
-        'Hugefiles' : 'hugefiles.net',
+        #'Hugefiles' : 'hugefiles.net',
         'iShared' : 'ishared.eu',
         'Jumbofiles' : 'jumbofiles.com',
         'Lemuploads' : 'lemuploads.com',
@@ -1743,12 +1763,14 @@ class simplymovies:
             simplymovies_sources = []
 
             query = self.simplymovies_search + urllib.quote_plus(show.replace(' ', '-'))
-            result = getUrl(query).result
 
+            result = getUrl(query).result
             url = common.parseDOM(result, "div", attrs = { "class": "movieInfoHolder" })
-            try: url = [i for i in url if str('tt' + imdb) in i][0]
-            except: url = url[0]
-            url = common.parseDOM(url, "a", ret="href")[0]
+            try: match = [i for i in url if str('>' + show.lower() + '<') in i.lower()][0]
+            except: pass
+            try: match = [i for i in url if str('tt' + imdb) in i][0]
+            except: pass
+            url = common.parseDOM(match, "a", ret="href")[0]
             url = '%s/%s' % (self.simplymovies_base, url)
             url = common.replaceHTMLCodes(url)
             url = url.encode('utf-8')
@@ -1874,22 +1896,23 @@ class tvonline:
             tvonline_sources = []
 
             query = self.tvonline_search % (urllib.quote_plus(show), urllib.quote_plus(year), urllib.quote_plus(self.tvonline_base))
+
             result = getUrl(query).result
-
-            showsUrl = common.parseDOM(result, "h3", attrs = { "class": "r" })[0]
-            showsUrl = common.parseDOM(showsUrl, "a", ret="href")[0]
-            result = getUrl(showsUrl).result
-
-            url = None
-            try: url = re.compile('S%01d, Ep%02d:.+?href="(.+?)"' % (int(season), int(episode))).findall(result)[-1]
-            except: pass
-            try: url = re.compile('href="(.+?)">%s<' % title).findall(result)[-1]
-            except: pass
-
-            if url == None: return
-            url = '%s%s' % (self.tvonline_base, url)
+            match = common.parseDOM(result, "h3", attrs = { "class": "r" })[0]
+            if not str(show.lower()) in match.lower(): raise Exception()
+            url = common.parseDOM(match, "a", ret="href")[0]
             url = common.replaceHTMLCodes(url)
             url = url.encode('utf-8')
+
+            result = getUrl(url).result
+            try: match = re.compile('S%01d, Ep%02d:.+?href="(.+?)"' % (int(season), int(episode))).findall(result)[-1]
+            except: pass
+            try: match = re.compile('href="(.+?)">%s<' % title.lower()).findall(result.lower())[-1]
+            except: pass
+            url = '%s%s' % (self.tvonline_base, match)
+            url = common.replaceHTMLCodes(url)
+            url = url.encode('utf-8')
+
             tvonline_sources.append({'source': 'TVonline', 'quality': 'SD', 'provider': 'TVonline', 'url': url})
         except:
             return
