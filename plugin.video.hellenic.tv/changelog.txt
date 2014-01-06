@@ -1,4 +1,13 @@
 ------------------------
+Hellenic TV v2.5.3 (6-Jan-14)
+------------------------
+
+- Updated ANT1.
+- Notifications are now silent in Gotham or later.
+- Code cosmetics.
+
+
+------------------------
 Hellenic TV v2.5.2 (25-Dec-13)
 ------------------------
 

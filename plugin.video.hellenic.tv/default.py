@@ -2,7 +2,7 @@
 
 '''
     Hellenic TV XBMC Addon
-    Copyright (C) 2013 lambda
+    Copyright (C) 2014 lambda
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -127,7 +127,8 @@ class Thread(threading.Thread):
 
 class index:
     def infoDialog(self, str, header=addonName):
-        xbmc.executebuiltin("Notification(%s,%s, 3000, %s)" % (header, str, addonIcon))
+        try: xbmcgui.Dialog().notification(header, str, addonIcon, 3000, sound=False)
+        except: xbmc.executebuiltin("Notification(%s,%s, 3000, %s)" % (header, str, addonIcon))
 
     def okDialog(self, str1, str2, header=addonName):
         xbmcgui.Dialog().ok(header, str1, str2)
@@ -353,7 +354,6 @@ class player:
                 ''                  : self.direct,
                 'http'              : self.http,
                 'hls'               : self.hls,
-                'ant1'              : self.ant1,
                 'visionip'          : self.visionip,
                 'youtubelive'       : self.youtubelive,
                 'viiideo'           : self.viiideo,
@@ -391,16 +391,6 @@ class player:
 
     def hls(self, url):
         try:
-            result = getUrl(url).result
-            if "EXTM3U" in result: return url
-        except:
-            return
-
-    def ant1(self, url):
-        try:
-            root = 'http://www.antenna.gr/webtv/doubleip/live?version=3.0'
-            result = getUrl(root).result
-            url = re.compile('"streampath":"(.+?)"').findall(result)[0]
             result = getUrl(url).result
             if "EXTM3U" in result: return url
         except:

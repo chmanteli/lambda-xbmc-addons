@@ -12,11 +12,11 @@
 		</channel>
 		<channel active="True">
 			<name>ANT1</name>
-			<type>ant1</type>
-			<url>http://www.antenna.gr/</url>
+			<type>hls</type>
+			<url>http://wow.ant1.gr:1935/live/smil:antlive.smil/playlist.m3u8</url>
 			<type2></type2>
 			<url2>rtmp://tmplive.ant1.gr:80/live playpath=ant1tvnilova swfUrl=http://static.ant1.gr/live.ashx pageUrl=http://webtv.antenna.gr/webtv/live conn=B:0 swfVfy=1 live=1 timeout=10</url2>
-			<base>http://www.antenna.gr/webtv/live</base>
+			<base>http://www.antenna.gr/webtv/doubleip/live</base>
 			<epg>30502</epg>
 		</channel>
 		<channel active="True">
