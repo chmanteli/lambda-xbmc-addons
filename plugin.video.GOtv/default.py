@@ -18,15 +18,17 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import urllib,urllib2,urlparse,re,os,threading,datetime,time,base64,xbmc,xbmcplugin,xbmcgui,xbmcaddon,xbmcvfs
+import urllib,urllib2,re,os,threading,datetime,time,base64,xbmc,xbmcplugin,xbmcgui,xbmcaddon,xbmcvfs
 from operator import itemgetter
-import urlresolver
+try:    import json
+except: import simplejson as json
 try:    import CommonFunctions
 except: import commonfunctionsdummy as CommonFunctions
 try:    import StorageServer
 except: import storageserverdummy as StorageServer
 from metahandler import metahandlers
 from metahandler import metacontainers
+import urlresolver
 
 
 language            = xbmcaddon.Addon().getLocalizedString
@@ -217,33 +219,22 @@ class player(xbmc.Player):
         if getProperty == 'true': return True
         return
 
-    def run(self, name, url):
+    def run(self, name, url, imdb='0'):
         if xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
             item = xbmcgui.ListItem(path=url)
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
         else:
-            try: season = re.compile('S(\d{3})E\d*').findall(name)[-1]
-            except: season = None
-            try: season = re.compile('S(\d{2})E\d*').findall(name)[-1]
-            except: season = None
-            try: episode = re.compile('S%sE(\d*)' % (season)).findall(name)[-1]
-            except: episode = None
-            try: year = re.compile('[(](\d{4})[)]').findall(name)[-1]
-            except: year = None
             try:
-                if not (season is None and episode is None):
-                	show = name.replace('S%sE%s' % (season, episode), '').strip()
-                	season, episode = '%01d' % int(season), '%01d' % int(episode)
-                	imdb = metaget.get_meta('tvshow', show)['imdb_id']
-                	imdb = re.sub("[^0-9]", "", imdb)
-                	meta = metaget.get_episode_meta('', imdb, season, episode)
-                	meta.update({'tvshowtitle': show})
-                	poster = meta['cover_url']
-                elif not year is None:
-                	title = name.replace('(%s)' % year, '').strip()
-                	meta = metaget.get_meta('movie', title ,year=year ,overlay=6)
-                	poster = meta['cover_url']
-                else: raise Exception()
+                file = name + '.strm'
+                file = file.translate(None, '\/:*?"<>|')
+
+                meta = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodes", "params": {"properties" : ["title", "plot", "votes", "rating", "writer", "firstaired", "playcount", "runtime", "director", "productioncode", "season", "episode", "originaltitle", "showtitle", "lastplayed", "fanart", "thumbnail", "file", "resume", "tvshowid", "dateadded", "uniqueid"]}, "id": 1}')
+                meta = unicode(meta, 'utf-8', errors='ignore')
+                meta = json.loads(meta)
+                meta = meta['result']['episodes']
+                self.meta = [i for i in meta if i['file'].endswith(file)][0]
+            	meta = {'title' : self.meta['title'], 'tvshowtitle': self.meta['showtitle'], 'season': self.meta['season'], 'episode': self.meta['episode'], 'writer': str(self.meta['writer']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'director': str(self.meta['director']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'rating': self.meta['rating'], 'duration': self.meta['runtime'], 'premiered': self.meta['firstaired'], 'plot': self.meta['plot']}
+                poster = self.meta['thumbnail']
             except:
             	meta = {'label' : name, 'title' : name}
             	poster = ''
@@ -260,16 +251,12 @@ class player(xbmc.Player):
 
         subtitles().get(name)
 
+        self.content = 'episode'
         self.season = str(xbmc.getInfoLabel('VideoPlayer.season'))
         self.episode = str(xbmc.getInfoLabel('VideoPlayer.episode'))
-        if self.season == '' or self.episode == '':
-            self.content = 'movie'
-            self.imdb = metaget.get_meta('movie', xbmc.getInfoLabel('VideoPlayer.title') ,year=str(xbmc.getInfoLabel('VideoPlayer.year')))['imdb_id']
-            self.imdb = re.sub("[^0-9]", "", self.imdb)
-        else:
-            self.content = 'episode'
-            self.imdb = metaget.get_meta('tvshow', xbmc.getInfoLabel('VideoPlayer.tvshowtitle'))['imdb_id']
-            self.imdb = re.sub("[^0-9]", "", self.imdb)
+        if imdb == '0': imdb = metaget.get_meta('tvshow', xbmc.getInfoLabel('VideoPlayer.tvshowtitle'))['imdb_id']
+        imdb = re.sub("[^0-9]", "", imdb)
+        self.imdb = imdb
 
         while True:
             try: self.currentTime = self.getTime()
@@ -278,9 +265,14 @@ class player(xbmc.Player):
 
     def onPlayBackEnded(self):
         if xbmc.getInfoLabel('Container.FolderPath') == '': index().setProperty(self.property, 'true')
+
         if not self.currentTime / self.totalTime >= .9: return
-        metaget.change_watched(self.content, '', self.imdb, season=self.season, episode=self.episode, year='', watched='')
-        index().container_refresh()
+        if xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
+            metaget.change_watched(self.content, '', self.imdb, season=self.season, episode=self.episode, year='', watched='')
+            index().container_refresh()
+        else:
+            try: xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.SetEpisodeDetails", "params": {"episodeid" : %s, "playcount" : 1 }, "id": 1 }' % str(self.meta['episodeid']))
+            except: pass
 
     def onPlayBackStopped(self):
         index().clearProperty(self.property)
@@ -365,7 +357,8 @@ class subtitles:
 
 class index:
     def infoDialog(self, str, header=addonName):
-        xbmc.executebuiltin("Notification(%s,%s, 3000, %s)" % (header, str, addonIcon))
+        try: xbmcgui.Dialog().notification(header, str, addonIcon, 3000, sound=False)
+        except: xbmc.executebuiltin("Notification(%s,%s, 3000, %s)" % (header, str, addonIcon))
 
     def okDialog(self, str1, str2, header=addonName):
         xbmcgui.Dialog().ok(header, str1, str2)
@@ -752,10 +745,11 @@ class contextMenu:
             label = xbmc.getInfoLabel('ListItemNoWrap(%s).Label' % i)
             if label == '': break
 
+            params = {}
             path = xbmc.getInfoLabel('ListItemNoWrap(%s).FileNameAndPath' % i)
-            query = urlparse.urlparse(path.replace(sys.argv[0],'')).query
-            name, title, imdb, year, url = urlparse.parse_qs(query)['name'][0], urlparse.parse_qs(query)['title'][0], urlparse.parse_qs(query)['imdb'][0], urlparse.parse_qs(query)['year'][0], urlparse.parse_qs(query)['url'][0]
-            sysname, systitle, sysimdb, sysyear, sysurl = urllib.quote_plus(name), urllib.quote_plus(title), urllib.quote_plus(imdb), urllib.quote_plus(year), urllib.quote_plus(url)
+            query = path[path.find('?') + 1:].split('&')
+            for i in query: params[i.split('=')[0]] = i.split('=')[1]
+            sysname, systitle, sysimdb, sysyear, sysurl = urllib.unquote_plus(params["name"]), urllib.unquote_plus(params["title"]), urllib.unquote_plus(params["imdb"]), urllib.unquote_plus(params["year"]), urllib.unquote_plus(params["url"])
             u = '%s?action=play&name=%s&title=%s&imdb=%s&year=%s&url=%s' % (sys.argv[0], sysname, systitle, sysimdb, sysyear, sysurl)
 
             meta = {'label' : xbmc.getInfoLabel('ListItemNoWrap(%s).title' % i), 'title' : xbmc.getInfoLabel('ListItemNoWrap(%s).title' % i), 'tvshowtitle': xbmc.getInfoLabel('ListItemNoWrap(%s).tvshowtitle' % i), 'imdb_id' : xbmc.getInfoLabel('ListItemNoWrap(%s).imdb_id' % i), 'season' : xbmc.getInfoLabel('ListItemNoWrap(%s).season' % i), 'episode' : xbmc.getInfoLabel('ListItemNoWrap(%s).episode' % i), 'writer' : xbmc.getInfoLabel('ListItemNoWrap(%s).writer' % i), 'director' : xbmc.getInfoLabel('ListItemNoWrap(%s).director' % i), 'rating' : xbmc.getInfoLabel('ListItemNoWrap(%s).rating' % i), 'duration' : xbmc.getInfoLabel('ListItemNoWrap(%s).duration' % i), 'plot' : xbmc.getInfoLabel('ListItemNoWrap(%s).plot' % i), 'premiered' : xbmc.getInfoLabel('ListItemNoWrap(%s).premiered' % i), 'genre' : xbmc.getInfoLabel('ListItemNoWrap(%s).genre' % i)}
@@ -1161,14 +1155,17 @@ class subscriptions:
             try:
                 file = xbmcvfs.File(episode)
                 read = file.read()
+                read = read.encode("utf-8")
                 file.close()
                 if not read.startswith(sys.argv[0]): raise Exception()
-                path = urlparse.urlparse(read).path
-                name, title, imdb, year, date = urlparse.parse_qs(path)['name'][0], urlparse.parse_qs(path)['title'][0], urlparse.parse_qs(path)['imdb'][0], urlparse.parse_qs(path)['year'][0], urlparse.parse_qs(path)['date'][0]
-                image = imdbDict[imdb]
+                params = {}
+                query = read[read.find('?') + 1:].split('&')
+                for i in query: params[i.split('=')[0]] = i.split('=')[1]
+                name, title, imdb, year, date = urllib.unquote_plus(params["name"]), urllib.unquote_plus(params["title"]), urllib.unquote_plus(params["imdb"]), urllib.unquote_plus(params["year"]), urllib.unquote_plus(params["date"])
                 show = name.rsplit(' ', 1)[0]
                 season = '%01d' % int(name.rsplit(' ', 1)[-1].split('S')[-1].split('E')[0])
                 num = '%01d' % int(name.rsplit(' ', 1)[-1].split('E')[-1])
+                image = imdbDict[imdb]
                 sort = date.replace('-','')
                 self.list.append({'name': name, 'url': name, 'image': image, 'date': date, 'year': year, 'imdb': imdb, 'genre': '', 'plot': '', 'title': title, 'show': show, 'season': season, 'episode': num, 'episode': num, 'sort': sort})
             except:
@@ -1525,7 +1522,7 @@ class resolver:
             if url == 'download://': return url
             if url == 'close://': return
 
-            player().run(name, url)
+            player().run(name, url, imdb)
             return url
         except:
             index().infoDialog(language(30318).encode("utf-8"))

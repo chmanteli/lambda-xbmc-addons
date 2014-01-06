@@ -1,4 +1,14 @@
 ------------------------
+GOtv v1.0.2 (6-Jan-14)
+------------------------
+
+- Fixed issues with watched status in library.
+- Fixed issues with latest episodes in Gotham.
+- Notifications are now silent in Gotham or later.
+- Code cosmetics.
+
+
+------------------------
 GOtv v1.0.1 (5-Jan-14)
 ------------------------
 
