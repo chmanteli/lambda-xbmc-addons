@@ -1,14 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
 	<!-- Settings -->
-	<string id="30020">Μεταδεδομένα</string>
-	<string id="30021">Χρήση μεταδεδομένων</string>
-	<string id="30022">Χρήση Fanart</string>
+	<string id="30000">Γενικά</string>
+	<string id="30001">Χρήση μεταδεδομένων</string>
+	<string id="30002">Χρήση Fanart</string>
+	<string id="30003">Αγαπημένα</string>
+	<string id="30004">Ταξ.: Τίτλος</string>
+	<string id="30005">Ταξ.: Έτος</string>
+	<string id="30006">Ταξ.: Προσθήκη</string>
+	<string id="30007">Λήψεις</string>
 	<string id="30040">Συλλογή</string>
 	<string id="30041">Μην ξεχάσετε να προσθέσετε το φάκελο στις πηγές πολυμέσων.</string>
 	<string id="30042">Φάκελος ταινιών</string>
-	<string id="30060">Λήψεις</string>
-	<string id="30061">Φάκελος</string>
 	<string id="30080">Υπότιτλοι</string>
 	<string id="30081">Οι υπότιτλοι μπορεί να είναι μη διαθέσιμοι ή ασυγχρόνιστοι.</string>
 	<string id="30082">Σε αυτή τη περίπτωση χρησιμοποιήστε τους δικούς σας.</string>
@@ -31,8 +34,9 @@
 	<string id="30313">Αφαιρέθηκε από τις Συνδρομές</string>
 	<string id="30314">Οι Συνδρομές ενημερώθηκαν</string>
 	<string id="30315">Οι Συνδρομές εκκαθαριστήκαν</string>
-	<string id="30316">Δεν υπάρχουν διαθέσιμοι υπότιτλοι</string>
-	<string id="30317">Δεν υπάρχει διαθέσιμη ροή</string>
+	<string id="30316">Υπάρχει ήδη στις Συνδρομές</string>
+	<string id="30317">Δεν υπάρχουν διαθέσιμοι υπότιτλοι</string>
+	<string id="30318">Δεν υπάρχει διαθέσιμη ροή</string>
 	<!-- OK -->
 	<string id="30321">Το πρόσθετο YouTube δεν έχει εγκατασταθεί.</string>
 	<string id="30322">Η ροή αυτή το απαιτεί.</string>
@@ -82,15 +86,16 @@
 	<string id="30429">Ορισμός θέασης σειρών</string>
 	<string id="30430">Ορισμός θέασης κύκλων</string>
 	<string id="30431">Ορισμός θέασης επεισοδίων</string>
+	<string id="30432">Πηγές</string>
 	<!-- Description -->
 	<string id="30450">Παρακολουθήστε μια ευρεία συλλογή ταινιών από το muchmovies.org</string>
 	<!-- Labels -->
-	<string id="30501">Αγαπημένα</string>
-	<string id="30502">Τίτλος</string>
-	<string id="30503">Κυκλοφορία</string>
-	<string id="30504">Πρόσφατα</string>
-	<string id="30505">Αξιολόγηση</string>
+	<string id="30501">Τίτλος</string>
+	<string id="30502">Κυκλοφορία</string>
+	<string id="30503">Προσθήκες</string>
+	<string id="30504">Αξιολόγηση</string>
+	<string id="30505">Σελίδες</string>
 	<string id="30506">Είδη</string>
-	<string id="30507">Σελίδες</string>
+	<string id="30507">Αγαπημένα</string>
 	<string id="30508">Αναζήτηση</string>
 </strings>
