@@ -122,6 +122,7 @@ class main:
         elif action == 'view_seasons':              contextMenu().view('seasons')
         elif action == 'view_episodes':             contextMenu().view('episodes')
         elif action == 'metadata_tvshows':          contextMenu().metadata('tvshow', imdb, '', '')
+        elif action == 'metadata_tvshows2':         contextMenu().metadata('tvshow', imdb, '', '')
         elif action == 'metadata_seasons':          contextMenu().metadata('season', imdb, season, '')
         elif action == 'metadata_episodes':         contextMenu().metadata('episode', imdb, season, episode)
         elif action == 'playcount_tvshows':         contextMenu().playcount('tvshow', imdb, '', '')
@@ -130,6 +131,7 @@ class main:
         elif action == 'library':                   contextMenu().library(name, url, imdb, year)
         elif action == 'download':                  contextMenu().download(name, title, imdb, year, url)
         elif action == 'sources':                   contextMenu().sources(name, title, imdb, year, url)
+        elif action == 'autoplay':                  contextMenu().autoplay(name, title, imdb, year, url)
         elif action == 'shows_favourites':          favourites().shows()
         elif action == 'shows_subscriptions':       subscriptions().shows()
         elif action == 'episodes_subscriptions':    subscriptions().episodes()
@@ -233,11 +235,11 @@ class player(xbmc.Player):
                 meta = json.loads(meta)
                 meta = meta['result']['episodes']
                 self.meta = [i for i in meta if i['file'].endswith(file)][0]
-            	meta = {'title' : self.meta['title'], 'tvshowtitle': self.meta['showtitle'], 'season': self.meta['season'], 'episode': self.meta['episode'], 'writer': str(self.meta['writer']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'director': str(self.meta['director']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'rating': self.meta['rating'], 'duration': self.meta['runtime'], 'premiered': self.meta['firstaired'], 'plot': self.meta['plot']}
+                meta = {'title' : self.meta['title'], 'tvshowtitle': self.meta['showtitle'], 'season': self.meta['season'], 'episode': self.meta['episode'], 'writer': str(self.meta['writer']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'director': str(self.meta['director']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'rating': self.meta['rating'], 'duration': self.meta['runtime'], 'premiered': self.meta['firstaired'], 'plot': self.meta['plot']}
                 poster = self.meta['thumbnail']
             except:
-            	meta = {'label' : name, 'title' : name}
-            	poster = ''
+                meta = {'label' : name, 'title' : name}
+                poster = ''
             item = xbmcgui.ListItem(path=url, iconImage="DefaultVideo.png", thumbnailImage=poster)
             item.setInfo( type="Video", infoLabels= meta )
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
@@ -552,6 +554,7 @@ class index:
                     cm.append((language(30429).encode("utf-8"), 'RunPlugin(%s?action=view_tvshows)' % (sys.argv[0])))
                     cm.append((language(30409).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
                 elif action.startswith('shows_search'):
+                    if getSetting("meta") == 'true': cm.append((language(30415).encode("utf-8"), 'RunPlugin(%s?action=metadata_tvshows2&imdb=%s)' % (sys.argv[0], metaimdb)))
                     cm.append((language(30423).encode("utf-8"), 'RunPlugin(%s?action=subscription_from_search&name=%s&imdb=%s&url=%s&image=%s&year=%s)' % (sys.argv[0], sysname, sysimdb, sysurl, sysimage, sysyear)))
                     cm.append((language(30422).encode("utf-8"), 'RunPlugin(%s?action=library&name=%s&url=%s&imdb=%s&year=%s)' % (sys.argv[0], sysname, sysurl, sysimdb, sysyear)))
                     cm.append((language(30417).encode("utf-8"), 'RunPlugin(%s?action=favourite_from_search&name=%s&imdb=%s&url=%s&image=%s&year=%s)' % (sys.argv[0], sysname, sysimdb, sysurl, sysimage, sysyear)))
@@ -560,6 +563,7 @@ class index:
                     cm.append((language(30410).encode("utf-8"), 'RunPlugin(%s?action=playlist_open)' % (sys.argv[0])))
                     cm.append((language(30411).encode("utf-8"), 'RunPlugin(%s?action=addon_home)' % (sys.argv[0])))
                 else:
+                    if getSetting("meta") == 'true': cm.append((language(30415).encode("utf-8"), 'RunPlugin(%s?action=metadata_tvshows2&imdb=%s)' % (sys.argv[0], metaimdb)))
                     if not '"%s"' % url in subRead: cm.append((language(30423).encode("utf-8"), 'RunPlugin(%s?action=subscription_add&name=%s&imdb=%s&url=%s&image=%s&year=%s)' % (sys.argv[0], sysname, sysimdb, sysurl, sysimage, sysyear)))
                     else: cm.append((language(30424).encode("utf-8"), 'RunPlugin(%s?action=subscription_delete&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
                     cm.append((language(30422).encode("utf-8"), 'RunPlugin(%s?action=library&name=%s&url=%s&imdb=%s&year=%s)' % (sys.argv[0], sysname, sysurl, sysimdb, sysyear)))
@@ -696,7 +700,8 @@ class index:
                     fanart = addonFanart
 
                 cm = []
-                cm.append((language(30432).encode("utf-8"), 'RunPlugin(%s?action=sources&name=%s&title=%s&imdb=%s&year=%s&url=%s)' % (sys.argv[0], sysname, systitle, sysimdb, sysyear, sysurl)))
+                if getSetting("autoplay") == 'true': cm.append((language(30432).encode("utf-8"), 'RunPlugin(%s?action=sources&name=%s&title=%s&imdb=%s&year=%s&url=%s)' % (sys.argv[0], sysname, systitle, sysimdb, sysyear, sysurl)))
+                else: cm.append((language(30433).encode("utf-8"), 'RunPlugin(%s?action=autoplay&name=%s&title=%s&imdb=%s&year=%s&url=%s)' % (sys.argv[0], sysname, systitle, sysimdb, sysyear, sysurl)))
                 cm.append((language(30405).encode("utf-8"), 'RunPlugin(%s?action=item_queue)' % (sys.argv[0])))
                 cm.append((language(30406).encode("utf-8"), 'RunPlugin(%s?action=download&name=%s&title=%s&imdb=%s&year=%s&url=%s)' % (sys.argv[0], sysname, systitle, sysimdb, sysyear, sysurl)))
                 cm.append((language(30403).encode("utf-8"), 'RunPlugin(%s?action=item_play_from_here&url=%s)' % (sys.argv[0], sysurl)))
@@ -752,7 +757,7 @@ class contextMenu:
             sysname, systitle, sysimdb, sysyear, sysurl = urllib.unquote_plus(params["name"]), urllib.unquote_plus(params["title"]), urllib.unquote_plus(params["imdb"]), urllib.unquote_plus(params["year"]), urllib.unquote_plus(params["url"])
             u = '%s?action=play&name=%s&title=%s&imdb=%s&year=%s&url=%s' % (sys.argv[0], sysname, systitle, sysimdb, sysyear, sysurl)
 
-            meta = {'label' : xbmc.getInfoLabel('ListItemNoWrap(%s).title' % i), 'title' : xbmc.getInfoLabel('ListItemNoWrap(%s).title' % i), 'tvshowtitle': xbmc.getInfoLabel('ListItemNoWrap(%s).tvshowtitle' % i), 'imdb_id' : xbmc.getInfoLabel('ListItemNoWrap(%s).imdb_id' % i), 'season' : xbmc.getInfoLabel('ListItemNoWrap(%s).season' % i), 'episode' : xbmc.getInfoLabel('ListItemNoWrap(%s).episode' % i), 'writer' : xbmc.getInfoLabel('ListItemNoWrap(%s).writer' % i), 'director' : xbmc.getInfoLabel('ListItemNoWrap(%s).director' % i), 'rating' : xbmc.getInfoLabel('ListItemNoWrap(%s).rating' % i), 'duration' : xbmc.getInfoLabel('ListItemNoWrap(%s).duration' % i), 'plot' : xbmc.getInfoLabel('ListItemNoWrap(%s).plot' % i), 'premiered' : xbmc.getInfoLabel('ListItemNoWrap(%s).premiered' % i), 'genre' : xbmc.getInfoLabel('ListItemNoWrap(%s).genre' % i)}
+            meta = {'title': xbmc.getInfoLabel('ListItemNoWrap(%s).title' % i), 'tvshowtitle': xbmc.getInfoLabel('ListItemNoWrap(%s).tvshowtitle' % i), 'season': xbmc.getInfoLabel('ListItemNoWrap(%s).season' % i), 'episode': xbmc.getInfoLabel('ListItemNoWrap(%s).episode' % i), 'writer': xbmc.getInfoLabel('ListItemNoWrap(%s).writer' % i), 'director': xbmc.getInfoLabel('ListItemNoWrap(%s).director' % i), 'rating': xbmc.getInfoLabel('ListItemNoWrap(%s).rating' % i), 'duration': xbmc.getInfoLabel('ListItemNoWrap(%s).duration' % i), 'premiered': xbmc.getInfoLabel('ListItemNoWrap(%s).premiered' % i), 'plot': xbmc.getInfoLabel('ListItemNoWrap(%s).plot' % i)}
             poster, fanart = xbmc.getInfoLabel('ListItemNoWrap(%s).icon' % i), xbmc.getInfoLabel('ListItemNoWrap(%s).Property(Fanart_Image)' % i)
 
             item = xbmcgui.ListItem(label, iconImage="DefaultVideo.png", thumbnailImage=poster)
@@ -1101,11 +1106,27 @@ class contextMenu:
             return
 
     def sources(self, name, title, imdb, year, url):
-        meta = {'label': xbmc.getInfoLabel('ListItem.label'), 'title': xbmc.getInfoLabel('ListItem.title'), 'tvshowtitle': xbmc.getInfoLabel('ListItem.tvshowtitle'), 'season': xbmc.getInfoLabel('ListItem.season'), 'episode': xbmc.getInfoLabel('ListItem.episode'), 'imdb_id': xbmc.getInfoLabel('ListItem.imdb_id'), 'tvdb_id': xbmc.getInfoLabel('ListItem.tvdb_id'), 'episode_id': xbmc.getInfoLabel('ListItem.episode_id'), 'trailer_url': xbmc.getInfoLabel('ListItem.trailer_url'), 'premiered': xbmc.getInfoLabel('ListItem.premiered'), 'director': xbmc.getInfoLabel('ListItem.director'), 'writer': xbmc.getInfoLabel('ListItem.writer'), 'rating': xbmc.getInfoLabel('ListItem.rating'), 'overlay': xbmc.getInfoLabel('ListItem.overlay'), 'genre': xbmc.getInfoLabel('ListItem.genre'), 'plot': xbmc.getInfoLabel('ListItem.plot')}
+        meta = {'title': xbmc.getInfoLabel('ListItem.title'), 'tvshowtitle': xbmc.getInfoLabel('ListItem.tvshowtitle'), 'season': xbmc.getInfoLabel('ListItem.season'), 'episode': xbmc.getInfoLabel('ListItem.episode'), 'writer': xbmc.getInfoLabel('ListItem.writer'), 'director': xbmc.getInfoLabel('ListItem.director'), 'rating': xbmc.getInfoLabel('ListItem.rating'), 'duration': xbmc.getInfoLabel('ListItem.duration'), 'premiered': xbmc.getInfoLabel('ListItem.premiered'), 'plot': xbmc.getInfoLabel('ListItem.plot')}
         label, poster, fanart = xbmc.getInfoLabel('ListItem.label'), xbmc.getInfoLabel('ListItem.icon'), xbmc.getInfoLabel('ListItem.Property(Fanart_Image)')
 
         sysname, systitle, sysimdb, sysyear = urllib.quote_plus(name), urllib.quote_plus(title), urllib.quote_plus(imdb), urllib.quote_plus(year)
         u = '%s?action=play&name=%s&title=%s&imdb=%s&year=%s&url=sources://' % (sys.argv[0], sysname, systitle, sysimdb, sysyear)
+
+        playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+        playlist.clear()
+        item = xbmcgui.ListItem(label, iconImage="DefaultVideo.png", thumbnailImage=poster)
+        item.setInfo( type="Video", infoLabels= meta )
+        item.setProperty("IsPlayable", "true")
+        item.setProperty("Video", "true")
+        item.setProperty("Fanart_Image", fanart)
+        xbmc.Player(xbmc.PLAYER_CORE_AUTO).play(u, item)
+
+    def autoplay(self, name, title, imdb, year, url):
+        meta = {'title': xbmc.getInfoLabel('ListItem.title'), 'tvshowtitle': xbmc.getInfoLabel('ListItem.tvshowtitle'), 'season': xbmc.getInfoLabel('ListItem.season'), 'episode': xbmc.getInfoLabel('ListItem.episode'), 'writer': xbmc.getInfoLabel('ListItem.writer'), 'director': xbmc.getInfoLabel('ListItem.director'), 'rating': xbmc.getInfoLabel('ListItem.rating'), 'duration': xbmc.getInfoLabel('ListItem.duration'), 'premiered': xbmc.getInfoLabel('ListItem.premiered'), 'plot': xbmc.getInfoLabel('ListItem.plot')}
+        label, poster, fanart = xbmc.getInfoLabel('ListItem.label'), xbmc.getInfoLabel('ListItem.icon'), xbmc.getInfoLabel('ListItem.Property(Fanart_Image)')
+
+        sysname, systitle, sysimdb, sysyear = urllib.quote_plus(name), urllib.quote_plus(title), urllib.quote_plus(imdb), urllib.quote_plus(year)
+        u = '%s?action=play&name=%s&title=%s&imdb=%s&year=%s&url=play://' % (sys.argv[0], sysname, systitle, sysimdb, sysyear)
 
         playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
         playlist.clear()
@@ -1230,6 +1251,7 @@ class link:
         self.imdb_views = 'http://akas.imdb.com/search/title?title_type=tv_series,mini_series&sort=num_votes,desc&count=25&start=1'
         self.imdb_active = 'http://akas.imdb.com/search/title?title_type=tv_series,mini_series&production_status=active&sort=moviemeter,asc&count=25&start=1'
         self.imdb_search = 'http://akas.imdb.com/search/title?title_type=tv_series,mini_series&sort=moviemeter,asc&count=25&start=1&title=%s'
+        self.imdb_seasons = 'http://www.imdb.com/title/tt%s/episodes'
         self.imdb_episodes = 'http://www.imdb.com/title/tt%s/episodes?season=%s'
 
 class genres:
@@ -1393,12 +1415,15 @@ class seasons:
 
     def imdb_list(self, url, image, year, imdb, genre, plot, show):
         try:
+            if imdb == '0': imdb = re.sub("[^0-9]", "", url.rsplit('tt', 1)[-1])
+
+            url = link().imdb_seasons % imdb
             result = getUrl(url.replace(link().imdb_base, link().imdb_akas)).result
             result = result.decode('iso-8859-1').encode('utf-8')
-            if imdb == '0': imdb = re.sub("[^0-9]", "", url.rsplit('tt', 1)[-1])
-            seasons = re.compile('/title/tt%s/episodes[?]season=(\d+)' % imdb).findall(result.replace('\n',''))
+
+            seasons = common.parseDOM(result, "select", attrs = { "id": "bySeason" })[0]
+            seasons = common.parseDOM(seasons, "option", ret="value")
             seasons = uniqueList(seasons).list
-            seasons = seasons[::-1]
         except:
             return
 
@@ -1512,7 +1537,9 @@ class resolver:
             if not xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
                 autoplay = getSetting("autoplay_library")
 
-            if url == 'sources://' or url == 'download://' or not autoplay == 'true':
+            if url == 'play://':
+                url = self.sources_direct()
+            elif url == 'sources://' or url == 'download://' or not autoplay == 'true':
                 url = self.sources_dialog()
             else:
                 url = self.sources_direct()

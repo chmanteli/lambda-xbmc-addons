@@ -1,4 +1,14 @@
 ------------------------
+GOtv v1.0.3 (8-Jan-14)
+------------------------
+
+- If autoplay is disabled, it can now be selected from context menu.
+- Refresh option is now available in all tv show folders.
+- Tweaked season listings.
+- Code cosmetics.
+
+
+------------------------
 GOtv v1.0.2 (6-Jan-14)
 ------------------------
 
