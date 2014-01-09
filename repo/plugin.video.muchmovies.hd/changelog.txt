@@ -1,4 +1,12 @@
 ------------------------
+Much Movies HD v1.3.1 (10-Jan-14)
+------------------------
+
+- Tweaked watched status.
+- Code cosmetics.
+
+
+------------------------
 Much Movies HD v1.3.0 (7-Jan-14)
 ------------------------
 

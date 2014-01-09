@@ -197,8 +197,8 @@ class player(xbmc.Player):
                 meta = {'title': self.meta['title'], 'originaltitle': self.meta['originaltitle'], 'year': self.meta['year'], 'genre': str(self.meta['genre']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'director': str(self.meta['director']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'country': str(self.meta['country']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'rating': self.meta['rating'], 'votes': self.meta['votes'], 'mpaa': self.meta['mpaa'], 'duration': self.meta['runtime'], 'trailer': self.meta['trailer'], 'writer': str(self.meta['writer']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'studio': str(self.meta['studio']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'tagline': self.meta['tagline'], 'plotoutline': self.meta['plotoutline'], 'plot': self.meta['plot']}
                 poster = self.meta['thumbnail']
             except:
-            	meta = {'label' : name, 'title' : name}
-            	poster = ''
+                meta = {'label' : name, 'title' : name}
+                poster = ''
             item = xbmcgui.ListItem(path=url, iconImage="DefaultVideo.png", thumbnailImage=poster)
             item.setInfo( type="Video", infoLabels= meta )
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
@@ -226,7 +226,6 @@ class player(xbmc.Player):
 
     def onPlayBackEnded(self):
         if xbmc.getInfoLabel('Container.FolderPath') == '': index().setProperty(self.property, 'true')
-
         if not self.currentTime / self.totalTime >= .9: return
         if xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
             metaget.change_watched(self.content, '', self.imdb, season=self.season, episode=self.episode, year='', watched='')
@@ -237,6 +236,13 @@ class player(xbmc.Player):
 
     def onPlayBackStopped(self):
         index().clearProperty(self.property)
+        if not self.currentTime / self.totalTime >= .9: return
+        if xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
+            metaget.change_watched(self.content, '', self.imdb, season=self.season, episode=self.episode, year='', watched='')
+            index().container_refresh()
+        else:
+            try: xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.SetMovieDetails", "params": {"movieid" : %s, "playcount" : 1 }, "id": 1 }' % str(self.meta['movieid']))
+            except: pass
 
 class subtitles:
     def get(self, name):

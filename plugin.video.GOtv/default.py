@@ -267,7 +267,6 @@ class player(xbmc.Player):
 
     def onPlayBackEnded(self):
         if xbmc.getInfoLabel('Container.FolderPath') == '': index().setProperty(self.property, 'true')
-
         if not self.currentTime / self.totalTime >= .9: return
         if xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
             metaget.change_watched(self.content, '', self.imdb, season=self.season, episode=self.episode, year='', watched='')
@@ -278,6 +277,13 @@ class player(xbmc.Player):
 
     def onPlayBackStopped(self):
         index().clearProperty(self.property)
+        if not self.currentTime / self.totalTime >= .9: return
+        if xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
+            metaget.change_watched(self.content, '', self.imdb, season=self.season, episode=self.episode, year='', watched='')
+            index().container_refresh()
+        else:
+            try: xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.SetEpisodeDetails", "params": {"episodeid" : %s, "playcount" : 1 }, "id": 1 }' % str(self.meta['episodeid']))
+            except: pass
 
 class subtitles:
     def get(self, name):
@@ -554,7 +560,6 @@ class index:
                     cm.append((language(30429).encode("utf-8"), 'RunPlugin(%s?action=view_tvshows)' % (sys.argv[0])))
                     cm.append((language(30409).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
                 elif action.startswith('shows_search'):
-                    if getSetting("meta") == 'true': cm.append((language(30415).encode("utf-8"), 'RunPlugin(%s?action=metadata_tvshows2&imdb=%s)' % (sys.argv[0], metaimdb)))
                     cm.append((language(30423).encode("utf-8"), 'RunPlugin(%s?action=subscription_from_search&name=%s&imdb=%s&url=%s&image=%s&year=%s)' % (sys.argv[0], sysname, sysimdb, sysurl, sysimage, sysyear)))
                     cm.append((language(30422).encode("utf-8"), 'RunPlugin(%s?action=library&name=%s&url=%s&imdb=%s&year=%s)' % (sys.argv[0], sysname, sysurl, sysimdb, sysyear)))
                     cm.append((language(30417).encode("utf-8"), 'RunPlugin(%s?action=favourite_from_search&name=%s&imdb=%s&url=%s&image=%s&year=%s)' % (sys.argv[0], sysname, sysimdb, sysurl, sysimage, sysyear)))
@@ -896,7 +901,7 @@ class contextMenu:
         try:
             status = metaget.get_meta('tvshow', name, imdb_id=imdb)['status']
             if status == 'Ended':
-            	yes = index().yesnoDialog(language(30347).encode("utf-8"), language(30348).encode("utf-8"))
+            	yes = index().yesnoDialog(language(30347).encode("utf-8"), language(30348).encode("utf-8"), name)
             	if not yes: return
             file = open(subData, 'a+')
             file.write('"%s"|"%s"|"%s"|"%s"|"%s"\n' % (name, year, imdb, url, image))
@@ -917,7 +922,7 @@ class contextMenu:
                 return
             status = metaget.get_meta('tvshow', name, imdb_id=imdb)['status']
             if status == 'Ended':
-            	yes = index().yesnoDialog(language(30347).encode("utf-8"), language(30348).encode("utf-8"))
+            	yes = index().yesnoDialog(language(30347).encode("utf-8"), language(30348).encode("utf-8"), name)
             	if not yes: return
             file = open(subData, 'a+')
             file.write('"%s"|"%s"|"%s"|"%s"|"%s"\n' % (name, year, imdb, url, image))
@@ -937,16 +942,43 @@ class contextMenu:
             file = open(subData, 'w')
             for line in list: file.write(line)
             file.close()
+
+            yes = index().yesnoDialog(language(30351).encode("utf-8"), language(30352).encode("utf-8"), name)
+            if yes:
+                library = xbmc.translatePath(getSetting("tv_library"))
+                enc_show = name.translate(None, '\/:*?"<>|')
+                folder = os.path.join(library, enc_show)
+                seasons = [os.path.join(folder, i) for i in xbmcvfs.listdir(folder)[0]]
+                for season in seasons:
+                    episodes = [os.path.join(season, i) for i in xbmcvfs.listdir(season)[1]]
+                    for episode in episodes: xbmcvfs.delete(episode)
+                    xbmcvfs.rmdir(season)
+                xbmcvfs.rmdir(folder)
+
             if silent == False:
                 index().container_refresh()
                 index().infoDialog(language(30313).encode("utf-8"), name)
         except:
             return
 
+    def subscriptions_clean(self):
+        try:
+            file = xbmcvfs.File(subData)
+            read = file.read()
+            file.close()
+            match = re.compile('"(.+?)"[|]"(.+?)"[|]"(.+?)"[|]"(.+?)"').findall(read)
+            for name, imdb, url, image in match:
+            	status = metaget.get_meta('tvshow', name, imdb_id=imdb)['status']
+            	if status == 'Ended':
+            	    yes = index().yesnoDialog(language(30349).encode("utf-8"), language(30350).encode("utf-8"), name)
+            	    if yes: self.subscription_delete(name, url, silent=True)
+            index().container_refresh()
+            index().infoDialog(language(30315).encode("utf-8"))
+        except:
+            return
+
     def subscriptions_update(self, silent=False):
         try:
-            if getSetting("subscriptions_update") == 'true' and getSetting("subscriptions_clean") == 'true':
-                self.subscriptions_clean(silent=True)
             file = xbmcvfs.File(subData)
             read = file.read()
             file.close()
@@ -958,22 +990,6 @@ class contextMenu:
                 xbmc.executebuiltin('UpdateLibrary(video)')
             if silent == False:
                 index().infoDialog(language(30314).encode("utf-8"))
-        except:
-            return
-
-    def subscriptions_clean(self, silent=False):
-        try:
-            file = xbmcvfs.File(subData)
-            read = file.read()
-            file.close()
-            match = re.compile('"(.+?)"[|]"(.+?)"[|]"(.+?)"[|]"(.+?)"').findall(read)
-            for name, imdb, url, image in match:
-            	status = metaget.get_meta('tvshow', name, imdb_id=imdb)['status']
-            	if status == 'Ended':
-            	    self.subscription_delete(name, url, silent=True)
-            if silent == False:
-                index().container_refresh()
-                index().infoDialog(language(30315).encode("utf-8"))
         except:
             return
 
@@ -1423,6 +1439,7 @@ class seasons:
 
             seasons = common.parseDOM(result, "select", attrs = { "id": "bySeason" })[0]
             seasons = common.parseDOM(seasons, "option", ret="value")
+            seasons = [i for i in seasons if int(i) > 0]
             seasons = uniqueList(seasons).list
         except:
             return
@@ -1508,7 +1525,7 @@ class episodes:
                     date = metaget.get_episode_meta(show, imdb, season, num)['premiered']
                     date = date.encode('utf-8')
 
-                if int(date.replace('-','')) > int((datetime.datetime.utcnow() - datetime.timedelta(hours = 5)).strftime("%Y%m%d")): raise Exception()
+                if int(date.replace('-','')) + 1 > int((datetime.datetime.utcnow() - datetime.timedelta(hours = 5)).strftime("%Y%m%d")): raise Exception()
 
                 self.list.append({'name': name, 'url': name, 'image': image, 'date': date, 'year': year, 'imdb': imdb, 'genre': genre, 'plot': desc, 'title': title, 'show': show, 'season': season, 'episode': num})
             except:
@@ -1531,7 +1548,7 @@ class resolver:
 
             self.sources = self.sources_get(show, season, episode, name, title, imdb, year, self.hostDict)
             self.sources = self.sources_filter()
-
+            if self.sources == []: raise Exception()
 
             autoplay = getSetting("autoplay")
             if not xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
@@ -1800,9 +1817,11 @@ class simplymovies:
             url = url.encode('utf-8')
 
             result = getUrl(url).result
-            url = result.split("<h3>Season %s" % season)[-1]
+            url = re.compile('<h3>(Season %s<.+)' % season).findall(result)[0]
             url = url.split("<h3>")[0]
-            url = url.rsplit('">Episode %s' % episode)[0].split('"')[-1]
+            url = url.replace(':','<')
+            url = re.compile('(.+>Episode %s<)' % episode).findall(url)[0]
+            url = re.compile('"(.+?)"').findall(url)[-1]
             url = '%s/%s' % (self.simplymovies_base, url)
             url = common.replaceHTMLCodes(url)
             url = url.encode('utf-8')
@@ -1929,11 +1948,11 @@ class tvonline:
             url = url.encode('utf-8')
 
             result = getUrl(url).result
-            try: match = re.compile('S%01d, Ep%02d:.+?href="(.+?)"' % (int(season), int(episode))).findall(result)[-1]
+            try: match2 = re.compile('S%01d, Ep%02d:.+?href="(.+?)"' % (int(season), int(episode))).findall(result)[-1]
             except: pass
-            try: match = re.compile('href="(.+?)">%s<' % title.lower()).findall(result.lower())[-1]
+            try: match2 = re.compile('href="(.+?)">%s<' % title.lower()).findall(result.lower())[-1]
             except: pass
-            url = '%s%s' % (self.tvonline_base, match)
+            url = '%s%s' % (self.tvonline_base, match2)
             url = common.replaceHTMLCodes(url)
             url = url.encode('utf-8')
 
@@ -2031,8 +2050,9 @@ class istreamhd:
             url = url.encode('utf-8')
 
             result = getUrl(url).result
-            url = result.split(">Season %s<" % season, 1)[-1]
-            url = url.split(">Season %s<" % str(int(season) - 1), 1)[0]
+            url = re.compile('(>Season %s<.+)' % season).findall(result)[0]
+            url = url.split('"list-divider"', 1)[0]
+            url = re.compile('(.+ E%s</a>)' % episode).findall(url)[0]
             url = url.split(" E%s</a>" % episode, 1)[0]
             url = common.parseDOM(url, "a", ret="href")[-1]
             if not url.startswith('item.php'): raise Exception()

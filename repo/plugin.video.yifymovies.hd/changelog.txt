@@ -1,4 +1,12 @@
 ------------------------
+Yify Movies HD v1.1.2 (10-Jan-14)
+------------------------
+
+- Tweaked watched status.
+- Code cosmetics.
+
+
+------------------------
 Yify Movies HD v1.1.1 (7-Jan-14)
 ------------------------
 

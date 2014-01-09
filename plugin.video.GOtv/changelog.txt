@@ -1,4 +1,20 @@
 ------------------------
+GOtv v1.1.0 (10-Jan-14)
+------------------------
+
+- Fixed issues with simplymovies source.
+- Fixed issues with istreamhd source.
+- Fixed issues with tvonline source.
+- Tweaked watched status.
+- Tweaked season listings.
+- Tweaked detection of new episodes.
+- Removed automatic cleaning of Subscriptions.
+- Tweaked cleaning of Subscriptions.
+- Tweaked removal of Subscription.
+- Code cosmetics.
+
+
+------------------------
 GOtv v1.0.3 (8-Jan-14)
 ------------------------
 
