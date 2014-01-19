@@ -2,8 +2,9 @@
 <settings>
 	<category label="30000">
 		<setting type="sep"/>
-		<setting id="autoplay" type="bool" label="30001" default="true"/>
-		<setting id="autoplay_library" type="bool" label="30002" default="true"/>
+		<setting id="autoplay" type="bool" label="30001" default="false"/>
+		<setting id="autoplay_library" type="bool" label="30002" default="false"/>
+		<setting id="playback_info" type="bool" label="30011" default="false"/>
 		<setting id="quality" type="bool" label="30003" default="true"/>
 		<setting type="sep"/>
 		<setting id="meta" type="bool" label="30004" default="true"/>
@@ -33,11 +34,11 @@
 
 	<category label="30060">
 		<setting id="watchseries" type="bool" label="Watchseries" default="true"/>
-		<setting id="simplymovies" type="bool" label="Simplymovies" default="true"/>
-		<setting id="watchonline" type="bool" label="Watchonline" default="true"/>
 		<setting id="tvonline" type="bool" label="TVonline" default="true"/>
-		<setting id="moviestorm" type="bool" label="Moviestorm" default="true"/>
+		<setting id="simplymovies" type="bool" label="Simplymovies" default="true"/>
 		<setting id="istreamhd" type="bool" label="iStreamHD" default="true"/>
+		<setting id="watchonline" type="bool" label="Watchonline" default="true"/>
+		<setting id="moviestorm" type="bool" label="Moviestorm" default="true"/>
 	</category>
 
 	<category label="30080">

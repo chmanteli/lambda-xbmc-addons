@@ -1,4 +1,17 @@
 ------------------------
+GOtv v1.1.5 (19-Jan-14)
+------------------------
+
+- Fixed issues with sources.
+- Tweaked genre listings.
+- Tweaked watched status.
+- Added option for showing playback info.
+- Autoplay is disabled by default.
+- Added new artwork.
+- Code cosmetics.
+
+
+------------------------
 GOtv v1.1.0 (10-Jan-14)
 ------------------------
 

@@ -12,6 +12,7 @@
 	<string id="30008">Ταξ.: Κατάσταση</string>
 	<string id="30009">Ταξ.: Προσθήκη</string>
 	<string id="30010">Λήψεις</string>
+	<string id="30011">Πληροφορίες αναπαραγωγής</string>
 	<string id="30030">Ροές</string>
 	<string id="30031">Προτεραιότητα 1</string>
 	<string id="30032">Προτεραιότητα 2</string>
@@ -62,6 +63,7 @@
 	<string id="30316">Υπάρχει ήδη στις Συνδρομές</string>
 	<string id="30317">Δεν υπάρχουν διαθέσιμοι υπότιτλοι</string>
 	<string id="30318">Δεν υπάρχει διαθέσιμη ροή</string>
+	<string id="30319">Φόρτωση σε</string>
 	<!-- OK -->
 	<string id="30321">Το πρόσθετο YouTube δεν έχει εγκατασταθεί.</string>
 	<string id="30322">Η ροή αυτή το απαιτεί.</string>

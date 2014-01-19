@@ -182,7 +182,7 @@ class getUrl(object):
             request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0')
         if not referer is None:
             request.add_header('Referer', referer)
-        response = urllib2.urlopen(request, timeout=30)
+        response = urllib2.urlopen(request, timeout=10)
         if fetch == True:
             result = response.read()
         else:
@@ -212,6 +212,7 @@ class Thread(threading.Thread):
 class player(xbmc.Player):
     def __init__ (self):
         self.property = addonName+'player_status'
+        self.loadingStarting = time.time()
         xbmc.Player.__init__(self)
 
     def status(self):
@@ -222,12 +223,15 @@ class player(xbmc.Player):
         return
 
     def run(self, name, url, imdb='0'):
+        self.name = name
+        self.imdb = imdb
+
         if xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
             item = xbmcgui.ListItem(path=url)
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
         else:
             try:
-                file = name + '.strm'
+                file = self.name + '.strm'
                 file = file.translate(None, '\/:*?"<>|')
 
                 meta = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodes", "params": {"properties" : ["title", "plot", "votes", "rating", "writer", "firstaired", "playcount", "runtime", "director", "productioncode", "season", "episode", "originaltitle", "showtitle", "lastplayed", "fanart", "thumbnail", "file", "resume", "tvshowid", "dateadded", "uniqueid"]}, "id": 1}')
@@ -238,7 +242,7 @@ class player(xbmc.Player):
                 meta = {'title' : self.meta['title'], 'tvshowtitle': self.meta['showtitle'], 'season': self.meta['season'], 'episode': self.meta['episode'], 'writer': str(self.meta['writer']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'director': str(self.meta['director']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'rating': self.meta['rating'], 'duration': self.meta['runtime'], 'premiered': self.meta['firstaired'], 'plot': self.meta['plot']}
                 poster = self.meta['thumbnail']
             except:
-                meta = {'label' : name, 'title' : name}
+                meta = {'label' : self.name, 'title' : self.name}
                 poster = ''
             item = xbmcgui.ListItem(path=url, iconImage="DefaultVideo.png", thumbnailImage=poster)
             item.setInfo( type="Video", infoLabels= meta )
@@ -251,39 +255,41 @@ class player(xbmc.Player):
             xbmc.sleep(1000)
         if self.totalTime == 0: return
 
-        subtitles().get(name)
-
-        self.content = 'episode'
-        self.season = str(xbmc.getInfoLabel('VideoPlayer.season'))
-        self.episode = str(xbmc.getInfoLabel('VideoPlayer.episode'))
-        if imdb == '0': imdb = metaget.get_meta('tvshow', xbmc.getInfoLabel('VideoPlayer.tvshowtitle'))['imdb_id']
-        imdb = re.sub("[^0-9]", "", imdb)
-        self.imdb = imdb
+        subtitles().get(self.name)
 
         while True:
             try: self.currentTime = self.getTime()
             except: break
             xbmc.sleep(1000)
 
-    def onPlayBackEnded(self):
-        if xbmc.getInfoLabel('Container.FolderPath') == '': index().setProperty(self.property, 'true')
-        if not self.currentTime / self.totalTime >= .9: return
+    def watched(self):
         if xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
-            metaget.change_watched(self.content, '', self.imdb, season=self.season, episode=self.episode, year='', watched='')
+            content = 'episode'
+            show = self.name.rsplit(' ', 1)[0]
+            if self.imdb == '0': self.imdb = metaget.get_meta('tvshow', show)['imdb_id']
+            self.imdb = re.sub("[^0-9]", "", self.imdb)
+            season = '%01d' % int(self.name.rsplit(' ', 1)[-1].split('S')[-1].split('E')[0])
+            episode = '%01d' % int(self.name.rsplit(' ', 1)[-1].split('E')[-1])
+
+            metaget.change_watched(content, '', self.imdb, season=season, episode=episode, year='', watched=7)
             index().container_refresh()
         else:
             try: xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.SetEpisodeDetails", "params": {"episodeid" : %s, "playcount" : 1 }, "id": 1 }' % str(self.meta['episodeid']))
             except: pass
 
+    def onPlayBackStarted(self):
+        if not getSetting("playback_info") == 'true': return
+        elapsedTime = '%s %.2f seconds' % (language(30319).encode("utf-8"), (time.time() - self.loadingStarting))     
+        index().infoDialog(elapsedTime, header=self.name)
+
+    def onPlayBackEnded(self):
+        if xbmc.getInfoLabel('Container.FolderPath') == '': index().setProperty(self.property, 'true')
+        self.watched()
+
     def onPlayBackStopped(self):
         index().clearProperty(self.property)
         if not self.currentTime / self.totalTime >= .9: return
-        if xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
-            metaget.change_watched(self.content, '', self.imdb, season=self.season, episode=self.episode, year='', watched='')
-            index().container_refresh()
-        else:
-            try: xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.SetEpisodeDetails", "params": {"episodeid" : %s, "playcount" : 1 }, "id": 1 }' % str(self.meta['episodeid']))
-            except: pass
+        self.watched()
 
 class subtitles:
     def get(self, name):
@@ -1082,6 +1088,7 @@ class contextMenu:
             if url is None: return
             ext = url.rsplit('/', 1)[-1].rsplit('?', 1)[0].rsplit('|', 1)[0].strip().lower()
             ext = os.path.splitext(ext)[1][1:]
+            if ext == '': ext = 'mp4'
             stream = os.path.join(download, enc_name + '.' + ext)
             temp = stream + '.tmp'
 
@@ -1135,7 +1142,7 @@ class contextMenu:
         item.setProperty("IsPlayable", "true")
         item.setProperty("Video", "true")
         item.setProperty("Fanart_Image", fanart)
-        xbmc.Player(xbmc.PLAYER_CORE_AUTO).play(u, item)
+        xbmc.Player().play(u, item)
 
     def autoplay(self, name, title, imdb, year, url):
         meta = {'title': xbmc.getInfoLabel('ListItem.title'), 'tvshowtitle': xbmc.getInfoLabel('ListItem.tvshowtitle'), 'season': xbmc.getInfoLabel('ListItem.season'), 'episode': xbmc.getInfoLabel('ListItem.episode'), 'writer': xbmc.getInfoLabel('ListItem.writer'), 'director': xbmc.getInfoLabel('ListItem.director'), 'rating': xbmc.getInfoLabel('ListItem.rating'), 'duration': xbmc.getInfoLabel('ListItem.duration'), 'premiered': xbmc.getInfoLabel('ListItem.premiered'), 'plot': xbmc.getInfoLabel('ListItem.plot')}
@@ -1151,7 +1158,7 @@ class contextMenu:
         item.setProperty("IsPlayable", "true")
         item.setProperty("Video", "true")
         item.setProperty("Fanart_Image", fanart)
-        xbmc.Player(xbmc.PLAYER_CORE_AUTO).play(u, item)
+        xbmc.Player().play(u, item)
 
 class subscriptions:
     def __init__(self):
@@ -1260,7 +1267,7 @@ class link:
     def __init__(self):
         self.imdb_base = 'http://www.imdb.com'
         self.imdb_akas = 'http://akas.imdb.com'
-        self.imdb_genre = 'http://akas.imdb.com/genre'
+        self.imdb_genre = 'http://akas.imdb.com/genre/'
         self.imdb_genres = 'http://akas.imdb.com/search/title?title_type=tv_series,mini_series&sort=moviemeter,asc&count=25&start=1&genres=%s'
         self.imdb_popular = 'http://akas.imdb.com/search/title?title_type=tv_series,mini_series&sort=moviemeter,asc&count=25&start=1'
         self.imdb_rating = 'http://akas.imdb.com/search/title?title_type=tv_series,mini_series&sort=user_rating,desc&count=25&start=1'
@@ -1282,7 +1289,8 @@ class genres:
     def imdb_list(self):
         try:
             result = getUrl(link().imdb_genre).result
-            genres = common.parseDOM(result, "table")
+            result = common.parseDOM(result, "div", attrs = { "class": "article" })
+            result = [i for i in result if str('"tv_genres"') in i][0]
             genres = common.parseDOM(result, "td")
         except:
             return
@@ -1293,8 +1301,8 @@ class genres:
                 name = name.encode('utf-8')
 
                 url = common.parseDOM(genre, "a", ret="href")[0]
-                if not url.startswith('/genre/'): raise Exception()
-                url = url.split('/genre/', 1)[-1]
+                try: url = re.compile('genres=(.+?)&').findall(url)[0]
+                except: url = re.compile('/genre/(.+?)/').findall(url)[0]
                 url = link().imdb_genres % url
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
@@ -1566,6 +1574,9 @@ class resolver:
             if url == 'download://': return url
             if url == 'close://': return
 
+            if getSetting("playback_info") == 'true':
+                index().infoDialog(self.selectedSource, header=name)
+
             player().run(name, url, imdb)
             return url
         except:
@@ -1579,46 +1590,46 @@ class resolver:
         watchseries_sources = []
         threads.append(Thread(watchseries().get, show, season, episode, name, title, imdb, year, hostDict))
 
-        global simplymovies_sources
-        simplymovies_sources = []
-        if getSetting("simplymovies") == 'true':
-            threads.append(Thread(simplymovies().get, show, season, episode, name, title, imdb, year, hostDict))
-
-        global watchmoviesonline_sources
-        watchmoviesonline_sources = []
-        if getSetting("watchonline") == 'true':
-            threads.append(Thread(watchmoviesonline().get, show, season, episode, name, title, imdb, year, hostDict))
-
         global tvonline_sources
         tvonline_sources = []
         if getSetting("tvonline") == 'true':
             threads.append(Thread(tvonline().get, show, season, episode, name, title, imdb, year, hostDict))
 
-        global moviestorm_sources
-        moviestorm_sources = []
-        if getSetting("moviestorm") == 'true':
-            threads.append(Thread(moviestorm().get, show, season, episode, name, title, imdb, year, hostDict))
+        global simplymovies_sources
+        simplymovies_sources = []
+        if getSetting("simplymovies") == 'true':
+            threads.append(Thread(simplymovies().get, show, season, episode, name, title, imdb, year, hostDict))
 
         global istreamhd_sources
         istreamhd_sources = []
         if getSetting("istreamhd") == 'true':
             threads.append(Thread(istreamhd().get, show, season, episode, name, title, imdb, year, hostDict))
 
+        global watchmoviesonline_sources
+        watchmoviesonline_sources = []
+        if getSetting("watchonline") == 'true':
+            threads.append(Thread(watchmoviesonline().get, show, season, episode, name, title, imdb, year, hostDict))
+
+        global moviestorm_sources
+        moviestorm_sources = []
+        if getSetting("moviestorm") == 'true':
+            threads.append(Thread(moviestorm().get, show, season, episode, name, title, imdb, year, hostDict))
+
         [i.start() for i in threads]
         [i.join() for i in threads]
 
-        self.sources = watchseries_sources + simplymovies_sources + watchmoviesonline_sources + tvonline_sources + moviestorm_sources + istreamhd_sources
+        self.sources = watchseries_sources + tvonline_sources + simplymovies_sources + istreamhd_sources + watchmoviesonline_sources + moviestorm_sources
 
         return self.sources
 
     def sources_resolve(self, url, provider):
         try:
             if provider == 'Watchseries': url = watchseries().resolve(url)
-            elif provider == 'Watchonline': url = watchmoviesonline().resolve(url)
-            elif provider == 'Simplymovies': url = simplymovies().resolve(url)
             elif provider == 'TVonline': url = tvonline().resolve(url)
-            elif provider == 'Moviestorm': url = moviestorm().resolve(url)
+            elif provider == 'Simplymovies': url = simplymovies().resolve(url)
             elif provider == 'iStreamHD': url = istreamhd().resolve(url)
+            elif provider == 'Watchonline': url = watchmoviesonline().resolve(url)
+            elif provider == 'Moviestorm': url = moviestorm().resolve(url)
             return url
         except:
             return
@@ -1656,9 +1667,9 @@ class resolver:
 
             select = index().selectDialog(sourceList)
             if select == -1: return 'close://'
-            if not select > -1: return
 
             url = self.sources_resolve(urlList[select], providerList[select])
+            self.selectedSource = self.sources[select]['source']
             return url
         except:
             return
@@ -1669,6 +1680,7 @@ class resolver:
                 url = self.sources_resolve(i['url'], i['provider'])
                 xbmc.sleep(1000)
                 if url is None: raise Exception()
+                self.selectedSource = i['source']
                 return url
             except:
                 pass
@@ -1702,6 +1714,7 @@ class resolver:
         'Movreel' : 'movreel.com',
         'Movshare' : 'movshare.net',
         'Movzap' : 'movzap.com',
+        'Muchmovies' : 'muchmovies.org',
         'Muchshare' : 'muchshare.net',
         'Nosvideo' : 'nosvideo.com',
         'Novamov' : 'novamov.com',
@@ -1732,6 +1745,7 @@ class resolver:
         'VKHD' : '.vk.me',
         'WatchfreeinHD' : 'watchfreeinhd.com',
         'Xvidstage' : 'xvidstage.com',
+        'YIFY' : 'yify.tv',
         'Youwatch' : 'youwatch.org',
         'Zalaa' : 'zalaa.com'
         }
@@ -1748,32 +1762,33 @@ class watchseries:
             global watchseries_sources
             watchseries_sources = []
 
-            url = None
             query = self.watchseries_search % urllib.quote_plus(show)
+
             result = getUrl(query).result
             result = result.replace(' (%s)' % str(int(year) - 1), ' (%s)' % year)
-            shows = re.compile('href="(/serie/.+?)".+?[(]%s[)]' % year).findall(result)
-            shows = uniqueList(shows).list
+            result = re.compile('href="(/serie/.+?)".+?[(]%s[)]' % year).findall(result)
+            result = uniqueList(result).list
 
-            for show in shows[:5]:
+            match = [self.watchseries_base + i for i in result]
+            if match == []: return
+            for i in match[:5]:
                 try:
-                    showsUrl = '%s%s' % (self.watchseries_base, show)
-                    result = getUrl(showsUrl).result
+                    result = getUrl(i).result
                     if str('tt' + imdb) in result:
-                        url = show.split('/')[-1]
+                        match2 = i
                         break
                 except:
                     pass
-
-            if url == None: return
+            url = match2.rsplit('/', 1)[-1]
             url = self.watchseries_episodes % (url, season, episode)
-            result = getUrl(url).result
+            url = common.replaceHTMLCodes(url)
+            url = url.encode('utf-8')
 
+            result = getUrl(url).result
             for host in sorted(hostDict.keys()):
                 try:
-                    match = hostDict[host]
-                    sources = re.compile('<span>%s</span>.+?href="(.+?)"' % match).findall(result)
-                    for url in sources:
+                    links = re.compile('<span>%s</span>.+?href="(.+?)"' % hostDict[host]).findall(result)
+                    for url in links:
                         url = '%s%s' % (self.watchseries_base, url)
                         watchseries_sources.append({'source': host, 'quality': 'SD', 'provider': 'Watchseries', 'url': url})
                 except:
@@ -1786,12 +1801,82 @@ class watchseries:
             result = getUrl(url).result
             url = common.parseDOM(result, "a", ret="href", attrs = { "class": "myButton" })[0]
 
+            if url.startswith('http://ishared.eu'):
+                result = getUrl(url).result
+                url = re.compile('var xxxx = "(.+?)"').findall(result)[0]
+                return url
+
             host = urlresolver.HostedMediaFile(url)
             if host: resolver = urlresolver.resolve(url)
             if not resolver.startswith('http://'): return
             if not resolver == url: return resolver
         except:
             return
+
+class tvonline:
+    def __init__(self):
+        self.tvonline_base = 'http://tvonline.cc'
+        self.tvonline_search = 'http://tvonline.cc/searchlist.php'
+        self.tvonline_login = 'http://www.tvonline.cc/reg.php'
+
+    def get(self, show, season, episode, name, title, imdb, year, hostDict):
+        try:
+            global tvonline_sources
+            tvonline_sources = []
+
+            query = self.tvonline_search
+            post = 'keyword=%s' % urllib.quote_plus(show)
+
+            result = getUrl(query, post=post).result
+            result = common.parseDOM(result, "div", attrs = { "class": "tv_aes_l" })[0]
+            result = common.parseDOM(result, "li")
+
+            match = [i for i in result if re.sub('\n|\s(|[(])(UK|US|AU)(|[)])$|\s\s','',re.sub('\n|\s(:|-)\s|(:|-)\s|\s(:|-)|(:|-)|([[].+?[]])',' ',show)).lower() == re.sub('\n|\s(|[(])(UK|US|AU)(|[)])$|\s\s','',re.sub('\n|\s(:|-)\s|(:|-)\s|\s(:|-)|(:|-)|([[].+?[]])',' ',common.parseDOM(i, "a")[-1])).lower()]
+            match2 = [self.tvonline_base + common.parseDOM(i, "a", ret="href")[-1] for i in match]
+            if match2 == []: return
+            for i in match2[:5]:
+                try:
+                    result = getUrl(i).result
+                    match3 = common.parseDOM(result, "span", attrs = { "class": "years" })[0]
+                    if any(x in match3 for x in ['(%s)' % str(year), '(%s)' % str(int(year)+1), '(%s)' % str(int(year)-1)]):
+                        match4 = result
+                        break
+                except:
+                    pass
+
+            try: match5 = re.compile('S%01d, Ep%02d:.+?href="(.+?)"' % (int(season), int(episode))).findall(match4)[-1]
+            except: pass
+            try: match5 = re.compile('href="(.+?)">%s<' % title.lower()).findall(match4.lower())[-1]
+            except: pass
+            url = '%s%s' % (self.tvonline_base, match5)
+            url = common.replaceHTMLCodes(url)
+            url = url.encode('utf-8')
+
+            tvonline_sources.append({'source': 'TVonline', 'quality': 'SD', 'provider': 'TVonline', 'url': url})
+        except:
+            return
+
+    def resolve(self, url):
+        import random
+        splitkey = url.split('?id=')[-1].split('-')
+        key1 = splitkey[0]
+        key4 = splitkey[1]
+        keychar = "beklm"
+        key_length = 3
+        key2 = ""
+        for i in range(key_length):
+            next_index = random.randrange(len(keychar))
+            key2 = key2 + keychar[next_index]
+
+        keychar = "ntwyz"
+        key_length = 3
+        key3 = ""
+        for i in range(key_length):
+            next_index = random.randrange(len(keychar))
+            key3 = key3 + keychar[next_index]# friday k saturday w sunday z
+
+        url = 'http://dd.tvonline.cc/ip.mp4?key=%s-ltylz%s%s-%s' % (key1, key2, key3, key4)
+        return url
 
 class simplymovies:
     def __init__(self):
@@ -1807,7 +1892,7 @@ class simplymovies:
 
             result = getUrl(query).result
             url = common.parseDOM(result, "div", attrs = { "class": "movieInfoHolder" })
-            try: match = [i for i in url if str('>' + show.lower() + '<') in i.lower()][0]
+            try: match = [i for i in url if str('>' + re.sub('\n|\s(|[(])(UK|US|AU)(|[)])$|\s\s','',re.sub('\n|\s(:|-)\s|(:|-)\s|\s(:|-)|(:|-)|([[].+?[]])',' ',show)).lower() + '<') in re.sub('\n|\s(|[(])(UK|US|AU)(|[)])$|\s\s','',re.sub('\n|\s(:|-)\s|(:|-)\s|\s(:|-)|(:|-)|([[].+?[]])',' ',i)).lower()][0]
             except: pass
             try: match = [i for i in url if str('tt' + imdb) in i][0]
             except: pass
@@ -1853,180 +1938,6 @@ class simplymovies:
     def resolve(self, url):
         return url
 
-class watchmoviesonline:
-    def __init__(self):
-        self.watchmoviesonline_base = 'http://watchmoviesonline.mobi'
-        self.watchmoviesonline_search = 'http://watchmoviesonline.mobi/?movieorserie=1&search='
-        self.watchmoviesonline_episodes = 'http://watchmoviesonline.mobi/title/%s?m=%s&s=%s&e=%s'
-
-    def get(self, show, season, episode, name, title, imdb, year, hostDict):
-        try:
-            global watchmoviesonline_sources
-            watchmoviesonline_sources = []
-
-            url = None
-            query = self.watchmoviesonline_search + urllib.quote_plus(show)
-            result = getUrl(query).result
-            shows = re.compile('(/title/.+?)/').findall(result)
-            shows = uniqueList(shows).list
-
-            for show in shows[:5]:
-                try:
-                    showsUrl = '%s%s' % (self.watchmoviesonline_base, show)
-                    result = getUrl(showsUrl).result
-                    if str('tt' + imdb) in result:
-                        url = showsUrl.split('/')[-1]
-                        break
-                except:
-                    pass
-
-            if url == None: return
-            url = self.watchmoviesonline_episodes % (url, url, season, episode)
-            result = getUrl(url).result
-            result = result.decode('iso-8859-1').encode('utf-8')
-            result = result.replace('\n','')
-
-            for v1, v2  in re.compile("return p}[(]'(.+?);',.+?,.+?,'(.+?)'.split").findall(result):
-                try:
-                    v2 = v2.split('|')
-                    for i in range(len(v2)):
-                        if v2[i]: v1 = re.sub('\\b%s\\b' % self.base36encode(i), v2[i], v1)
-                    url = base64.b64decode(v1.split('"')[1])
-                    url = common.parseDOM(url, "a")[0]
-                    for host in sorted(hostDict.keys()):
-                        if 'watchfreeinhd.com' in url:
-                            watchmoviesonline_sources.append({'source': 'WatchfreeinHD', 'quality': 'HD', 'provider': 'Watchonline', 'url': url})
-                            break
-                        elif hostDict[host] in url:
-                            watchmoviesonline_sources.append({'source': host, 'quality': 'SD', 'provider': 'Watchonline', 'url': url})
-                except:
-                    pass
-        except:
-            return
-
-    def base36encode(self, number):
-        if not isinstance(number, (int, long)):
-            raise TypeError('number must be an integer')
-        if number < 0:
-            raise ValueError('number must be positive')
-
-        alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-        base36 = ''
-        while number:
-            number, i = divmod(number, 36)
-            base36 = alphabet[i] + base36
-
-        return base36 or alphabet[0]
-
-    def resolve(self, url):
-        try:
-            host = urlresolver.HostedMediaFile(url)
-            if host: resolver = urlresolver.resolve(url)
-            if not resolver.startswith('http://'): return
-            if not resolver == url: return resolver
-        except:
-            return
-
-class tvonline:
-    def __init__(self):
-        self.tvonline_base = 'http://tvonline.cc'
-        self.tvonline_search = 'https://www.google.com/search?as_q=%s+%s&as_sitesearch=%s&num=1'
-        self.tvonline_login = 'http://www.tvonline.cc/reg.php'
-
-    def get(self, show, season, episode, name, title, imdb, year, hostDict):
-        try:
-            global tvonline_sources
-            tvonline_sources = []
-
-            query = self.tvonline_search % (urllib.quote_plus(show), urllib.quote_plus(year), urllib.quote_plus(self.tvonline_base))
-
-            result = getUrl(query).result
-            match = common.parseDOM(result, "h3", attrs = { "class": "r" })[0]
-            if not str(show.lower()) in match.lower(): raise Exception()
-            url = common.parseDOM(match, "a", ret="href")[0]
-            url = common.replaceHTMLCodes(url)
-            url = url.encode('utf-8')
-
-            result = getUrl(url).result
-            try: match2 = re.compile('S%01d, Ep%02d:.+?href="(.+?)"' % (int(season), int(episode))).findall(result)[-1]
-            except: pass
-            try: match2 = re.compile('href="(.+?)">%s<' % title.lower()).findall(result.lower())[-1]
-            except: pass
-            url = '%s%s' % (self.tvonline_base, match2)
-            url = common.replaceHTMLCodes(url)
-            url = url.encode('utf-8')
-
-            tvonline_sources.append({'source': 'TVonline', 'quality': 'SD', 'provider': 'TVonline', 'url': url})
-        except:
-            return
-
-    def resolve(self, url):
-        for i in range(0, 2):
-            try:
-                tvonline_user = getSetting("tvonline_user")
-                tvonline_password = getSetting("tvonline_password")
-
-                result = getUrl(self.tvonline_login, close=False, cookie=True).result
-                token = re.compile('name="(Token.+?)" value=".+?"').findall(result)[0]
-
-                POST = '_method=POST&%s=login&UserUsername=gotv&subscriptionsPass=gotv' % (token)
-
-                if not (tvonline_user == '' and tvonline_password == ''):
-                    post = '_method=POST&%s=login&UserUsername=%s&subscriptionsPass=%s' % (token, urllib.quote_plus(tvonline_user), urllib.quote_plus(tvonline_password))
-                    result = getUrl(self.tvonline_login, post=post, close=False, cookie=True).result
-                    if 'Invalid Username' in result:
-                        result = getUrl(self.tvonline_login, post=POST, close=False, cookie=True).result
-                else:
-                    result = getUrl(self.tvonline_login, post=POST, close=False, cookie=True).result
-
-                result = getUrl(url).result
-
-                url = common.parseDOM(result, "video", ret="src", attrs = { "id": "ipadvideo" })[0]
-                url = common.replaceHTMLCodes(url)
-                url = url.encode('utf-8')
-
-                return url
-            except:
-                pass
-
-class moviestorm:
-    def __init__(self):
-        self.moviestorm_base = 'http://moviestorm.eu'
-        self.moviestorm_search = 'http://moviestorm.eu/search?q=%s'
-
-    def get(self, show, season, episode, name, title, imdb, year, hostDict):
-        try:
-            global moviestorm_sources
-            moviestorm_sources = []
-
-            query = self.moviestorm_search % (urllib.quote_plus(show))
-            result = getUrl(query).result
-
-            url = common.parseDOM(result, "div", attrs = { "class": "movie_box" })
-            url = [i for i in url if str('tt' + imdb) in i][0]
-            url = common.parseDOM(url, "a", ret="href")[0]
-            url = common.replaceHTMLCodes(url)
-            url = url.encode('utf-8')
-
-            url = '%s?season=%s&episode=%s' % (url, season, episode)
-            result = getUrl(url).result
-            result = common.parseDOM(result, "div", attrs = { "id": "searialinks" })[0]
-            links = re.compile('"(http://ishared.eu/.+?)"').findall(result)
-
-            for url in links:
-                moviestorm_sources.append({'source': 'iShared', 'quality': 'SD', 'provider': 'Moviestorm', 'url': url})
-
-        except:
-            return
-
-    def resolve(self, url):
-        try:
-            result = getUrl(url).result
-            url = re.compile('var xxxx = "(.+?)"').findall(result)[0]
-            return url
-        except:
-            return
-
 class istreamhd:
     def __init__(self):
         self.istreamhd_base = 'http://istreamhd.org'
@@ -2040,8 +1951,8 @@ class istreamhd:
             istreamhd_sources = []
 
             query = self.istreamhd_search % (urllib.quote_plus(show))
-            result = getUrl(query).result
 
+            result = getUrl(query).result
             url = common.parseDOM(result, "div", attrs = { "class": "ui-block.+?" })
             url = [i for i in url if str('tt' + imdb) in i][0]
             url = common.parseDOM(url, "a", ret="href")[0]
@@ -2092,6 +2003,121 @@ class istreamhd:
 
     def resolve(self, url):
         return url
+
+class watchmoviesonline:
+    def __init__(self):
+        self.watchmoviesonline_base = 'http://watchmoviesonline.mobi'
+        self.watchmoviesonline_search = 'http://watchmoviesonline.mobi/?movieorserie=1&search='
+        self.watchmoviesonline_episodes = 'http://watchmoviesonline.mobi/title/%s?m=%s&s=%s&e=%s'
+
+    def get(self, show, season, episode, name, title, imdb, year, hostDict):
+        try:
+            global watchmoviesonline_sources
+            watchmoviesonline_sources = []
+
+            query = self.watchmoviesonline_search + urllib.quote_plus(show)
+
+            result = getUrl(query).result
+            result = common.parseDOM(result, "div", attrs = { "class": "rowcol.+?" })
+
+            match = [i for i in result if str('>' + re.sub('\n|\s(|[(])(UK|US|AU)(|[)])$|\s\s','',re.sub('\n|\s(:|-)\s|(:|-)\s|\s(:|-)|(:|-)|([[].+?[]])',' ',show)).lower() + '<') in re.sub('\n|\s(|[(])(UK|US|AU)(|[)])$|\s\s','',re.sub('\n|\s(:|-)\s|(:|-)\s|\s(:|-)|(:|-)|([[].+?[]])',' ',i)).lower()]
+            match2 = [self.watchmoviesonline_base + re.compile('"(/title/.+?)"').findall(i)[0] for i in match]
+            if match2 == []: return
+            for i in match2[:5]:
+                try:
+                    result = getUrl(i).result
+                    match3 = re.compile('[(](\d{4})[)]').findall(result)[0]
+                    if any(x == match3 for x in [str(year), str(int(year)+1), str(int(year)-1)]):
+                        match4 = i
+                        break
+                except:
+                    pass
+            url = match4.split('/title/', 1)[-1].split('/', 1)[0]
+            url = self.watchmoviesonline_episodes % (url, url, season, episode)
+            url = common.replaceHTMLCodes(url)
+            url = url.encode('utf-8')
+
+            result = getUrl(url).result
+            result = result.decode('iso-8859-1').encode('utf-8')
+            result = result.replace('\n','')
+
+            for v1, v2  in re.compile("return p}[(]'(.+?);',.+?,.+?,'(.+?)'.split").findall(result):
+                try:
+                    v2 = v2.split('|')
+                    for i in range(len(v2)):
+                        if v2[i]: v1 = re.sub('\\b%s\\b' % self.base36encode(i), v2[i], v1)
+                    url = base64.b64decode(v1.split('"')[1])
+                    url = common.parseDOM(url, "a")[0]
+                    for host in sorted(hostDict.keys()):
+                        if 'watchfreeinhd.com' in url:
+                            watchmoviesonline_sources.append({'source': 'WatchfreeinHD', 'quality': 'HD', 'provider': 'Watchonline', 'url': url})
+                            break
+                        elif hostDict[host] in url:
+                            watchmoviesonline_sources.append({'source': host, 'quality': 'SD', 'provider': 'Watchonline', 'url': url})
+                except:
+                    pass
+        except:
+            return
+
+    def base36encode(self, number):
+        if not isinstance(number, (int, long)):
+            raise TypeError('number must be an integer')
+        if number < 0:
+            raise ValueError('number must be positive')
+
+        alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        base36 = ''
+        while number:
+            number, i = divmod(number, 36)
+            base36 = alphabet[i] + base36
+
+        return base36 or alphabet[0]
+
+    def resolve(self, url):
+        try:
+            host = urlresolver.HostedMediaFile(url)
+            if host: resolver = urlresolver.resolve(url)
+            if not resolver.startswith('http://'): return
+            if not resolver == url: return resolver
+        except:
+            return
+
+class moviestorm:
+    def __init__(self):
+        self.moviestorm_base = 'http://moviestorm.eu'
+        self.moviestorm_search = 'http://moviestorm.eu/search?q=%s'
+
+    def get(self, show, season, episode, name, title, imdb, year, hostDict):
+        try:
+            global moviestorm_sources
+            moviestorm_sources = []
+
+            query = self.moviestorm_search % (urllib.quote_plus(show))
+
+            result = getUrl(query).result
+            url = common.parseDOM(result, "div", attrs = { "class": "movie_box" })
+            url = [i for i in url if str('tt' + imdb) in i][0]
+            url = common.parseDOM(url, "a", ret="href")[0]
+            url = '%s?season=%s&episode=%s' % (url, season, episode)
+            url = common.replaceHTMLCodes(url)
+            url = url.encode('utf-8')
+
+            result = getUrl(url).result
+            result = common.parseDOM(result, "div", attrs = { "id": "searialinks" })[0]
+            links = re.compile('"(http://ishared.eu/.+?)"').findall(result)
+
+            for url in links:
+                moviestorm_sources.append({'source': 'iShared', 'quality': 'SD', 'provider': 'Moviestorm', 'url': url})
+        except:
+            return
+
+    def resolve(self, url):
+        try:
+            result = getUrl(url).result
+            url = re.compile('var xxxx = "(.+?)"').findall(result)[0]
+            return url
+        except:
+            return
 
 
 main()
