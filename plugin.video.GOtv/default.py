@@ -263,19 +263,17 @@ class player(xbmc.Player):
             xbmc.sleep(1000)
 
     def watched(self):
-        if xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
+        try:
+            xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.SetEpisodeDetails", "params": {"episodeid" : %s, "playcount" : 1 }, "id": 1 }' % str(self.meta['episodeid']))
+        except:
             content = 'episode'
             show = self.name.rsplit(' ', 1)[0]
             if self.imdb == '0': self.imdb = metaget.get_meta('tvshow', show)['imdb_id']
             self.imdb = re.sub("[^0-9]", "", self.imdb)
             season = '%01d' % int(self.name.rsplit(' ', 1)[-1].split('S')[-1].split('E')[0])
             episode = '%01d' % int(self.name.rsplit(' ', 1)[-1].split('E')[-1])
-
             metaget.change_watched(content, '', self.imdb, season=season, episode=episode, year='', watched=7)
             index().container_refresh()
-        else:
-            try: xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.SetEpisodeDetails", "params": {"episodeid" : %s, "playcount" : 1 }, "id": 1 }' % str(self.meta['episodeid']))
-            except: pass
 
     def onPlayBackStarted(self):
         if not getSetting("playback_info") == 'true': return
