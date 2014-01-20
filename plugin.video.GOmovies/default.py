@@ -123,6 +123,7 @@ class main:
         elif action == 'movies_favourites':         favourites().movies()
         elif action == 'genres_movies':             genres().imdb()
         elif action == 'years_movies':              years().imdb()
+        elif action == 'movies_added':              movies().imdb_added()
         elif action == 'account_movies':            mymovies().account()
         elif action == 'mymovies':                  mymovies().imdb(url)
         elif action == 'play':                      resolver().run(name, title, imdb, year, url)
@@ -187,6 +188,7 @@ class Thread(threading.Thread):
 class player(xbmc.Player):
     def __init__ (self):
         self.property = addonName+'player_status'
+        self.loadingStarting = time.time()
         xbmc.Player.__init__(self)
 
     def status(self):
@@ -197,12 +199,15 @@ class player(xbmc.Player):
         return
 
     def run(self, name, url, imdb='0'):
+        self.name = name
+        self.imdb = imdb
+
         if xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
             item = xbmcgui.ListItem(path=url)
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
         else:
             try:
-                file = name + '.strm'
+                file = self.name + '.strm'
                 file = file.translate(None, '\/:*?"<>|')
 
                 meta = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties" : ["title", "genre", "year", "rating", "director", "trailer", "tagline", "plot", "plotoutline", "originaltitle", "lastplayed", "playcount", "writer", "studio", "mpaa", "country", "imdbnumber", "runtime", "votes", "fanart", "thumbnail", "file", "sorttitle", "resume", "dateadded"]}, "id": 1}')
@@ -213,7 +218,7 @@ class player(xbmc.Player):
                 meta = {'title': self.meta['title'], 'originaltitle': self.meta['originaltitle'], 'year': self.meta['year'], 'genre': str(self.meta['genre']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'director': str(self.meta['director']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'country': str(self.meta['country']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'rating': self.meta['rating'], 'votes': self.meta['votes'], 'mpaa': self.meta['mpaa'], 'duration': self.meta['runtime'], 'trailer': self.meta['trailer'], 'writer': str(self.meta['writer']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'studio': str(self.meta['studio']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'tagline': self.meta['tagline'], 'plotoutline': self.meta['plotoutline'], 'plot': self.meta['plot']}
                 poster = self.meta['thumbnail']
             except:
-                meta = {'label' : name, 'title' : name}
+                meta = {'label' : self.name, 'title' : self.name}
                 poster = ''
             item = xbmcgui.ListItem(path=url, iconImage="DefaultVideo.png", thumbnailImage=poster)
             item.setInfo( type="Video", infoLabels= meta )
@@ -226,38 +231,38 @@ class player(xbmc.Player):
             xbmc.sleep(1000)
         if self.totalTime == 0: return
 
-        subtitles().get(name)
-
-        self.content = 'movie'
-        self.season = str(xbmc.getInfoLabel('VideoPlayer.season'))
-        self.episode = str(xbmc.getInfoLabel('VideoPlayer.episode'))
-        if imdb == '0': imdb = metaget.get_meta('movie', xbmc.getInfoLabel('VideoPlayer.title') ,year=str(xbmc.getInfoLabel('VideoPlayer.year')))['imdb_id']
-        imdb = re.sub("[^0-9]", "", imdb)
-        self.imdb = imdb
+        subtitles().get(self.name)
 
         while True:
             try: self.currentTime = self.getTime()
             except: break
             xbmc.sleep(1000)
 
+    def watched(self):
+        try:
+            xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.SetMovieDetails", "params": {"movieid" : %s, "playcount" : 1 }, "id": 1 }' % str(self.meta['movieid']))
+        except:
+            content = 'movie'
+            title = self.name.rsplit(' (', 1)[0].strip()
+            year = '%04d' % int(self.name.rsplit(' (', 1)[-1].split(')')[0])
+            if self.imdb == '0': self.imdb = metaget.get_meta('movie', title ,year=str(year))['imdb_id']
+            self.imdb = re.sub("[^0-9]", "", self.imdb)
+            metaget.change_watched(content, '', self.imdb, season='', episode='', year='', watched=7)
+            index().container_refresh()
+
+    def onPlayBackStarted(self):
+        if not getSetting("playback_info") == 'true': return
+        elapsedTime = '%s %.2f seconds' % (language(30319).encode("utf-8"), (time.time() - self.loadingStarting))     
+        index().infoDialog(elapsedTime, header=self.name)
+
     def onPlayBackEnded(self):
         if xbmc.getInfoLabel('Container.FolderPath') == '': index().setProperty(self.property, 'true')
-        if xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
-            metaget.change_watched(self.content, '', self.imdb, season=self.season, episode=self.episode, year='', watched='')
-            index().container_refresh()
-        else:
-            try: xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.SetMovieDetails", "params": {"movieid" : %s, "playcount" : 1 }, "id": 1 }' % str(self.meta['movieid']))
-            except: pass
+        self.watched()
 
     def onPlayBackStopped(self):
         index().clearProperty(self.property)
         if not self.currentTime / self.totalTime >= .9: return
-        if xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
-            metaget.change_watched(self.content, '', self.imdb, season=self.season, episode=self.episode, year='', watched='')
-            index().container_refresh()
-        else:
-            try: xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.SetMovieDetails", "params": {"movieid" : %s, "playcount" : 1 }, "id": 1 }' % str(self.meta['movieid']))
-            except: pass
+        self.watched()
 
 class subtitles:
     def get(self, name):
@@ -882,10 +887,11 @@ class root:
         rootList.append({'name': 30504, 'image': 'Oscars.png', 'action': 'movies_oscars'})
         rootList.append({'name': 30505, 'image': 'Genres.png', 'action': 'genres_movies'})
         rootList.append({'name': 30506, 'image': 'Years.png', 'action': 'years_movies'})
-        rootList.append({'name': 30507, 'image': 'Favourites.png', 'action': 'movies_favourites'})
+        rootList.append({'name': 30507, 'image': 'Amazon.png', 'action': 'movies_added'})
         if not (getSetting("imdb_mail") == '' or getSetting("imdb_password") == ''):
             rootList.append({'name': 30508, 'image': 'IMDb.png', 'action': 'account_movies'})
-        rootList.append({'name': 30509, 'image': 'Search.png', 'action': 'movies_search'})
+        rootList.append({'name': 30509, 'image': 'Favourites.png', 'action': 'movies_favourites'})
+        rootList.append({'name': 30510, 'image': 'Search.png', 'action': 'movies_search'})
         index().rootList(rootList)
         index().downloadList()
 
@@ -893,6 +899,7 @@ class link:
     def __init__(self):
         self.imdb_base = 'http://www.imdb.com'
         self.imdb_akas = 'http://akas.imdb.com'
+        self.imdb_added = 'http://akas.imdb.com/watchnow/'
         self.imdb_login = 'https://secure.imdb.com/oauth/m_login?origpath=/&ref_=m_nv_usr_lgin'
         self.imdb_genre = 'http://akas.imdb.com/genre/'
         self.imdb_genres = 'http://akas.imdb.com/search/title?title_type=feature,tv_movie&sort=boxoffice_gross_us&count=25&start=1&genres=%s'
@@ -1000,6 +1007,11 @@ class movies:
         index().movieList(self.list)
         index().nextList(self.list)
 
+    def imdb_added(self):
+        #self.list = self.imdb_list2(link().imdb_added)
+        self.list = cache(self.imdb_list2, link().imdb_added)
+        index().movieList(self.list)
+
     def imdb_search(self, query=None):
         if query is None:
             self.query = common.getUserInput(language(30362).encode("utf-8"), '')
@@ -1075,6 +1087,59 @@ class movies:
                     plot = ''
 
                 self.list.append({'name': name, 'url': url, 'image': image, 'title': title, 'year': year, 'imdb': imdb, 'genre': genre, 'plot': plot, 'next': next})
+            except:
+                pass
+
+        return self.list
+
+    def imdb_list2(self, url):
+        try:
+            result = getUrl(url.replace(link().imdb_base, link().imdb_akas)).result
+            result = result.decode('iso-8859-1').encode('utf-8')
+            movies = common.parseDOM(result, "div", attrs = { "class": "list_item.+?" })
+        except:
+            return
+
+        for movie in movies:
+            try:
+                title = common.parseDOM(movie, "a")[1]
+                title = common.replaceHTMLCodes(title)
+                title = title.encode('utf-8')
+
+                year = common.parseDOM(movie, "span", attrs = { "class": "year_type" })[0]
+                year = re.sub("\n|[(]|[)]", "", year)
+                year = year.encode('utf-8')
+
+                if not year.isdigit(): raise Exception()
+
+                name = '%s (%s)' % (title, year)
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                url = common.parseDOM(movie, "a", ret="href")[0]
+                url = '%s%s' % (link().imdb_base, url)
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+
+                try: image = common.parseDOM(movie, "img", ret="loadlate")[0]
+                except: image = common.parseDOM(movie, "img", ret="src")[0]
+                if not ('._SX' in image or '._SY' in image): raise Exception()
+                image = image.rsplit('._SX', 1)[0].rsplit('._SY', 1)[0] + '._SX1000.' + image.rsplit('.', 1)[-1]
+                image = common.replaceHTMLCodes(image)
+                image = image.encode('utf-8')
+
+                imdb = re.sub("[^0-9]", "", url.rsplit('tt', 1)[-1])
+                imdb = imdb.encode('utf-8')
+
+                try:
+                    plot = common.parseDOM(movie, "div", attrs = { "class": "item_description" })[0]
+                    plot = plot.rsplit('<', 1)[0].rsplit('<', 1)[0].strip()
+                    plot = common.replaceHTMLCodes(plot)
+                    plot = plot.encode('utf-8')
+                except:
+                    plot = ''
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'title': title, 'year': year, 'imdb': imdb, 'genre': '', 'plot': plot})
             except:
                 pass
 
@@ -1312,6 +1377,9 @@ class resolver:
             if url == 'download://': return url
             if url == 'close://': return
 
+            if getSetting("playback_info") == 'true':
+                index().infoDialog(self.selectedSource, header=name)
+
             player().run(name, url, imdb)
             return url
         except:
@@ -1411,9 +1479,9 @@ class resolver:
 
             select = index().selectDialog(sourceList)
             if select == -1: return 'close://'
-            if not select > -1: return
 
             url = self.sources_resolve(urlList[select], providerList[select])
+            self.selectedSource = self.sources[select]['source']
             return url
         except:
             return
@@ -1424,6 +1492,7 @@ class resolver:
                 url = self.sources_resolve(i['url'], i['provider'])
                 xbmc.sleep(1000)
                 if url is None: raise Exception()
+                self.selectedSource = i['source']
                 return url
             except:
                 pass
@@ -1504,7 +1573,6 @@ class movie25:
             global movie25_sources
             movie25_sources = []
 
-            url = None
             query = self.movie25_search % urllib.quote_plus(title)
 
             result = getUrl(query).result
@@ -1520,17 +1588,12 @@ class movie25:
                     result = getUrl(i).result
                     result = result.decode('iso-8859-1').encode('utf-8')
                     if str('tt' + imdb) in result:
-                        url = i
+                        match3 = result
                         break
                 except:
                     pass
-            if url == None: return
-            url = common.replaceHTMLCodes(url)
-            url = url.encode('utf-8')
 
-            result = getUrl(url).result
-            result = result.decode('iso-8859-1').encode('utf-8')
-            result = common.parseDOM(result, "div", attrs = { "class": "links_quality" })[0]
+            result = common.parseDOM(match3, "div", attrs = { "class": "links_quality" })[0]
 
             quality = common.parseDOM(result, "h1")[0]
             quality = quality.replace('\n','').rsplit(' ', 1)[-1]

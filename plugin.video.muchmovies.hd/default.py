@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import urllib,urllib2,re,os,threading,datetime,xbmc,xbmcplugin,xbmcgui,xbmcaddon,xbmcvfs
+import urllib,urllib2,re,os,threading,datetime,time,base64,xbmc,xbmcplugin,xbmcgui,xbmcaddon,xbmcvfs
 from operator import itemgetter
 try:    import json
 except: import simplejson as json
@@ -141,7 +141,7 @@ class getUrl(object):
             request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0')
         if not referer is None:
             request.add_header('Referer', referer)
-        response = urllib2.urlopen(request, timeout=30)
+        response = urllib2.urlopen(request, timeout=10)
         if fetch == True:
             result = response.read()
         else:
@@ -171,6 +171,7 @@ class Thread(threading.Thread):
 class player(xbmc.Player):
     def __init__ (self):
         self.property = addonName+'player_status'
+        self.loadingStarting = time.time()
         xbmc.Player.__init__(self)
 
     def status(self):
@@ -181,12 +182,15 @@ class player(xbmc.Player):
         return
 
     def run(self, name, url, imdb='0'):
+        self.name = name
+        self.imdb = imdb
+
         if xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
             item = xbmcgui.ListItem(path=url)
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
         else:
             try:
-                file = name + '.strm'
+                file = self.name + '.strm'
                 file = file.translate(None, '\/:*?"<>|')
 
                 meta = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties" : ["title", "genre", "year", "rating", "director", "trailer", "tagline", "plot", "plotoutline", "originaltitle", "lastplayed", "playcount", "writer", "studio", "mpaa", "country", "imdbnumber", "runtime", "votes", "fanart", "thumbnail", "file", "sorttitle", "resume", "dateadded"]}, "id": 1}')
@@ -197,7 +201,7 @@ class player(xbmc.Player):
                 meta = {'title': self.meta['title'], 'originaltitle': self.meta['originaltitle'], 'year': self.meta['year'], 'genre': str(self.meta['genre']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'director': str(self.meta['director']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'country': str(self.meta['country']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'rating': self.meta['rating'], 'votes': self.meta['votes'], 'mpaa': self.meta['mpaa'], 'duration': self.meta['runtime'], 'trailer': self.meta['trailer'], 'writer': str(self.meta['writer']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'studio': str(self.meta['studio']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'tagline': self.meta['tagline'], 'plotoutline': self.meta['plotoutline'], 'plot': self.meta['plot']}
                 poster = self.meta['thumbnail']
             except:
-                meta = {'label' : name, 'title' : name}
+                meta = {'label' : self.name, 'title' : self.name}
                 poster = ''
             item = xbmcgui.ListItem(path=url, iconImage="DefaultVideo.png", thumbnailImage=poster)
             item.setInfo( type="Video", infoLabels= meta )
@@ -210,39 +214,36 @@ class player(xbmc.Player):
             xbmc.sleep(1000)
         if self.totalTime == 0: return
 
-        subtitles().get(name)
-
-        self.content = 'movie'
-        self.season = str(xbmc.getInfoLabel('VideoPlayer.season'))
-        self.episode = str(xbmc.getInfoLabel('VideoPlayer.episode'))
-        if imdb == '0': imdb = metaget.get_meta('movie', xbmc.getInfoLabel('VideoPlayer.title') ,year=str(xbmc.getInfoLabel('VideoPlayer.year')))['imdb_id']
-        imdb = re.sub("[^0-9]", "", imdb)
-        self.imdb = imdb
+        subtitles().get(self.name)
 
         while True:
             try: self.currentTime = self.getTime()
             except: break
             xbmc.sleep(1000)
 
+    def watched(self):
+        try:
+            xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.SetMovieDetails", "params": {"movieid" : %s, "playcount" : 1 }, "id": 1 }' % str(self.meta['movieid']))
+        except:
+            content = 'movie'
+            title = self.name.rsplit(' (', 1)[0].strip()
+            year = '%04d' % int(self.name.rsplit(' (', 1)[-1].split(')')[0])
+            if self.imdb == '0': self.imdb = metaget.get_meta('movie', title ,year=str(year))['imdb_id']
+            self.imdb = re.sub("[^0-9]", "", self.imdb)
+            metaget.change_watched(content, '', self.imdb, season='', episode='', year='', watched=7)
+            index().container_refresh()
+
+    def onPlayBackStarted(self):
+        return
+
     def onPlayBackEnded(self):
         if xbmc.getInfoLabel('Container.FolderPath') == '': index().setProperty(self.property, 'true')
-        if not self.currentTime / self.totalTime >= .9: return
-        if xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
-            metaget.change_watched(self.content, '', self.imdb, season=self.season, episode=self.episode, year='', watched='')
-            index().container_refresh()
-        else:
-            try: xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.SetMovieDetails", "params": {"movieid" : %s, "playcount" : 1 }, "id": 1 }' % str(self.meta['movieid']))
-            except: pass
+        self.watched()
 
     def onPlayBackStopped(self):
         index().clearProperty(self.property)
         if not self.currentTime / self.totalTime >= .9: return
-        if xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
-            metaget.change_watched(self.content, '', self.imdb, season=self.season, episode=self.episode, year='', watched='')
-            index().container_refresh()
-        else:
-            try: xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.SetMovieDetails", "params": {"movieid" : %s, "playcount" : 1 }, "id": 1 }' % str(self.meta['movieid']))
-            except: pass
+        self.watched()
 
 class subtitles:
     def get(self, name):
@@ -739,6 +740,7 @@ class contextMenu:
             if url is None: return
             ext = url.rsplit('/', 1)[-1].rsplit('?', 1)[0].rsplit('|', 1)[0].strip().lower()
             ext = os.path.splitext(ext)[1][1:]
+            if ext == '': ext = 'mp4'
             stream = os.path.join(download, enc_name + '.' + ext)
             temp = stream + '.tmp'
 
@@ -779,7 +781,7 @@ class contextMenu:
             return
 
     def trailer(self, name, url):
-        url = resolver().trailer(name, url)
+        url = trailer().run(name, url)
         if url is None: return
         item = xbmcgui.ListItem(path=url)
         item.setProperty("IsPlayable", "true")
@@ -1000,8 +1002,79 @@ class movies:
 
         return self.list
 
+class trailer:
+    def __init__(self):
+        self.youtube_base = 'http://www.youtube.com'
+        self.youtube_query = 'http://gdata.youtube.com/feeds/api/videos?q='
+        self.youtube_watch = 'http://www.youtube.com/watch?v=%s'
+        self.youtube_info = 'http://gdata.youtube.com/feeds/api/videos/%s?v=2'
+
+    def run(self, name, url):
+        try:
+            if url.startswith(self.youtube_base):
+                url = self.youtube(url)
+                if url is None: raise Exception()
+                return url
+            elif not url.startswith('http://'):
+                url = self.youtube_watch % url
+                url = self.youtube(url)
+                if url is None: raise Exception()
+                return url
+            else:
+                raise Exception()
+        except:
+            url = self.youtube_query + name + ' trailer'
+            url = self.youtube_search(url)
+            if url is None: return
+            return url
+
+    def youtube_search(self, url):
+        try:
+            if index().addon_status('plugin.video.youtube') is None:
+                index().okDialog(language(30321).encode("utf-8"), language(30322).encode("utf-8"))
+                return
+
+            query = url.split("?q=")[-1].split("/")[-1].split("?")[0]
+            url = url.replace(query, urllib.quote_plus(query))
+            result = getUrl(url).result
+            result = common.parseDOM(result, "entry")
+            result = common.parseDOM(result, "id")
+
+            for url in result[:5]:
+                url = url.split("/")[-1]
+                url = self.youtube_watch % url
+                url = self.youtube(url)
+                if not url is None: return url
+        except:
+            return
+
+    def youtube(self, url):
+        try:
+            if index().addon_status('plugin.video.youtube') is None:
+                index().okDialog(language(30321).encode("utf-8"), language(30322).encode("utf-8"))
+                return
+            id = url.split("?v=")[-1].split("/")[-1].split("?")[0].split("&")[0]
+            state, reason = None, None
+            result = getUrl(self.youtube_info % id).result
+            try:
+                state = common.parseDOM(result, "yt:state", ret="name")[0]
+                reason = common.parseDOM(result, "yt:state", ret="reasonCode")[0]
+            except:
+                pass
+            if state == 'deleted' or state == 'rejected' or state == 'failed' or reason == 'requesterRegion' : return
+            try:
+                result = getUrl(self.youtube_watch % id).result
+                alert = common.parseDOM(result, "div", attrs = { "id": "watch7-notification-area" })[0]
+                return
+            except:
+                pass
+            url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % id
+            return url
+        except:
+            return
+
 class resolver:
-    def run(self, url, name=None, download=False):
+    def run(self, url, name, download=False):
         try:
             if player().status() is True: return
             url = self.muchmovies(url)
@@ -1020,72 +1093,6 @@ class resolver:
             url = common.parseDOM(result, "a", ret="href")
             url = [i for i in url if "?action=stream" in i][0]
             url = url.split("?")[0]
-            return url
-        except:
-            return
-
-    def trailer(self, name, url):
-        try:
-            if not url.startswith('http://'):
-                url = link().youtube_watch % url
-                url = self.youtube(url)
-            else:
-                try:
-                    result = getUrl(url).result
-                    url = re.compile('"http://www.youtube.com/embed/(.+?)"').findall(result)[0]
-                    if ' ' in url: raise Exception()
-                    url = url.split("?")[0].split("&")[0]
-                    url = link().youtube_watch % url
-                    url = self.youtube(url)
-                except:
-                    url = link().youtube_search + name + ' trailer'
-                    url = self.youtube_search(url)
-            if url is None: return
-            return url
-        except:
-            return
-
-    def youtube_search(self, url):
-        try:
-            if index().addon_status('plugin.video.youtube') is None:
-                index().okDialog(language(30321).encode("utf-8"), language(30322).encode("utf-8"))
-                return
-
-            query = url.split("?q=")[-1].split("/")[-1].split("?")[0]
-            url = url.replace(query, urllib.quote_plus(query))
-            result = getUrl(url).result
-            result = common.parseDOM(result, "entry")
-            result = common.parseDOM(result, "id")
-
-            for url in result[:5]:
-                url = url.split("/")[-1]
-                url = link().youtube_watch % url
-                url = self.youtube(url)
-                if not url is None: return url
-        except:
-            return
-
-    def youtube(self, url):
-        try:
-            if index().addon_status('plugin.video.youtube') is None:
-                index().okDialog(language(30321).encode("utf-8"), language(30322).encode("utf-8"))
-                return
-            id = url.split("?v=")[-1].split("/")[-1].split("?")[0].split("&")[0]
-            state, reason = None, None
-            result = getUrl(link().youtube_info % id).result
-            try:
-                state = common.parseDOM(result, "yt:state", ret="name")[0]
-                reason = common.parseDOM(result, "yt:state", ret="reasonCode")[0]
-            except:
-                pass
-            if state == 'deleted' or state == 'rejected' or state == 'failed' or reason == 'requesterRegion' : return
-            try:
-                result = getUrl(link().youtube_watch % id).result
-                alert = common.parseDOM(result, "div", attrs = { "id": "watch7-notification-area" })[0]
-                return
-            except:
-                pass
-            url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % id
             return url
         except:
             return

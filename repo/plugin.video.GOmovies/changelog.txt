@@ -1,4 +1,15 @@
 ------------------------
+GOmovies v1.1.0 (20-Jan-14)
+------------------------
+
+- Tweaked movie25 source.
+- Tweaked watched status.
+- Added section for Amazon's latest movies.
+- Added option for showing playback info.
+- Code cosmetics.
+
+
+------------------------
 GOmovies v1.0.0 (16-Jan-14)
 ------------------------
 
