@@ -510,7 +510,8 @@ class episodes:
     def livefootballvideo_list(self, show, url):
         try:
             result = getUrl(url).result
-            episodes = re.compile('(<li.+?</li>)').findall(result)
+            result = re.sub('<li\s.+?>','<li>', result)
+            episodes = common.parseDOM(result, "li")
         except:
             return
         try:
@@ -582,7 +583,8 @@ class episodes:
     def livefootballvideo2_list(self, show, url):
         try:
             result = getUrl(url).result
-            episodes = re.compile('(<li.+?</li>)').findall(result)
+            result = re.sub('<li\s.+?>','<li>', result)
+            episodes = common.parseDOM(result, "li")
         except:
             return
         try:
