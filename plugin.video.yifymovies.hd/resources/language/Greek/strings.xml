@@ -9,6 +9,9 @@
 	<string id="30005">Ταξ.: Έτος</string>
 	<string id="30006">Ταξ.: Προσθήκη</string>
 	<string id="30007">Λήψεις</string>
+	<string id="30008">Διαμεσολαβητής</string>
+	<string id="30009">- Διακομιστής</string>
+	<string id="30010">- Θύρα</string>
 	<string id="30040">Συλλογή</string>
 	<string id="30041">Μην ξεχάσετε να προσθέσετε το φάκελο στις πηγές πολυμέσων.</string>
 	<string id="30042">Φάκελος ταινιών</string>
@@ -101,7 +104,7 @@
 	<!-- Labels -->
 	<string id="30501">Τίτλος</string>
 	<string id="30502">Κυκλοφορία</string>
-	<string id="30503">IMDB</string>
+	<string id="30503">IMDb</string>
 	<string id="30504">Προσθήκες</string>
 	<string id="30505">Αξιολόγηση</string>
 	<string id="30506">Προβολές</string>

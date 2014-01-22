@@ -9,6 +9,9 @@
 	<string id="30005">Sort by: Year</string>
 	<string id="30006">Sort by: Added</string>
 	<string id="30007">Downloads</string>
+	<string id="30008">Proxy</string>
+	<string id="30009">- Server</string>
+	<string id="30010">- Port</string>
 	<string id="30040">Library</string>
 	<string id="30041">Don't forget to add this folder to media sources.</string>
 	<string id="30042">Movies Folder</string>
@@ -101,7 +104,7 @@
 	<!-- Labels -->
 	<string id="30501">Title</string>
 	<string id="30502">Release</string>
-	<string id="30503">IMDB</string>
+	<string id="30503">IMDb</string>
 	<string id="30504">Added</string>
 	<string id="30505">Rating</string>
 	<string id="30506">Views</string>

@@ -146,7 +146,7 @@ class getUrl(object):
             request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0')
         if not referer is None:
             request.add_header('Referer', referer)
-        response = urllib2.urlopen(request, timeout=10)
+        response = urllib2.urlopen(request, timeout=30)
         if fetch == True:
             result = response.read()
         else:
@@ -873,7 +873,7 @@ class root:
         rootList = []
         rootList.append({'name': 30501, 'image': 'Title.png', 'action': 'movies_title'})
         rootList.append({'name': 30502, 'image': 'Release.png', 'action': 'movies_release'})
-        rootList.append({'name': 30503, 'image': 'IMDB.png', 'action': 'movies_imdb'})
+        rootList.append({'name': 30503, 'image': 'IMDb.png', 'action': 'movies_imdb'})
         rootList.append({'name': 30504, 'image': 'Added.png', 'action': 'movies_added'})
         rootList.append({'name': 30505, 'image': 'Rating.png', 'action': 'movies_rating'})
         rootList.append({'name': 30506, 'image': 'Views.png', 'action': 'movies_views'})
@@ -884,6 +884,12 @@ class root:
         rootList.append({'name': 30511, 'image': 'Search.png', 'action': 'movies_search'})
         index().rootList(rootList)
         index().downloadList()
+
+class proxy:
+    def __init__(self):
+        self.server = None
+        if getSetting("proxy") == 'true' and not (getSetting("proxy_ip") == '' or getSetting("proxy_port") == ''):
+            self.server = '%s:%s' % (getSetting("proxy_ip"), getSetting("proxy_port"))
 
 class link:
     def __init__(self):
@@ -901,11 +907,6 @@ class link:
         self.yify_year = 'http://yify.tv/years'
         self.yify_search = 'action=ajaxy_sf&sf_value='
 
-        self.youtube_base = 'http://www.youtube.com'
-        self.youtube_search = 'http://gdata.youtube.com/feeds/api/videos?q='
-        self.youtube_watch = 'http://www.youtube.com/watch?v=%s'
-        self.youtube_info = 'http://gdata.youtube.com/feeds/api/videos/%s?v=2'
-
 class pages:
     def __init__(self):
         self.list = []
@@ -916,7 +917,7 @@ class pages:
 
     def yify_list(self):
         try:
-            result = getUrl(link().yify_page % '1').result
+            result = getUrl(link().yify_page % '1', proxy=proxy().server).result
             result = common.parseDOM(result, "div", attrs = { "class": "contenedor_page" })[0]
             count = common.parseDOM(result, "a", ret="href", attrs = { "class": "last" })[0]
             count = re.compile('/(\d+)/').findall(count)[0]
@@ -950,7 +951,7 @@ class genres:
 
     def yify_list(self):
         try:
-            result = getUrl(link().yify_genre).result
+            result = getUrl(link().yify_genre, proxy=proxy().server).result
             result = common.parseDOM(result, "div", attrs = { "class": "datagrid" })[0]
             genres = re.compile('(<a.+?</a>)').findall(result)
         except:
@@ -989,7 +990,7 @@ class years:
 
     def yify_list(self):
         try:
-            result = getUrl(link().yify_year).result
+            result = getUrl(link().yify_year, proxy=proxy().server).result
             result = common.parseDOM(result, "div", attrs = { "class": "datagrid" })[0]
             years = re.compile('(<a.+?</a>)').findall(result)
         except:
@@ -1066,7 +1067,7 @@ class movies:
 
     def yify_list(self, url):
         try:
-            result = getUrl(url).result
+            result = getUrl(url, proxy=proxy().server).result
             movies = common.parseDOM(result, "div", attrs = { "class": "mover_izp" })
         except:
             return
@@ -1128,7 +1129,7 @@ class movies:
 
     def yify_list2(self, query):
         try:
-            result = getUrl(link().yify_ajax, post=query).result
+            result = getUrl(link().yify_ajax, post=query, proxy=proxy().server).result
             result = json.loads(result)
             result = result['post']['all']
             result = [common.replaceHTMLCodes(i['post_link']) for i in result]
@@ -1200,7 +1201,7 @@ class movies:
 
     def thread(self, url, i):
         try:
-            result = getUrl(url).result
+            result = getUrl(url, proxy=proxy().server).result
             self.data[i] = {'html': result, 'url': url}
         except:
             return
@@ -1292,10 +1293,10 @@ class resolver:
 
     def yify(self, url):
         try:
-            result = getUrl(url).result
+            result = getUrl(url, proxy=proxy().server).result
             url = re.compile('showPkPlayer[(]"(.+?)"[)]').findall(result)[0]
             url = 'http://yify.tv/reproductor2/pk/pk/plugins/player_picasa.php?url=https%3A//picasaweb.google.com/' + url
-            result = getUrl(url).result
+            result = getUrl(url, proxy=proxy().server).result
             result = re.compile('{(.+?)}').findall(result)[-1]
             url = re.compile('"url":"(.+?)"').findall(result)[0]
             return url

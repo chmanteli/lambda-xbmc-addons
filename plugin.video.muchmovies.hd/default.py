@@ -837,11 +837,6 @@ class link:
         self.muchmovies_search = 'http://www.muchmovies.org/search'
         self.muchmovies_genre = 'http://www.muchmovies.org/genres'
 
-        self.youtube_base = 'http://www.youtube.com'
-        self.youtube_search = 'http://gdata.youtube.com/feeds/api/videos?q='
-        self.youtube_watch = 'http://www.youtube.com/watch?v=%s'
-        self.youtube_info = 'http://gdata.youtube.com/feeds/api/videos/%s?v=2'
-
 class pages:
     def __init__(self):
         self.list = []
