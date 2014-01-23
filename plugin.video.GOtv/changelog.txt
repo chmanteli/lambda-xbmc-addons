@@ -1,4 +1,13 @@
 ------------------------
+GOtv v1.1.7 (24-Jan-14)
+------------------------
+
+- Added option for resuming playback.
+- Added Polish and Romanian translations.
+- Code cosmetics.
+
+
+------------------------
 GOtv v1.1.6 (19-Jan-14)
 ------------------------
 

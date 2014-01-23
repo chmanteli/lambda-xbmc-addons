@@ -13,6 +13,7 @@
 	<string id="30009">Ταξ.: Προσθήκη</string>
 	<string id="30010">Λήψεις</string>
 	<string id="30011">Πληροφορίες αναπαραγωγής</string>
+	<string id="30012">Συνέχιση αναπαραγωγής</string>
 	<string id="30030">Ροές</string>
 	<string id="30031">Προτεραιότητα 1</string>
 	<string id="30032">Προτεραιότητα 2</string>
@@ -84,6 +85,9 @@
 	<string id="30350">Θέλετε πραγματικά να την αφαιρέσετε;</string>
 	<string id="30351">Η σειρά αυτή θα παραμείνει στη βιβλιοθήκη.</string>
 	<string id="30352">Θέλετε να αφαιρέθει από τη βιβλιοθήκη;</string>
+	<string id="30353">Συνέχεια από</string>
+	<string id="30354">Συνέχεια</string>
+	<string id="30355">Εκκίνηση από την αρχή</string>
 	<!-- Misc -->
 	<string id="30361">Επόμενη σελίδα</string>
 	<string id="30362">Αναζήτηση</string>

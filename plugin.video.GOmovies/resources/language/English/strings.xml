@@ -13,7 +13,8 @@
 	<string id="30009">Sort by: Added</string>
 	<string id="30010">Downloads</string>
 	<string id="30011">Playback Info</string>
-	<string id="30012">Filter Search</string>
+	<string id="30012">Resume Playback</string>
+	<string id="30013">Filter Search</string>
 	<string id="30030">Hosts</string>
 	<string id="30031">Priority 1</string>
 	<string id="30032">Priority 2</string>
@@ -81,6 +82,9 @@
 	<string id="30350">Do you really want to remove it?</string>
 	<string id="30351">This TV Show will remain to library.</string>
 	<string id="30352">Do you want to remove it from library?</string>
+	<string id="30353">Resume from</string>
+	<string id="30354">Resume</string>
+	<string id="30355">Start from beginning</string>
 	<!-- Misc -->
 	<string id="30361">Next Page</string>
 	<string id="30362">Search</string>

@@ -48,6 +48,7 @@ addonGenres         = os.path.join(addonPath,'resources/art/Genres.png')
 addonNext           = os.path.join(addonPath,'resources/art/Next.png')
 dataPath            = xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
 viewData            = os.path.join(dataPath,'views.cfg')
+offData             = os.path.join(dataPath,'offset.cfg')
 favData             = os.path.join(dataPath,'favourites.cfg')
 subData             = os.path.join(dataPath,'subscriptions.cfg')
 metaget             = metahandlers.MetaData(preparezip=False)
@@ -215,16 +216,8 @@ class player(xbmc.Player):
         self.loadingStarting = time.time()
         xbmc.Player.__init__(self)
 
-    def status(self):
-        getProperty = index().getProperty(self.property)
-        index().clearProperty(self.property)
-        if not xbmc.getInfoLabel('Container.FolderPath') == '': return
-        if getProperty == 'true': return True
-        return
-
     def run(self, name, url, imdb='0'):
-        self.name = name
-        self.imdb = imdb
+        self.video_info(name, imdb)
 
         if xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
             item = xbmcgui.ListItem(path=url)
@@ -255,39 +248,99 @@ class player(xbmc.Player):
             xbmc.sleep(1000)
         if self.totalTime == 0: return
 
-        subtitles().get(self.name)
-
         while True:
             try: self.currentTime = self.getTime()
             except: break
             xbmc.sleep(1000)
 
-    def watched(self):
+    def video_info(self, name, imdb):
+        self.name = name
+        self.content = 'episode'
+        self.show = self.name.rsplit(' ', 1)[0]
+        if imdb == '0': imdb = metaget.get_meta('tvshow', self.show)['imdb_id']
+        self.imdb = re.sub("[^0-9]", "", imdb)
+        self.season = '%01d' % int(name.rsplit(' ', 1)[-1].split('S')[-1].split('E')[0])
+        self.episode = '%01d' % int(name.rsplit(' ', 1)[-1].split('E')[-1])
+        return
+
+    def offset_add(self):
+        try:
+            file = open(offData, 'a+')
+            file.write('"%s"|"%s"|"%s"\n' % (self.name, self.imdb, self.currentTime))
+            file.close()
+        except:
+            return
+
+    def offset_delete(self):
+        try:
+            file = xbmcvfs.File(offData)
+            read = file.read()
+            file.close()
+            line = [x for x in re.compile('(".+?)\n').findall(read) if '"%s"|"%s"' % (self.name, self.imdb) in x][0]
+            list = re.compile('(".+?\n)').findall(read.replace(line, ''))
+            file = open(offData, 'w')
+            for line in list: file.write(line)
+            file.close()
+        except:
+            return
+
+    def offset_read(self):
+        try:
+            self.offset = '0'
+            file = xbmcvfs.File(offData)
+            read = file.read()
+            file.close()
+            line = [x for x in re.compile('(".+?)\n').findall(read) if '"%s"|"%s"' % (self.name, self.imdb) in x][0]
+            self.offset = re.compile('".+?"[|]".+?"[|]"(.+?)"').findall(line)[0]
+        except:
+            return
+
+    def change_watched(self):
         try:
             xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.SetEpisodeDetails", "params": {"episodeid" : %s, "playcount" : 1 }, "id": 1 }' % str(self.meta['episodeid']))
         except:
-            content = 'episode'
-            show = self.name.rsplit(' ', 1)[0]
-            if self.imdb == '0': self.imdb = metaget.get_meta('tvshow', show)['imdb_id']
-            self.imdb = re.sub("[^0-9]", "", self.imdb)
-            season = '%01d' % int(self.name.rsplit(' ', 1)[-1].split('S')[-1].split('E')[0])
-            episode = '%01d' % int(self.name.rsplit(' ', 1)[-1].split('E')[-1])
-            metaget.change_watched(content, '', self.imdb, season=season, episode=episode, year='', watched=7)
-            index().container_refresh()
+            metaget.change_watched(self.content, '', self.imdb, season=self.season, episode=self.episode, year='', watched=7)
+
+    def resume_playback(self):
+        offset = float(self.offset)
+        if not offset > 0: return
+        minutes, seconds = divmod(offset, 60)
+        hours, minutes = divmod(minutes, 60)
+        offset_time = '%02d:%02d:%02d' % (hours, minutes, seconds)
+        yes = index().yesnoDialog('%s %s' % (language(30353).encode("utf-8"), offset_time), '', self.name, language(30354).encode("utf-8"), language(30355).encode("utf-8"))
+        if yes: self.seekTime(offset)
+
+    def status(self):
+        getProperty = index().getProperty(self.property)
+        index().clearProperty(self.property)
+        if not xbmc.getInfoLabel('Container.FolderPath') == '': return
+        if getProperty == 'true': return True
+        return
 
     def onPlayBackStarted(self):
-        if not getSetting("playback_info") == 'true': return
-        elapsedTime = '%s %.2f seconds' % (language(30319).encode("utf-8"), (time.time() - self.loadingStarting))     
-        index().infoDialog(elapsedTime, header=self.name)
+        if getSetting("playback_info") == 'true':
+            elapsedTime = '%s %.2f seconds' % (language(30319).encode("utf-8"), (time.time() - self.loadingStarting))     
+            index().infoDialog(elapsedTime, header=self.name)
+
+        if getSetting("resume_playback") == 'true':
+            self.offset_read()
+            self.resume_playback()
+
+        subtitles().get(self.name)
 
     def onPlayBackEnded(self):
         if xbmc.getInfoLabel('Container.FolderPath') == '': index().setProperty(self.property, 'true')
-        self.watched()
+        self.change_watched()
+        self.offset_delete()
+        index().container_refresh()
 
     def onPlayBackStopped(self):
         index().clearProperty(self.property)
-        if not self.currentTime / self.totalTime >= .9: return
-        self.watched()
+        if self.currentTime / self.totalTime >= .9:
+            self.change_watched()
+        self.offset_delete()
+        self.offset_add()
+        index().container_refresh()
 
 class subtitles:
     def get(self, name):
@@ -379,8 +432,8 @@ class index:
         select = xbmcgui.Dialog().select(header, list)
         return select
 
-    def yesnoDialog(self, str1, str2, header=addonName):
-        answer = xbmcgui.Dialog().yesno(header, str1, str2)
+    def yesnoDialog(self, str1, str2, header=addonName, str3='', str4=''):
+        answer = xbmcgui.Dialog().yesno(header, str1, str2, '', str4, str3)
         return answer
 
     def getProperty(self, str):
@@ -413,6 +466,10 @@ class index:
             file.close()
         if not xbmcvfs.exists(viewData):
             file = xbmcvfs.File(viewData, 'w')
+            file.write('')
+            file.close()
+        if not xbmcvfs.exists(offData):
+            file = xbmcvfs.File(offData, 'w')
             file.write('')
             file.close()
 
