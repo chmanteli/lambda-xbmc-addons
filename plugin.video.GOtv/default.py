@@ -1331,6 +1331,7 @@ class link:
         self.imdb_search = 'http://akas.imdb.com/search/title?title_type=tv_series,mini_series&sort=moviemeter,asc&count=25&start=1&title=%s'
         self.imdb_seasons = 'http://www.imdb.com/title/tt%s/episodes'
         self.imdb_episodes = 'http://www.imdb.com/title/tt%s/episodes?season=%s'
+        self.tvdb_image = 'http://thetvdb.com/banners/posters/'
 
 class genres:
     def __init__(self):
@@ -1439,23 +1440,29 @@ class shows:
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
 
+                year = common.parseDOM(show, "span", attrs = { "class": "year_type" })[0]
+                year = re.sub("[^0-9]", "", year)[:4]
+                year = year.encode('utf-8')
+
                 url = common.parseDOM(show, "a", ret="href")[0]
                 url = '%s%s' % (link().imdb_base, url)
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
 
-                image = common.parseDOM(show, "img", ret="src")[0]
-                if not ('._SX' in image or '._SY' in image): raise Exception()
-                image = image.rsplit('._SX', 1)[0].rsplit('._SY', 1)[0] + '._SX1000.' + image.rsplit('.', 1)[-1]
-                image = common.replaceHTMLCodes(image)
-                image = image.encode('utf-8')
-
-                year = common.parseDOM(show, "span", attrs = { "class": "year_type" })[0]
-                year = re.sub("[^0-9]", "", year)[:4]
-                year = year.encode('utf-8')
-
                 imdb = re.sub("[^0-9]", "", url.rsplit('tt', 1)[-1])
                 imdb = imdb.encode('utf-8')
+
+                try:
+                    image = common.parseDOM(show, "img", ret="src")[0]
+                    if not ('._SX' in image or '._SY' in image): raise Exception()
+                    image = image.rsplit('._SX', 1)[0].rsplit('._SY', 1)[0] + '._SX500.' + image.rsplit('.', 1)[-1] 
+                except:
+                    image = ''
+                    image = metaget.get_meta('tvshow', name, imdb_id=imdb)['cover_url']
+                    if not image == '': image = link().tvdb_image + image.rsplit('\\', 1)[-1].rsplit('/', 1)[-1]
+                if image == '': raise Exception()
+                image = common.replaceHTMLCodes(image)
+                image = image.encode('utf-8')
 
                 try:
                     genre = common.parseDOM(show, "span", attrs = { "class": "genre" })

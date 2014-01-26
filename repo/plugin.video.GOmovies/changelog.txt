@@ -1,4 +1,14 @@
 ------------------------
+GOmovies v1.1.8 (24-Jan-14)
+------------------------
+
+- Tweaked IMDb listings.
+- Reduced resolution of IMDb posters.
+- Added French translation.
+- Code cosmetics.
+
+
+------------------------
 GOmovies v1.1.7 (24-Jan-14)
 ------------------------
 

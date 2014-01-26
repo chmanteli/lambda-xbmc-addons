@@ -10,6 +10,7 @@ Watch movies from various sources
 Attributions
 ---------------------
 - Main icon and fanart by jokster | http://www.xbmchub.com
+- French translation by nek | http://www.xbmchub.com
 - Polish translation by kodishu | http://www.xbmchub.com
 - Romanian translation by timmygotcha | http://www.xbmchub.com
 - Main icon set is based on work done by DryIcons | http://dryicons.com

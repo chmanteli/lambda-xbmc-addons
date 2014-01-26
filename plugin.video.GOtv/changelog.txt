@@ -1,4 +1,14 @@
 ------------------------
+GOtv v1.1.8 (24-Jan-14)
+------------------------
+
+- Tweaked tv show listings.
+- Reduced resolution of IMDb posters.
+- Added French translation.
+- Code cosmetics.
+
+
+------------------------
 GOtv v1.1.7 (24-Jan-14)
 ------------------------
 

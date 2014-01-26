@@ -505,10 +505,7 @@ class index:
         name, url, image = language(30361).encode("utf-8"), next, addonNext
         sysurl = urllib.quote_plus(url)
 
-        if action == 'mymovies':
-            u = '%s?action=mymovies&url=%s' % (sys.argv[0], sysurl)
-        else:
-            u = '%s?action=movies&url=%s' % (sys.argv[0], sysurl)
+        u = '%s?action=movies&url=%s' % (sys.argv[0], sysurl)
 
         item = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=image)
         item.setInfo( type="Video", infoLabels={ "Label": name, "Title": name, "Plot": addonDesc } )
@@ -967,11 +964,13 @@ class link:
         self.imdb_oscars = 'http://akas.imdb.com/search/title?title_type=feature,tv_movie&groups=oscar_best_picture_winners&sort=year,desc&count=25&start=1'
         self.imdb_search = 'http://akas.imdb.com/search/title?title_type=feature,tv_movie&sort=moviemeter,asc&count=25&start=1&title=%s'
 
-        self.myimdb_listorian = 'http://akas.imdb.com/list/watchlist?title_type=feature,tv_movie&sort=listorian:asc&view=detail&count=100&start=1'
-        self.myimdb_added = 'http://akas.imdb.com/list/watchlist?title_type=feature,tv_movie&sort=created:desc&view=detail&count=100&start=1'
-        self.myimdb_title = 'http://akas.imdb.com/list/watchlist?title_type=feature,tv_movie&sort=title:asc&view=detail&count=100&start=1'
         self.myimdb_lists = 'http://akas.imdb.com/user/%s/lists?tab=all&sort=modified:desc&filter=titles'
-        self.myimdb_list = 'http://akas.imdb.com%s?title_type=feature,tv_movie&sort=listorian:asc&view=detail&count=100&start=1'
+        self.myimdb_listorian = 'http://akas.imdb.com/list/watchlist?title_type=feature,tv_movie&sort=listorian:asc&view=compact&count=100&start=1'
+        self.myimdb_added = 'http://akas.imdb.com/list/watchlist?title_type=feature,tv_movie&sort=created:desc&view=compact&count=100&start=1'
+        self.myimdb_title = 'http://akas.imdb.com/list/watchlist?title_type=feature,tv_movie&sort=title:asc&view=compact&count=100&start=1'
+        self.myimdb_list = 'http://akas.imdb.com%s?title_type=feature,tv_movie&sort=listorian:asc&view=compact&count=100&start=1'
+
+        self.tmdb_image = 'http://image.tmdb.org/t/p/w500/'
 
 class genres:
     def __init__(self):
@@ -1120,7 +1119,7 @@ class movies:
 
                 image = common.parseDOM(movie, "img", ret="src")[0]
                 if not ('._SX' in image or '._SY' in image): raise Exception()
-                image = image.rsplit('._SX', 1)[0].rsplit('._SY', 1)[0] + '._SX1000.' + image.rsplit('.', 1)[-1]
+                image = image.rsplit('._SX', 1)[0].rsplit('._SY', 1)[0] + '._SX500.' + image.rsplit('.', 1)[-1]
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
 
@@ -1181,7 +1180,7 @@ class movies:
                 try: image = common.parseDOM(movie, "img", ret="loadlate")[0]
                 except: image = common.parseDOM(movie, "img", ret="src")[0]
                 if not ('._SX' in image or '._SY' in image): raise Exception()
-                image = image.rsplit('._SX', 1)[0].rsplit('._SY', 1)[0] + '._SX1000.' + image.rsplit('.', 1)[-1]
+                image = image.rsplit('._SX', 1)[0].rsplit('._SY', 1)[0] + '._SX500.' + image.rsplit('.', 1)[-1]
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
 
@@ -1226,7 +1225,6 @@ class mymovies:
         #self.list = self.imdb_list(mail, password, url)
         self.list = cache(self.imdb_list, mail, password, url)
         index().movieList(self.list)
-        index().nextList(self.list)
 
     def imdb_account(self, mail, password):
         try:
@@ -1275,29 +1273,18 @@ class mymovies:
             result = getUrl(link().imdb_login, post=post, close=False, cookie=True).result
             result = getUrl(url.replace(link().imdb_base, link().imdb_akas)).result
             result = result.decode('iso-8859-1').encode('utf-8')
-            movies = common.parseDOM(result, "div", attrs = { "class": "list_item.+?" })
+            movies = common.parseDOM(result, "tr", attrs = { "class": "list_item.+?" })
         except:
             return
 
-        try:
-            next = common.parseDOM(result, "div", attrs = { "class": "pagination" })[0]
-            base = common.parseDOM(result, "link", ret="href", attrs = { "rel": "canonical" })[0]
-            name = common.parseDOM(next, "a")[-1]
-            if 'laquo' in name: raise Exception()
-            next = common.parseDOM(next, "a", ret="href")[-1]
-            next = '%s%s' % (base, next)
-            next = common.replaceHTMLCodes(next)
-            next = next.encode('utf-8')
-        except:
-            next = ''
-
         for movie in movies:
             try:
-                title = common.parseDOM(movie, "a")[1]
+                title = common.parseDOM(movie, "td", attrs = { "class": "title" })[0]
+                title = common.parseDOM(title, "a")[0]
                 title = common.replaceHTMLCodes(title)
                 title = title.encode('utf-8')
 
-                year = common.parseDOM(movie, "span", attrs = { "class": "year_type" })[0]
+                year = common.parseDOM(movie, "td", attrs = { "class": "year" })[0]
                 year = re.sub("[^0-9]", "", year)[:4]
                 year = year.encode('utf-8')
 
@@ -1305,30 +1292,22 @@ class mymovies:
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
 
-                url = common.parseDOM(movie, "a", ret="href")[0]
+                url = common.parseDOM(movie, "td", attrs = { "class": "title" })[0]
+                url = common.parseDOM(url, "a", ret="href")[0]
                 url = '%s%s' % (link().imdb_base, url)
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
 
-                try: image = common.parseDOM(movie, "img", ret="loadlate")[0]
-                except: image = common.parseDOM(movie, "img", ret="src")[0]
-                if not ('._SX' in image or '._SY' in image): raise Exception()
-                image = image.rsplit('._SX', 1)[0].rsplit('._SY', 1)[0] + '._SX1000.' + image.rsplit('.', 1)[-1]
+                image = metaget.get_meta('movie', title ,year=year)['cover_url']
+                if image == '': raise Exception()
+                image = link().tmdb_image + image.rsplit('\\', 1)[-1].rsplit('/', 1)[-1]
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
 
                 imdb = re.sub("[^0-9]", "", url.rsplit('tt', 1)[-1])
                 imdb = imdb.encode('utf-8')
 
-                try:
-                    plot = common.parseDOM(movie, "div", attrs = { "class": "item_description" })[0]
-                    plot = plot.rsplit('<', 1)[0].rsplit('<', 1)[0].strip()
-                    plot = common.replaceHTMLCodes(plot)
-                    plot = plot.encode('utf-8')
-                except:
-                    plot = ''
-
-                self.list.append({'name': name, 'url': url, 'image': image, 'title': title, 'year': year, 'imdb': imdb, 'genre': '', 'plot': plot, 'next': next})
+                self.list.append({'name': name, 'url': url, 'image': image, 'title': title, 'year': year, 'imdb': imdb, 'genre': '', 'plot': '', 'next': ''})
             except:
                 pass
 
