@@ -1,4 +1,13 @@
 ------------------------
+GOtv v1.1.9 (27-Jan-14)
+------------------------
+
+- Tweaked playback from library.
+- Updated French translation.
+- Code cosmetics.
+
+
+------------------------
 GOtv v1.1.8 (26-Jan-14)
 ------------------------
 
