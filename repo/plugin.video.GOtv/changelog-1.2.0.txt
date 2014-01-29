@@ -1,4 +1,16 @@
 ------------------------
+GOtv v1.2.0 (29-Jan-14)
+------------------------
+
+- Reworked season listings (TVDB).
+- Reworked episode listings (TVDB).
+- Tweaked library integration.
+- NOTE: Delete TV folder, update subscriptions and clean library.
+- Added French, Polish and Romanian addon description.
+- Code cosmetics.
+
+
+------------------------
 GOtv v1.1.9 (27-Jan-14)
 ------------------------
 
