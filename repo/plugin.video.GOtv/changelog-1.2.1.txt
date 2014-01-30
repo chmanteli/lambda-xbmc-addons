@@ -1,4 +1,14 @@
 ------------------------
+GOtv v1.2.1 (30-Jan-14)
+------------------------
+
+- Tweaked tv show listings.
+- Tweaked season listings.
+- Fixed library integration.
+- Code cosmetics.
+
+
+------------------------
 GOtv v1.2.0 (29-Jan-14)
 ------------------------
 

@@ -1113,7 +1113,7 @@ class contextMenu:
                     enc_name = name.translate(None, '\/:*?"<>|')
                     stream = os.path.join(seasonDir, enc_name + '.strm')
                     file = xbmcvfs.File(stream, 'w')
-                    file.write(content)
+                    file.write(str(content))
                     file.close()
             if silent == False:
                 index().infoDialog(language(30311).encode("utf-8"), show)
@@ -1476,7 +1476,9 @@ class shows:
                     image = image.rsplit('._SX', 1)[0].rsplit('._SY', 1)[0] + '._SX500.' + image.rsplit('.', 1)[-1] 
                 except:
                     image = ''
-                    image = metaget.get_meta('tvshow', name, imdb_id=imdb)['cover_url']
+                    meta = metaget.get_meta('tvshow', '', imdb_id=imdb)
+                    image = meta['cover_url']
+                    if not str(meta['year']) == year: image = ''
                     if not image == '': image = link().tvdb_poster + image.rsplit('\\', 1)[-1].rsplit('/', 1)[-1]
                 if image == '': raise Exception()
                 image = common.replaceHTMLCodes(image)
@@ -1529,7 +1531,7 @@ class seasons:
                 tvdb = link().tvdb_series2 % urllib.quote_plus(show)
                 tvdb = getUrl(tvdb).result
                 tvdb = common.parseDOM(tvdb, "Series")
-                tvdb = [i for i in tvdb if common.parseDOM(i, "SeriesName")[0] == show][0]
+                tvdb = [i for i in tvdb if show == common.parseDOM(i, "SeriesName")[0] and year in common.parseDOM(i, "FirstAired")[0]][0]
                 tvdb = common.parseDOM(tvdb, "seriesid")[0]
 
             tvdbUrl = link().tvdb_episodes % (tvdb_key, tvdb)
