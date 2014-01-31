@@ -487,7 +487,7 @@ class index:
 
     def api_key(self):
         global tvdb_key
-        tvdb_key = '1D62F2F90030C444'
+        tvdb_key = base64.urlsafe_b64decode('MUQ2MkYyRjkwMDMwQzQ0NA==')
 
     def container_view(self, content, viewDict):
         try:
@@ -1687,15 +1687,20 @@ class resolver:
         if getSetting("tvonline") == 'true':
             threads.append(Thread(tvonline().get, show, season, episode, name, title, imdb, year, hostDict))
 
-        global simplymovies_sources
-        simplymovies_sources = []
-        if getSetting("simplymovies") == 'true':
-            threads.append(Thread(simplymovies().get, show, season, episode, name, title, imdb, year, hostDict))
+        global vkbox_sources
+        vkbox_sources = []
+        if getSetting("vkbox") == 'true':
+            threads.append(Thread(vkbox().get, show, season, episode, name, title, imdb, year, hostDict))
 
         global istreamhd_sources
         istreamhd_sources = []
         if getSetting("istreamhd") == 'true':
             threads.append(Thread(istreamhd().get, show, season, episode, name, title, imdb, year, hostDict))
+
+        global simplymovies_sources
+        simplymovies_sources = []
+        if getSetting("simplymovies") == 'true':
+            threads.append(Thread(simplymovies().get, show, season, episode, name, title, imdb, year, hostDict))
 
         global watchmoviesonline_sources
         watchmoviesonline_sources = []
@@ -1710,7 +1715,7 @@ class resolver:
         [i.start() for i in threads]
         [i.join() for i in threads]
 
-        self.sources = watchseries_sources + tvonline_sources + simplymovies_sources + istreamhd_sources + watchmoviesonline_sources + moviestorm_sources
+        self.sources = watchseries_sources + tvonline_sources + vkbox_sources + istreamhd_sources + simplymovies_sources + watchmoviesonline_sources + moviestorm_sources
 
         return self.sources
 
@@ -1718,8 +1723,9 @@ class resolver:
         try:
             if provider == 'Watchseries': url = watchseries().resolve(url)
             elif provider == 'TVonline': url = tvonline().resolve(url)
-            elif provider == 'Simplymovies': url = simplymovies().resolve(url)
+            elif provider == 'VKBox': url = vkbox().resolve(url)
             elif provider == 'iStreamHD': url = istreamhd().resolve(url)
+            elif provider == 'Simplymovies': url = simplymovies().resolve(url)
             elif provider == 'Watchonline': url = watchmoviesonline().resolve(url)
             elif provider == 'Moviestorm': url = moviestorm().resolve(url)
             return url
@@ -1970,58 +1976,55 @@ class tvonline:
         url = 'http://dd.tvonline.cc/ip.mp4?key=%s-ltylz%s%s-%s' % (key1, key2, key3, key4)
         return url
 
-class simplymovies:
+class vkbox:
     def __init__(self):
-        self.simplymovies_base = 'http://simplymovies.net'
-        self.simplymovies_search = 'http://simplymovies.net/tv_shows.php?searchTerm='
+        self.mobapps_base = 'http://mobapps.cc'
+        self.mobapps_data = 'http://mobapps.cc/data/data_en.zip'
+        self.mobapps_episodes = 'http://mobapps.cc/api/serials/e/?h=%s&u=%s&y=%s'
+        self.mobapps_tv = 'tv_lite.json'
 
     def get(self, show, season, episode, name, title, imdb, year, hostDict):
         try:
-            global simplymovies_sources
-            simplymovies_sources = []
+            global vkbox_sources
+            vkbox_sources = []
 
-            query = self.simplymovies_search + urllib.quote_plus(show.replace(' ', '-'))
+            search = 'http://www.imdbapi.com/?i=tt%s' % imdb
+            search = getUrl(search).result
+            search = json.loads(search)
+            country = search['Country']
+            if not 'USA' in country: return
 
-            result = getUrl(query).result
-            url = common.parseDOM(result, "div", attrs = { "class": "movieInfoHolder" })
-            try: match = [i for i in url if str('>' + re.sub('\n|\s(|[(])(UK|US|AU)(|[)])$|\s\s','',re.sub('\n|\s(:|-)\s|(:|-)\s|\s(:|-)|(:|-)|([[].+?[]])',' ',show)).lower() + '<') in re.sub('\n|\s(|[(])(UK|US|AU)(|[)])$|\s\s','',re.sub('\n|\s(:|-)\s|(:|-)\s|\s(:|-)|(:|-)|([[].+?[]])',' ',i)).lower()][0]
-            except: pass
-            try: match = [i for i in url if str('tt' + imdb) in i][0]
-            except: pass
-            url = common.parseDOM(match, "a", ret="href")[0]
-            url = '%s/%s' % (self.simplymovies_base, url)
+            import zipfile, StringIO
+            data = urllib2.urlopen(self.mobapps_data, timeout=10).read()
+            zip = zipfile.ZipFile(StringIO.StringIO(data))
+            read = zip.open(self.mobapps_tv)
+            result = read.read()
+            result = json.loads(result)
+
+            match = [i['id'] for i in result if re.sub('\n|\s(|[(])(UK|US|AU)(|[)])$|\s\s','',re.sub('\n|\s(:|-)\s|(:|-)\s|\s(:|-)|(:|-)|([[].+?[]])',' ',show)).lower() == re.sub('\n|\s(|[(])(UK|US|AU)(|[)])$|\s\s','',re.sub('\n|\s(:|-)\s|(:|-)\s|\s(:|-)|(:|-)|([[].+?[]])',' ',i['title'])).lower()][0]
+            url = self.mobapps_episodes % (match, season, episode)
             url = common.replaceHTMLCodes(url)
             url = url.encode('utf-8')
 
             result = getUrl(url).result
-            url = re.compile('<h3>(Season %s<.+)' % season).findall(result)[0]
-            url = url.split("<h3>")[0]
-            url = url.replace(':','<')
-            url = re.compile('(.+>Episode %s<)' % episode).findall(url)[0]
-            url = re.compile('"(.+?)"').findall(url)[-1]
-            url = '%s/%s' % (self.simplymovies_base, url)
-            url = common.replaceHTMLCodes(url)
-            url = url.encode('utf-8')
-
-            result = getUrl(url).result
-            url = common.parseDOM(result, "iframe", ret="src", attrs = { "class": "videoPlayerIframe" })[0]
-            url = common.replaceHTMLCodes(url)
-            url = url.encode('utf-8')
+            param = re.findall('"lang":"en","apple":(\d+?),"google":(\d+?),"microsoft":"(.+?)"', result, re.I)
+            num = int(match) + int(season) + int(episode)
+            url = 'https://vk.com/video_ext.php?oid=%s&id=%s&hash=%s' % (str(int(param[0][0]) + num), str(int(param[0][1]) + num), param[0][2])
 
             result = getUrl(url).result
             try:
                 url = re.compile('url720=(.+?)&').findall(result)[0]
-                simplymovies_sources.append({'source': 'VKHD', 'quality': 'HD', 'provider': 'Simplymovies', 'url': url})
+                vkbox_sources.append({'source': 'VKHD', 'quality': 'HD', 'provider': 'VKBox', 'url': url})
             except:
                 pass
             try:
                 url = re.compile('url540=(.+?)&').findall(result)[0]
-                simplymovies_sources.append({'source': 'VK', 'quality': 'SD', 'provider': 'Simplymovies', 'url': url})
+                vkbox_sources.append({'source': 'VK', 'quality': 'SD', 'provider': 'VKBox', 'url': url})
             except:
                 pass
             try:
                 url = re.compile('url480=(.+?)&').findall(result)[0]
-                simplymovies_sources.append({'source': 'VK', 'quality': 'SD', 'provider': 'Simplymovies', 'url': url})
+                vkbox_sources.append({'source': 'VK', 'quality': 'SD', 'provider': 'VKBox', 'url': url})
             except:
                 pass
         except:
@@ -2088,6 +2091,66 @@ class istreamhd:
             try:
                 url = re.compile('url480=(.+?)&').findall(result)[0]
                 istreamhd_sources.append({'source': 'VK', 'quality': 'SD', 'provider': 'iStreamHD', 'url': url})
+            except:
+                pass
+        except:
+            return
+
+    def resolve(self, url):
+        return url
+
+class simplymovies:
+    def __init__(self):
+        self.simplymovies_base = 'http://simplymovies.net'
+        self.simplymovies_search = 'http://simplymovies.net/tv_shows.php?searchTerm='
+
+    def get(self, show, season, episode, name, title, imdb, year, hostDict):
+        try:
+            global simplymovies_sources
+            simplymovies_sources = []
+
+            query = self.simplymovies_search + urllib.quote_plus(show.replace(' ', '-'))
+
+            result = getUrl(query).result
+            url = common.parseDOM(result, "div", attrs = { "class": "movieInfoHolder" })
+            try: match = [i for i in url if str('>' + re.sub('\n|\s(|[(])(UK|US|AU)(|[)])$|\s\s','',re.sub('\n|\s(:|-)\s|(:|-)\s|\s(:|-)|(:|-)|([[].+?[]])',' ',show)).lower() + '<') in re.sub('\n|\s(|[(])(UK|US|AU)(|[)])$|\s\s','',re.sub('\n|\s(:|-)\s|(:|-)\s|\s(:|-)|(:|-)|([[].+?[]])',' ',i)).lower()][0]
+            except: pass
+            try: match = [i for i in url if str('tt' + imdb) in i][0]
+            except: pass
+            url = common.parseDOM(match, "a", ret="href")[0]
+            url = '%s/%s' % (self.simplymovies_base, url)
+            url = common.replaceHTMLCodes(url)
+            url = url.encode('utf-8')
+
+            result = getUrl(url).result
+            url = re.compile('<h3>(Season %s<.+)' % season).findall(result)[0]
+            url = url.split("<h3>")[0]
+            url = url.replace(':','<')
+            url = re.compile('(.+>Episode %s<)' % episode).findall(url)[0]
+            url = re.compile('"(.+?)"').findall(url)[-1]
+            url = '%s/%s' % (self.simplymovies_base, url)
+            url = common.replaceHTMLCodes(url)
+            url = url.encode('utf-8')
+
+            result = getUrl(url).result
+            url = common.parseDOM(result, "iframe", ret="src", attrs = { "class": "videoPlayerIframe" })[0]
+            url = common.replaceHTMLCodes(url)
+            url = url.encode('utf-8')
+
+            result = getUrl(url).result
+            try:
+                url = re.compile('url720=(.+?)&').findall(result)[0]
+                simplymovies_sources.append({'source': 'VKHD', 'quality': 'HD', 'provider': 'Simplymovies', 'url': url})
+            except:
+                pass
+            try:
+                url = re.compile('url540=(.+?)&').findall(result)[0]
+                simplymovies_sources.append({'source': 'VK', 'quality': 'SD', 'provider': 'Simplymovies', 'url': url})
+            except:
+                pass
+            try:
+                url = re.compile('url480=(.+?)&').findall(result)[0]
+                simplymovies_sources.append({'source': 'VK', 'quality': 'SD', 'provider': 'Simplymovies', 'url': url})
             except:
                 pass
         except:

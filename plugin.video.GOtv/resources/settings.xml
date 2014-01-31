@@ -35,8 +35,9 @@
 	<category label="30060">
 		<setting id="watchseries" type="bool" label="Watchseries" default="true"/>
 		<setting id="tvonline" type="bool" label="TVonline" default="true"/>
-		<setting id="simplymovies" type="bool" label="Simplymovies" default="true"/>
+		<setting id="vkbox" type="bool" label="VKBox" default="true"/>
 		<setting id="istreamhd" type="bool" label="iStreamHD" default="true"/>
+		<setting id="simplymovies" type="bool" label="Simplymovies" default="true"/>
 		<setting id="watchonline" type="bool" label="Watchonline" default="true"/>
 		<setting id="moviestorm" type="bool" label="Moviestorm" default="true"/>
 	</category>
