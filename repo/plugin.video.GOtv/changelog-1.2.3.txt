@@ -1,4 +1,14 @@
 ------------------------
+GOtv v1.2.3 (2-Feb-14)
+------------------------
+
+- Reworked all sources.
+- Added MerDB source.
+- Tweaked subscriptions.
+- Code cosmetics.
+
+
+------------------------
 GOtv v1.2.2 (31-Jan-14)
 ------------------------
 

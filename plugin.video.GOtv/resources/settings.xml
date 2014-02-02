@@ -40,6 +40,7 @@
 		<setting id="simplymovies" type="bool" label="Simplymovies" default="true"/>
 		<setting id="watchonline" type="bool" label="Watchonline" default="true"/>
 		<setting id="moviestorm" type="bool" label="Moviestorm" default="true"/>
+		<setting id="merdb" type="bool" label="MerDB" default="true"/>
 	</category>
 
 	<category label="30080">
