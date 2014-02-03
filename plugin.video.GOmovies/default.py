@@ -46,10 +46,7 @@ addonPoster         = os.path.join(addonPath,'resources/art/Poster.png')
 addonDownloads      = os.path.join(addonPath,'resources/art/Downloads.png')
 addonGenres         = os.path.join(addonPath,'resources/art/Genres.png')
 addonYears          = os.path.join(addonPath,'resources/art/Years.png')
-addonAccount1       = os.path.join(addonPath,'resources/art/Watch-List.png')
-addonAccount2       = os.path.join(addonPath,'resources/art/Watch-Added.png')
-addonAccount3       = os.path.join(addonPath,'resources/art/Watch-Title.png')
-addonAccount4       = os.path.join(addonPath,'resources/art/Lists.png')
+addonLists          = os.path.join(addonPath,'resources/art/Lists.png')
 addonNext           = os.path.join(addonPath,'resources/art/Next.png')
 dataPath            = xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
 viewData            = os.path.join(dataPath,'views.cfg')
@@ -95,6 +92,7 @@ class main:
         except:     imdb = None
 
         if action == None:                          root().get()
+        elif action == 'root_mymovies':             root().mymovies()
         elif action == 'item_play':                 contextMenu().item_play()
         elif action == 'item_random_play':          contextMenu().item_random_play()
         elif action == 'item_queue':                contextMenu().item_queue()
@@ -110,6 +108,7 @@ class main:
         elif action == 'metadata_movies':           contextMenu().metadata('movie', imdb, '', '')
         elif action == 'metadata_movies2':          contextMenu().metadata('movie', imdb, '', '')
         elif action == 'playcount_movies':          contextMenu().playcount('movie', imdb, '', '')
+        elif action == 'library_batch':             contextMenu().library_batch(url)
         elif action == 'library':                   contextMenu().library(name, title, imdb, year, url)
         elif action == 'download':                  contextMenu().download(name, title, imdb, year, url)
         elif action == 'sources':                   contextMenu().sources(name, title, imdb, year, url)
@@ -125,8 +124,10 @@ class main:
         elif action == 'genres_movies':             genres().imdb()
         elif action == 'years_movies':              years().imdb()
         elif action == 'movies_added':              movies().imdb_added()
-        elif action == 'account_movies':            mymovies().account()
         elif action == 'mymovies':                  mymovies().imdb(url)
+        elif action == 'mymovies_list':             mymovies().imdb_watchlist()
+        elif action == 'mymovies_added':            mymovies().imdb_watchadded()
+        elif action == 'mymovies_title':            mymovies().imdb_watchtitle()
         elif action == 'play':                      resolver().run(name, title, imdb, year, url)
 
         if action is None:
@@ -468,10 +469,14 @@ class index:
                 action = i['action']
                 u = '%s?action=%s' % (sys.argv[0], action)
 
+                cm = []
+                if action.startswith('mymovies'):
+                    cm.append((language(30422).encode("utf-8"), 'RunPlugin(%s?action=library_batch&url=%s)' % (sys.argv[0], urllib.quote_plus(link().imdb_watchlist))))
+
                 item = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=image)
                 item.setInfo( type="Video", infoLabels={ "Label": name, "Title": name, "Plot": addonDesc } )
                 item.setProperty("Fanart_Image", addonFanart)
-                item.addContextMenuItems([], replaceItems=False)
+                item.addContextMenuItems(cm, replaceItems=False)
                 xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=item,totalItems=total,isFolder=True)
             except:
                 pass
@@ -485,15 +490,19 @@ class index:
                 name, url, image = i['name'], i['url'], i['image']
                 sysname, sysurl, sysimage = urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(image)
 
-                if action == 'account_movies':
+                if action == 'root_mymovies':
                     u = '%s?action=mymovies&url=%s' % (sys.argv[0], sysurl)
                 else:
                     u = '%s?action=movies&url=%s' % (sys.argv[0], sysurl)
 
+                cm = []
+                if action == 'root_mymovies':
+                    cm.append((language(30422).encode("utf-8"), 'RunPlugin(%s?action=library_batch&url=%s)' % (sys.argv[0], sysurl)))
+
                 item = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=image)
                 item.setInfo( type="Video", infoLabels={ "Label": name, "Title": name, "Plot": addonDesc } )
                 item.setProperty("Fanart_Image", addonFanart)
-                item.addContextMenuItems([], replaceItems=False)
+                item.addContextMenuItems(cm, replaceItems=False)
                 xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=item,totalItems=total,isFolder=True)
             except:
                 pass
@@ -582,7 +591,7 @@ class index:
                     cm.append((language(30428).encode("utf-8"), 'RunPlugin(%s?action=view_movies)' % (sys.argv[0])))
                     cm.append((language(30409).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
                     cm.append((language(30411).encode("utf-8"), 'RunPlugin(%s?action=addon_home)' % (sys.argv[0])))
-                elif action == 'mymovies':
+                elif action.startswith('mymovies'):
                     cm.append((language(30412).encode("utf-8"), 'Action(Info)'))
                     cm.append((language(30416).encode("utf-8"), 'RunPlugin(%s?action=trailer&name=%s&url=%s)' % (sys.argv[0], sysname, trailer)))
                     if getSetting("meta") == 'true': cm.append((language(30415).encode("utf-8"), 'RunPlugin(%s?action=metadata_movies2&imdb=%s)' % (sys.argv[0], metaimdb)))
@@ -775,6 +784,17 @@ class contextMenu:
         except:
             return
 
+    def library_batch(self, url, update=True, silent=False):
+        movieList = mymovies().get(url)
+        if movieList == None: return
+        for i in movieList:
+            try: self.library(i['name'], i['title'], i['imdb'], i['year'], i['url'], silent=True)
+            except: pass
+        if silent == False:
+            index().infoDialog(language(30311).encode("utf-8"))
+        if update == True:
+            xbmc.executebuiltin('UpdateLibrary(video)')
+
     def library(self, name, title, imdb, year, url, silent=False):
         try:
             library = xbmc.translatePath(getSetting("movie_library"))
@@ -787,7 +807,7 @@ class contextMenu:
             xbmcvfs.mkdir(library)
             xbmcvfs.mkdir(folder)
             file = xbmcvfs.File(stream, 'w')
-            file.write(content)
+            file.write(str(content))
             file.close()
             if silent == False:
                 index().infoDialog(language(30311).encode("utf-8"), name)
@@ -943,18 +963,27 @@ class root:
         rootList.append({'name': 30506, 'image': 'Years.png', 'action': 'years_movies'})
         rootList.append({'name': 30507, 'image': 'Amazon.png', 'action': 'movies_added'})
         if not (getSetting("imdb_mail") == '' or getSetting("imdb_password") == ''):
-            rootList.append({'name': 30508, 'image': 'IMDb.png', 'action': 'account_movies'})
+            rootList.append({'name': 30508, 'image': 'IMDb.png', 'action': 'root_mymovies'})
         rootList.append({'name': 30509, 'image': 'Favourites.png', 'action': 'movies_favourites'})
         rootList.append({'name': 30510, 'image': 'Search.png', 'action': 'movies_search'})
         index().rootList(rootList)
         index().downloadList()
 
+    def mymovies(self):
+        rootList = []
+        rootList.append({'name': 30521, 'image': 'Watch-List.png', 'action': 'mymovies_list'})
+        rootList.append({'name': 30522, 'image': 'Watch-Added.png', 'action': 'mymovies_added'})
+        rootList.append({'name': 30523, 'image': 'Watch-Title.png', 'action': 'mymovies_title'})
+        index().rootList(rootList)
+        mymovies().imdb_user()
+
 class link:
     def __init__(self):
         self.imdb_base = 'http://www.imdb.com'
         self.imdb_akas = 'http://akas.imdb.com'
-        self.imdb_added = 'http://akas.imdb.com/watchnow/'
+        self.imdb_mobile = 'http://m.imdb.com'
         self.imdb_login = 'https://secure.imdb.com/oauth/m_login?origpath=/&ref_=m_nv_usr_lgin'
+        self.imdb_added = 'http://akas.imdb.com/watchnow/'
         self.imdb_genre = 'http://akas.imdb.com/genre/'
         self.imdb_genres = 'http://akas.imdb.com/search/title?title_type=feature,tv_movie&sort=boxoffice_gross_us&count=25&start=1&genres=%s'
         self.imdb_years = 'http://akas.imdb.com/search/title?title_type=feature,tv_movie&sort=boxoffice_gross_us&count=25&start=1&&year=%s,%s'
@@ -963,14 +992,9 @@ class link:
         self.imdb_views = 'http://akas.imdb.com/search/title?title_type=feature,tv_movie&sort=num_votes,desc&count=25&start=1'
         self.imdb_oscars = 'http://akas.imdb.com/search/title?title_type=feature,tv_movie&groups=oscar_best_picture_winners&sort=year,desc&count=25&start=1'
         self.imdb_search = 'http://akas.imdb.com/search/title?title_type=feature,tv_movie&sort=moviemeter,asc&count=25&start=1&title=%s'
-
-        self.myimdb_lists = 'http://akas.imdb.com/user/%s/lists?tab=all&sort=modified:desc&filter=titles'
-        self.myimdb_listorian = 'http://akas.imdb.com/list/watchlist?title_type=feature,tv_movie&sort=listorian:asc&view=compact&count=100&start=1'
-        self.myimdb_added = 'http://akas.imdb.com/list/watchlist?title_type=feature,tv_movie&sort=created:desc&view=compact&count=100&start=1'
-        self.myimdb_title = 'http://akas.imdb.com/list/watchlist?title_type=feature,tv_movie&sort=title:asc&view=compact&count=100&start=1'
-        self.myimdb_list = 'http://akas.imdb.com%s?title_type=feature,tv_movie&sort=listorian:asc&view=compact&count=100&start=1'
-
-        self.tmdb_image = 'http://image.tmdb.org/t/p/w500/'
+        self.imdb_user = 'http://akas.imdb.com/user/%s/lists?tab=all&sort=modified:desc&filter=titles'
+        self.imdb_watchlist ='http://m.imdb.com/list/userlist_json?list_class=watchlist&limit=10000'
+        self.imdb_list ='http://m.imdb.com/list/userlist_json?list_class=%s&limit=10000'
 
 class genres:
     def __init__(self):
@@ -1163,7 +1187,7 @@ class movies:
                 title = title.encode('utf-8')
 
                 year = common.parseDOM(movie, "span", attrs = { "class": "year_type" })[0]
-                year = re.sub("\n|[(]|[)]", "", year)
+                year = re.sub("\n|[(]|[)]|\s", "", year)
                 year = year.encode('utf-8')
 
                 if not year.isdigit(): raise Exception()
@@ -1213,28 +1237,96 @@ class movies:
 class mymovies:
     def __init__(self):
         self.list = []
+        self.mail = getSetting("imdb_mail")
+        self.password = getSetting("imdb_password")
 
-    def account(self):
-        mail, password = getSetting("imdb_mail"), getSetting("imdb_password")
-        #self.list = self.imdb_account(mail, password)
-        self.list = cache(self.imdb_account, mail, password)
-        index().pageList(self.list)
+    def get(self, url):
+        self.list = self.imdb_list(self.mail, self.password, url)
+        self.list = sorted(self.list, key=itemgetter('title'))
+        return self.list
 
     def imdb(self, url):
-        mail, password = getSetting("imdb_mail"), getSetting("imdb_password")
-        #self.list = self.imdb_list(mail, password, url)
-        self.list = cache(self.imdb_list, mail, password, url)
+        #self.list = self.imdb_list(self.mail, self.password, url)
+        self.list = cache(self.imdb_list, self.mail, self.password, url)
+        self.list = sorted(self.list, key=itemgetter('title'))
         index().movieList(self.list)
 
-    def imdb_account(self, mail, password):
+    def imdb_watchlist(self):
+        #self.list = self.imdb_list(self.mail, self.password, link().imdb_watchlist)
+        self.list = cache(self.imdb_list, self.mail, self.password, link().imdb_watchlist)
+        index().movieList(self.list)
+
+    def imdb_watchadded(self):
+        #self.list = self.imdb_list(self.mail, self.password, link().imdb_watchlist)
+        self.list = cache(self.imdb_list, self.mail, self.password, link().imdb_watchlist)
+        self.list = self.list[::-1]
+        index().movieList(self.list)
+
+    def imdb_watchtitle(self):
+        #self.list = self.imdb_list(self.mail, self.password, link().imdb_watchlist)
+        self.list = cache(self.imdb_list, self.mail, self.password, link().imdb_watchlist)
+        self.list = sorted(self.list, key=itemgetter('title'))
+        index().movieList(self.list)
+
+    def imdb_user(self):
+        #self.list = self.imdb_list2(self.mail, self.password)
+        self.list = cache(self.imdb_list2, self.mail, self.password)
+        index().pageList(self.list)
+
+    def imdb_list(self, mail, password, url):
         try:
             post = 'login=%s&password=%s' % (urllib.quote_plus(mail), urllib.quote_plus(password))
+            result = getUrl(link().imdb_login, post=post, close=False, cookie=True).result
+            result = getUrl(url).result
+            result = json.loads(result)
+            movies = result['list']
+        except:
+            return
 
+        for movie in movies:
+            try:
+                title = movie['title']
+                title = common.replaceHTMLCodes(title)
+                title = title.encode('utf-8')
+
+                year = movie['extra']
+                year = re.sub("\n|[(]|[)]|\s", "", year)
+                year = year.encode('utf-8')
+
+                if not year.isdigit(): raise Exception()
+
+                name = '%s (%s)' % (title, year)
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                url = movie['url']
+                url = '%s%s' % (link().imdb_base, url)
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+
+                image = movie['img']['url']
+                if not ('_SX' in image or '_SY' in image): raise Exception()
+                image = image.rsplit('_SX', 1)[0].rsplit('_SY', 1)[0].rsplit('_CR', 1)[0] + '_SX500.' + image.rsplit('.', 1)[-1]
+                image = common.replaceHTMLCodes(image)
+                image = image.encode('utf-8')
+
+                imdb = re.sub("[^0-9]", "", url.rsplit('tt', 1)[-1])
+                imdb = imdb.encode('utf-8')
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'title': title, 'year': year, 'imdb': imdb, 'genre': '', 'plot': '', 'next': ''})
+            except:
+                pass
+
+        return self.list
+
+    def imdb_list2(self, mail, password):
+        try:
+            post = 'login=%s&password=%s' % (urllib.quote_plus(mail), urllib.quote_plus(password))
             result = getUrl(link().imdb_login, post=post, close=False, cookie=True).result
             result = getUrl(link().imdb_akas, close=False).result
             result = result.decode('iso-8859-1').encode('utf-8')
             url = re.compile('/user/(ur.+?)/').findall(result)[0]
-            url = link().myimdb_lists % url
+            url = link().imdb_user % url
 
             result = getUrl(url).result
             result = result.decode('iso-8859-1').encode('utf-8')
@@ -1243,10 +1335,6 @@ class mymovies:
         except:
             return
 
-        self.list.append({'name': 'Watch-List', 'url': link().myimdb_listorian, 'image': addonAccount1.encode('utf-8')})
-        self.list.append({'name': 'Watch-Added', 'url': link().myimdb_added, 'image': addonAccount2.encode('utf-8')})
-        self.list.append({'name': 'Watch-Title', 'url': link().myimdb_title, 'image': addonAccount3.encode('utf-8')})
-
         for list in lists:
             try:
                 name = common.parseDOM(list, "a", ret="title")[0]
@@ -1254,60 +1342,14 @@ class mymovies:
                 name = name.encode('utf-8')
 
                 url = common.parseDOM(list, "a", ret="href")[0]
-                url = link().myimdb_list % url
+                url = url.split('/list/', 1)[-1].replace('/','')
+                url = link().imdb_list % url
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
 
-                image = addonAccount4.encode('utf-8')
+                image = addonLists.encode('utf-8')
 
                 self.list.append({'name': name, 'url': url, 'image': image})
-            except:
-                pass
-
-        return self.list
-
-    def imdb_list(self, mail, password, url):
-        try:
-            post = 'login=%s&password=%s' % (urllib.quote_plus(mail), urllib.quote_plus(password))
-
-            result = getUrl(link().imdb_login, post=post, close=False, cookie=True).result
-            result = getUrl(url.replace(link().imdb_base, link().imdb_akas)).result
-            result = result.decode('iso-8859-1').encode('utf-8')
-            movies = common.parseDOM(result, "tr", attrs = { "class": "list_item.+?" })
-        except:
-            return
-
-        for movie in movies:
-            try:
-                title = common.parseDOM(movie, "td", attrs = { "class": "title" })[0]
-                title = common.parseDOM(title, "a")[0]
-                title = common.replaceHTMLCodes(title)
-                title = title.encode('utf-8')
-
-                year = common.parseDOM(movie, "td", attrs = { "class": "year" })[0]
-                year = re.sub("[^0-9]", "", year)[:4]
-                year = year.encode('utf-8')
-
-                name = '%s (%s)' % (title, year)
-                name = common.replaceHTMLCodes(name)
-                name = name.encode('utf-8')
-
-                url = common.parseDOM(movie, "td", attrs = { "class": "title" })[0]
-                url = common.parseDOM(url, "a", ret="href")[0]
-                url = '%s%s' % (link().imdb_base, url)
-                url = common.replaceHTMLCodes(url)
-                url = url.encode('utf-8')
-
-                image = metaget.get_meta('movie', title ,year=year)['cover_url']
-                if image == '': raise Exception()
-                image = link().tmdb_image + image.rsplit('\\', 1)[-1].rsplit('/', 1)[-1]
-                image = common.replaceHTMLCodes(image)
-                image = image.encode('utf-8')
-
-                imdb = re.sub("[^0-9]", "", url.rsplit('tt', 1)[-1])
-                imdb = imdb.encode('utf-8')
-
-                self.list.append({'name': name, 'url': url, 'image': image, 'title': title, 'year': year, 'imdb': imdb, 'genre': '', 'plot': '', 'next': ''})
             except:
                 pass
 

@@ -1,4 +1,14 @@
 ------------------------
+GOmovies v1.2.0 (3-Feb-14)
+------------------------
+
+- Fixed issues with IMDb listings.
+- Added option for importing IMDb lists to library.
+- Added French, Polish and Romanian addon description.
+- Code cosmetics.
+
+
+------------------------
 GOmovies v1.1.9 (27-Jan-14)
 ------------------------
 
