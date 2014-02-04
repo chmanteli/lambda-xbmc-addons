@@ -140,7 +140,7 @@ class main:
         return
 
 class getUrl(object):
-    def __init__(self, url, fetch=True, close=True, cookie=False, mobile=False, proxy=None, post=None, referer=None):
+    def __init__(self, url, fetch=True, close=True, cookie=False, mobile=False, proxy=None, post=None, referer=None, setcookie=None):
         if not proxy is None:
             proxy_handler = urllib2.ProxyHandler({'http':'%s' % (proxy)})
             opener = urllib2.build_opener(proxy_handler, urllib2.HTTPHandler)
@@ -160,6 +160,8 @@ class getUrl(object):
             request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0')
         if not referer is None:
             request.add_header('Referer', referer)
+        if not setcookie is None:
+            request.add_header('cookie', setcookie)
         response = urllib2.urlopen(request, timeout=10)
         if fetch == True:
             result = response.read()
@@ -1241,43 +1243,39 @@ class mymovies:
         self.password = getSetting("imdb_password")
 
     def get(self, url):
-        self.list = self.imdb_list(self.mail, self.password, url)
+        self.list = self.imdb_list(url)
         self.list = sorted(self.list, key=itemgetter('title'))
         return self.list
 
     def imdb(self, url):
-        #self.list = self.imdb_list(self.mail, self.password, url)
-        self.list = cache(self.imdb_list, self.mail, self.password, url)
+        self.list = self.imdb_list(url)
         self.list = sorted(self.list, key=itemgetter('title'))
         index().movieList(self.list)
 
     def imdb_watchlist(self):
-        #self.list = self.imdb_list(self.mail, self.password, link().imdb_watchlist)
-        self.list = cache(self.imdb_list, self.mail, self.password, link().imdb_watchlist)
+        self.list = self.imdb_list(link().imdb_watchlist)
         index().movieList(self.list)
 
     def imdb_watchadded(self):
-        #self.list = self.imdb_list(self.mail, self.password, link().imdb_watchlist)
-        self.list = cache(self.imdb_list, self.mail, self.password, link().imdb_watchlist)
+        self.list = self.imdb_list(link().imdb_watchlist)
         self.list = self.list[::-1]
         index().movieList(self.list)
 
     def imdb_watchtitle(self):
-        #self.list = self.imdb_list(self.mail, self.password, link().imdb_watchlist)
-        self.list = cache(self.imdb_list, self.mail, self.password, link().imdb_watchlist)
+        self.list = self.imdb_list(link().imdb_watchlist)
         self.list = sorted(self.list, key=itemgetter('title'))
         index().movieList(self.list)
 
     def imdb_user(self):
-        #self.list = self.imdb_list2(self.mail, self.password)
-        self.list = cache(self.imdb_list2, self.mail, self.password)
+        self.list = self.imdb_list2()
         index().pageList(self.list)
 
-    def imdb_list(self, mail, password, url):
+    def imdb_list(self, url):
         try:
-            post = 'login=%s&password=%s' % (urllib.quote_plus(mail), urllib.quote_plus(password))
-            result = getUrl(link().imdb_login, post=post, close=False, cookie=True).result
-            result = getUrl(url).result
+            #cookie = self.imdb_cookie(self.mail, self.password)
+            cookie = cache2(self.imdb_cookie, self.mail, self.password)
+
+            result = getUrl(url, setcookie=cookie).result
             result = json.loads(result)
             movies = result['list']
         except:
@@ -1319,16 +1317,14 @@ class mymovies:
 
         return self.list
 
-    def imdb_list2(self, mail, password):
+    def imdb_list2(self):
         try:
-            post = 'login=%s&password=%s' % (urllib.quote_plus(mail), urllib.quote_plus(password))
-            result = getUrl(link().imdb_login, post=post, close=False, cookie=True).result
-            result = getUrl(link().imdb_akas, close=False).result
-            result = result.decode('iso-8859-1').encode('utf-8')
-            url = re.compile('/user/(ur.+?)/').findall(result)[0]
-            url = link().imdb_user % url
+            #cookie = self.imdb_cookie(self.mail, self.password)
+            cookie = cache2(self.imdb_cookie, self.mail, self.password)
+            #id = self.imdb_id(cookie)
+            id = cache2(self.imdb_id, cookie)
 
-            result = getUrl(url).result
+            result = getUrl(link().imdb_user % id, setcookie=cookie).result
             result = result.decode('iso-8859-1').encode('utf-8')
             lists = common.parseDOM(result, "table", attrs = { "class": "lists" })[0]
             lists = common.parseDOM(lists, "tr", attrs = { "id": ".+?" })
@@ -1354,6 +1350,32 @@ class mymovies:
                 pass
 
         return self.list
+
+    def imdb_cookie(self, mail, password):
+        try:
+            import cookielib
+            post = 'login=%s&password=%s' % (urllib.quote_plus(mail), urllib.quote_plus(password))
+            cookie_handler = urllib2.HTTPCookieProcessor(cookielib.LWPCookieJar())
+            opener = urllib2.build_opener(cookie_handler, urllib2.HTTPBasicAuthHandler(), urllib2.HTTPHandler())
+            opener = urllib2.install_opener(opener)
+            request = urllib2.Request(link().imdb_login, post)
+            request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0')
+            response = urllib2.urlopen(request, timeout=10)
+            cookie = response.headers.get('Set-Cookie')
+            cookie = str(cookie)
+            response.close()
+            return cookie
+        except:
+            return
+
+    def imdb_id(self, cookie):
+        try:
+            result = getUrl(link().imdb_akas, setcookie=cookie).result
+            result = result.decode('iso-8859-1').encode('utf-8')
+            id = re.compile('/user/(ur.+?)/').findall(result)[0]
+            return id
+        except:
+            return
 
 class trailer:
     def __init__(self):
