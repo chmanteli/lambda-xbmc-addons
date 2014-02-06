@@ -63,7 +63,6 @@ action              = None
 class main:
     def __init__(self):
         global action
-        index().warning_120()
         index().container_data()
         index().api_key()
         params = {}
@@ -170,12 +169,12 @@ class main:
         return
 
 class getUrl(object):
-    def __init__(self, url, fetch=True, close=True, cookie=False, mobile=False, proxy=None, post=None, referer=None):
+    def __init__(self, url, close=True, proxy=None, post=None, mobile=False, referer=None, cookie=None, output='', timeout='10'):
         if not proxy is None:
             proxy_handler = urllib2.ProxyHandler({'http':'%s' % (proxy)})
             opener = urllib2.build_opener(proxy_handler, urllib2.HTTPHandler)
             opener = urllib2.install_opener(opener)
-        if cookie == True:
+        if output == 'cookie' or not close == True:
             import cookielib
             cookie_handler = urllib2.HTTPCookieProcessor(cookielib.LWPCookieJar())
             opener = urllib2.build_opener(cookie_handler, urllib2.HTTPBasicAuthHandler(), urllib2.HTTPHandler())
@@ -190,11 +189,15 @@ class getUrl(object):
             request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0')
         if not referer is None:
             request.add_header('Referer', referer)
-        response = urllib2.urlopen(request, timeout=10)
-        if fetch == True:
-            result = response.read()
-        else:
+        if not cookie is None:
+            request.add_header('cookie', cookie)
+        response = urllib2.urlopen(request, timeout=int(timeout))
+        if output == 'cookie':
+            result = str(response.headers.get('Set-Cookie'))
+        elif output == 'geturl':
             result = response.geturl()
+        else:
+            result = response.read()
         if close == True:
             response.close()
         self.result = result
@@ -479,11 +482,6 @@ class index:
             file = xbmcvfs.File(offData, 'w')
             file.write('')
             file.close()
-
-    def warning_120(self):
-        if getSetting("warning_120") == 'true': return
-        index().okDialog("This version includes changes in library integration!", "Delete TV folder, update subscriptions and clean library.")
-        setSetting('warning_120', 'true')
 
     def api_key(self):
         global tvdb_key
@@ -861,21 +859,15 @@ class contextMenu:
     def view(self, content):
         try:
             skin = xbmc.getSkinDir()
-            if xbmcvfs.exists(xbmc.translatePath('special://xbmc/addons/%s/addon.xml' % (skin))):
-                xml = xbmc.translatePath('special://xbmc/addons/%s/addon.xml' % (skin))
-            elif xbmcvfs.exists(xbmc.translatePath('special://home/addons/%s/addon.xml' % (skin))):
-                xml = xbmc.translatePath('special://home/addons/%s/addon.xml' % (skin))
-            else:
-                return
+            skinPath = xbmc.translatePath('special://skin/')
+            xml = os.path.join(skinPath,'addon.xml')
             file = xbmcvfs.File(xml)
             read = file.read().replace('\n','')
             file.close()
-            src = os.path.dirname(xml) + '/'
-            try:
-                src += re.compile('defaultresolution="(.+?)"').findall(read)[0] + '/'
-            except:
-                src += re.compile('<res.+?folder="(.+?)"').findall(read)[0] + '/'
-            src += 'MyVideoNav.xml'
+            try: src = re.compile('defaultresolution="(.+?)"').findall(read)[0]
+            except: src = re.compile('<res.+?folder="(.+?)"').findall(read)[0]
+            src = os.path.join(skinPath, src)
+            src = os.path.join(src, 'MyVideoNav.xml')
             file = xbmcvfs.File(src)
             read = file.read().replace('\n','')
             file.close()
@@ -2100,6 +2092,7 @@ class istreamhd:
             result = getUrl(url).result
             url = common.parseDOM(result, "iframe", ret="src")[0]
             url = common.replaceHTMLCodes(url)
+            url = url.replace('http://', 'https://')
             url = url.encode('utf-8')
 
             result = getUrl(url).result
@@ -2160,6 +2153,7 @@ class simplymovies:
             result = getUrl(url).result
             url = common.parseDOM(result, "iframe", ret="src", attrs = { "class": "videoPlayerIframe" })[0]
             url = common.replaceHTMLCodes(url)
+            url = url.replace('http://', 'https://')
             url = url.encode('utf-8')
 
             result = getUrl(url).result

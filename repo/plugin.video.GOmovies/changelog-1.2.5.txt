@@ -1,4 +1,14 @@
 ------------------------
+GOmovies v1.2.5 (6-Feb-14)
+------------------------
+
+- Reworked all sources.
+- Added VKBox and MerDB source.
+- Added Dutch translation.
+- Code cosmetics.
+
+
+------------------------
 GOmovies v1.2.1 (4-Feb-14)
 ------------------------
 

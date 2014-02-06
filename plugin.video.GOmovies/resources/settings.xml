@@ -37,11 +37,13 @@
 
 	<category label="30060">
 		<setting id="movie25" type="bool" label="Movie25" default="true"/>
-		<setting id="simplymovies" type="bool" label="Simplymovies" default="true"/>
+		<setting id="vkbox" type="bool" label="VKBox" default="true"/>
 		<setting id="istreamhd" type="bool" label="iStreamHD" default="true"/>
+		<setting id="simplymovies" type="bool" label="Simplymovies" default="true"/>
 		<setting id="muchmovies" type="bool" label="Muchmovies" default="true"/>
 		<setting id="yify" type="bool" label="YIFY" default="true"/>
 		<setting id="moviestorm" type="bool" label="Moviestorm" default="true"/>
+		<setting id="merdb" type="bool" label="MerDB" default="true"/>
 	</category>
 
 	<category label="30080">
