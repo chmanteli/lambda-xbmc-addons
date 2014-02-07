@@ -12,6 +12,7 @@
 	<string id="30008">Διαμεσολαβητής</string>
 	<string id="30009">- Διακομιστής</string>
 	<string id="30010">- Θύρα</string>
+	<string id="30011">Συνέχιση αναπαραγωγής</string>
 	<string id="30040">Συλλογή</string>
 	<string id="30041">Μην ξεχάσετε να προσθέσετε το φάκελο στις πηγές πολυμέσων.</string>
 	<string id="30042">Φάκελος ταινιών</string>
@@ -40,6 +41,7 @@
 	<string id="30316">Υπάρχει ήδη στις Συνδρομές</string>
 	<string id="30317">Δεν υπάρχουν διαθέσιμοι υπότιτλοι</string>
 	<string id="30318">Δεν υπάρχει διαθέσιμη ροή</string>
+	<string id="30319">Φόρτωση σε</string>
 	<!-- OK -->
 	<string id="30321">Το πρόσθετο YouTube δεν έχει εγκατασταθεί.</string>
 	<string id="30322">Η ροή αυτή το απαιτεί.</string>
@@ -60,6 +62,9 @@
 	<string id="30350">Θέλετε πραγματικά να την αφαιρέσετε;</string>
 	<string id="30351">Η σειρά αυτή θα παραμείνει στη βιβλιοθήκη.</string>
 	<string id="30352">Θέλετε να αφαιρέθει από τη βιβλιοθήκη;</string>
+	<string id="30353">Συνέχεια από</string>
+	<string id="30354">Συνέχεια</string>
+	<string id="30355">Εκκίνηση από την αρχή</string>
 	<!-- Misc -->
 	<string id="30361">Επόμενη σελίδα</string>
 	<string id="30362">Αναζήτηση</string>
@@ -103,8 +108,8 @@
 	<string id="30450">Παρακολουθήστε μια ευρεία συλλογή ταινιών από το yify.tv</string>
 	<!-- Labels -->
 	<string id="30501">Τίτλος</string>
-	<string id="30502">Κυκλοφορία</string>
-	<string id="30503">IMDb</string>
+	<string id="30502">IMDb</string>
+	<string id="30503">Κυκλοφορία</string>
 	<string id="30504">Προσθήκες</string>
 	<string id="30505">Αξιολόγηση</string>
 	<string id="30506">Προβολές</string>

@@ -12,6 +12,7 @@
 	<string id="30008">Proxy</string>
 	<string id="30009">- Server</string>
 	<string id="30010">- Port</string>
+	<string id="30011">Resume Playback</string>
 	<string id="30040">Library</string>
 	<string id="30041">Don't forget to add this folder to media sources.</string>
 	<string id="30042">Movies Folder</string>
@@ -40,6 +41,7 @@
 	<string id="30316">Item already in Subscriptions</string>
 	<string id="30317">No subtitles available</string>
 	<string id="30318">No stream available</string>
+	<string id="30319">Loaded in</string>
 	<!-- OK -->
 	<string id="30321">YouTube addon is not installed.</string>
 	<string id="30322">This stream requires it.</string>
@@ -60,6 +62,9 @@
 	<string id="30350">Do you really want to remove it?</string>
 	<string id="30351">This TV Show will remain to library.</string>
 	<string id="30352">Do you want to remove it from library?</string>
+	<string id="30353">Resume from</string>
+	<string id="30354">Resume</string>
+	<string id="30355">Start from beginning</string>
 	<!-- Misc -->
 	<string id="30361">Next Page</string>
 	<string id="30362">Search</string>
@@ -103,8 +108,8 @@
 	<string id="30450">Watch a wide selection of movies from yify.tv</string>
 	<!-- Labels -->
 	<string id="30501">Title</string>
-	<string id="30502">Release</string>
-	<string id="30503">IMDb</string>
+	<string id="30502">IMDb</string>
+	<string id="30503">Release</string>
 	<string id="30504">Added</string>
 	<string id="30505">Rating</string>
 	<string id="30506">Views</string>

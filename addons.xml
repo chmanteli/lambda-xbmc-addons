@@ -321,7 +321,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.yifymovies.hd" name="Yify Movies HD" version="1.1.4" provider-name="lambda">
+<addon id="plugin.video.yifymovies.hd" name="Yify Movies HD" version="1.2.0" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.module.metahandler" version="1.0.0"/>
@@ -334,11 +334,18 @@
 	</extension>
 	<extension point="xbmc.addon.metadata">
 		<summary lang="en">Watch a wide selection of movies from yify.tv</summary>
-		<summary lang="el">Παρακολουθήστε μια ευρεία συλλογή ταινιών από το yify.tv</summary>
 		<description lang="en">Watch a wide selection of movies from yify.tv</description>
+		<summary lang="el">Παρακολουθήστε μια ευρεία συλλογή ταινιών από το yify.tv</summary>
 		<description lang="el">Παρακολουθήστε μια ευρεία συλλογή ταινιών από το yify.tv</description>
+		<summary lang="fr">Regardez des films en version originale (Anglais)</summary>
+		<description lang="fr">Regardez des films en version originale (Anglais)</description>
+		<summary lang="nl">Bekijk Speelfilms vanaf yify.tv</summary>
+		<description lang="nl">Bekijk Speelfilms vanaf yify.tv</description>
+		<summary lang="pl">Oglądaj filmy z yify.tv</summary>
+		<description lang="pl">Oglądaj filmy z yify.tv</description>
+		<summary lang="ro">Urmărește filme de yify.tv</summary>
+		<description lang="ro">Urmărește filme de yify.tv</description>
 		<disclaimer lang="en">The author does not host or distribute any of the content displayed by this addon. The author does not have any affiliation with the content provider.</disclaimer>
-		<disclaimer lang="el">Ο συγγραφέας δεν φιλοξενεί ή διανέμει οποιοδήποτε περιεχόμενο που εμφανίζεται από τo πρόσθετο αυτό. Ο συγγραφέας δεν έχει καμία σχέση με τον πάροχο του περιεχομένου.</disclaimer>
 		<forum>http://www.xbmchub.com/forums/lambdas-xbmc-repository/</forum>
 		<source>https://github.com/lambda81/lambda-xbmc-addons</source>
 		<website>http://www.xbmchub.com/</website>

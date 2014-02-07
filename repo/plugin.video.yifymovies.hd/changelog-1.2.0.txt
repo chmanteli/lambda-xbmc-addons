@@ -1,4 +1,15 @@
 ------------------------
+Yify Movies HD v1.2.0 (7-Feb-14)
+------------------------
+
+- Fixed issues with movie listings.
+- Added option for resuming playback.
+- Tweaked playback from library.
+- Added Dutch, French, Polish and Romanian translation.
+- Code cosmetics.
+
+
+------------------------
 Yify Movies HD v1.1.4 (22-Jan-14)
 ------------------------
 
