@@ -6,7 +6,7 @@
 			<type>hls</type>
 			<url>http://megahdlive1-f.akamaihd.net/i/live_1@105260/master.m3u8</url>
 			<type2></type2>
-			<url2>rtmp://46.21.146.45:80/megaweb playpath=megaweb.sdp pageUrl=http://www.kanalia.eu/ live=1 timeout=10</url2>
+			<url2>rtmp://37.48.66.244:80/megaweb playpath=megaweb.sdp pageUrl=http://www.kanalia.eu/ live=1 timeout=10</url2>
 			<base>http://kanalia.eu/mega_channel_original.php</base>
 			<epg>30501</epg>
 		</channel>
@@ -22,24 +22,22 @@
 		<channel active="True">
 			<name>STAR</name>
 			<type></type>
-			<url>rtmp://46.21.146.45:80/alterweb playpath=alterweb.sdp pageUrl=http://www.kanalia.eu/ live=1 timeout=10</url>
+			<url>rtmp://37.48.66.244:80/alterweb playpath=alterweb.sdp pageUrl=http://www.kanalia.eu/ live=1 timeout=10</url>
 			<base>http://kanalia.eu/star_original.php</base>
 			<epg>30503</epg>
 		</channel>
 		<channel active="True">
 			<name>ALPHA</name>
-			<type>http</type>
-			<url>http://85.196.8.204:1234/udp/225.170.98.1:1234</url>
-			<type2>hls</type2>
-			<url2>http://alfakanali-lh.akamaihd.net/i/live_1@90368/master.m3u8</url2>
+			<type>hls</type>
+			<url>http://alfakanali-lh.akamaihd.net/i/live_1@90368/master.m3u8</url>
 			<base>http://www.alphatv.gr/Live.aspx</base>
 			<epg>30504</epg>
 		</channel>
 		<channel active="True">
 			<name>SKAI</name>
-			<type>hls</type>
-			<url>http://skaihdn2-f.akamaihd.net/i/geo_2@86985/master.m3u8</url>
-			<base>http://www.skai.gr/player/tvlive/</base>
+			<type>skai</type>
+			<url>http://www.skai.gr/player/tvlive/</url>
+			<base>http://www.skai.gr</base>
 			<epg>30505</epg>
 		</channel>
 		<channel active="True">
@@ -91,7 +89,7 @@
 		<channel active="True">
 			<name>EURONEWS</name>
 			<type></type>
-			<url>rtmp://fr-par-3.stream-relay.hexaglobe.net:1935/rtpeuronewslive/gr_video750_rtp.sdp live=1 timeout=10</url>
+			<url>rtmp://fr-par-3.stream-relay.hexaglobe.net:1935/rtpeuronewslive playpath=gr_video750_rtp.sdp swfUrl=http://gr.euronews.com/media/player_live_1_14.swf live=1 timeout=10</url>
 			<base>http://gr.euronews.com/news/streaming-live/</base>
 			<epg>30512</epg>
 		</channel>
@@ -161,8 +159,8 @@
 		</channel>
 		<channel active="True">
 			<name>MAD TV</name>
-			<type>youtubelive</type>
-			<url>http://www.youtube.com/user/MADTVGREECE/</url>
+			<type>madtv</type>
+			<url>http://www.mad.tv/players/madtv/</url>
 			<base>http://www.mad.tv/</base>
 			<epg>30544</epg>
 		</channel>
@@ -176,7 +174,7 @@
 		<channel active="True">
 			<name>GREEK CINEMA</name>
 			<type></type>
-			<url>rtmp://46.21.146.45:80/cinema playpath=cinema.sdp pageUrl=http://www.kanalia.eu/ live=1 timeout=10</url>
+			<url>rtmp://37.48.66.244:80/cinema playpath=cinema.sdp pageUrl=http://www.kanalia.eu/ live=1 timeout=10</url>
 			<base>http://kanalia.eu/player/player.php?channel=105</base>
 			<epg>30546</epg>
 		</channel>
@@ -211,17 +209,17 @@
 			<base>http://www.extratv.gr/</base>
 			<epg>30562</epg>
 		</channel>
-		<channel active="True">
-			<name>ACTION 24</name>
-			<type>viiideo</type>
-			<url>http://action24.viiideo.gr/</url>
-			<base>http://action24.viiideo.gr/</base>
-			<epg>30563</epg>
-		</channel>
 		<channel active="False">
-			<name>ART CHANNEL</name>
+			<name>ACTION 24</name>
 			<type></type>
 			<url></url>
+			<base>http://www.action24.gr/</base>
+			<epg>30563</epg>
+		</channel>
+		<channel active="True">
+			<name>ART CHANNEL</name>
+			<type>ustream</type>
+			<url>http://www.ustream.tv/embed/16667543</url>
 			<base>http://www.arttv.info/</base>
 			<epg>30564</epg>
 		</channel>
@@ -235,7 +233,7 @@
 		<channel active="True">
 			<name>ZOUGLA TV</name>
 			<type>hls</type>
-			<url>http://zouglahd-f.akamaihd.net/i/zougla_1@56341/index_700_av-b.m3u8</url>
+			<url>http://zouglahd-f.akamaihd.net/i/zougla_1@56341/index_700_av-p.m3u8?rebase=on</url>
 			<url>http://zouglahd-f.akamaihd.net/i/zougla_1@56341/master.m3u8</url>
 			<base>http://www.zougla.gr/zouglatv</base>
 			<epg>30566</epg>
@@ -412,8 +410,8 @@
 		</channel>
 		<channel active="True">
 			<name>ASTRA TV</name>
-			<type>livestream</type>
-			<url>http://www.livestream.com/astratelevision</url>
+			<type>hls</type>
+			<url>http://www.astratv.gr:8090/hls/livestream/index.m3u8</url>
 			<base>http://www.astratv.gr/</base>
 			<epg>30622</epg>
 		</channel>
@@ -449,10 +447,10 @@
 			<epg>30641</epg>
 		</channel>
 		<channel active="True">
-			<name>HRT</name>
+			<name>VIMA TV</name>
 			<type>ustream</type>
-			<url>http://www.ustream.tv/channel/hrt-live0</url>
-			<base>http://www.hrt.gr/</base>
+			<url>http://www.ustream.tv/channel/pluswebtv</url>
+			<base>http://vimanews.gr/</base>
 			<epg>30642</epg>
 		</channel>
 		<channel active="True">
@@ -510,7 +508,7 @@
 		<channel active="True">
 			<name>ACHAIA CHANNEL</name>
 			<type></type>
-			<url>mmst://www999.connectit.gr/stream-web</url>
+			<url>rtmp://78.129.184.15:20141/streaming/stream pageUrl=http://achaianews.listen2myradio.com/ live=1 timeout=10</url>
 			<base>http://www.achaianews.gr/</base>
 			<epg>30662</epg>
 		</channel>
@@ -780,7 +778,7 @@
 		<channel active="True">
 			<name>FLASH TV</name>
 			<type>justin</type>
-			<url>http://www.justin.tv/flash_television</url>
+			<url>http://www.justin.tv/flashtvkozani</url>
 			<base>http://www.flash-tv.gr/</base>
 			<epg>30782</epg>
 		</channel>

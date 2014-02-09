@@ -56,12 +56,12 @@ class main:
                 time.sleep(1)
 
 class getUrl(object):
-    def __init__(self, url, fetch=True, close=True, cookie=False, mobile=False, proxy=None, post=None, referer=None):
+    def __init__(self, url, close=True, proxy=None, post=None, mobile=False, referer=None, cookie=None, output='', timeout='10'):
         if not proxy is None:
             proxy_handler = urllib2.ProxyHandler({'http':'%s' % (proxy)})
             opener = urllib2.build_opener(proxy_handler, urllib2.HTTPHandler)
             opener = urllib2.install_opener(opener)
-        if cookie == True:
+        if output == 'cookie' or not close == True:
             import cookielib
             cookie_handler = urllib2.HTTPCookieProcessor(cookielib.LWPCookieJar())
             opener = urllib2.build_opener(cookie_handler, urllib2.HTTPBasicAuthHandler(), urllib2.HTTPHandler())
@@ -76,11 +76,15 @@ class getUrl(object):
             request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0')
         if not referer is None:
             request.add_header('Referer', referer)
-        response = urllib2.urlopen(request, timeout=10)
-        if fetch == True:
-            result = response.read()
-        else:
+        if not cookie is None:
+            request.add_header('cookie', cookie)
+        response = urllib2.urlopen(request, timeout=int(timeout))
+        if output == 'cookie':
+            result = str(response.headers.get('Set-Cookie'))
+        elif output == 'geturl':
             result = response.geturl()
+        else:
+            result = response.read()
         if close == True:
             response.close()
         self.result = result
@@ -105,7 +109,8 @@ class Thread(threading.Thread):
 
 class index:
     def infoDialog(self, str, header=addonName):
-        xbmc.executebuiltin("Notification(%s,%s, 3000, %s)" % (header, str, addonIcon))
+        try: xbmcgui.Dialog().notification(header, str, addonIcon, 3000, sound=False)
+        except: xbmc.executebuiltin("Notification(%s,%s, 3000, %s)" % (header, str, addonIcon))
 
     def okDialog(self, str1, str2, header=addonName):
         xbmcgui.Dialog().ok(header, str1, str2)
@@ -114,8 +119,8 @@ class index:
         select = xbmcgui.Dialog().select(header, list)
         return select
 
-    def yesnoDialog(self, str1, str2, header=addonName):
-        answer = xbmcgui.Dialog().yesno(header, str1, str2)
+    def yesnoDialog(self, str1, str2, header=addonName, str3='', str4=''):
+        answer = xbmcgui.Dialog().yesno(header, str1, str2, '', str4, str3)
         return answer
 
     def getProperty(self, str):

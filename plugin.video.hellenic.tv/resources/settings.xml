@@ -74,7 +74,7 @@
 		<setting id="TV 10" label="TV 10" type="bool" default="true" visible="false"/>
 		<!-- EPIRUS AND WEST GREECE -->
 		<setting id="EPIRUS TV1" label="EPIRUS TV1" type="bool" default="true" visible="true"/>
-		<setting id="HRT" label="HRT" type="bool" default="true" visible="true"/>
+		<setting id="VIMA TV" label="VIMA TV" type="bool" default="true" visible="true"/>
 		<setting id="ITV" label="ITV" type="bool" default="true" visible="true"/>
 		<setting id="ACHELOOS TV" label="ACHELOOS TV" type="bool" default="true" visible="true"/>
 		<setting id="START TV" label="START TV" type="bool" default="true" visible="true"/>

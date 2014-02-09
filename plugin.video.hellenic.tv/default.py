@@ -78,12 +78,12 @@ class main:
         return
 
 class getUrl(object):
-    def __init__(self, url, fetch=True, close=True, cookie=False, mobile=False, proxy=None, post=None, referer=None):
+    def __init__(self, url, close=True, proxy=None, post=None, mobile=False, referer=None, cookie=None, output='', timeout='10'):
         if not proxy is None:
             proxy_handler = urllib2.ProxyHandler({'http':'%s' % (proxy)})
             opener = urllib2.build_opener(proxy_handler, urllib2.HTTPHandler)
             opener = urllib2.install_opener(opener)
-        if cookie == True:
+        if output == 'cookie' or not close == True:
             import cookielib
             cookie_handler = urllib2.HTTPCookieProcessor(cookielib.LWPCookieJar())
             opener = urllib2.build_opener(cookie_handler, urllib2.HTTPBasicAuthHandler(), urllib2.HTTPHandler())
@@ -98,11 +98,15 @@ class getUrl(object):
             request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0')
         if not referer is None:
             request.add_header('Referer', referer)
-        response = urllib2.urlopen(request, timeout=10)
-        if fetch == True:
-            result = response.read()
-        else:
+        if not cookie is None:
+            request.add_header('cookie', cookie)
+        response = urllib2.urlopen(request, timeout=int(timeout))
+        if output == 'cookie':
+            result = str(response.headers.get('Set-Cookie'))
+        elif output == 'geturl':
             result = response.geturl()
+        else:
+            result = response.read()
         if close == True:
             response.close()
         self.result = result
@@ -137,8 +141,8 @@ class index:
         select = xbmcgui.Dialog().select(header, list)
         return select
 
-    def yesnoDialog(self, str1, str2, header=addonName):
-        answer = xbmcgui.Dialog().yesno(header, str1, str2)
+    def yesnoDialog(self, str1, str2, header=addonName, str3='', str4=''):
+        answer = xbmcgui.Dialog().yesno(header, str1, str2, '', str4, str3)
         return answer
 
     def getProperty(self, str):
@@ -355,7 +359,8 @@ class player:
                 'http'              : self.http,
                 'hls'               : self.hls,
                 'visionip'          : self.visionip,
-                'youtubelive'       : self.youtubelive,
+                'skai'              : self.skai,
+                'madtv'             : self.madtv,
                 'viiideo'           : self.viiideo,
                 'dailymotion'       : self.dailymotion,
                 'livestream'        : self.livestream,
@@ -399,7 +404,7 @@ class player:
     def visionip(self, url):
         try:
             root = 'http://tvnetwork.new.visionip.tv/Hellenic_TV'
-            result = getUrl(root, close=False, cookie=True).result
+            result = getUrl(root, close=False).result
             result = getUrl(url).result
             result = common.parseDOM(result, "entry")[0]
             streamer = common.parseDOM(result, "param", ret="value")[0]
@@ -409,15 +414,34 @@ class player:
         except:
             return
 
-    def youtubelive(self, url):
+    def skai(self, url):
         try:
             if index().addon_status('plugin.video.youtube') is None:
                 index().okDialog(language(30321).encode("utf-8"), language(30322).encode("utf-8"))
                 return
-            url += '/videos?view=2&flow=grid'
-            result = getUrl(url).result
-            url = re.compile('"/watch[?]v=(.+?)"').findall(result)[0]
+            root = 'http://www.skai.gr/ajax.aspx?m=NewModules.LookupMultimedia&mmid=/Root/TVLive'
+            result = getUrl(root).result
+            url = common.parseDOM(result, "File")[0]
+            url = url.split('[')[-1].split(']')[0]
             url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % url
+            return url
+        except:
+            return
+
+    def madtv(self, url):
+        try:
+            if index().addon_status('plugin.video.youtube') is None:
+                index().okDialog(language(30321).encode("utf-8"), language(30322).encode("utf-8"))
+                return
+            result = getUrl(url).result
+            url = re.compile('.*src="(.+?/youtube/.+?)"').findall(result)[0]
+            if url.startswith('//'): url = 'http:' + url
+
+            result = getUrl(url).result
+            url = re.compile('/embed/(.+?)"').findall(result)[0]
+            url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % url
+            index().okDialog(language(30321).encode("utf-8"), str(url).encode("utf-8"))
+
             return url
         except:
             return

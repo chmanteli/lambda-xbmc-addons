@@ -1,4 +1,15 @@
 ------------------------
+Hellenic TV v2.5.5 (9-Feb-14)
+------------------------
+
+- Updated STAR, SKAI, EURONEWS, MAD TV, GREEK CINEMA, ZOUGLA TV, ASTRA TV and ACHAIA CHANNEL.
+- NOTE: SKAI and MAD TV require a version of YouTube addon capable of decoding live streams!
+- Added ART CHANNEL and VIMA TV.
+- Removed ACTION 24 and HRT.
+- Code cosmetics.
+
+
+------------------------
 Hellenic TV v2.5.4 (8-Jan-14)
 ------------------------
 
