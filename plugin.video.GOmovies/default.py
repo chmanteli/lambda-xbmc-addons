@@ -28,7 +28,6 @@ try:    import StorageServer
 except: import storageserverdummy as StorageServer
 from metahandler import metahandlers
 from metahandler import metacontainers
-import urlresolver
 
 
 language            = xbmcaddon.Addon().getLocalizedString
@@ -903,7 +902,7 @@ class contextMenu:
         item.setProperty("IsPlayable", "true")
         item.setProperty("Video", "true")
         item.setProperty("Fanart_Image", fanart)
-        xbmc.Player(xbmc.PLAYER_CORE_AUTO).play(u, item)
+        xbmc.Player().play(u, item)
 
     def autoplay(self, name, title, imdb, year, url):
         meta = {'title': xbmc.getInfoLabel('ListItem.title'), 'originaltitle': xbmc.getInfoLabel('ListItem.originaltitle'), 'year': xbmc.getInfoLabel('ListItem.year'), 'genre': xbmc.getInfoLabel('ListItem.genre'), 'director': xbmc.getInfoLabel('ListItem.director'), 'country': xbmc.getInfoLabel('ListItem.country'), 'rating': xbmc.getInfoLabel('ListItem.rating'), 'votes': xbmc.getInfoLabel('ListItem.votes'), 'mpaa': xbmc.getInfoLabel('ListItem.mpaa'), 'duration': xbmc.getInfoLabel('ListItem.duration'), 'trailer': xbmc.getInfoLabel('ListItem.trailer'), 'writer': xbmc.getInfoLabel('ListItem.writer'), 'studio': xbmc.getInfoLabel('ListItem.studio'), 'tagline': xbmc.getInfoLabel('ListItem.tagline'), 'plotoutline': xbmc.getInfoLabel('ListItem.plotoutline'), 'plot': xbmc.getInfoLabel('ListItem.plot')}
@@ -919,14 +918,14 @@ class contextMenu:
         item.setProperty("IsPlayable", "true")
         item.setProperty("Video", "true")
         item.setProperty("Fanart_Image", fanart)
-        xbmc.Player(xbmc.PLAYER_CORE_AUTO).play(u, item)
+        xbmc.Player().play(u, item)
 
     def trailer(self, name, url):
         url = trailer().run(name, url)
         if url is None: return
         item = xbmcgui.ListItem(path=url)
         item.setProperty("IsPlayable", "true")
-        xbmc.Player(xbmc.PLAYER_CORE_AUTO).play(url, item)
+        xbmc.Player().play(url, item)
 
 class favourites:
     def __init__(self):
@@ -1735,6 +1734,7 @@ class movie25:
                 url = re.compile('var xxxx = "(.+?)"').findall(result)[0]
                 return url
 
+            import urlresolver
             host = urlresolver.HostedMediaFile(url)
             if host: resolver = urlresolver.resolve(url)
             if not resolver.startswith('http://'): return
@@ -2114,6 +2114,7 @@ class merdb:
                 url = re.compile('var xxxx = "(.+?)"').findall(result)[0]
                 return url
 
+            import urlresolver
             host = urlresolver.HostedMediaFile(url)
             if host: resolver = urlresolver.resolve(url)
             if not resolver.startswith('http://'): return

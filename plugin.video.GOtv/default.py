@@ -28,7 +28,6 @@ try:    import StorageServer
 except: import storageserverdummy as StorageServer
 from metahandler import metahandlers
 from metahandler import metacontainers
-import urlresolver
 
 
 language            = xbmcaddon.Addon().getLocalizedString
@@ -1903,6 +1902,7 @@ class watchseries:
                 url = re.compile('var xxxx = "(.+?)"').findall(result)[0]
                 return url
 
+            import urlresolver
             host = urlresolver.HostedMediaFile(url)
             if host: resolver = urlresolver.resolve(url)
             if not resolver.startswith('http://'): return
@@ -2257,6 +2257,7 @@ class watchmoviesonline:
 
     def resolve(self, url):
         try:
+            import urlresolver
             host = urlresolver.HostedMediaFile(url)
             if host: resolver = urlresolver.resolve(url)
             if not resolver.startswith('http://'): return
@@ -2368,6 +2369,7 @@ class merdb:
                 url = re.compile('var xxxx = "(.+?)"').findall(result)[0]
                 return url
 
+            import urlresolver
             host = urlresolver.HostedMediaFile(url)
             if host: resolver = urlresolver.resolve(url)
             if not resolver.startswith('http://'): return

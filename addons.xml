@@ -40,6 +40,27 @@
 	</extension>
 </addon>
 
+<addon id="plugin.video.extreme.com" name="Extreme Sports" version="1.0.0" provider-name="lambda">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+		<import addon="script.module.simplejson" version="2.0.10"/>
+		<import addon="script.common.plugin.cache" version="0.9.1"/>
+		<import addon="script.module.parsedom" version="0.9.1"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Extreme Sports</summary>
+		<description lang="en">Extreme Sports</description>
+		<disclaimer lang="en">The author does not host or distribute any of the content displayed by this addon. The author does not have any affiliation with the content provider.</disclaimer>
+		<forum>http://www.xbmchub.com/forums/lambdas-xbmc-repository/</forum>
+		<source>https://github.com/lambda81/lambda-xbmc-addons</source>
+		<website>http://www.xbmchub.com/</website>
+		<platform>all</platform>
+	</extension>
+</addon>
+
 <addon id="plugin.video.football.today" name="Football Today" version="1.0.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.addon" version="12.0.0"/>
@@ -62,7 +83,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.GOmovies" name="GOmovies" version="1.2.5" provider-name="lambda">
+<addon id="plugin.video.GOmovies" name="GOmovies" version="1.2.6" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.module.metahandler" version="1.0.0"/>
@@ -96,11 +117,12 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.GOtv" name="GOtv" version="1.2.5" provider-name="lambda">
+<addon id="plugin.video.GOtv" name="GOtv" version="1.2.6" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.module.metahandler" version="1.0.0"/>
 		<import addon="script.module.urlresolver" version="1.0.0"/>
+		<import addon="script.module.simplejson" version="2.0.10"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
 		<import addon="script.module.parsedom" version="0.9.1"/>
 	</requires>
@@ -262,6 +284,33 @@
 		<description lang="el">Παρακολουθήστε μια ευρεία συλλογή ταινιών από το muchmovies.org</description>
 		<disclaimer lang="en">The author does not host or distribute any of the content displayed by this addon. The author does not have any affiliation with the content provider.</disclaimer>
 		<disclaimer lang="el">Ο συγγραφέας δεν φιλοξενεί ή διανέμει οποιοδήποτε περιεχόμενο που εμφανίζεται από τo πρόσθετο αυτό. Ο συγγραφέας δεν έχει καμία σχέση με τον πάροχο του περιεχομένου.</disclaimer>
+		<forum>http://www.xbmchub.com/forums/lambdas-xbmc-repository/</forum>
+		<source>https://github.com/lambda81/lambda-xbmc-addons</source>
+		<website>http://www.xbmchub.com/</website>
+		<platform>all</platform>
+	</extension>
+</addon>
+
+<addon id="plugin.video.nbaondemand" name="NBA On-demand" version="1.1.0" provider-name="lambda,enen92">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+		<import addon="script.module.simplejson" version="2.0.10"/>
+		<import addon="script.common.plugin.cache" version="0.9.1"/>
+		<import addon="script.module.parsedom" version="0.9.1"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Watch NBA games whenever you want</summary>
+		<description lang="en">Watch NBA games whenever you want</description>
+		<summary lang="el">Παρακολουθήστε αγώνες NBA ότι ώρα θέλετε</summary>
+		<description lang="el">Παρακολουθήστε αγώνες NBA ότι ώρα θέλετε</description>
+		<summary lang="pl">Oglądaj mecze NBA gdziekolwiek zechcesz.</summary>
+		<description lang="pl">Oglądaj mecze NBA gdziekolwiek zechcesz.</description>
+		<summary lang="ro">Urmărește oricând meciuri din NBA</summary>
+		<description lang="ro">Urmărește oricând meciuri din NBA</description>
+		<disclaimer lang="en">The author does not host or distribute any of the content displayed by this addon. The author does not have any affiliation with the content provider.</disclaimer>
 		<forum>http://www.xbmchub.com/forums/lambdas-xbmc-repository/</forum>
 		<source>https://github.com/lambda81/lambda-xbmc-addons</source>
 		<website>http://www.xbmchub.com/</website>
