@@ -267,10 +267,11 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.muchmovies.hd" name="Much Movies HD" version="1.3.2" provider-name="lambda">
+<addon id="plugin.video.muchmovies.hd" name="Much Movies HD" version="1.4.0" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.module.metahandler" version="1.0.0"/>
+		<import addon="script.module.simplejson" version="2.0.10"/>
 		<import addon="script.module.parsedom" version="0.9.1"/>
 		<import addon="plugin.video.youtube" version="2.9.2"/>
 	</requires>
@@ -279,11 +280,18 @@
 	</extension>
 	<extension point="xbmc.addon.metadata">
 		<summary lang="en">Watch a wide selection of movies from muchmovies.org</summary>
-		<summary lang="el">Παρακολουθήστε μια ευρεία συλλογή ταινιών από το muchmovies.org</summary>
 		<description lang="en">Watch a wide selection of movies from muchmovies.org</description>
+		<summary lang="el">Παρακολουθήστε μια ευρεία συλλογή ταινιών από το muchmovies.org</summary>
 		<description lang="el">Παρακολουθήστε μια ευρεία συλλογή ταινιών από το muchmovies.org</description>
+		<summary lang="fr">Regardez des films en version originale (Anglais)</summary>
+		<description lang="fr">Regardez des films en version originale (Anglais)</description>
+		<summary lang="nl">Bekijk Speelfilms vanaf muchmovies.org</summary>
+		<description lang="nl">Bekijk Speelfilms vanaf muchmovies.org</description>
+		<summary lang="pl">Oglądaj filmy z muchmovies.org</summary>
+		<description lang="pl">Oglądaj filmy z muchmovies.org</description>
+		<summary lang="ro">Urmărește filme de muchmovies.org</summary>
+		<description lang="ro">Urmărește filme de muchmovies.org</description>
 		<disclaimer lang="en">The author does not host or distribute any of the content displayed by this addon. The author does not have any affiliation with the content provider.</disclaimer>
-		<disclaimer lang="el">Ο συγγραφέας δεν φιλοξενεί ή διανέμει οποιοδήποτε περιεχόμενο που εμφανίζεται από τo πρόσθετο αυτό. Ο συγγραφέας δεν έχει καμία σχέση με τον πάροχο του περιεχομένου.</disclaimer>
 		<forum>http://www.xbmchub.com/forums/lambdas-xbmc-repository/</forum>
 		<source>https://github.com/lambda81/lambda-xbmc-addons</source>
 		<website>http://www.xbmchub.com/</website>

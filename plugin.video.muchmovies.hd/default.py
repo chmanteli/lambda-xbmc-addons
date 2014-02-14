@@ -44,6 +44,7 @@ addonPages          = os.path.join(addonPath,'resources/art/Pages.png')
 addonNext           = os.path.join(addonPath,'resources/art/Next.png')
 dataPath            = xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
 viewData            = os.path.join(dataPath,'views.cfg')
+offData             = os.path.join(dataPath,'offset.cfg')
 favData             = os.path.join(dataPath,'favourites.cfg')
 metaget             = metahandlers.MetaData(preparezip=False)
 common              = CommonFunctions
@@ -121,12 +122,12 @@ class main:
         return
 
 class getUrl(object):
-    def __init__(self, url, fetch=True, close=True, cookie=False, mobile=False, proxy=None, post=None, referer=None):
+    def __init__(self, url, close=True, proxy=None, post=None, mobile=False, referer=None, cookie=None, output='', timeout='10'):
         if not proxy is None:
             proxy_handler = urllib2.ProxyHandler({'http':'%s' % (proxy)})
             opener = urllib2.build_opener(proxy_handler, urllib2.HTTPHandler)
             opener = urllib2.install_opener(opener)
-        if cookie == True:
+        if output == 'cookie' or not close == True:
             import cookielib
             cookie_handler = urllib2.HTTPCookieProcessor(cookielib.LWPCookieJar())
             opener = urllib2.build_opener(cookie_handler, urllib2.HTTPBasicAuthHandler(), urllib2.HTTPHandler())
@@ -141,11 +142,15 @@ class getUrl(object):
             request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0')
         if not referer is None:
             request.add_header('Referer', referer)
-        response = urllib2.urlopen(request, timeout=10)
-        if fetch == True:
-            result = response.read()
-        else:
+        if not cookie is None:
+            request.add_header('cookie', cookie)
+        response = urllib2.urlopen(request, timeout=int(timeout))
+        if output == 'cookie':
+            result = str(response.headers.get('Set-Cookie'))
+        elif output == 'geturl':
             result = response.geturl()
+        else:
+            result = response.read()
         if close == True:
             response.close()
         self.result = result
@@ -171,19 +176,10 @@ class Thread(threading.Thread):
 class player(xbmc.Player):
     def __init__ (self):
         self.property = addonName+'player_status'
-        self.loadingStarting = time.time()
         xbmc.Player.__init__(self)
 
-    def status(self):
-        getProperty = index().getProperty(self.property)
-        index().clearProperty(self.property)
-        if not xbmc.getInfoLabel('Container.FolderPath') == '': return
-        if getProperty == 'true': return True
-        return
-
     def run(self, name, url, imdb='0'):
-        self.name = name
-        self.imdb = imdb
+        self.video_info(name, imdb)
 
         if xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
             item = xbmcgui.ListItem(path=url)
@@ -193,7 +189,7 @@ class player(xbmc.Player):
                 file = self.name + '.strm'
                 file = file.translate(None, '\/:*?"<>|')
 
-                meta = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties" : ["title", "genre", "year", "rating", "director", "trailer", "tagline", "plot", "plotoutline", "originaltitle", "lastplayed", "playcount", "writer", "studio", "mpaa", "country", "imdbnumber", "runtime", "votes", "fanart", "thumbnail", "file", "sorttitle", "resume", "dateadded"]}, "id": 1}')
+                meta = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"filter":{"or": [{"field": "year", "operator": "is", "value": "%s"}, {"field": "year", "operator": "is", "value": "%s"}, {"field": "year", "operator": "is", "value": "%s"}]}, "properties" : ["title", "genre", "year", "rating", "director", "trailer", "tagline", "plot", "plotoutline", "originaltitle", "lastplayed", "playcount", "writer", "studio", "mpaa", "country", "imdbnumber", "runtime", "votes", "fanart", "thumbnail", "file", "sorttitle", "resume", "dateadded"]}, "id": 1}' % (self.year, str(int(self.year)+1), str(int(self.year)-1)))
                 meta = unicode(meta, 'utf-8', errors='ignore')
                 meta = json.loads(meta)
                 meta = meta['result']['movies']
@@ -214,36 +210,94 @@ class player(xbmc.Player):
             xbmc.sleep(1000)
         if self.totalTime == 0: return
 
-        subtitles().get(self.name)
-
         while True:
             try: self.currentTime = self.getTime()
             except: break
             xbmc.sleep(1000)
 
-    def watched(self):
+    def video_info(self, name, imdb):
+        self.name = name
+        self.content = 'movie'
+        self.title = self.name.rsplit(' (', 1)[0].strip()
+        self.year = '%04d' % int(self.name.rsplit(' (', 1)[-1].split(')')[0])
+        if imdb == '0': imdb = metaget.get_meta('movie', self.title ,year=str(self.year))['imdb_id']
+        self.imdb = re.sub("[^0-9]", "", imdb)
+        return
+
+    def offset_add(self):
+        try:
+            file = open(offData, 'a+')
+            file.write('"%s"|"%s"|"%s"\n' % (self.name, self.imdb, self.currentTime))
+            file.close()
+        except:
+            return
+
+    def offset_delete(self):
+        try:
+            file = xbmcvfs.File(offData)
+            read = file.read()
+            file.close()
+            line = [x for x in re.compile('(".+?)\n').findall(read) if '"%s"|"%s"' % (self.name, self.imdb) in x][0]
+            list = re.compile('(".+?\n)').findall(read.replace(line, ''))
+            file = open(offData, 'w')
+            for line in list: file.write(line)
+            file.close()
+        except:
+            return
+
+    def offset_read(self):
+        try:
+            self.offset = '0'
+            file = xbmcvfs.File(offData)
+            read = file.read()
+            file.close()
+            line = [x for x in re.compile('(".+?)\n').findall(read) if '"%s"|"%s"' % (self.name, self.imdb) in x][0]
+            self.offset = re.compile('".+?"[|]".+?"[|]"(.+?)"').findall(line)[0]
+        except:
+            return
+
+    def change_watched(self):
         try:
             xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.SetMovieDetails", "params": {"movieid" : %s, "playcount" : 1 }, "id": 1 }' % str(self.meta['movieid']))
         except:
-            content = 'movie'
-            title = self.name.rsplit(' (', 1)[0].strip()
-            year = '%04d' % int(self.name.rsplit(' (', 1)[-1].split(')')[0])
-            if self.imdb == '0': self.imdb = metaget.get_meta('movie', title ,year=str(year))['imdb_id']
-            self.imdb = re.sub("[^0-9]", "", self.imdb)
-            metaget.change_watched(content, '', self.imdb, season='', episode='', year='', watched=7)
-            index().container_refresh()
+            metaget.change_watched(self.content, '', self.imdb, season='', episode='', year='', watched=7)
+
+    def resume_playback(self):
+        offset = float(self.offset)
+        if not offset > 0: return
+        minutes, seconds = divmod(offset, 60)
+        hours, minutes = divmod(minutes, 60)
+        offset_time = '%02d:%02d:%02d' % (hours, minutes, seconds)
+        yes = index().yesnoDialog('%s %s' % (language(30353).encode("utf-8"), offset_time), '', self.name, language(30354).encode("utf-8"), language(30355).encode("utf-8"))
+        if yes: self.seekTime(offset)
+
+    def status(self):
+        getProperty = index().getProperty(self.property)
+        index().clearProperty(self.property)
+        if not xbmc.getInfoLabel('Container.FolderPath') == '': return
+        if getProperty == 'true': return True
+        return
 
     def onPlayBackStarted(self):
-        return
+        if getSetting("resume_playback") == 'true':
+            self.offset_read()
+            self.resume_playback()
+
+        subtitles().get(self.name)
 
     def onPlayBackEnded(self):
         if xbmc.getInfoLabel('Container.FolderPath') == '': index().setProperty(self.property, 'true')
-        self.watched()
+        self.change_watched()
+        self.offset_delete()
+        index().container_refresh()
 
     def onPlayBackStopped(self):
         index().clearProperty(self.property)
-        if not self.currentTime / self.totalTime >= .9: return
-        self.watched()
+        if self.currentTime / self.totalTime >= .9:
+            self.change_watched()
+        self.offset_delete()
+        self.offset_add()
+        index().container_refresh()
 
 class subtitles:
     def get(self, name):
@@ -335,8 +389,8 @@ class index:
         select = xbmcgui.Dialog().select(header, list)
         return select
 
-    def yesnoDialog(self, str1, str2, header=addonName):
-        answer = xbmcgui.Dialog().yesno(header, str1, str2)
+    def yesnoDialog(self, str1, str2, header=addonName, str3='', str4=''):
+        answer = xbmcgui.Dialog().yesno(header, str1, str2, '', str4, str3)
         return answer
 
     def getProperty(self, str):
@@ -365,6 +419,10 @@ class index:
             file.close()
         if not xbmcvfs.exists(viewData):
             file = xbmcvfs.File(viewData, 'w')
+            file.write('')
+            file.close()
+        if not xbmcvfs.exists(offData):
+            file = xbmcvfs.File(offData, 'w')
             file.write('')
             file.close()
 
@@ -551,21 +609,15 @@ class contextMenu:
     def view(self, content):
         try:
             skin = xbmc.getSkinDir()
-            if xbmcvfs.exists(xbmc.translatePath('special://xbmc/addons/%s/addon.xml' % (skin))):
-                xml = xbmc.translatePath('special://xbmc/addons/%s/addon.xml' % (skin))
-            elif xbmcvfs.exists(xbmc.translatePath('special://home/addons/%s/addon.xml' % (skin))):
-                xml = xbmc.translatePath('special://home/addons/%s/addon.xml' % (skin))
-            else:
-                return
+            skinPath = xbmc.translatePath('special://skin/')
+            xml = os.path.join(skinPath,'addon.xml')
             file = xbmcvfs.File(xml)
             read = file.read().replace('\n','')
             file.close()
-            src = os.path.dirname(xml) + '/'
-            try:
-                src += re.compile('defaultresolution="(.+?)"').findall(read)[0] + '/'
-            except:
-                src += re.compile('<res.+?folder="(.+?)"').findall(read)[0] + '/'
-            src += 'MyVideoNav.xml'
+            try: src = re.compile('defaultresolution="(.+?)"').findall(read)[0]
+            except: src = re.compile('<res.+?folder="(.+?)"').findall(read)[0]
+            src = os.path.join(skinPath, src)
+            src = os.path.join(src, 'MyVideoNav.xml')
             file = xbmcvfs.File(src)
             read = file.read().replace('\n','')
             file.close()
@@ -785,7 +837,7 @@ class contextMenu:
         if url is None: return
         item = xbmcgui.ListItem(path=url)
         item.setProperty("IsPlayable", "true")
-        xbmc.Player(xbmc.PLAYER_CORE_AUTO).play(url, item)
+        xbmc.Player().play(url, item)
 
 class favourites:
     def __init__(self):
@@ -952,7 +1004,7 @@ class movies:
     def muchmovies_list(self, url):
         try:
             post = url.split('?')[-1]
-            result = getUrl(link().muchmovies_sort, post=post, mobile=True, close=False, cookie=True).result
+            result = getUrl(link().muchmovies_sort, post=post, mobile=True, close=False).result
             result = getUrl(url, mobile=True).result
             movies = common.parseDOM(result, "li", attrs = { "data-icon": "false" })
         except:

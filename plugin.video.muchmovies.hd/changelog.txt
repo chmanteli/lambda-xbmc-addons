@@ -1,4 +1,14 @@
 ------------------------
+Much Movies HD v1.4.0 (14-Feb-14)
+------------------------
+
+- Added option for resuming playback.
+- Tweaked playback from library.
+- Added Dutch, French, Polish and Romanian translation.
+- Code cosmetics.
+
+
+------------------------
 Much Movies HD v1.3.2 (20-Jan-14)
 ------------------------
 
@@ -84,7 +94,7 @@ Much Movies HD v1.0.1 (11-Oct-13)
 
 
 ------------------------
-Much Movies v1.0.0 (8-Oct-13)
+Much Movies HD v1.0.0 (8-Oct-13)
 ------------------------
 
 - Initial version
