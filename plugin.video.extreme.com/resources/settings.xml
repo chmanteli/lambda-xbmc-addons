@@ -2,5 +2,6 @@
 <settings>
 	<category label="30000">
 		<setting id="quality" type="bool" label="30001" default="true"/>
+		<setting id="user_videos" type="bool" label="30002" default="false"/>
 	</category>
 </settings>

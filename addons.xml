@@ -40,7 +40,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.extreme.com" name="Extreme Sports" version="1.0.0" provider-name="lambda">
+<addon id="plugin.video.extreme.com" name="Extreme Sports" version="1.0.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.module.simplejson" version="2.0.10"/>
@@ -53,6 +53,16 @@
 	<extension point="xbmc.addon.metadata">
 		<summary lang="en">Extreme Sports</summary>
 		<description lang="en">Extreme Sports</description>
+		<summary lang="el">Extreme Sports</summary>
+		<description lang="el">Extreme Sports</description>
+		<summary lang="fr">Extreme Sports</summary>
+		<description lang="fr">Extreme Sports</description>
+		<summary lang="nl">Extreme sporten</summary>
+		<description lang="nl">Extreme sporten</description>
+		<summary lang="pl">Extreme Sports</summary>
+		<description lang="pl">Extreme Sports</description>
+		<summary lang="ro">Extreme Sports</summary>
+		<description lang="ro">Extreme Sports</description>
 		<disclaimer lang="en">The author does not host or distribute any of the content displayed by this addon. The author does not have any affiliation with the content provider.</disclaimer>
 		<forum>http://www.xbmchub.com/forums/lambdas-xbmc-repository/</forum>
 		<source>https://github.com/lambda81/lambda-xbmc-addons</source>
@@ -299,7 +309,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.nbaondemand" name="NBA On-demand" version="1.1.0" provider-name="lambda,enen92">
+<addon id="plugin.video.nbaondemand" name="NBA On-demand" version="1.1.1" provider-name="lambda,enen92">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.module.simplejson" version="2.0.10"/>
@@ -314,6 +324,10 @@
 		<description lang="en">Watch NBA games whenever you want</description>
 		<summary lang="el">Παρακολουθήστε αγώνες NBA ότι ώρα θέλετε</summary>
 		<description lang="el">Παρακολουθήστε αγώνες NBA ότι ώρα θέλετε</description>
+		<summary lang="fr">Regarder les matchs de la NBA à tout moment</summary>
+		<description lang="fr">Regarder les matchs de la NBA à tout moment</description>
+		<summary lang="nl">NBA video's kijken wanneer je wilt</summary>
+		<description lang="nl">NBA video's kijken wanneer je wilt</description>
 		<summary lang="pl">Oglądaj mecze NBA gdziekolwiek zechcesz.</summary>
 		<description lang="pl">Oglądaj mecze NBA gdziekolwiek zechcesz.</description>
 		<summary lang="ro">Urmărește oricând meciuri din NBA</summary>

@@ -1,16 +1,16 @@
 ======================
-GOtv XBMC Addon
+NBA On-demand XBMC Addon
 ======================
 
 About
 -----
-Watch tv shows from various sources
+Watch NBA games whenever you want
 
 
 Attributions
 ---------------------
-- Main icon and fanart by jokster | http://www.xbmchub.com
-- Dutch translation by falos | http://www.xbmchub.com
+- Main icon and fanart by enen92 | http://www.xbmchub.com
+- Dutch translation by Marquerite | http://www.xbmchub.com
 - French translation by nek | http://www.xbmchub.com
 - Polish translation by kodishu | http://www.xbmchub.com
 - Romanian translation by timmygotcha | http://www.xbmchub.com

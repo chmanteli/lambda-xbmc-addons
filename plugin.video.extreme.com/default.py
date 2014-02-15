@@ -409,7 +409,8 @@ class root:
     def get(self):
         rootList = []
         rootList.append({'name': 30501, 'image': 'All videos.png', 'action': 'videos_all'})
-        #rootList.append({'name': 30502, 'image': 'User videos.png', 'action': 'videos_users'})
+        if getSetting("user_videos") == 'true':
+            rootList.append({'name': 30502, 'image': 'User videos.png', 'action': 'videos_users'})
         rootList.append({'name': 30503, 'image': 'MTB.png', 'action': 'videos_mountainbike'})
         rootList.append({'name': 30504, 'image': 'BMX.png', 'action': 'videos_bmx'})
         rootList.append({'name': 30505, 'image': 'Skate.png', 'action': 'videos_skate'})

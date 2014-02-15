@@ -10,7 +10,7 @@ Extreme Sports
 Attributions
 ---------------------
 - Main icon and fanart by jokster | http://www.xbmchub.com
-- Dutch translation by falos | http://www.xbmchub.com
+- Dutch translation by Marquerite | http://www.xbmchub.com
 - French translation by nek | http://www.xbmchub.com
 - Polish translation by kodishu | http://www.xbmchub.com
 - Romanian translation by timmygotcha | http://www.xbmchub.com
