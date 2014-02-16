@@ -1971,7 +1971,7 @@ class yify:
         self.yify_base = 'http://yify.tv'
         self.yify_ajax = 'http://yify.tv/wp-admin/admin-ajax.php'
         self.yify_post = 'action=ajaxy_sf&sf_value=%s'
-        self.yify_watch = 'http://yify.tv/reproductor2/pk/pk/plugins/player_picasa.php?url=https%3A//picasaweb.google.com/'
+        self.yify_watch = 'http://yify.tv/reproductor2/pk/pk/plugins/player_p.php?url='
 
     def get(self, name, title, imdb, year, hostDict):
         try:

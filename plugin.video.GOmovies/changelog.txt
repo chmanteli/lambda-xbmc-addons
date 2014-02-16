@@ -1,4 +1,12 @@
 ------------------------
+GOmovies v1.2.7 (16-Feb-14)
+------------------------
+
+- Fixed issues with yify resolver.
+- Code cosmetics.
+
+
+------------------------
 GOmovies v1.2.6 (12-Feb-14)
 ------------------------
 

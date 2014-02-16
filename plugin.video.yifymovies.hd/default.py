@@ -1344,7 +1344,7 @@ class resolver:
         try:
             result = getUrl(url, proxy=proxy().server, timeout='30').result
             url = re.compile('showPkPlayer[(]"(.+?)"[)]').findall(result)[0]
-            url = 'http://yify.tv/reproductor2/pk/pk/plugins/player_picasa.php?url=https%3A//picasaweb.google.com/' + url
+            url = 'http://yify.tv/reproductor2/pk/pk/plugins/player_p.php?url=' + url
             result = getUrl(url, proxy=proxy().server, timeout='30').result
             result = re.compile('{(.+?)}').findall(result)[-1]
             url = re.compile('"url":"(.+?)"').findall(result)[0]
