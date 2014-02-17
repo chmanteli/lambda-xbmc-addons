@@ -1,4 +1,12 @@
 ------------------------
+Extreme Sports v1.0.2 (17-Feb-14)
+------------------------
+
+- Added Portuguese translation.
+- Code cosmetics.
+
+
+------------------------
 Extreme Sports v1.0.1 (15-Feb-14)
 ------------------------
 

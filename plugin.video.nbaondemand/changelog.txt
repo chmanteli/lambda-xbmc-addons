@@ -1,4 +1,12 @@
 ------------------------
+NBA On-demand v1.1.2 (17-Feb-14)
+------------------------
+
+- Added Portuguese translation.
+- Code cosmetics.
+
+
+------------------------
 NBA On-demand v1.1.1 (15-Feb-14)
 ------------------------
 
