@@ -440,7 +440,6 @@ class player:
             result = getUrl(url).result
             url = re.compile('/embed/(.+?)"').findall(result)[0]
             url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % url
-            index().okDialog(language(30321).encode("utf-8"), str(url).encode("utf-8"))
 
             return url
         except:
