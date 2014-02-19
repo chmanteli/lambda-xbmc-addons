@@ -582,7 +582,8 @@ class videos:
 
         for video in videos:
             try:
-                title = re.compile('.*<b>(.+?&ndash;.+?)</b>').findall(video)[0]
+                title = re.compile('<b>(.+?)</b>').findall(video)
+                title = [i for i in title if '&ndash;' in i or '-' in i][-1]
                 title = title.replace('&ndash;', '-')
                 title = common.replaceHTMLCodes(title)
                 title = title.encode('utf-8')
@@ -649,7 +650,8 @@ class videos:
 
         for video in videos:
             try:
-                title = re.compile('.*<b>(.+?&ndash;.+?)</b>').findall(video)[0]
+                title = re.compile('<b>(.+?)</b>').findall(video)
+                title = [i for i in title if '&ndash;' in i or '-' in i][-1]
                 title = title.replace('&ndash;', '-')
                 title = common.replaceHTMLCodes(title)
                 title = title.encode('utf-8')
