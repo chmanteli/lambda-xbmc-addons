@@ -1,4 +1,12 @@
 ------------------------
+GOmovies v1.2.8 (20-Feb-14)
+------------------------
+
+- Fixed issues with muchmovies resolver.
+- Code cosmetics.
+
+
+------------------------
 GOmovies v1.2.7 (16-Feb-14)
 ------------------------
 

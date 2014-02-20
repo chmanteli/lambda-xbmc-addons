@@ -112,7 +112,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.GOmovies" name="GOmovies" version="1.2.7" provider-name="lambda">
+<addon id="plugin.video.GOmovies" name="GOmovies" version="1.2.8" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.module.metahandler" version="1.0.0"/>
@@ -296,7 +296,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.muchmovies.hd" name="Much Movies HD" version="1.4.0" provider-name="lambda">
+<addon id="plugin.video.muchmovies.hd" name="Much Movies HD" version="1.4.1" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.module.metahandler" version="1.0.0"/>

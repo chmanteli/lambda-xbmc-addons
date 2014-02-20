@@ -1947,8 +1947,8 @@ class muchmovies:
     def resolve(self, url):
         try:
             result = getUrl(url, mobile=True).result
-            url = common.parseDOM(result, "a", ret="href")
-            url = [i for i in url if "?action=stream" in i][0]
+            url = common.parseDOM(result, "a", ret="href", attrs = { "data-role": "button" })
+            url = [i for i in url if i.startswith('http://')][0]
             url = url.split("?")[0]
 
             start = time.clock()
