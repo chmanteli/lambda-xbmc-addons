@@ -1,4 +1,14 @@
 ------------------------
+Yify Movies HD v1.3.0 (23-Feb-14)
+------------------------
+
+- Fixed issue with downloads.
+- Tweaked cache (less traffic to yify.tv).
+- Added Languages section.
+- Code cosmetics.
+
+
+------------------------
 Yify Movies HD v1.2.1 (16-Feb-14)
 ------------------------
 

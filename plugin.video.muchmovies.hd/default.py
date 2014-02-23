@@ -24,10 +24,15 @@ try:    import json
 except: import simplejson as json
 try:    import CommonFunctions
 except: import commonfunctionsdummy as CommonFunctions
+try:    import StorageServer
+except: import storageserverdummy as StorageServer
 from metahandler import metahandlers
 from metahandler import metacontainers
 
 
+action              = None
+common              = CommonFunctions
+metaget             = metahandlers.MetaData(preparezip=False)
 language            = xbmcaddon.Addon().getLocalizedString
 setSetting          = xbmcaddon.Addon().setSetting
 getSetting          = xbmcaddon.Addon().getSetting
@@ -35,7 +40,11 @@ addonName           = xbmcaddon.Addon().getAddonInfo("name")
 addonVersion        = xbmcaddon.Addon().getAddonInfo("version")
 addonId             = xbmcaddon.Addon().getAddonInfo("id")
 addonPath           = xbmcaddon.Addon().getAddonInfo("path")
+addonFullId         = addonName + addonVersion
 addonDesc           = language(30450).encode("utf-8")
+cache               = StorageServer.StorageServer(addonFullId,1).cacheFunction
+cache2              = StorageServer.StorageServer(addonFullId,24).cacheFunction
+cache3              = StorageServer.StorageServer(addonFullId,720).cacheFunction
 addonIcon           = os.path.join(addonPath,'icon.png')
 addonFanart         = os.path.join(addonPath,'fanart.jpg')
 addonArt            = os.path.join(addonPath,'resources/art')
@@ -46,9 +55,6 @@ dataPath            = xbmc.translatePath('special://profile/addon_data/%s' % (ad
 viewData            = os.path.join(dataPath,'views.cfg')
 offData             = os.path.join(dataPath,'offset.cfg')
 favData             = os.path.join(dataPath,'favourites.cfg')
-metaget             = metahandlers.MetaData(preparezip=False)
-common              = CommonFunctions
-action              = None
 
 
 class main:
@@ -101,7 +107,7 @@ class main:
         elif action == 'library':                   contextMenu().library(name, url)
         elif action == 'download':                  contextMenu().download(name, url)
         elif action == 'trailer':                   contextMenu().trailer(name, url)
-        elif action == 'movies':                    movies().muchmovies(url)
+        elif action == 'movies':                    movies().get(url)
         elif action == 'movies_title':              movies().muchmovies_title()
         elif action == 'movies_release':            movies().muchmovies_release()
         elif action == 'movies_added':              movies().muchmovies_added()
@@ -221,7 +227,7 @@ class player(xbmc.Player):
         self.title = self.name.rsplit(' (', 1)[0].strip()
         self.year = '%04d' % int(self.name.rsplit(' (', 1)[-1].split(')')[0])
         if imdb == '0': imdb = metaget.get_meta('movie', self.title ,year=str(self.year))['imdb_id']
-        self.imdb = re.sub("[^0-9]", "", imdb)
+        self.imdb = re.sub('[^0-9]', '', imdb)
         return
 
     def offset_add(self):
@@ -524,7 +530,7 @@ class index:
                     meta = metaget.get_meta('movie', title ,year=year)
                     playcountMenu = language(30407).encode("utf-8")
                     if meta['overlay'] == 6: playcountMenu = language(30408).encode("utf-8")
-                    metaimdb = urllib.quote_plus(re.sub("[^0-9]", "", meta['imdb_id']))
+                    metaimdb = urllib.quote_plus(re.sub('[^0-9]', '', meta['imdb_id']))
                     trailer, poster = urllib.quote_plus(meta['trailer_url']), meta['cover_url']
                     if trailer == '': trailer = sysurl
                     if poster == '': poster = image
@@ -800,7 +806,6 @@ class contextMenu:
             CHUNK = 16 * 1024
             request = urllib2.Request(url)
             request.add_header('User-Agent', 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_0 like Mac OS X; en-us) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 Mobile/8A293 Safari/6531.22.7')
-            request.add_header('Cookie', 'video=true') #add cookie
             response = urllib2.urlopen(request, timeout=10)
             size = response.info()["Content-Length"]
 
@@ -894,7 +899,8 @@ class pages:
         self.list = []
 
     def muchmovies(self):
-        self.list = self.muchmovies_list()
+        #self.list = self.muchmovies_list()
+        self.list = cache(self.muchmovies_list)
         index().pageList(self.list)
 
     def muchmovies_list(self):
@@ -928,7 +934,8 @@ class genres:
         self.list = []
 
     def muchmovies(self):
-        self.list = self.muchmovies_list()
+        #self.list = self.muchmovies_list()
+        self.list = cache(self.muchmovies_list)
         index().pageList(self.list)
 
     def muchmovies_list(self):
@@ -965,28 +972,33 @@ class movies:
         self.list = []
         self.data = []
 
-    def muchmovies(self, url):
-        self.list = self.muchmovies_list(url)
+    def get(self, url):
+        #self.list = self.muchmovies_list(url)
+        self.list = cache(self.muchmovies_list, url)
         index().movieList(self.list)
         index().nextList(self.list)
 
     def muchmovies_title(self):
-        self.list = self.muchmovies_list(link().muchmovies_title)
+        #self.list = self.muchmovies_list(link().muchmovies_title)
+        self.list = cache(self.muchmovies_list, link().muchmovies_title)
         index().movieList(self.list)
         index().nextList(self.list)
 
     def muchmovies_release(self):
-        self.list = self.muchmovies_list(link().muchmovies_release)
+        #self.list = self.muchmovies_list(link().muchmovies_release)
+        self.list = cache(self.muchmovies_list, link().muchmovies_release)
         index().movieList(self.list)
         index().nextList(self.list)
 
     def muchmovies_added(self):
-        self.list = self.muchmovies_list(link().muchmovies_added)
+        #self.list = self.muchmovies_list(link().muchmovies_added)
+        self.list = cache(self.muchmovies_list, link().muchmovies_added)
         index().movieList(self.list)
         index().nextList(self.list)
 
     def muchmovies_rating(self):
-        self.list = self.muchmovies_list(link().muchmovies_rating)
+        #self.list = self.muchmovies_list(link().muchmovies_rating)
+        self.list = cache(self.muchmovies_list, link().muchmovies_rating)
         index().movieList(self.list)
         index().nextList(self.list)
 
@@ -1031,7 +1043,7 @@ class movies:
                 title = title.encode('utf-8')
 
                 year = match[-1].strip()
-                year = re.sub("[^0-9]", "", year)
+                year = re.sub('[^0-9]', '', year)
                 year = year.encode('utf-8')
 
                 url = common.parseDOM(movie, "a", ret="href")[0]
