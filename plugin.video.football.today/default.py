@@ -28,6 +28,8 @@ try:    import StorageServer
 except: import storageserverdummy as StorageServer
 
 
+action              = None
+common              = CommonFunctions
 language            = xbmcaddon.Addon().getLocalizedString
 setSetting          = xbmcaddon.Addon().setSetting
 getSetting          = xbmcaddon.Addon().getSetting
@@ -35,18 +37,17 @@ addonName           = xbmcaddon.Addon().getAddonInfo("name")
 addonVersion        = xbmcaddon.Addon().getAddonInfo("version")
 addonId             = xbmcaddon.Addon().getAddonInfo("id")
 addonPath           = xbmcaddon.Addon().getAddonInfo("path")
+addonFullId         = addonName + addonVersion
 addonDesc           = language(40450).encode("utf-8")
+cache               = StorageServer.StorageServer(addonFullId,1).cacheFunction
+cache2              = StorageServer.StorageServer(addonFullId,24).cacheFunction
+cache3              = StorageServer.StorageServer(addonFullId,720).cacheFunction
 addonIcon           = os.path.join(addonPath,'icon.png')
 addonFanart         = os.path.join(addonPath,'fanart.jpg')
 addonArt            = os.path.join(addonPath,'resources/art')
 addonNext           = os.path.join(addonPath,'resources/art/Next.png')
 dataPath            = xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
 viewData            = os.path.join(dataPath,'views.cfg')
-cache               = StorageServer.StorageServer(addonName+addonVersion,1).cacheFunction
-cache2              = StorageServer.StorageServer(addonName+addonVersion,24).cacheFunction
-cache3              = StorageServer.StorageServer(addonName+addonVersion,720).cacheFunction
-common              = CommonFunctions
-action              = None
 
 
 class main:
@@ -457,6 +458,8 @@ class root:
         rootList.append({'name': 30513, 'image': 'Copa Libertadores.png', 'action': 'videos_copalibertadores'})
         index().rootList(rootList)
 
+
+
 class link:
     def __init__(self):
         self.lfv_base = 'http://livefootballvideo.com'
@@ -654,6 +657,7 @@ class videoparts:
         else:
             #self.list = self.lfv_list(name, url, image, date, genre, plot, title, show)
             self.list = cache(self.lfv_list, name, url, image, date, genre, plot, title, show)
+
         index().videopartList(self.list)
 
 
@@ -671,9 +675,15 @@ class videoparts:
                 lang = common.parseDOM(video, "span")[0]
                 lang = lang.split("-")[-1].strip()
 
-                count = 0
-                parts = common.parseDOM(video, "iframe", ret="src")
+                parts = re.findall('"(http://.+?)"', video, re.I)
+                parts = [i for i in parts if any(i.startswith(x) for x in resolver().hostList)]
+                if parts == [] and 'proxy.link=lfv*' in video:
+                    import decrypter
+                    parts = re.compile('proxy[.]link=lfv[*](.+?)&').findall(video)
+                    parts = uniqueList(parts).list
+                    parts = [decrypter.decrypter(198,128).decrypt(i,base64.urlsafe_b64decode('Y0ZNSENPOUhQeHdXbkR4cWJQVlU='),'ECB').split('\0')[0] for i in parts]
 
+                count = 0
                 for url in parts:
                     count = count + 1
 
@@ -695,8 +705,13 @@ class videoparts:
     def lfv_list2(self, name, url, image, date, genre, plot, title, show):
         try:
             result = getUrl(url, timeout='30').result
-            result = result.replace('<object', '<iframe').replace(' data=', ' src=')
-            videos = common.parseDOM(result, "iframe", ret="src")
+            result = result.replace('"//', '"http://')
+
+            result = re.findall('"(http://.+?)"', result, re.I)
+            result = uniqueList(result).list
+
+            videos = [i for i in result if any(i.startswith(x) for x in resolver().hostList)]
+            videos = [i for i in videos if not i.endswith('.js')]
         except:
             return
 
@@ -705,7 +720,6 @@ class videoparts:
                 url = video
                 url = common.replaceHTMLCodes(url)
                 if url.startswith('//') : url = 'http:' + url
-                if not any(url.startswith(i) for i in resolver().hostList): continue
                 url = url.encode('utf-8')
 
                 self.list.append({'name': name, 'url': url, 'image': image, 'date': date, 'genre': genre, 'plot': plot, 'title': title, 'show': show})
@@ -718,8 +732,10 @@ class resolver:
     def __init__(self):
         self.vk_base = 'http://vk.com'
         self.dailymotion_base = 'http://www.dailymotion.com'
+        self.facebook_base = 'http://www.facebook.com/video'
         self.playwire_base = 'http://cdn.playwire.com'
         self.youtube_base = 'http://www.youtube.com'
+        self.rutube_base = 'http://rutube.ru'
         self.rutube_base = 'http://rutube.ru'
         self.sapo_base = 'http://videos.sapo.pt'
         self.hostList = self.host_list()
@@ -728,6 +744,7 @@ class resolver:
         try:
             if url.startswith(self.vk_base): url = self.vk(url)
             elif url.startswith(self.dailymotion_base): url = self.dailymotion(url)
+            elif url.startswith(self.facebook_base): url = self.facebook(url)
             elif url.startswith(self.playwire_base): url = self.playwire(url)
             elif url.startswith(self.youtube_base): url = self.youtube(url)
             elif url.startswith(self.rutube_base): url = self.rutube(url)
@@ -741,11 +758,10 @@ class resolver:
             return
 
     def host_list(self):
-        return [self.vk_base, self.dailymotion_base, self.playwire_base, self.youtube_base, self.rutube_base, self.sapo_base]
+        return [self.vk_base, self.dailymotion_base, self.facebook_base, self.playwire_base, self.youtube_base, self.rutube_base, self.sapo_base]
 
     def vk(self, url):
         try:
-            print url
             url = url.replace('http://', 'https://')
             url = url.encode('utf-8')
 
@@ -767,6 +783,8 @@ class resolver:
 
     def dailymotion(self, url):
         try:
+            url = url.replace('dailymotion.com/video/', 'dailymotion.com/embed/video/')
+
             result = getUrl(url).result
             url = None
             try: url = re.compile('"stream_h264_ld_url":"(.+?)"').findall(result)[0]
@@ -780,6 +798,16 @@ class resolver:
                 except: pass
 
             url = urllib.unquote(url).decode('utf-8').replace('\\/', '/')
+            return url
+        except:
+            return
+
+    def facebook(self, url):
+        try:
+            result = getUrl(url).result
+            url = re.compile('"params","(.+?)"').findall(result)[0]
+            url = re.sub(r'\\(.)', r'\1', urllib.unquote_plus(url.decode('unicode_escape')))
+            url = re.compile('_src":"(.+?)"').findall(url)[0]
             return url
         except:
             return

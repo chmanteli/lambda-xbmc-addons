@@ -1,4 +1,14 @@
 ------------------------
+Football Today v2.1.0 (23-Feb-14)
+------------------------
+
+- Added support for encrypted videos.
+- Added more resolvers.
+- Tweaked videoparts.
+- Code cosmetics.
+
+
+------------------------
 Football Today v2.0.0 (17-Feb-14)
 ------------------------
 

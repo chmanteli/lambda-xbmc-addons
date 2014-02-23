@@ -10,6 +10,7 @@ Watch football games whenever you want
 Attributions
 ---------------------
 - Main icon by azad720 | http://www.xbmchub.com
+- Decrypter by shani_08 | http://www.xbmchub.com
 - Dutch translation by Marquerite | http://www.xbmchub.com
 - French translation by nek | http://www.xbmchub.com
 - Polish translation by kodishu | http://www.xbmchub.com
