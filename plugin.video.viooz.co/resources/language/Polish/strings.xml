@@ -9,10 +9,7 @@
 	<string id="30005">Sortuj wg.: Roku Produkcji</string>
 	<string id="30006">Sortuj wg.: Ostatnio Dodane</string>
 	<string id="30007">Katalog Pobierania</string>
-	<string id="30008">Proxy</string>
-	<string id="30009">- Serwer</string>
-	<string id="30010">- Port</string>
-	<string id="30011">Wznów Odtwarzanie</string>
+	<string id="30008">Wznów Odtwarzanie</string>
 	<string id="30040">Biblioteka</string>
 	<string id="30041">Dodaj ten folder do źródeł biblioteki XBMC.</string>
 	<string id="30042">Folder Filmów</string>
@@ -107,16 +104,15 @@
 	<!-- Description -->
 	<string id="40450">Oglądaj filmy z viooz.co</string>
 	<!-- Labels -->
-	<string id="30501">Tytułu</string>
-	<string id="30502">IMDb</string>
-	<string id="30503">Data wydania</string>
-	<string id="30504">Data dodania</string>
-	<string id="30505">Ocena</string>
-	<string id="30506">Najczęściej Oglądane</string>
-	<string id="30507">Strony</string>
-	<string id="30508">Gatunki</string>
-	<string id="30509">Rok Produkcji</string>
-	<string id="30510">Wybór języka</string>
-	<string id="30511">Ulubione</string>
-	<string id="30512">Szukaj</string>
+	<string id="30501">Data dodania</string>
+	<string id="30502">Filmy HD</string>
+	<string id="30503">Kino</string>
+	<string id="30504">Najczęściej Oglądane</string>
+	<string id="30505">Strony</string>
+	<string id="30506">Gatunki</string>
+	<string id="30507">Rok Produkcji</string>
+	<string id="30508">Kraje</string>
+	<string id="30509">Wybór języka</string>
+	<string id="30510">Ulubione</string>
+	<string id="30511">Szukaj</string>
 </strings>

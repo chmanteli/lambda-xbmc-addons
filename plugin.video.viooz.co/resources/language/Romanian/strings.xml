@@ -9,10 +9,7 @@
 	<string id="30005">Sortare după: An</string>
 	<string id="30006">Sortare după: Data adăugării</string>
 	<string id="30007">Descărcări</string>
-	<string id="30008">Proxy</string>
-	<string id="30009">- Server</string>
-	<string id="30010">- Port</string>
-	<string id="30011">Redare de la ultima poziție</string>
+	<string id="30008">Redare de la ultima poziție</string>
 	<string id="30040">Mediatecă</string>
 	<string id="30041">Nu uita să adaugi directorul la Surse Media</string>
 	<string id="30042">Director filme</string>
@@ -107,16 +104,15 @@
 	<!-- Description -->
 	<string id="40450">Urmărește filme de viooz.co</string>
 	<!-- Labels -->
-	<string id="30501">Titlu</string>
-	<string id="30502">IMDb</string>
-	<string id="30503">Dată de lansare</string>
-	<string id="30504">Data adăugării</string>
-	<string id="30505">Scor</string>
-	<string id="30506">Vizualizări</string>
-	<string id="30507">Pagini</string>
-	<string id="30508">Genuri</string>
-	<string id="30509">Ani</string>
-	<string id="30510">Limbi</string>
-	<string id="30511">Favorite</string>
-	<string id="30512">Caută</string>
+	<string id="30501">Data adăugării</string>
+	<string id="30502">Filme HD</string>
+	<string id="30503">Cinema</string>
+	<string id="30504">Vizualizări</string>
+	<string id="30505">Pagini</string>
+	<string id="30506">Genuri</string>
+	<string id="30507">Ani</string>
+	<string id="30508">Țări</string>
+	<string id="30509">Limbi</string>
+	<string id="30510">Favorite</string>
+	<string id="30511">Caută</string>
 </strings>

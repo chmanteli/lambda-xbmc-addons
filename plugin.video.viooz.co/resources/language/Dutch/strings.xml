@@ -9,10 +9,7 @@
 	<string id="30005">Sorteren op: Jaar</string>
 	<string id="30006">Sorteren op: Toegevoegd</string>
 	<string id="30007">Downloads</string>
-	<string id="30008">Proxy</string>
-	<string id="30009">- Server</string>
-	<string id="30010">- Poort</string>
-	<string id="30011">Afspelen hervatten</string>
+	<string id="30008">Afspelen hervatten</string>
 	<string id="30040">Bibliotheek</string>
 	<string id="30041">Vergeet deze bron niet toe te voegen aan je bibliotheek.</string>
 	<string id="30042">Film map</string>
@@ -107,16 +104,15 @@
 	<!-- Description -->
 	<string id="40450">Bekijk Speelfilms vanaf viooz.co</string>
 	<!-- Labels -->
-	<string id="30501">Titel</string>
-	<string id="30502">IMDb</string>
-	<string id="30503">Releasedatum</string>
-	<string id="30504">Datum toegevoegd</string>
-	<string id="30505">Waardering</string>
-	<string id="30506">Bekeken</string>
-	<string id="30507">Pagina's</string>
-	<string id="30508">Genres</string>
-	<string id="30509">Years</string>
-	<string id="30510">Talen</string>
-	<string id="30511">Favorieten</string>
-	<string id="30512">Zoeken</string>
+	<string id="30501">Datum toegevoegd</string>
+	<string id="30502">HD-films</string>
+	<string id="30503">Cinema</string>
+	<string id="30504">Bekeken</string>
+	<string id="30505">Pagina's</string>
+	<string id="30506">Genres</string>
+	<string id="30507">Years</string>
+	<string id="30508">Landen</string>
+	<string id="30509">Talen</string>
+	<string id="30510">Favorieten</string>
+	<string id="30511">Zoeken</string>
 </strings>

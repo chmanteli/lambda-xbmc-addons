@@ -9,10 +9,7 @@
 	<string id="30005">Trier par: Statuts</string>
 	<string id="30006">Trier par: Date</string>
 	<string id="30007">Téléchargements</string>
-	<string id="30008">Proxy</string>
-	<string id="30009">- Serveur</string>
-	<string id="30010">- Port</string>
-	<string id="30011">Reprendre la lecture</string>
+	<string id="30008">Reprendre la lecture</string>
 	<string id="30040">Médiathèque</string>
 	<string id="30041">N'oubliez pas d'ajouter ce dossier à vos sources de média.</string>
 	<string id="30042">Dossier des films</string>
@@ -107,16 +104,15 @@
 	<!-- Description -->
 	<string id="40450">Une sélection de Films en Version Originale (Anglais)</string>
 	<!-- Labels -->
-	<string id="30501">Titre</string>
-	<string id="30502">Classement IMDb</string>
-	<string id="30503">Version du</string>
-	<string id="30504">Ajouté le</string>
-	<string id="30505">Les Mieux Classées</string>
-	<string id="30506">Les Plus Vues</string>
-	<string id="30507">Par Pages</string>
-	<string id="30508">Par Genres</string>
-	<string id="30509">Par Année</string>
-	<string id="30510">Par Langues</string>
-	<string id="30511">Mes Favoris</string>
-	<string id="30512">Recherche</string>
+	<string id="30501">Ajouté le</string>
+	<string id="30502">Films en HD</string>
+	<string id="30503">Cinéma</string>
+	<string id="30504">Les Plus Vues</string>
+	<string id="30505">Par Pages</string>
+	<string id="30506">Par Genres</string>
+	<string id="30507">Par Année</string>
+	<string id="30508">Par Pays</string>
+	<string id="30509">Par Langues</string>
+	<string id="30510">Mes Favoris</string>
+	<string id="30511">Recherche</string>
 </strings>

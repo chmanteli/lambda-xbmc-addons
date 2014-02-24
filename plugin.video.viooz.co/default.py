@@ -53,6 +53,7 @@ addonDownloads      = os.path.join(addonPath,'resources/art/Downloads.png')
 addonPages          = os.path.join(addonPath,'resources/art/Pages.png')
 addonGenres         = os.path.join(addonPath,'resources/art/Genres.png')
 addonYears          = os.path.join(addonPath,'resources/art/Years.png')
+addonCountries      = os.path.join(addonPath,'resources/art/Countries.png')
 addonLanguages      = os.path.join(addonPath,'resources/art/Languages.png')
 addonNext           = os.path.join(addonPath,'resources/art/Next.png')
 dataPath            = xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
@@ -112,8 +113,17 @@ class main:
         elif action == 'download':                  contextMenu().download(name, url)
         elif action == 'trailer':                   contextMenu().trailer(name, url)
         elif action == 'movies':                    movies().get(url)
+        elif action == 'movies_added':              movies().viooz_added()
+        elif action == 'movies_hd':                 movies().viooz_hd()
+        elif action == 'movies_cinema':             movies().viooz_cinema()
+        elif action == 'movies_views':              movies().viooz_views()
         elif action == 'movies_search':             movies().viooz_search(query)
         elif action == 'movies_favourites':         favourites().movies()
+        elif action == 'pages_movies':              pages().viooz()
+        elif action == 'genres_movies':             genres().viooz()
+        elif action == 'years_movies':              years().viooz()
+        elif action == 'years_countries':           countries().viooz()
+        elif action == 'languages_movies':          languages().viooz()
         elif action == 'play':                      resolver().run(url, name)
 
         if action is None:
@@ -922,39 +932,252 @@ class favourites:
 class root:
     def get(self):
         rootList = []
-        '''
-        rootList.append({'name': 30501, 'image': 'Title.png', 'action': 'movies_title'})
-        rootList.append({'name': 30502, 'image': 'IMDb.png', 'action': 'movies_imdb'})
-        rootList.append({'name': 30503, 'image': 'Release.png', 'action': 'movies_release'})
-        rootList.append({'name': 30504, 'image': 'Added.png', 'action': 'movies_added'})
-        rootList.append({'name': 30505, 'image': 'Rating.png', 'action': 'movies_rating'})
-        rootList.append({'name': 30506, 'image': 'Views.png', 'action': 'movies_views'})
-        rootList.append({'name': 30507, 'image': 'Pages.png', 'action': 'pages_movies'})
-        rootList.append({'name': 30508, 'image': 'Genres.png', 'action': 'genres_movies'})
-        rootList.append({'name': 30509, 'image': 'Years.png', 'action': 'years_movies'})
-        rootList.append({'name': 30510, 'image': 'Languages.png', 'action': 'languages_movies'})
-        '''
-        rootList.append({'name': 30511, 'image': 'Favourites.png', 'action': 'movies_favourites'})
-        rootList.append({'name': 30512, 'image': 'Search.png', 'action': 'movies_search'})
+        rootList.append({'name': 30501, 'image': 'Added.png', 'action': 'movies_added'})
+        rootList.append({'name': 30502, 'image': 'HD.png', 'action': 'movies_hd'})
+        rootList.append({'name': 30503, 'image': 'Cinema.png', 'action': 'movies_cinema'})
+        rootList.append({'name': 30504, 'image': 'Views.png', 'action': 'movies_views'})
+        rootList.append({'name': 30505, 'image': 'Pages.png', 'action': 'pages_movies'})
+        rootList.append({'name': 30506, 'image': 'Genres.png', 'action': 'genres_movies'})
+        rootList.append({'name': 30507, 'image': 'Years.png', 'action': 'years_movies'})
+        rootList.append({'name': 30508, 'image': 'Countries.png', 'action': 'years_countries'})
+        rootList.append({'name': 30509, 'image': 'Languages.png', 'action': 'languages_movies'})
+        rootList.append({'name': 30510, 'image': 'Favourites.png', 'action': 'movies_favourites'})
+        rootList.append({'name': 30511, 'image': 'Search.png', 'action': 'movies_search'})
         index().rootList(rootList)
         index().downloadList()
-
-class proxy:
-    def __init__(self):
-        self.server = None
-        if getSetting("proxy") == 'true' and not (getSetting("proxy_ip") == '' or getSetting("proxy_port") == ''):
-            self.server = '%s:%s' % (getSetting("proxy_ip"), getSetting("proxy_port"))
 
 class link:
     def __init__(self):
         self.viooz_base = 'http://viooz.co'
         self.viooz_static = 'http://static.viooz.co'
+        self.viooz_added = 'http://viooz.co/movies/'
+        self.viooz_hd = 'http://viooz.co/hd/'
+        self.viooz_cinema = 'http://viooz.co/cenima/'
+        self.viooz_views = 'http://viooz.co/top/'
         self.viooz_search = 'http://viooz.co/search?s=t&q=%s'
+        self.viooz_pages = 'http://viooz.co/movies/'
+        self.viooz_genres = 'http://viooz.co/genre/'
+        self.viooz_years = 'http://viooz.co/year/'
+        self.viooz_countries = 'http://viooz.co/country/'
+        self.viooz_languages = 'http://viooz.co/language/'
+
+class pages:
+    def __init__(self):
+        self.list = []
+
+    def viooz(self):
+        #self.list = self.viooz_list()
+        self.list = cache3(self.viooz_list)
+        index().pageList(self.list)
+
+    def viooz_list(self):
+        try:
+            result = getUrl(link().viooz_pages, timeout='30').result
+            result = common.parseDOM(result, "div", attrs = { "id": "tree_title_type" })[0]
+            pages = re.compile('(<a.+?</a>)').findall(result)
+        except:
+            return
+
+        for page in pages:
+            try:
+                name = common.parseDOM(page, "a")[0]
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                url = common.parseDOM(page, "a", ret="href")[0]
+                url = '%s%s' % (link().viooz_base, url)
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+
+                image = addonPages.encode('utf-8')
+
+                self.list.append({'name': name, 'url': url, 'image': image})
+            except:
+                pass
+
+        return self.list
+
+class genres:
+    def __init__(self):
+        self.list = []
+
+    def viooz(self):
+        #self.list = self.viooz_list()
+        self.list = cache3(self.viooz_list)
+        self.list = sorted(self.list, key=itemgetter('name'))
+        index().pageList(self.list)
+
+    def viooz_list(self):
+        try:
+            result = getUrl(link().viooz_genres, timeout='30').result
+            result = common.parseDOM(result, "div", attrs = { "class": "content" })[0]
+            genres = re.compile('(<a.+?</a>)').findall(result)
+        except:
+            return
+
+        for genre in genres:
+            try:
+                name = common.parseDOM(genre, "a")[0]
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                url = common.parseDOM(genre, "a", ret="href")[0]
+                url = '%s%s' % (link().viooz_base, url)
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+
+                image = addonGenres.encode('utf-8')
+
+                self.list.append({'name': name, 'url': url, 'image': image})
+            except:
+                pass
+
+        return self.list
+
+class years:
+    def __init__(self):
+        self.list = []
+
+    def viooz(self):
+        #self.list = self.viooz_list()
+        self.list = cache3(self.viooz_list)
+        self.list = self.list[::-1]
+        index().pageList(self.list)
+
+    def viooz_list(self):
+        try:
+            result = getUrl(link().viooz_years, timeout='30').result
+            result = common.parseDOM(result, "div", attrs = { "class": "content" })[0]
+            years = re.compile('(<a.+?</a>)').findall(result)
+        except:
+            return
+
+        for year in years:
+            try:
+                name = common.parseDOM(year, "a")[0]
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                url = common.parseDOM(year, "a", ret="href")[0]
+                url = '%s%s' % (link().viooz_base, url)
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+
+                image = addonYears.encode('utf-8')
+
+                self.list.append({'name': name, 'url': url, 'image': image})
+            except:
+                pass
+
+        return self.list
+
+class countries:
+    def __init__(self):
+        self.list = []
+
+    def viooz(self):
+        #self.list = self.viooz_list()
+        self.list = cache3(self.viooz_list)
+        self.list = sorted(self.list, key=itemgetter('name'))
+        index().pageList(self.list)
+
+    def viooz_list(self):
+        try:
+            result = getUrl(link().viooz_countries, timeout='30').result
+            result = common.parseDOM(result, "div", attrs = { "class": "content" })[0]
+            countries = re.compile('(<a.+?</a>)').findall(result)
+        except:
+            return
+
+        for country in countries:
+            try:
+                name = common.parseDOM(country, "a")[0]
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                url = common.parseDOM(country, "a", ret="href")[0]
+                url = '%s%s' % (link().viooz_base, url)
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+
+                image = addonCountries.encode('utf-8')
+
+                self.list.append({'name': name, 'url': url, 'image': image})
+            except:
+                pass
+
+        return self.list
+
+class languages:
+    def __init__(self):
+        self.list = []
+
+    def viooz(self):
+        #self.list = self.viooz_list()
+        self.list = cache3(self.viooz_list)
+        self.list = sorted(self.list, key=itemgetter('name'))
+        index().pageList(self.list)
+
+    def viooz_list(self):
+        try:
+            result = getUrl(link().viooz_languages, timeout='30').result
+            result = common.parseDOM(result, "div", attrs = { "class": "content" })[0]
+            languages = re.compile('(<a.+?</a>)').findall(result)
+        except:
+            return
+
+        for language in languages:
+            try:
+                name = common.parseDOM(language, "a")[0]
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                url = common.parseDOM(language, "a", ret="href")[0]
+                url = '%s%s' % (link().viooz_base, url)
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+
+                image = addonLanguages.encode('utf-8')
+
+                self.list.append({'name': name, 'url': url, 'image': image})
+            except:
+                pass
+
+        return self.list
 
 class movies:
     def __init__(self):
         self.list = []
-        self.data = []
+
+    def get(self, url):
+        #self.list = self.viooz_list(url)
+        self.list = cache(self.viooz_list, url)
+        index().movieList(self.list)
+        index().nextList(self.list)
+
+    def viooz_added(self):
+        #self.list = self.viooz_list(link().viooz_added)
+        self.list = cache(self.viooz_list, link().viooz_added)
+        index().movieList(self.list)
+        index().nextList(self.list)
+
+    def viooz_hd(self):
+        #self.list = self.viooz_list(link().viooz_hd)
+        self.list = cache(self.viooz_list, link().viooz_hd)
+        index().movieList(self.list)
+        index().nextList(self.list)
+
+    def viooz_cinema(self):
+        #self.list = self.viooz_list(link().viooz_cinema)
+        self.list = cache(self.viooz_list, link().viooz_cinema)
+        index().movieList(self.list)
+        index().nextList(self.list)
+
+    def viooz_views(self):
+        #self.list = self.viooz_list(link().viooz_views)
+        self.list = cache(self.viooz_list, link().viooz_views)
+        index().movieList(self.list)
+        index().nextList(self.list)
 
     def viooz_search(self, query=None):
         if query is None:
@@ -968,27 +1191,34 @@ class movies:
 
     def viooz_list(self, url):
         try:
-            result = getUrl(url).result
+            result = getUrl(url, timeout='30').result
             result = result.decode('iso-8859-1').encode('utf-8')
-            movies = result.split('class="infos"')
+            movies = result.split('class="film boxed film_grid"')
         except:
             return
 
+        try:
+            next = common.parseDOM(result, "div", attrs = { "class": "pagination" })[0]
+            next = re.compile('.*href="(.+?)">&#8594;<').findall(next)[0]
+            if '</' in next: raise Exception()
+            next = common.replaceHTMLCodes(next)
+            next = next.encode('utf-8')
+        except:
+            next = ''
+
         for movie in movies:
             try:
-                name = common.parseDOM(movie, "a", ret="title")[0]
-                name = common.replaceHTMLCodes(name)
-                name = name.encode('utf-8')
-
-                match = re.findall('(.+?)[(](\d{4})[)]', name)[0]
-
-                title = match[0].strip()
+                title = common.parseDOM(movie, "h3", attrs = { "title": ".+?" })[0]
                 title = common.replaceHTMLCodes(title)
                 title = title.encode('utf-8')
 
-                year = match[-1].strip()
-                year = re.sub('[^0-9]', '', year)
+                year = common.parseDOM(movie, "h3", ret="title")[0]
+                year = re.compile('[(](\d{4})[)]').findall(year)[-1]
                 year = year.encode('utf-8')
+
+                name = '%s (%s)' % (title, year)
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
 
                 url = common.parseDOM(movie, "a", ret="href")[0]
                 url = common.replaceHTMLCodes(url)
@@ -1000,13 +1230,29 @@ class movies:
                 image = image.encode('utf-8')
 
                 try:
+                    imdb = image.rsplit('/', 1)[-1].split('.', 1)[0]
+                    imdb = re.sub('[^0-9]', '', imdb)
+                    imdb = imdb.encode('utf-8')
+                except:
+                    imdb = '0'
+
+                try:
+                    genre = re.findall('Genre : (<a.+?</a>)\n', movie)
+                    genre = [common.parseDOM(i, "a") for i in genre][0]
+                    genre = " / ".join(genre)
+                    genre = common.replaceHTMLCodes(genre)
+                    genre = genre.encode('utf-8')
+                except:
+                    genre = ''
+
+                try:
                     plot = common.parseDOM(movie, "div", attrs = { "class": "summary" })[0]
                     plot = common.replaceHTMLCodes(plot)
                     plot = plot.encode('utf-8')
                 except:
                     plot = ''
 
-                self.list.append({'name': name, 'url': url, 'image': image, 'title': title, 'year': year, 'imdb': '0', 'genre': '', 'plot': plot, 'next': ''})
+                self.list.append({'name': name, 'url': url, 'image': image, 'title': title, 'year': year, 'imdb': imdb, 'genre': genre, 'plot': plot, 'next': next})
             except:
                 pass
 
