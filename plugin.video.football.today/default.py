@@ -762,6 +762,8 @@ class resolver:
 
     def vk(self, url):
         try:
+            if not 'hash' in url: url = self.vk_private(url)
+
             url = url.replace('http://', 'https://')
             url = url.encode('utf-8')
 
@@ -780,6 +782,57 @@ class resolver:
             return url
         except:
             return
+
+    def vk_private(self, url):
+        urln = 'http://livefootballvideo.com/player/vkru/plugins/plugins_vk.php'
+
+        result = re.compile('\/video(.*)_(.*)').findall(url)[0]
+        oid, vid = result[0], result[1]
+
+        post = {'getacc':'true'}
+        post = urllib.urlencode(post)
+        result = getUrl(urln, post=post).result
+        result = re.compile('u=(.*)&p=(.*)&').findall(result)[0]
+        username, pwd = result[0], result[1]
+        ipostfield = "pass=%s&email=%s&act=login&captcha_sid=&captcha_key=&role=al_frame&_origin=http://vk.com&expire=" % (pwd, username)
+
+        post = {'icookie':'remixlang=3',
+                'ipostfield':ipostfield,
+				'ihttpheader':'true',
+				'iagent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0',
+				'isslverify':'true',
+				'iheader':'true',
+				'url':'https://login.vk.com/?act=login',
+				'ipost':'true'}
+        post = urllib.urlencode(post)
+        result = getUrl(urln, post=post).result
+        result = re.compile('Set-Cookie: h=(.*?)\;.*?\sSet-Cookie:\ss=(.*?);.*?\sSet-Cookie:\sl=(.*?);.*?\sSet-Cookie:\sp=(.*?);.*?\sLocation.*?hash=(.*)').findall(result)
+        h, s, l, p, hash = result[0][0], result[0][1], result[0][2], result[0][3], result[0][4]
+        icookiePost = "h=%s; s=%s; p=%s; l=%s; remixlang=3" % (h,s,p,l)
+        urlPost = 'http://vk.com/login.php?act=slogin&to=&s=%s&__q_hash=%s' % (s,hash)
+
+        post = {'icookie':icookiePost,
+				'iheader':'true',
+				'url':urlPost,
+				'ihttpheader':'true',
+				'iagent':'	Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0'}
+        post = urllib.urlencode(post)
+        result = getUrl(urln, post=post).result
+        remixId = re.compile('remixsid=(.*?);').findall(result)[0]
+        icookiePost = "remixlang=3; remixsid=%s" % (remixId)
+        ipostFieldPost = "vid=%s&act=video_embed_box&al=1&oid=%s"	% (vid,oid)
+
+        post = {'icookie':icookiePost,
+				'ipostfield':ipostFieldPost,
+				'ihttpheader':'true',
+				'iagent':'	Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0',
+				'iheader':'true',
+				'url':'http://vk.com/al_video.php'
+				}
+        post = urllib.urlencode(post)
+        result = getUrl(urln, post=post).result
+        url = re.compile('iframe src=&quot;(.*)";').findall(result)[0]
+        return url
 
     def dailymotion(self, url):
         try:
