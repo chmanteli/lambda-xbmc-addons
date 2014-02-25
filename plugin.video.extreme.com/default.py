@@ -28,6 +28,8 @@ try:    import StorageServer
 except: import storageserverdummy as StorageServer
 
 
+action              = None
+common              = CommonFunctions
 language            = xbmcaddon.Addon().getLocalizedString
 setSetting          = xbmcaddon.Addon().setSetting
 getSetting          = xbmcaddon.Addon().getSetting
@@ -35,18 +37,17 @@ addonName           = xbmcaddon.Addon().getAddonInfo("name")
 addonVersion        = xbmcaddon.Addon().getAddonInfo("version")
 addonId             = xbmcaddon.Addon().getAddonInfo("id")
 addonPath           = xbmcaddon.Addon().getAddonInfo("path")
+addonFullId         = addonName + addonVersion
 addonDesc           = language(40450).encode("utf-8")
+cache               = StorageServer.StorageServer(addonFullId,1).cacheFunction
+cache2              = StorageServer.StorageServer(addonFullId,24).cacheFunction
+cache3              = StorageServer.StorageServer(addonFullId,720).cacheFunction
 addonIcon           = os.path.join(addonPath,'icon.png')
 addonFanart         = os.path.join(addonPath,'fanart.jpg')
 addonArt            = os.path.join(addonPath,'resources/art')
 addonNext           = os.path.join(addonPath,'resources/art/Next.png')
 dataPath            = xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
 viewData            = os.path.join(dataPath,'views.cfg')
-cache               = StorageServer.StorageServer(addonName+addonVersion,1).cacheFunction
-cache2              = StorageServer.StorageServer(addonName+addonVersion,24).cacheFunction
-cache3              = StorageServer.StorageServer(addonName+addonVersion,720).cacheFunction
-common              = CommonFunctions
-action              = None
 
 
 class main:
@@ -469,14 +470,14 @@ class videos:
         elif url == 'wake': url = link().extreme_wake
         elif url == 'windsurf': url = link().extreme_windsurf
 
-        self.list = self.extreme_list(url)
-        #self.list = cache(self.extreme_list, url)
+        #self.list = self.extreme_list(url)
+        self.list = cache(self.extreme_list, url)
         index().videoList(self.list)
         index().nextList(self.list)
 
     def get(self, url):
-        self.list = self.extreme_list(url)
-        #self.list = cache(self.extreme_list, url)
+        #self.list = self.extreme_list(url)
+        self.list = cache(self.extreme_list, url)
         index().videoList(self.list)
         index().nextList(self.list)
 
@@ -531,16 +532,7 @@ class videos:
 class resolver:
     def run(self, url):
         try:
-            result = getUrl(url).result
-            try:
-                url = self.freecaster(result)
-                if not url == None: raise Exception()
-                url = self.youtube(result)
-                if not url == None: raise Exception()
-                url = self.vimeo(result)
-            except:
-                pass
-
+            url = self.extreme(url)
             if url is None: raise Exception()
             player().run(url)
             return url
@@ -548,53 +540,56 @@ class resolver:
             index().infoDialog(language(30303).encode("utf-8"))
             return
 
-
-    def freecaster(self, result):
+    def extreme(self, url):
         try:
-            result = re.compile('"levels":(\[{"file":.+?\])').findall(result)[0]
-            result = json.loads(result)
+            r = getUrl(url).result
+        except:
+            return
 
+        try:
+            freecaster = re.compile('"levels":(\[{"file":.+?\])').findall(r)[0]
+
+            result = json.loads(freecaster)
             url = None
             try: url = [i['file'] for i in result if i['width'] == '320'][0]
             except: pass
             try: url = [i['file'] for i in result if i['width'] == '640'][0]
             except: pass
-            if getSetting("quality") == 'true' or url is None:
-                try: url = [i['file'] for i in result if i['width'] == '1280'][0]
-                except: pass
+            try: url = [i['file'] for i in result if i['width'] == '1280'][0]
+            except: pass
 
+            if url == None: raise Exception()
             return url
         except:
-            return
+            pass
 
-    def youtube(self, result):
         try:
-            result = result.replace('\/', '/').replace('youtube.com/watch', 'youtube.com/embed/')
-            url = re.compile('youtube.com/embed/(.+?)"').findall(result)[0]
-            url = url.split("?v=")[-1].split("/")[-1].split("?")[0]
+            result = r.replace('\/', '/').replace('youtube.com/watch', 'youtube.com/embed/')
 
-            url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % url
+            youtube = re.compile('youtube.com/embed/(.+?)"').findall(result)[0]
+            youtube = youtube.split("?v=")[-1].split("/")[-1].split("?")[0]
+
+            url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % youtube
             if index().addon_status('plugin.video.youtube') is None:
                 index().okDialog(language(30321).encode("utf-8"), language(30322).encode("utf-8"))
                 return
 
             return url
         except:
-            return
+            pass
 
-    def vimeo(self, result):
         try:
-            url = re.compile('.*src="(http://.+?vimeo.com/.+?)"').findall(result)[0]
-            url = common.replaceHTMLCodes(url)
-            url = url.encode('utf-8')
+            vimeo = re.compile('.*src="(http://.+?vimeo.com/.+?)"').findall(r)[0]
+            vimeo = common.replaceHTMLCodes(vimeo)
+            vimeo = vimeo.encode('utf-8')
 
-            result = getUrl(url).result
+            result = getUrl(vimeo).result
             url = re.compile('"url":"(.+?)"').findall(result)
             url = [i for i in url if 'token=' in i or 'token2=' in i][-1]
 
             return url
         except:
-            return
+            pass
 
 
 main()

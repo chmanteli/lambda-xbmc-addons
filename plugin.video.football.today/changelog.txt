@@ -1,4 +1,12 @@
 ------------------------
+Football Today v2.1.2 (25-Feb-14)
+------------------------
+
+- Updated French translation.
+- Code cosmetics.
+
+
+------------------------
 Football Today v2.1.1 (24-Feb-14)
 ------------------------
 

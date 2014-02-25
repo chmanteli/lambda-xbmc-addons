@@ -28,6 +28,8 @@ try:    import StorageServer
 except: import storageserverdummy as StorageServer
 
 
+action              = None
+common              = CommonFunctions
 language            = xbmcaddon.Addon().getLocalizedString
 setSetting          = xbmcaddon.Addon().setSetting
 getSetting          = xbmcaddon.Addon().getSetting
@@ -35,22 +37,22 @@ addonName           = xbmcaddon.Addon().getAddonInfo("name")
 addonVersion        = xbmcaddon.Addon().getAddonInfo("version")
 addonId             = xbmcaddon.Addon().getAddonInfo("id")
 addonPath           = xbmcaddon.Addon().getAddonInfo("path")
+addonFullId         = addonName + addonVersion
 addonDesc           = language(40450).encode("utf-8")
+cache               = StorageServer.StorageServer(addonFullId,1).cacheFunction
+cache2              = StorageServer.StorageServer(addonFullId,24).cacheFunction
+cache3              = StorageServer.StorageServer(addonFullId,720).cacheFunction
 addonIcon           = os.path.join(addonPath,'icon.png')
 addonFanart         = os.path.join(addonPath,'fanart.jpg')
+addonArt            = os.path.join(addonPath,'resources/art')
 addonImage          = os.path.join(addonPath,'resources/art/Image.jpg')
 addonImage2         = os.path.join(addonPath,'resources/art/Image2.jpg')
-addonArt            = os.path.join(addonPath,'resources/art')
 addonGames          = os.path.join(addonPath,'resources/art/Games.png')
 addonHighlights     = os.path.join(addonPath,'resources/art/Highlights.png')
 addonTeams          = os.path.join(addonPath,'resources/art/Teams.png')
+addonNext           = os.path.join(addonPath,'resources/art/Next.png')
 dataPath            = xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
 viewData            = os.path.join(dataPath,'views.cfg')
-cache               = StorageServer.StorageServer(addonName+addonVersion,1).cacheFunction
-cache2              = StorageServer.StorageServer(addonName+addonVersion,24).cacheFunction
-cache3              = StorageServer.StorageServer(addonName+addonVersion,720).cacheFunction
-common              = CommonFunctions
-action              = None
 
 
 class main:
@@ -737,17 +739,7 @@ class videoparts:
 class resolver:
     def run(self, url):
         try:
-            result = getUrl(url).result
-            result = result.decode('iso-8859-1').encode('utf-8')
-            try:
-                url = self.vk(result)
-                if not url == None: raise Exception()
-                url = self.youtube(result)
-                if not url == None: raise Exception()
-                url = self.nba_com(result)
-            except:
-                pass
-
+            url = self.livetv(url)
             if url is None: raise Exception()
             player().run(url)
             return url
@@ -755,15 +747,21 @@ class resolver:
             index().infoDialog(language(30303).encode("utf-8"))
             return
 
-    def vk(self, result):
+    def livetv(self, url):
         try:
-            url = re.compile('"(https://vk.com/.+?)"').findall(result)
-            url += re.compile('"(http://vk.com/.+?)"').findall(result)
-            url = common.replaceHTMLCodes(url[0])
-            url = url.replace('http://', 'https://')
-            url = url.encode('utf-8')
+            r = getUrl(url).result
+            r = r.decode('iso-8859-1').encode('utf-8')
+        except:
+            return
 
-            result = getUrl(url).result
+        try:
+            vk = re.compile('"(https://vk.com/.+?)"').findall(r)
+            vk += re.compile('"(http://vk.com/.+?)"').findall(r)
+            vk = common.replaceHTMLCodes(vk[0])
+            vk = vk.replace('http://', 'https://')
+            vk = vk.encode('utf-8')
+
+            result = getUrl(vk).result
             url = None
             try: url = re.compile('url240=(.+?)&').findall(result)[0]
             except: pass
@@ -771,35 +769,35 @@ class resolver:
             except: pass
             try: url = re.compile('url480=(.+?)&').findall(result)[0]
             except: pass
-            if getSetting("quality") == 'true' or url is None:
-                try: url = re.compile('url720=(.+?)&').findall(result)[0]
-                except: pass
+            try: url = re.compile('url720=(.+?)&').findall(result)[0]
+            except: pass
 
+            if url == None: raise Exception()
             return url
         except:
-            return
+            pass
 
-    def youtube(self, result):
         try:
-            result = result.replace('\/', '/').replace('youtube.com/watch', 'youtube.com/embed/')
-            url = re.compile('youtube.com/embed/(.+?)"').findall(result)[0]
-            url = url.split("?v=")[-1].split("/")[-1].split("?")[0]
+            result = r.replace('\/', '/').replace('youtube.com/watch', 'youtube.com/embed/')
 
-            url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % url
+            youtube = re.compile('youtube.com/embed/(.+?)"').findall(result)[0]
+            youtube = youtube.split("?v=")[-1].split("/")[-1].split("?")[0]
+
+            url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % youtube
             if index().addon_status('plugin.video.youtube') is None:
                 index().okDialog(language(30321).encode("utf-8"), language(30322).encode("utf-8"))
                 return
 
             return url
         except:
-            return
+            pass
 
-    def nba_com(self, result):
         try:
-            url = re.compile('addVariable[(]"file".+?"(.+?)"').findall(result)[0]
+            nba_com = re.compile('addVariable[(]"file".+?"(.+?)"').findall(r)[0]
+            url = nba_com
             return url
         except:
-            return
+            pass
 
 
 main()

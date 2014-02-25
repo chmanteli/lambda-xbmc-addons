@@ -1,4 +1,14 @@
 ------------------------
+Yify Movies HD v1.3.1 (25-Feb-14)
+------------------------
+
+- Tweaked cache.
+- Added Portuguese translation.
+- Updated French translation.
+- Code cosmetics.
+
+
+------------------------
 Yify Movies HD v1.3.0 (23-Feb-14)
 ------------------------
 

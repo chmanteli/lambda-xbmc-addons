@@ -1011,7 +1011,7 @@ class genres:
 
     def yify(self):
         #self.list = self.yify_list(self.proxy)
-        self.list = cache(self.yify_list, self.proxy)
+        self.list = cache3(self.yify_list, self.proxy)
         self.list = sorted(self.list, key=itemgetter('name'))
         index().pageList(self.list)
 
@@ -1051,7 +1051,7 @@ class years:
 
     def yify(self):
         #self.list = self.yify_list(self.proxy)
-        self.list = cache(self.yify_list, self.proxy)
+        self.list = cache2(self.yify_list, self.proxy)
         self.list = sorted(self.list, key=itemgetter('name'))
         self.list = self.list[::-1]
         index().pageList(self.list)
@@ -1090,7 +1090,7 @@ class languages:
 
     def yify(self):
         #self.list = self.yify_list(self.proxy)
-        self.list = cache(self.yify_list, self.proxy)
+        self.list = cache3(self.yify_list, self.proxy)
         self.list = sorted(self.list, key=itemgetter('name'))
         index().pageList(self.list)
 

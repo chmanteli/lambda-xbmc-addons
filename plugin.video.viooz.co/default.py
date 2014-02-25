@@ -1040,7 +1040,7 @@ class years:
 
     def viooz(self):
         #self.list = self.viooz_list()
-        self.list = cache3(self.viooz_list)
+        self.list = cache2(self.viooz_list)
         self.list = self.list[::-1]
         index().pageList(self.list)
 
@@ -1077,7 +1077,7 @@ class countries:
 
     def viooz(self):
         #self.list = self.viooz_list()
-        self.list = cache3(self.viooz_list)
+        self.list = cache2(self.viooz_list)
         self.list = sorted(self.list, key=itemgetter('name'))
         index().pageList(self.list)
 
@@ -1114,7 +1114,7 @@ class languages:
 
     def viooz(self):
         #self.list = self.viooz_list()
-        self.list = cache3(self.viooz_list)
+        self.list = cache2(self.viooz_list)
         self.list = sorted(self.list, key=itemgetter('name'))
         index().pageList(self.list)
 
@@ -1350,7 +1350,7 @@ class resolver:
 
             url = re.compile('proxy[.]link=viooz[*](.+?)&').findall(result)[0]
             url = common.replaceHTMLCodes(url)
-            url = decrypter.decrypter(198,128).decrypt(url,'aXV7OaSC804VayTCIOba','ECB').split('\0')[0]
+            url = decrypter.decrypter(198,128).decrypt(url,base64.urlsafe_b64decode('YVhWN09hU0M4MDRWYXlUQ0lPYmE='),'ECB').split('\0')[0]
 
             result = getUrl(url).result
             url = common.parseDOM(result, "link", ret="href", attrs = { "rel": "alternate" })[0]

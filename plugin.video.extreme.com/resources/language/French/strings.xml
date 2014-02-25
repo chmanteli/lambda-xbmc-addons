@@ -16,15 +16,15 @@
 	<string id="30362">Recherche</string>
 	<!-- ContextMenu -->
 	<string id="30401">Lecture</string>
-	<string id="30402">Random Play</string>
-	<string id="30403">Lecture Aléatoire</string>
+	<string id="30402">Lecture Aléatoire</string>
+	<string id="30403">Lecture depuis ce point</string>
 	<string id="30404">Videos en attente</string>
 	<string id="30405">Mettre la vidéo en attente</string>
 	<string id="30406">Télécharger la vidéo</string>
 	<string id="30407">Paramètres de l'extension</string>
-	<string id="30408">En cours de lecture...</string>
-	<string id="30409">Acceuil...</string>
-	<string id="30410">Établir comme vue globale</string>
+	<string id="30408">Liste de lecture...</string>
+	<string id="30409">Retour à l'acceuil...</string>
+	<string id="30410">Vue Globale</string>
 	<!-- Description -->
 	<string id="40450">Extreme Sports</string>
 	<!-- Labels -->

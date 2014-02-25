@@ -15,20 +15,20 @@
 	<string id="30362">Recherche</string>
 	<!-- ContextMenu -->
 	<string id="30401">Lecture</string>
-	<string id="30402">Random Play</string>
-	<string id="30403">Lecture Aléatoire</string>
+	<string id="30402">Lecture Aléatoire</string>
+	<string id="30403">Lecture depuis ce point</string>
 	<string id="30404">Videos en attente</string>
 	<string id="30405">Mettre la vidéo en attente</string>
 	<string id="30406">Télécharger la vidéo</string>
 	<string id="30407">Paramètres de l'extension</string>
-	<string id="30408">En cours de lecture...</string>
-	<string id="30409">Acceuil...</string>
-	<string id="30410">Établir comme vue globale</string>
+	<string id="30408">Liste de lecture...</string>
+	<string id="30409">Retour à l'acceuil...</string>
+	<string id="30410">Vue Globale</string>
 	<!-- Description -->
 	<string id="40450">Regarder les matchs de football à tout moment</string>
 	<!-- Labels -->
-	<string id="30501">Les matchs</string>
-	<string id="30502">Les temps forts</string>
+	<string id="30501">Matchs</string>
+	<string id="30502">Temps Forts</string>
 	<string id="30503">Recherche</string>
 	<string id="30504">Premier League</string>
 	<string id="30505">La Liga</string>

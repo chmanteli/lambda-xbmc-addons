@@ -935,7 +935,7 @@ class genres:
 
     def muchmovies(self):
         #self.list = self.muchmovies_list()
-        self.list = cache(self.muchmovies_list)
+        self.list = cache3(self.muchmovies_list)
         index().pageList(self.list)
 
     def muchmovies_list(self):
