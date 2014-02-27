@@ -2,69 +2,26 @@
 <strings>
 	<!-- Settings -->
 	<string id="30000">Γενικά</string>
-	<string id="30001">Βάση δεδομένων</string>
-	<string id="30002">Αστερίσκος σε σειρές εκτός ororo.tv</string>
-	<string id="30003">Σε ορισμένες περιοχές ίσως είναι απαραίτητη η είδοδος στο ororo.tv</string>
-	<string id="30004">Email</string>
-	<string id="30005">Κωδικός</string>
-	<string id="30020">Πηγές</string>
-	<string id="30021">Αυτόματη αναπαραγωγή</string>
-	<string id="30022">Ροή Ororo όταν είναι διαθέσιμη</string>
-	<string id="30031">Προτεραιότητα 1</string>
-	<string id="30032">Προτεραιότητα 2</string>
-	<string id="30033">Προτεραιότητα 3</string>
-	<string id="30034">Προτεραιότητα 4</string>
-	<string id="30035">Προτεραιότητα 5</string>
-	<string id="30036">Προτεραιότητα 6</string>
-	<string id="30037">Προτεραιότητα 7</string>
-	<string id="30038">Προτεραιότητα 8</string>
-	<string id="30039">Προτεραιότητα 9</string>
-	<string id="30040">Προτεραιότητα 10</string>
-	<string id="30050">Ανενεργό</string>
-	<string id="30051">Putlocker</string>
-	<string id="30052">Sockshare</string>
-	<string id="30053">Movreel</string>
-	<string id="30054">Flashx</string>
-	<string id="30055">Played</string>
-	<string id="30056">Nowvideo</string>
-	<string id="30057">Filenuke</string>
-	<string id="30058">Vidx</string>
-	<string id="30059">Streamcloud</string>
-	<string id="30060">Novamov</string>
-	<string id="30061">Uploadc</string>
-	<string id="30062">Xvidstage</string>
-	<string id="30063">StageVu</string>
-	<string id="30064">Gorillavid</string>
-	<string id="30065">Divxstage</string>
-	<string id="30066">Moveshare</string>
-	<string id="30067">Sharesix</string>
-	<string id="30068">Movpod</string>
-	<string id="30069">Daclips</string>
-	<string id="30070">Videoweed</string>
-	<string id="30071">Zalaa</string>
-	<string id="30072">Vidxden</string>
-	<string id="30073">Vidbux</string>
-	<string id="30074">BillionUploads</string>
-	<string id="30075">180upload</string>
-	<string id="30100">Μεταδεδομένα</string>
-	<string id="30101">Χρήση μεταδεδομένων</string>
-	<string id="30102">Χρήση Fanart</string>
-	<string id="30120">Συλλογή</string>
-	<string id="30121">Μην ξεχάσετε να προσθέσετε τους φάκελους στις πηγές πολυμέσων.</string>
-	<string id="30122">Φάκελος ταινιών</string>
-	<string id="30123">Φάκελος σειρών</string>
-	<string id="30124">Αυτόματες ενημερώσεις συνδρομών</string>
-	<string id="30125">Διάστημα ενημερώσεων συνδρομών</string>
-	<string id="30126">Ενημέρωση συλλογής μετά από ενημερώσεις συνδρομών</string>
-	<string id="30127">Εκκαθάριση συνδρομών για ολοκληρωμένες σειρές</string>
-	<string id="30140">Λήψεις</string>
-	<string id="30141">Φάκελος</string>
-	<string id="30160">Υπότιτλοι</string>
-	<string id="30161">Οι υπότιτλοι μπορεί να είναι μη διαθέσιμοι ή ασυγχρόνιστοι.</string>
-	<string id="30162">Σε αυτή τη περίπτωση χρησιμοποιήστε τους δικούς σας.</string>
-	<string id="30163">Υπότιτλοι</string>
-	<string id="30164">Ανενεργοί</string>
-	<string id="30165">Ελληνικά</string>
+	<string id="30001">Χρήση μεταδεδομένων</string>
+	<string id="30002">Χρήση Fanart</string>
+	<string id="30003">Αγαπημένα</string>
+	<string id="30004">Ταξ.: Τίτλος</string>
+	<string id="30005">Ταξ.: Κατάσταση</string>
+	<string id="30006">Ταξ.: Προσθήκη</string>
+	<string id="30007">Λήψεις</string>
+	<string id="30008">Συνέχιση αναπαραγωγής</string>
+	<string id="30040">Συλλογή</string>
+	<string id="30041">Μην ξεχάσετε να προσθέσετε το φάκελο στις πηγές πολυμέσων.</string>
+	<string id="30042">Φάκελος σειρών</string>
+	<string id="30043">Αυτόματες ενημερώσεις συνδρομών</string>
+	<string id="30044">Διάστημα ενημερώσεων συνδρομών</string>
+	<string id="30045">Ενημέρωση συλλογής μετά από ενημερώσεις συνδρομών</string>
+	<string id="30080">Υπότιτλοι</string>
+	<string id="30081">Οι υπότιτλοι μπορεί να είναι μη διαθέσιμοι ή ασυγχρόνιστοι.</string>
+	<string id="30082">Σε αυτή τη περίπτωση χρησιμοποιήστε τους δικούς σας.</string>
+	<string id="30083">Υπότιτλοι</string>
+	<string id="30084">Ανενεργοί</string>
+	<string id="30085">Ελληνικά</string>
 	<!-- Info -->
 	<string id="30301">Η </string>
 	<string id="30302"> είναι πλέον προεπιλεγμένη</string>
@@ -81,11 +38,17 @@
 	<string id="30313">Αφαιρέθηκε από τις Συνδρομές</string>
 	<string id="30314">Οι Συνδρομές ενημερώθηκαν</string>
 	<string id="30315">Οι Συνδρομές εκκαθαριστήκαν</string>
-	<string id="30316">Δεν υπάρχουν διαθέσιμοι υπότιτλοι</string>
-	<string id="30317">Δεν υπάρχει διαθέσιμη ροή</string>
+	<string id="30316">Υπάρχει ήδη στις Συνδρομές</string>
+	<string id="30317">Δεν υπάρχουν διαθέσιμοι υπότιτλοι</string>
+	<string id="30318">Δεν υπάρχει διαθέσιμη ροή</string>
+	<string id="30319">Φόρτωση σε</string>
 	<!-- OK -->
 	<string id="30321">Το πρόσθετο YouTube δεν έχει εγκατασταθεί.</string>
 	<string id="30322">Η ροή αυτή το απαιτεί.</string>
+	<string id="30323">Δεν έχετε προσθέσει Συνδρομές.</string>
+	<string id="30324">Τα Πρόσφατα Επεισόδια το απαιτούν.</string>
+	<string id="30325">Έχετε απενεργοποιήσει τις Αυτόματες ενημερώσεις συνδρομών.</string>
+	<string id="30326">Τα Πρόσφατα Επεισόδια το απαιτούν.</string>
 	<!-- YesNo -->
 	<string id="30341">Δεν έχετε ορίσει φάκελο λήψης.</string>
 	<string id="30342">Θέλετε να τον ορίσετε τώρα;</string>
@@ -95,6 +58,13 @@
 	<string id="30346">Θέλετε να την ακυρώσετε;</string>
 	<string id="30347">Η σειρά αυτή φαίνεται να έχει ολοκληρωθεί.</string>
 	<string id="30348">Θέλετε πραγματικά να τη προσθέσετε;</string>
+	<string id="30349">Η σειρά αυτή φαίνεται να έχει ολοκληρωθεί.</string>
+	<string id="30350">Θέλετε πραγματικά να την αφαιρέσετε;</string>
+	<string id="30351">Η σειρά αυτή θα παραμείνει στη βιβλιοθήκη.</string>
+	<string id="30352">Θέλετε να αφαιρέθει από τη βιβλιοθήκη;</string>
+	<string id="30353">Συνέχεια από</string>
+	<string id="30354">Συνέχεια</string>
+	<string id="30355">Εκκίνηση από την αρχή</string>
 	<!-- Misc -->
 	<string id="30361">Επόμενη σελίδα</string>
 	<string id="30362">Αναζήτηση</string>
@@ -133,8 +103,9 @@
 	<string id="30430">Ορισμός θέασης κύκλων</string>
 	<string id="30431">Ορισμός θέασης επεισοδίων</string>
 	<string id="30432">Πηγές</string>
+	<string id="30433">Αυτόματη αναπαραγωγή</string>
 	<!-- Description -->
-	<string id="40450">Παρακολουθήστε σειρές από το ororo.tv</string>
+	<string id="30450">Παρακολουθήστε σειρές από το ororo.tv</string>
 	<!-- Labels -->
 	<string id="30501">Τίτλος</string>
 	<string id="30502">Κυκλοφορία</string>
@@ -143,6 +114,4 @@
 	<string id="30505">Αγαπημένα</string>
 	<string id="30506">Συνδρομές</string>
 	<string id="30507">Αναζήτηση</string>
-	<string id="30521">Ororo</string>
-	<string id="30522">Εξωτερικό</string>
 </strings>

@@ -1,4 +1,14 @@
 ------------------------
+Football Today v2.1.3 (27-Feb-14)
+------------------------
+
+- Fixed various encryption issues.
+- Added more resolvers.
+- Updated French translation.
+- Code cosmetics.
+
+
+------------------------
 Football Today v2.1.2 (25-Feb-14)
 ------------------------
 

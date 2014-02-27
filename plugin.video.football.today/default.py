@@ -38,7 +38,7 @@ addonVersion        = xbmcaddon.Addon().getAddonInfo("version")
 addonId             = xbmcaddon.Addon().getAddonInfo("id")
 addonPath           = xbmcaddon.Addon().getAddonInfo("path")
 addonFullId         = addonName + addonVersion
-addonDesc           = language(40450).encode("utf-8")
+addonDesc           = language(30450).encode("utf-8")
 cache               = StorageServer.StorageServer(addonFullId,1).cacheFunction
 cache2              = StorageServer.StorageServer(addonFullId,24).cacheFunction
 cache3              = StorageServer.StorageServer(addonFullId,720).cacheFunction
@@ -458,8 +458,6 @@ class root:
         rootList.append({'name': 30513, 'image': 'Copa Libertadores.png', 'action': 'videos_copalibertadores'})
         index().rootList(rootList)
 
-
-
 class link:
     def __init__(self):
         self.lfv_base = 'http://livefootballvideo.com'
@@ -675,13 +673,15 @@ class videoparts:
                 lang = common.parseDOM(video, "span")[0]
                 lang = lang.split("-")[-1].strip()
 
-                parts = re.findall('"(http://.+?)"', video, re.I)
-                parts = [i for i in parts if any(i.startswith(x) for x in resolver().hostList)]
-                if parts == [] and 'proxy.link=lfv*' in video:
+                if 'proxy.link=lfv*' in video:
                     import decrypter
                     parts = re.compile('proxy[.]link=lfv[*](.+?)&').findall(video)
                     parts = uniqueList(parts).list
                     parts = [decrypter.decrypter(198,128).decrypt(i,base64.urlsafe_b64decode('Y0ZNSENPOUhQeHdXbkR4cWJQVlU='),'ECB').split('\0')[0] for i in parts]
+                else:
+                    video = video.replace('"//', '"http://')
+                    parts = re.findall('"(http://.+?)"', video, re.I)
+                    parts = [i for i in parts if any(i.startswith(x) for x in resolver().hostList)]
 
                 count = 0
                 for url in parts:
@@ -736,7 +736,7 @@ class resolver:
         self.playwire_base = 'http://cdn.playwire.com'
         self.youtube_base = 'http://www.youtube.com'
         self.rutube_base = 'http://rutube.ru'
-        self.rutube_base = 'http://rutube.ru'
+        self.videa_base = 'http://videa.hu'
         self.sapo_base = 'http://videos.sapo.pt'
         self.hostList = self.host_list()
 
@@ -748,6 +748,7 @@ class resolver:
             elif url.startswith(self.playwire_base): url = self.playwire(url)
             elif url.startswith(self.youtube_base): url = self.youtube(url)
             elif url.startswith(self.rutube_base): url = self.rutube(url)
+            elif url.startswith(self.videa_base): url = self.videa(url)
             elif url.startswith(self.sapo_base): url = self.sapo(url)
 
             if url is None: raise Exception()
@@ -758,7 +759,7 @@ class resolver:
             return
 
     def host_list(self):
-        return [self.vk_base, self.dailymotion_base, self.facebook_base, self.playwire_base, self.youtube_base, self.rutube_base, self.sapo_base]
+        return [self.vk_base, self.dailymotion_base, self.facebook_base, self.playwire_base, self.youtube_base, self.rutube_base, self.videa_base, self.sapo_base]
 
     def vk(self, url):
         try:
@@ -775,9 +776,8 @@ class resolver:
             except: pass
             try: url = re.compile('url480=(.+?)&').findall(result)[0]
             except: pass
-            if getSetting("quality") == 'true' or url is None:
-                try: url = re.compile('url720=(.+?)&').findall(result)[0]
-                except: pass
+            try: url = re.compile('url720=(.+?)&').findall(result)[0]
+            except: pass
 
             return url
         except:
@@ -809,6 +809,7 @@ class resolver:
         result = re.compile('Set-Cookie: h=(.*?)\;.*?\sSet-Cookie:\ss=(.*?);.*?\sSet-Cookie:\sl=(.*?);.*?\sSet-Cookie:\sp=(.*?);.*?\sLocation.*?hash=(.*)').findall(result)
         h, s, l, p, hash = result[0][0], result[0][1], result[0][2], result[0][3], result[0][4]
         icookiePost = "h=%s; s=%s; p=%s; l=%s; remixlang=3" % (h,s,p,l)
+        if hash[len(hash)-1] == '\r': hash = hash[:-1]
         urlPost = 'http://vk.com/login.php?act=slogin&to=&s=%s&__q_hash=%s' % (s,hash)
 
         post = {'icookie':icookiePost,
@@ -846,9 +847,8 @@ class resolver:
             except: pass
             try: url = re.compile('"stream_h264_hq_url":"(.+?)"').findall(result)[0]
             except: pass
-            if getSetting("quality") == 'true' or url is None:
-                try: url = re.compile('"stream_h264_hd_url":"(.+?)"').findall(result)[0]
-                except: pass
+            try: url = re.compile('"stream_h264_hd_url":"(.+?)"').findall(result)[0]
+            except: pass
 
             url = urllib.unquote(url).decode('utf-8').replace('\\/', '/')
             return url
@@ -899,6 +899,19 @@ class resolver:
         except:
             return
 
+    def videa(self, url):
+        try:
+            url = url.rsplit("v=", 1)[-1].rsplit("-", 1)[-1]
+            if url.startswith('http://'): raise Exception()
+            url = 'http://videa.hu/flvplayer_get_video_xml.php?v=%s' % url
+
+            result = getUrl(url).result
+            url = re.compile('video_url="(.+?)"').findall(result)[0]
+
+            return url
+        except:
+            return
+
     def sapo(self, url):
         try:
             id = url.split("file=")[-1].split("sapo.pt/")[-1].split("/")[0]
@@ -912,6 +925,5 @@ class resolver:
             return url
         except:
             return
-
 
 main()

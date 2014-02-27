@@ -1,4 +1,21 @@
 ------------------------
+Ororo TV v2.0.0 (27-Feb-13)
+------------------------
+
+- Re-work of addon.
+- Added Dutch, French, Polish, Portuguese and Romanian translation.
+- Added option for resuming playback.
+- Tweaked playback from library.
+- Tweaked watched status.
+- Tweaked context menus.
+- Tweaked cache (less traffic to ororo.tv).
+- Removed everything outside ororo.tv database.
+- NOTE: Your favourites and subscriptions have to be re-added.
+- NOTE: Ororo TV Folder has to be cleaned.
+- Code cosmetics.
+
+
+------------------------
 Ororo TV v1.1.2 (17-Dec-13)
 ------------------------
 
