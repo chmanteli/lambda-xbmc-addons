@@ -16,9 +16,9 @@
 	<string id="30080">Napisy</string>
 	<string id="30081">Napisy mogą być niedostępne bądź działać nieprawidłowo.</string>
 	<string id="30082">W takim przypadku użyj własnego pliku z napisami.</string>
-	<string id="30083">Napisy</string>
-	<string id="30084">Wyłączone</string>
-	<string id="30085">Greckie</string>
+	<string id="30083">Włącz napisy</string>
+	<string id="30084">Pierwszy język</string>
+	<string id="30085">Drugi język</string>
 	<!-- Info -->
 	<string id="30301"></string>
 	<string id="30302"> domyślnie włączone</string>
@@ -102,7 +102,7 @@
 	<string id="30432">Wybierz Źródło</string>
 	<string id="30433">Auto-odtwarzanie</string>
 	<!-- Description -->
-	<string id="40450">Oglądaj filmy z viooz.co</string>
+	<string id="30450">Oglądaj filmy z viooz.co</string>
 	<!-- Labels -->
 	<string id="30501">Data dodania</string>
 	<string id="30502">Filmy HD</string>

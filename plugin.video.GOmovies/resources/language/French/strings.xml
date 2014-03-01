@@ -15,7 +15,6 @@
 	<string id="30011">Info sur le stream</string>
 	<string id="30012">Reprendre la lecture</string>
 	<string id="30013">Filtrer la Recherche</string>
-	<string id="30030">Sources</string>
 	<string id="30031">Priorité 1</string>
 	<string id="30032">Priorité 2</string>
 	<string id="30033">Priorité 3</string>
@@ -26,8 +25,8 @@
 	<string id="30038">Priorité 8</string>
 	<string id="30039">Priorité 9</string>
 	<string id="30040">Priorité 10</string>
-	<string id="30041">Qualité HD</string>
-	<string id="30042">Qualité SD</string>
+	<string id="30041">Hôtes HD</string>
+	<string id="30042">Hôtes SD</string>
 	<string id="30060">Sources</string>
 	<string id="30080">Médiathèque</string>
 	<string id="30081">N'oubliez pas d'ajouter ce dossier à vos sources de média.</string>
@@ -39,9 +38,9 @@
 	<string id="30120">Sous-titres</string>
 	<string id="30121">Certains sous-titres peuvent être indisponibles ou décalés.</string>
 	<string id="30122">Dans ce cas utilisez vos fichiers ou extension de sous-titres.</string>
-	<string id="30123">Sous-titres</string>
-	<string id="30124">Désactivés</string>
-	<string id="30125">Grec</string>
+	<string id="30123">Activer les sous-titres</string>
+	<string id="30124">Langue principale</string>
+	<string id="30125">Seconde Langue</string>
 	<!-- Info -->
 	<string id="30301"></string>
 	<string id="30302"> est actif par défaut</string>
@@ -99,15 +98,15 @@
 	<string id="30406">Télécharger la video</string>
 	<string id="30407">Marquer comme non vu</string>
 	<string id="30408">Marquer comme vu</string>
-	<string id="30409">Réglages de l'extension</string>
-	<string id="30410">En cours de lecture...</string>
-	<string id="30411">Acceuil...</string>
+	<string id="30409">Paramètres de l'extension</string>
+	<string id="30410">Liste de lecture...</string>
+	<string id="30411">Retour à l'accueil...</string>
 	<string id="30412">Information du Film</string>
 	<string id="30413">Information de la Série TV</string>
 	<string id="30414">Information de l'Episode</string>
 	<string id="30415">Rafraîchir les Infos</string>
 	<string id="30416">Voir la Bande Annonce</string>
-	<string id="30417">Ajouter à mes favoris</string>
+	<string id="30417">Ajouter à Mes Favoris</string>
 	<string id="30418">Retirer des favoris</string>
 	<string id="30419">Monter dans la liste</string>
 	<string id="30420">Descendre dans la liste</string>
@@ -125,7 +124,7 @@
 	<string id="30432">Sources</string>
 	<string id="30433">Auto-play</string>
 	<!-- Description -->
-	<string id="40450">Une sélection de Films en Version Originale (Anglais)</string>
+	<string id="30450">Une sélection de Films en Version Originale (Anglais)</string>
 	<!-- Labels -->
 	<string id="30501">BOXoffice</string>
 	<string id="30502">Les Plus Vus</string>

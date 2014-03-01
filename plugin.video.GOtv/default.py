@@ -30,6 +30,9 @@ from metahandler import metahandlers
 from metahandler import metacontainers
 
 
+action              = None
+common              = CommonFunctions
+metaget             = metahandlers.MetaData(preparezip=False)
 language            = xbmcaddon.Addon().getLocalizedString
 setSetting          = xbmcaddon.Addon().setSetting
 getSetting          = xbmcaddon.Addon().getSetting
@@ -37,7 +40,11 @@ addonName           = xbmcaddon.Addon().getAddonInfo("name")
 addonVersion        = xbmcaddon.Addon().getAddonInfo("version")
 addonId             = xbmcaddon.Addon().getAddonInfo("id")
 addonPath           = xbmcaddon.Addon().getAddonInfo("path")
-addonDesc           = language(40450).encode("utf-8")
+addonFullId         = addonName + addonVersion
+addonDesc           = language(30450).encode("utf-8")
+cache               = StorageServer.StorageServer(addonFullId,1).cacheFunction
+cache2              = StorageServer.StorageServer(addonFullId,24).cacheFunction
+cache3              = StorageServer.StorageServer(addonFullId,720).cacheFunction
 addonIcon           = os.path.join(addonPath,'icon.png')
 addonFanart         = os.path.join(addonPath,'fanart.jpg')
 addonArt            = os.path.join(addonPath,'resources/art')
@@ -50,20 +57,12 @@ viewData            = os.path.join(dataPath,'views.cfg')
 offData             = os.path.join(dataPath,'offset.cfg')
 favData             = os.path.join(dataPath,'favourites.cfg')
 subData             = os.path.join(dataPath,'subscriptions.cfg')
-metaget             = metahandlers.MetaData(preparezip=False)
-cache               = StorageServer.StorageServer(addonName+addonVersion,1).cacheFunction
-cache2              = StorageServer.StorageServer(addonName+addonVersion,24).cacheFunction
-cache3              = StorageServer.StorageServer(addonName+addonVersion,720).cacheFunction
-common              = CommonFunctions
-tvdb_key            = None
-action              = None
 
 
 class main:
     def __init__(self):
         global action
         index().container_data()
-        index().api_key()
         params = {}
         splitparams = sys.argv[2][sys.argv[2].find('?') + 1:].split('&')
         for param in splitparams:
@@ -221,14 +220,14 @@ class Thread(threading.Thread):
 
 class player(xbmc.Player):
     def __init__ (self):
-        self.property = addonName+'player_status'
+        self.folderPath = xbmc.getInfoLabel('Container.FolderPath')
         self.loadingStarting = time.time()
         xbmc.Player.__init__(self)
 
     def run(self, name, url, imdb='0'):
         self.video_info(name, imdb)
 
-        if xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
+        if self.folderPath.startswith(sys.argv[0]):
             item = xbmcgui.ListItem(path=url)
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
         else:
@@ -241,10 +240,10 @@ class player(xbmc.Player):
                 meta = json.loads(meta)
                 meta = meta['result']['episodes']
                 self.meta = [i for i in meta if i['file'].endswith(file)][0]
-                meta = {'title' : self.meta['title'], 'tvshowtitle': self.meta['showtitle'], 'season': self.meta['season'], 'episode': self.meta['episode'], 'writer': str(self.meta['writer']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'director': str(self.meta['director']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'rating': self.meta['rating'], 'duration': self.meta['runtime'], 'premiered': self.meta['firstaired'], 'plot': self.meta['plot']}
+                meta = {'title': self.meta['title'], 'tvshowtitle': self.meta['showtitle'], 'season': self.meta['season'], 'episode': self.meta['episode'], 'writer': str(self.meta['writer']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'director': str(self.meta['director']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'rating': self.meta['rating'], 'duration': self.meta['runtime'], 'premiered': self.meta['firstaired'], 'plot': self.meta['plot']}
                 poster = self.meta['thumbnail']
             except:
-                meta = {'label' : self.name, 'title' : self.name}
+                meta = {'label': self.name, 'title': self.name}
                 poster = ''
             item = xbmcgui.ListItem(path=url, iconImage="DefaultVideo.png", thumbnailImage=poster)
             item.setInfo( type="Video", infoLabels= meta )
@@ -267,10 +266,10 @@ class player(xbmc.Player):
         self.content = 'episode'
         self.show = self.name.rsplit(' ', 1)[0]
         if imdb == '0': imdb = metaget.get_meta('tvshow', self.show)['imdb_id']
-        self.imdb = re.sub("[^0-9]", "", imdb)
+        self.imdb = re.sub('[^0-9]', '', imdb)
         self.season = '%01d' % int(name.rsplit(' ', 1)[-1].split('S')[-1].split('E')[0])
         self.episode = '%01d' % int(name.rsplit(' ', 1)[-1].split('E')[-1])
-        return
+        self.subtitle = subtitles().get(self.name, self.imdb, self.season, self.episode)
 
     def offset_add(self):
         try:
@@ -308,7 +307,11 @@ class player(xbmc.Player):
         try:
             xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.SetEpisodeDetails", "params": {"episodeid" : %s, "playcount" : 1 }, "id": 1 }' % str(self.meta['episodeid']))
         except:
+            params = {}
             metaget.change_watched(self.content, '', self.imdb, season=self.season, episode=self.episode, year='', watched=7)
+            query = self.folderPath[self.folderPath.find('?') + 1:].split('&')
+            for i in query: params[i.split('=')[0]] = i.split('=')[1]
+            if not params["action"].endswith('_search'): index().container_refresh()
 
     def resume_playback(self):
         offset = float(self.offset)
@@ -319,14 +322,10 @@ class player(xbmc.Player):
         yes = index().yesnoDialog('%s %s' % (language(30353).encode("utf-8"), offset_time), '', self.name, language(30354).encode("utf-8"), language(30355).encode("utf-8"))
         if yes: self.seekTime(offset)
 
-    def status(self):
-        getProperty = index().getProperty(self.property)
-        index().clearProperty(self.property)
-        if not xbmc.getInfoLabel('Container.FolderPath') == '': return
-        if getProperty == 'true': return True
-        return
-
     def onPlayBackStarted(self):
+        try: self.setSubtitles(self.subtitle)
+        except: pass
+
         if getSetting("playback_info") == 'true':
             elapsedTime = '%s %.2f seconds' % (language(30319).encode("utf-8"), (time.time() - self.loadingStarting))     
             index().infoDialog(elapsedTime, header=self.name)
@@ -335,97 +334,67 @@ class player(xbmc.Player):
             self.offset_read()
             self.resume_playback()
 
-        subtitles().get(re.sub('\s[(].+?[)]','', self.name))
-
     def onPlayBackEnded(self):
-        if xbmc.getInfoLabel('Container.FolderPath') == '': index().setProperty(self.property, 'true')
         self.change_watched()
         self.offset_delete()
-        index().container_refresh()
 
     def onPlayBackStopped(self):
-        index().clearProperty(self.property)
         if self.currentTime / self.totalTime >= .9:
             self.change_watched()
         self.offset_delete()
         self.offset_add()
-        index().container_refresh()
 
 class subtitles:
-    def get(self, name):
-        subs = getSetting("subs")
-        if subs == '1': self.greek(name)
+    def get(self, name, imdb, season, episode):
+        lang = ''
+        subtitles = []
+        quality = ['bluray', 'hdrip', 'brrip', 'bdrip', 'dvdrip', 'webrip', 'hdtv']
+        langDict = {'Afrikaans': 'afr', 'Albanian': 'alb', 'Arabic': 'ara', 'Armenian': 'arm', 'Basque': 'baq', 'Bengali': 'ben', 'Bosnian': 'bos', 'Breton': 'bre', 'Bulgarian': 'bul', 'Burmese': 'bur', 'Catalan': 'cat', 'Chinese': 'chi', 'Croatian': 'hrv', 'Czech': 'cze', 'Danish': 'dan', 'Dutch': 'dut', 'English': 'eng', 'Esperanto': 'epo', 'Estonian': 'est', 'Finnish': 'fin', 'French': 'fre', 'Galician': 'glg', 'Georgian': 'geo', 'German': 'ger', 'Greek': 'ell', 'Hebrew': 'heb', 'Hindi': 'hin', 'Hungarian': 'hun', 'Icelandic': 'ice', 'Indonesian': 'ind', 'Italian': 'ita', 'Japanese': 'jpn', 'Kazakh': 'kaz', 'Khmer': 'khm', 'Korean': 'kor', 'Latvian': 'lav', 'Lithuanian': 'lit', 'Luxembourgish': 'ltz', 'Macedonian': 'mac', 'Malay': 'may', 'Malayalam': 'mal', 'Manipuri': 'mni', 'Mongolian': 'mon', 'Montenegrin': 'mne', 'Norwegian': 'nor', 'Occitan': 'oci', 'Persian': 'per', 'Polish': 'pol', 'Portuguese': 'por,pob', 'Romanian': 'rum', 'Russian': 'rus', 'Serbian': 'scc', 'Sinhalese': 'sin', 'Slovak': 'slo', 'Slovenian': 'slv', 'Spanish': 'spa', 'Swahili': 'swa', 'Swedish': 'swe', 'Syriac': 'syr', 'Tagalog': 'tgl', 'Tamil': 'tam', 'Telugu': 'tel', 'Thai': 'tha', 'Turkish': 'tur', 'Ukrainian': 'ukr', 'Urdu': 'urd'}
 
-    def greek(self, name):
+        if not getSetting("subtitles") == 'true': return
+        lang1 = getSetting("sublang1")
+        lang2 = getSetting("sublang2")
+
         try:
-            import shutil, zipfile, time
-            sub_tmp = os.path.join(dataPath,'sub_tmp')
-            sub_tmp2 = os.path.join(sub_tmp, "subs")
-            sub_stream = os.path.join(dataPath,'sub_stream')
-            sub_file = os.path.join(sub_tmp, 'sub_tmp.zip')
-            try: os.makedirs(dataPath)
-            except: pass
-            try: os.remove(sub_tmp)
-            except: pass
-            try: shutil.rmtree(sub_tmp)
-            except: pass
-            try: os.makedirs(sub_tmp)
-            except: pass
-            try: os.remove(sub_stream)
-            except: pass
-            try: shutil.rmtree(sub_stream)
-            except: pass
-            try: os.makedirs(sub_stream)
-            except: pass
+            import xmlrpclib
+            server = xmlrpclib.Server('http://api.opensubtitles.org/xml-rpc', verbose=0)
+            token = server.LogIn('', '', 'en', 'XBMC_Subtitles_v1')['token']
+        except:
+            return
 
-            subtitles = []
-            query = ''.join(e for e in name if e.isalnum() or e == ' ')
-            query = urllib.quote_plus(query)
-            url = 'http://www.greeksubtitles.info/search.php?name=' + query
-            result = getUrl(url).result
-            result = result.decode('iso-8859-7').encode('utf-8')
-            result = result.lower().replace('"',"'")
-            match = "get_greek_subtitles[.]php[?]id=(.+?)'.+?%s.+?<"
-            quality = ['bluray', 'brrip', 'bdrip', 'dvdrip', 'hdtv']
-            for q in quality:
-                subtitles += re.compile(match % q).findall(result)
-            if subtitles == []: raise Exception()
-            for subtitle in subtitles:
-                url = 'http://www.findsubtitles.eu/getp.php?id=' + subtitle
-                response = urllib.urlopen(url)
-                content = response.read()
-                response.close()
-                if content[:4] == 'PK': break
+        try:
+            result = server.SearchSubtitles(token, [{'sublanguageid': langDict[lang1], 'imdbid': imdb, 'season': season, 'episode': episode}])['data']
+            result = [i for i in result if i['SubSumCD'] == '1']
+            for q in quality: subtitles += [i for i in result if q in i['MovieReleaseName'].lower()]
+            subtitles += [i for i in result if not any(x in i['MovieReleaseName'].lower() for x in quality)]
+            lang = xbmc.convertLanguage(langDict[lang1][:3], xbmc.ISO_639_1)
+        except:
+            pass
+        try:
+            if not subtitles == []: raise Exception()
+            result = server.SearchSubtitles(token, [{'sublanguageid': langDict[lang2], 'imdbid': imdb, 'season': season, 'episode': episode}])['data']
+            result = [i for i in result if i['SubSumCD'] == '1']
+            for q in quality: subtitles += [i for i in result if q in i['MovieReleaseName'].lower()]
+            subtitles += [i for i in result if not any(x in i['MovieReleaseName'].lower() for x in quality)]
+            lang = xbmc.convertLanguage(langDict[lang2][:3], xbmc.ISO_639_1)
+        except:
+            pass
 
-            file = open(sub_file, 'wb')
+        try:
+            import zlib, base64
+            content = [subtitles[0]["IDSubtitleFile"],]
+            content = server.DownloadSubtitles(token, content)
+            content = base64.b64decode(content['data'][0]['data'])
+            content = zlib.decompressobj(16+zlib.MAX_WBITS).decompress(content)
+
+            subtitle = xbmc.translatePath('special://temp/')
+            subtitle = os.path.join(subtitle, 'TemporarySubs.%s.srt' % lang)
+            file = open(subtitle, 'wb')
             file.write(content)
             file.close()
-            file = zipfile.ZipFile(sub_file, 'r')
-            file.extractall(sub_tmp)
-            file.close()
-            files = os.listdir(sub_tmp2)
-            if files == []: raise Exception()
-            file = [i for i in files if i.endswith('.srt') or i.endswith('.sub')]
-            if file == []:
-                pack = [i for i in files if i.endswith('.zip') or i.endswith('.rar')]
-                pack = os.path.join(sub_tmp2, pack[0])
-                xbmc.executebuiltin('Extract("%s","%s")' % (pack, sub_tmp2))
-                time.sleep(1)
-            files = os.listdir(sub_tmp2)
-            file = [i for i in files if i.endswith('.srt') or i.endswith('.sub')][0]
-            copy = os.path.join(sub_tmp2, file)
-            shutil.copy(copy, sub_stream)
-            try: shutil.rmtree(sub_tmp)
-            except: pass
-            file = os.path.join(sub_stream, file)
-            if not os.path.isfile(file): raise Exception()
 
-            xbmc.Player().setSubtitles(file)
+            return subtitle
         except:
-            try: shutil.rmtree(sub_tmp)
-            except: pass
-            try: shutil.rmtree(sub_stream)
-            except: pass
             index().infoDialog(language(30317).encode("utf-8"), name)
             return
 
@@ -481,10 +450,6 @@ class index:
             file = xbmcvfs.File(offData, 'w')
             file.write('')
             file.close()
-
-    def api_key(self):
-        global tvdb_key
-        tvdb_key = base64.urlsafe_b64decode('MUQ2MkYyRjkwMDMwQzQ0NA==')
 
     def container_view(self, content, viewDict):
         try:
@@ -593,7 +558,7 @@ class index:
                     meta = metaget.get_meta('tvshow', title, imdb_id=imdb)
                     playcountMenu = language(30407).encode("utf-8")
                     if meta['overlay'] == 6: playcountMenu = language(30408).encode("utf-8")
-                    metaimdb = urllib.quote_plus(re.sub("[^0-9]", "", meta['imdb_id']))
+                    metaimdb = urllib.quote_plus(re.sub('[^0-9]', '', meta['imdb_id']))
                     poster, banner = meta['cover_url'], meta['banner_url']
                     if banner == '': banner = poster
                     if banner == '': banner = image
@@ -707,7 +672,7 @@ class index:
                     poster = season_meta[i]['cover_url']
                     playcountMenu = language(30407).encode("utf-8")
                     if season_meta[i]['overlay'] == 6: playcountMenu = language(30408).encode("utf-8")
-                    metaimdb, metaseason = urllib.quote_plus(re.sub("[^0-9]", "", str(season_meta[i]['imdb_id']))), urllib.quote_plus(str(season_meta[i]['season']))
+                    metaimdb, metaseason = urllib.quote_plus(re.sub('[^0-9]', '', str(season_meta[i]['imdb_id']))), urllib.quote_plus(str(season_meta[i]['season']))
                     if poster == '': poster = image
                     if banner == '': banner = poster
                     if banner == '': banner = image
@@ -751,7 +716,7 @@ class index:
                 u = '%s?action=play&name=%s&title=%s&imdb=%s&tvdb=%s&year=%s&season=%s&episode=%s&show=%s&show_alt=%s&url=%s&t=%s' % (sys.argv[0], sysname, systitle, sysimdb, systvdb, sysyear, sysseason, sysepisode, sysshow, sysshow_alt, sysurl, datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"))
 
                 if getSetting("meta") == 'true':
-                    imdb = re.sub("[^0-9]", "", imdb)
+                    imdb = re.sub('[^0-9]', '', imdb)
                     meta = metaget.get_episode_meta(title, imdb, season, episode)
                     meta.update({'tvshowtitle': show})
                     if meta['title'] == '': meta.update({'title': title})
@@ -760,7 +725,7 @@ class index:
                     if meta['plot'] == '': meta.update({'plot': plot})
                     playcountMenu = language(30407).encode("utf-8")
                     if meta['overlay'] == 6: playcountMenu = language(30408).encode("utf-8")
-                    metaimdb, metaseason, metaepisode = urllib.quote_plus(re.sub("[^0-9]", "", str(meta['imdb_id']))), urllib.quote_plus(str(meta['season'])), urllib.quote_plus(str(meta['episode']))
+                    metaimdb, metaseason, metaepisode = urllib.quote_plus(re.sub('[^0-9]', '', str(meta['imdb_id']))), urllib.quote_plus(str(meta['season'])), urllib.quote_plus(str(meta['episode']))
                     label = str(meta['season']) + 'x' + '%02d' % int(meta['episode']) + ' . ' + meta['title']
                     if action == 'episodes_subscriptions': label = show + ' - ' + label
                     poster = meta['cover_url']
@@ -1146,6 +1111,7 @@ class contextMenu:
 
             url = resolver().run(name, title, imdb, tvdb, year, season, episode, show, show_alt, 'download://')
             if url is None: return
+            url = url.rsplit('|', 1)[0]
             ext = url.rsplit('/', 1)[-1].rsplit('?', 1)[0].rsplit('|', 1)[0].strip().lower()
             ext = os.path.splitext(ext)[1][1:]
             if ext == '': ext = 'mp4'
@@ -1156,7 +1122,7 @@ class contextMenu:
             CHUNK = 16 * 1024
             request = urllib2.Request(url)
             request.add_header('User-Agent', 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_0 like Mac OS X; en-us) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 Mobile/8A293 Safari/6531.22.7')
-            request.add_header('Cookie', 'video=true') #add cookie
+            request.add_header('Cookie', 'video=true')
             response = urllib2.urlopen(request, timeout=10)
             size = response.info()["Content-Length"]
 
@@ -1333,6 +1299,7 @@ class link:
         self.imdb_search = 'http://akas.imdb.com/search/title?title_type=tv_series,mini_series&sort=moviemeter,asc&count=25&start=1&title=%s'
 
         self.tvdb_base = 'http://thetvdb.com'
+        self.tvdb_key = base64.urlsafe_b64decode('MUQ2MkYyRjkwMDMwQzQ0NA==')
         self.tvdb_series = 'http://thetvdb.com/api/GetSeriesByRemoteID.php?imdbid=tt%s&language=en'
         self.tvdb_series2 = 'http://thetvdb.com/api/GetSeries.php?seriesname=%s&language=en'
         self.tvdb_episodes = 'http://thetvdb.com/api/%s/series/%s/all/en.xml'
@@ -1447,7 +1414,7 @@ class shows:
                 name = name.encode('utf-8')
 
                 year = common.parseDOM(show, "span", attrs = { "class": "year_type" })[0]
-                year = re.sub("[^0-9]", "", year)[:4]
+                year = re.sub('[^0-9]', '', year)[:4]
                 year = year.encode('utf-8')
 
                 url = common.parseDOM(show, "a", ret="href")[0]
@@ -1455,7 +1422,7 @@ class shows:
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
 
-                imdb = re.sub("[^0-9]", "", url.rsplit('tt', 1)[-1])
+                imdb = re.sub('[^0-9]', '', url.rsplit('tt', 1)[-1])
                 imdb = imdb.encode('utf-8')
 
                 try:
@@ -1475,7 +1442,7 @@ class shows:
                 try:
                     genre = common.parseDOM(show, "span", attrs = { "class": "genre" })
                     genre = common.parseDOM(genre, "a")
-                    genre = str(genre).replace("[u'", '').replace("']", '').replace("', u'", ' / ')
+                    genre = " / ".join(genre)
                     genre = common.replaceHTMLCodes(genre)
                     genre = genre.encode('utf-8')
                 except:
@@ -1509,7 +1476,7 @@ class seasons:
 
     def imdb_list(self, url, image, year, imdb, genre, plot, show):
         try:
-            if imdb == '0': imdb = re.sub("[^0-9]", "", url.rsplit('tt', 1)[-1])
+            if imdb == '0': imdb = re.sub('[^0-9]', '', url.rsplit('tt', 1)[-1])
 
             try:
                 tvdb = link().tvdb_series % imdb
@@ -1522,7 +1489,7 @@ class seasons:
                 tvdb = [i for i in tvdb if show == common.parseDOM(i, "SeriesName")[0] and year in common.parseDOM(i, "FirstAired")[0]][0]
                 tvdb = common.parseDOM(tvdb, "seriesid")[0]
 
-            tvdbUrl = link().tvdb_episodes % (tvdb_key, tvdb)
+            tvdbUrl = link().tvdb_episodes % (link().tvdb_key, tvdb)
             result = getUrl(tvdbUrl).result
 
             show_alt = common.parseDOM(result, "SeriesName")[0]
@@ -1571,11 +1538,11 @@ class episodes:
 
     def imdb_list(self, name, url, image, year, imdb, tvdb, genre, plot, show, show_alt):
         try:
-            season = re.sub("[^0-9]", "", name)
+            season = re.sub('[^0-9]', '', name)
             season = season.encode('utf-8')
-            if imdb == '0': imdb = re.sub("[^0-9]", "", url.rsplit('tt', 1)[-1])
+            if imdb == '0': imdb = re.sub('[^0-9]', '', url.rsplit('tt', 1)[-1])
 
-            tvdbUrl = link().tvdb_episodes % (tvdb_key, tvdb)
+            tvdbUrl = link().tvdb_episodes % (link().tvdb_key, tvdb)
             result = getUrl(tvdbUrl).result
 
             episodes = common.parseDOM(result, "Episode")
@@ -1596,7 +1563,7 @@ class episodes:
                 title = title.encode('utf-8')
 
                 num = common.parseDOM(episode, "EpisodeNumber")[0]
-                num = re.sub("[^0-9]", "", '%01d' % int(num))
+                num = re.sub('[^0-9]', '', '%01d' % int(num))
                 num = num.encode('utf-8')
 
                 name = show_alt + ' S' + '%02d' % int(season) + 'E' + '%02d' % int(num)
@@ -1628,8 +1595,6 @@ class resolver:
 
     def run(self, name, title, imdb, tvdb, year, season, episode, show, show_alt, url):
         try:
-            if player().status() is True: return
-
             self.sources = self.sources_get(name, title, imdb, tvdb, year, season, episode, show, show_alt, self.hostDict)
             self.sources = self.sources_filter()
             if self.sources == []: raise Exception()
@@ -1723,19 +1688,20 @@ class resolver:
             return
 
     def sources_filter(self):
-        filter = []
         #host_rank = ['VKHD', 'WatchfreeinHD', 'TVonline', 'VK', 'Movreel', 'iShared', 'Putlocker', 'Sockshare', 'Flashx', 'Played', 'Vidx', 'Streamcloud']
         host_rank = [getSetting("hosthd1"), getSetting("hosthd2"), getSetting("host1"), getSetting("host2"), getSetting("host3"), getSetting("host4"), getSetting("host5"), getSetting("host6"), getSetting("host7"), getSetting("host8"), getSetting("host9"), getSetting("host10")]
-        host_rank = uniqueList(host_rank + sorted(self.hostDict.keys())).list
-        for host in host_rank: filter += [i for i in self.sources if i['source'] == host]
+
+        filter = []
+        hosts = uniqueList(host_rank + sorted(self.hostDict.keys())).list
+        for host in hosts: filter += [i for i in self.sources if i['source'] == host]
+        self.sources = filter
+
+        filter = [i for i in self.sources if i['quality'] == 'HD' and i['source'] in host_rank]
+        filter += [i for i in self.sources if not i['quality'] == 'HD']
         self.sources = filter
 
         if not getSetting("quality") == 'true':
             self.sources = [i for i in self.sources if not i['quality'] == 'HD']
-        if not getSetting("hosthd1") == 'VKHD':
-            self.sources = [i for i in self.sources if not i['source'] == 'VKHD']
-        if not getSetting("hosthd2") == 'WatchfreeinHD':
-            self.sources = [i for i in self.sources if not i['source'] == 'WatchfreeinHD']
 
         count = 1
         for i in range(len(self.sources)):
@@ -1775,67 +1741,68 @@ class resolver:
 
     def sources_dict(self):
         self.hostDict = {
-        '2gb-hosting' : '2gb-hosting.com',
-        'Allmyvideos' : 'allmyvideos.net',
-        #'180upload' : '180upload.com',
-        'Bayfiles' : 'bayfiles.com',
-        #'BillionUploads' : 'billionuploads.com',
-        'Castamp' : 'castamp.com',
-        #'Clicktoview' : 'clicktoview.org',
-        'Daclips' : 'daclips.com',
-        'Divxstage' : 'divxstage.eu',
-        'Donevideo' : 'donevideo.com',
-        'Ecostream' : 'ecostream.tv',
-        'Filenuke' : 'filenuke.com',
-        'Flashx' : 'flashx.tv',
-        'Gorillavid' : 'gorillavid.com',
-        'Hostingbulk' : 'hostingbulk.com',
-        #'Hugefiles' : 'hugefiles.net',
-        'iShared' : 'ishared.eu',
-        'Jumbofiles' : 'jumbofiles.com',
-        'Lemuploads' : 'lemuploads.com',
-        'Limevideo' : 'limevideo.net',
-        #'Megarelease' : 'megarelease.org',
-        'Mightyupload' : 'mightyupload.com',
-        'Movdivx' : 'movdivx.com',
-        'Movpod' : 'movpod.net',
-        'Movreel' : 'movreel.com',
-        'Movshare' : 'movshare.net',
-        'Movzap' : 'movzap.com',
-        'Muchmovies' : 'muchmovies.org',
-        'Muchshare' : 'muchshare.net',
-        'Nosvideo' : 'nosvideo.com',
-        'Novamov' : 'novamov.com',
-        'Nowvideo' : 'nowvideo.co',
-        'Played' : 'played.to',
-        'Playwire' : 'playwire.com',
-        'Primeshare' : 'primeshare.tv',
-        'Promptfile' : 'promptfile.com',
-        'Purevid' : 'purevid.com',
-        'Putlocker' : 'putlocker.com',
-        'Sharerepo' : 'sharerepo.com',
-        'Sharesix' : 'sharesix.com',
-        'Sockshare' : 'sockshare.com',
-        'StageVu' : 'stagevu.com',
-        'Streamcloud' : 'streamcloud.eu',
-        'Thefile' : 'thefile.me',
-        'TVonline' : 'tvonline.cc',
-        'Uploadc' : 'uploadc.com',
-        'Vidbull' : 'vidbull.com',
-        'Videobb' : 'videobb.com',
-        'Videoweed' : 'videoweed.es',
-        'Videozed' : 'videozed.net',
-        #'Vidhog' : 'vidhog.com',
-        #'Vidplay' : 'vidplay.net',
-        'Vidx' : 'vidx.to',
-        #'Vidxden' : 'vidxden.com',
-        'VK' : '.vk.me',
-        'VKHD' : '.vk.me',
-        'WatchfreeinHD' : 'watchfreeinhd.com',
-        'Xvidstage' : 'xvidstage.com',
-        'YIFY' : 'yify.tv',
-        'Youwatch' : 'youwatch.org',
-        'Zalaa' : 'zalaa.com'
+        'VKHD': '.vk.me',
+        'Muchmovies': 'muchmovies.org',
+        'WatchfreeinHD': 'watchfreeinhd.com',
+        'YIFY': 'yify.tv',
+
+        '2gb-hosting': '2gb-hosting.com',
+        'Allmyvideos': 'allmyvideos.net',
+        #'180upload': '180upload.com',
+        'Bayfiles': 'bayfiles.com',
+        #'BillionUploads': 'billionuploads.com',
+        'Castamp': 'castamp.com',
+        #'Clicktoview': 'clicktoview.org',
+        'Daclips': 'daclips.com',
+        'Divxstage': 'divxstage.eu',
+        'Donevideo': 'donevideo.com',
+        'Ecostream': 'ecostream.tv',
+        'Filenuke': 'filenuke.com',
+        'Flashx': 'flashx.tv',
+        'Gorillavid': 'gorillavid.com',
+        'Hostingbulk': 'hostingbulk.com',
+        #'Hugefiles': 'hugefiles.net',
+        'iShared': 'ishared.eu',
+        'Jumbofiles': 'jumbofiles.com',
+        'Lemuploads': 'lemuploads.com',
+        'Limevideo': 'limevideo.net',
+        #'Megarelease': 'megarelease.org',
+        'Mightyupload': 'mightyupload.com',
+        'Movdivx': 'movdivx.com',
+        'Movpod': 'movpod.net',
+        'Movreel': 'movreel.com',
+        'Movshare': 'movshare.net',
+        'Movzap': 'movzap.com',
+        'Muchshare': 'muchshare.net',
+        'Nosvideo': 'nosvideo.com',
+        'Novamov': 'novamov.com',
+        'Nowvideo': 'nowvideo.co',
+        'Played': 'played.to',
+        'Playwire': 'playwire.com',
+        'Primeshare': 'primeshare.tv',
+        'Promptfile': 'promptfile.com',
+        'Purevid': 'purevid.com',
+        'Putlocker': 'putlocker.com',
+        'Sharerepo': 'sharerepo.com',
+        'Sharesix': 'sharesix.com',
+        'Sockshare': 'sockshare.com',
+        'StageVu': 'stagevu.com',
+        'Streamcloud': 'streamcloud.eu',
+        'Thefile': 'thefile.me',
+        'TVonline': 'tvonline.cc',
+        'Uploadc': 'uploadc.com',
+        'Vidbull': 'vidbull.com',
+        'Videobb': 'videobb.com',
+        'Videoweed': 'videoweed.es',
+        'Videozed': 'videozed.net',
+        #'Vidhog': 'vidhog.com',
+        #'Vidplay': 'vidplay.net',
+        'Vidx': 'vidx.to',
+        #'Vidxden': 'vidxden.com',
+        'VK': '.vk.me',
+        'Xvidstage': 'xvidstage.com',
+        'Youwatch': 'youwatch.org',
+        'Zalaa': 'zalaa.com'
         }
 
 

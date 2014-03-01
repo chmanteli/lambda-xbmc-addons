@@ -14,7 +14,6 @@
 	<string id="30010">Descărcări</string>
 	<string id="30011">Informații suplimentare la incărcare</string>
 	<string id="30012">Redare de la ultima poziție</string>
-	<string id="30030">Servere</string>
 	<string id="30031">Prioritate 1</string>
 	<string id="30032">Prioritate 2</string>
 	<string id="30033">Prioritate 3</string>
@@ -25,8 +24,8 @@
 	<string id="30038">Prioritate 8</string>
 	<string id="30039">Prioritate 9</string>
 	<string id="30040">Prioritate 10</string>
-	<string id="30041">Calitate HD</string>
-	<string id="30042">Calitate SD</string>
+	<string id="30041">Servere HD</string>
+	<string id="30042">Servere SD</string>
 	<string id="30060">Surse</string>
 	<string id="30080">Mediatecă</string>
 	<string id="30081">Nu uita să adaugi directorul la Surse Media</string>
@@ -42,9 +41,9 @@
 	<string id="30120">Subtitrări</string>
 	<string id="30121">Subtitrările pot fi indisponibile sau desincronizate</string>
 	<string id="30122">În acest caz poți utiliza propriile subtitrări</string>
-	<string id="30123">Subtitrări</string>
-	<string id="30124">Dezactivat</string>
-	<string id="30125">Greacă</string>
+	<string id="30123">Activare subtitrări</string>
+	<string id="30124">Limba principală</string>
+	<string id="30125">Limba secundară</string>
 	<!-- Info -->
 	<string id="30301"></string>
 	<string id="30302"> este activat implicit</string>
@@ -128,7 +127,7 @@
 	<string id="30432">Surse</string>
 	<string id="30433">Auto-rulare</string>
 	<!-- Description -->
-	<string id="40450">Urmărește seriale din diverse surse</string>
+	<string id="30450">Urmărește seriale din diverse surse</string>
 	<!-- Labels -->
 	<string id="30501">Episoade</string>
 	<string id="30502">Populare</string>

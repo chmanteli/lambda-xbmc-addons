@@ -1,4 +1,18 @@
 ------------------------
+GOmovies v1.2.9 (1-Mar-14)
+------------------------
+
+- Re-work of subtitles (66 languages are now available).
+- Fixed various playback issues.
+- Added priority options for HD hosts.
+- HD and SD hosts are now separated in options.
+- Tweaked movie listings.
+- Added Portuguese translation.
+- Update all existing translations.
+- Code cosmetics.
+
+
+------------------------
 GOmovies v1.2.8 (20-Feb-14)
 ------------------------
 

@@ -14,7 +14,6 @@
 	<string id="30010">Λήψεις</string>
 	<string id="30011">Πληροφορίες αναπαραγωγής</string>
 	<string id="30012">Συνέχιση αναπαραγωγής</string>
-	<string id="30030">Ροές</string>
 	<string id="30031">Προτεραιότητα 1</string>
 	<string id="30032">Προτεραιότητα 2</string>
 	<string id="30033">Προτεραιότητα 3</string>
@@ -25,8 +24,8 @@
 	<string id="30038">Προτεραιότητα 8</string>
 	<string id="30039">Προτεραιότητα 9</string>
 	<string id="30040">Προτεραιότητα 10</string>
-	<string id="30041">HD ΠΟΙΟΤΗΤΑ</string>
-	<string id="30042">SD ΠΟΙΟΤΗΤΑ</string>
+	<string id="30041">HD Ροές</string>
+	<string id="30042">SD Ροές</string>
 	<string id="30060">Πηγές</string>
 	<string id="30080">Συλλογή</string>
 	<string id="30081">Οι Συνδρομές θα προστεθούν στη συλλογή αν ο φάκελος προστεθεί στις πηγές πολυμέσων.</string>
@@ -42,9 +41,9 @@
 	<string id="30120">Υπότιτλοι</string>
 	<string id="30121">Οι υπότιτλοι μπορεί να είναι μη διαθέσιμοι ή ασυγχρόνιστοι.</string>
 	<string id="30122">Σε αυτή τη περίπτωση χρησιμοποιήστε τους δικούς σας.</string>
-	<string id="30123">Υπότιτλοι</string>
-	<string id="30124">Ανενεργοί</string>
-	<string id="30125">Ελληνικά</string>
+	<string id="30123">Ενεργοποίηση υποτίτλων</string>
+	<string id="30124">Πρώτη Γλώσσα</string>
+	<string id="30125">Δεύτερη Γλώσσα</string>
 	<!-- Info -->
 	<string id="30301">Η </string>
 	<string id="30302"> είναι πλέον προεπιλεγμένη</string>
@@ -128,7 +127,7 @@
 	<string id="30432">Πηγές</string>
 	<string id="30433">Αυτόματη αναπαραγωγή</string>
 	<!-- Description -->
-	<string id="40450">Παρακολουθήστε σειρές από διάφορες πηγές</string>
+	<string id="30450">Παρακολουθήστε σειρές από διάφορες πηγές</string>
 	<!-- Labels -->
 	<string id="30501">Επεισόδια</string>
 	<string id="30502">Δημοφιλή</string>

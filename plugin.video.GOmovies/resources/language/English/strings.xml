@@ -15,7 +15,6 @@
 	<string id="30011">Playback Info</string>
 	<string id="30012">Resume Playback</string>
 	<string id="30013">Filter Search</string>
-	<string id="30030">Hosts</string>
 	<string id="30031">Priority 1</string>
 	<string id="30032">Priority 2</string>
 	<string id="30033">Priority 3</string>
@@ -26,8 +25,8 @@
 	<string id="30038">Priority 8</string>
 	<string id="30039">Priority 9</string>
 	<string id="30040">Priority 10</string>
-	<string id="30041">HD QUALITY</string>
-	<string id="30042">SD QUALITY</string>
+	<string id="30041">HD Hosts</string>
+	<string id="30042">SD Hosts</string>
 	<string id="30060">Sources</string>
 	<string id="30080">Library</string>
 	<string id="30081">Don't forget to add this folder to media sources.</string>
@@ -39,9 +38,9 @@
 	<string id="30120">Subtitles</string>
 	<string id="30121">Subtitles could be unavailable or out of sync.</string>
 	<string id="30122">In that case use your own subtitles.</string>
-	<string id="30123">Subtitles</string>
-	<string id="30124">Disabled</string>
-	<string id="30125">Greek</string>
+	<string id="30123">Enable subtitles</string>
+	<string id="30124">Primary Language</string>
+	<string id="30125">Secondary Language</string>
 	<!-- Info -->
 	<string id="30301"></string>
 	<string id="30302"> is on by default</string>
@@ -125,7 +124,7 @@
 	<string id="30432">Sources</string>
 	<string id="30433">Auto-play</string>
 	<!-- Description -->
-	<string id="40450">Watch movies from various sources</string>
+	<string id="30450">Watch movies from various sources</string>
 	<!-- Labels -->
 	<string id="30501">BOXoffice</string>
 	<string id="30502">Views</string>

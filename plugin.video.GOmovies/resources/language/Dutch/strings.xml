@@ -15,7 +15,6 @@
 	<string id="30011">Afspeel informatie</string>
 	<string id="30012">Afspelen hervatten</string>
 	<string id="30013">Zoekopdracht filteren</string>
-	<string id="30030">Hosts</string>
 	<string id="30031">Prioriteit 1</string>
 	<string id="30032">Prioriteit 2</string>
 	<string id="30033">Prioriteit 3</string>
@@ -26,8 +25,8 @@
 	<string id="30038">Prioriteit 8</string>
 	<string id="30039">Prioriteit 9</string>
 	<string id="30040">Prioriteit 10</string>
-	<string id="30041">HD KWALITEIT</string>
-	<string id="30042">SD KWALITEIT</string>
+	<string id="30041">HD Hosts</string>
+	<string id="30042">SD Hosts</string>
 	<string id="30060">Bronnen</string>
 	<string id="30080">Bibliotheek</string>
 	<string id="30081">Vergeet deze bron niet toe te voegen aan je bibliotheek.</string>
@@ -39,9 +38,9 @@
 	<string id="30120">Ondertiteling</string>
 	<string id="30121">Ondertiteling kan niet beschikbaar zijn of niet synchroon lopen.</string>
 	<string id="30122">In dat geval moet je je eigen ondertitels gebruiken.</string>
-	<string id="30123">Ondertiteling</string>
-	<string id="30124">Uitgeschakeld</string>
-	<string id="30125">Grieks</string>
+	<string id="30123">Ondertitels gebruiken</string>
+	<string id="30124">Eerste taal</string>
+	<string id="30125">Tweede taal</string>
 	<!-- Info -->
 	<string id="30301"></string>
 	<string id="30302"> is als standaard ingesteld</string>
@@ -125,7 +124,7 @@
 	<string id="30432">Bronnen</string>
 	<string id="30433">Automatisch afspelen</string>
 	<!-- Description -->
-	<string id="40450">Bekijk Speelfilms van verscheidene bronnen</string>
+	<string id="30450">Bekijk Speelfilms van verscheidene bronnen</string>
 	<!-- Labels -->
 	<string id="30501">BOXoffice</string>
 	<string id="30502">Bekeken</string>

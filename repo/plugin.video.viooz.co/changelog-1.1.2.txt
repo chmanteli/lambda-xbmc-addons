@@ -1,4 +1,14 @@
 ------------------------
+Viooz v1.1.2 (1-Mar-14)
+------------------------
+
+- Fixed issues with resolver.
+- Re-work of subtitles (66 languages are now available).
+- Update all existing translations.
+- Code cosmetics.
+
+
+------------------------
 Viooz v1.1.1 (25-Feb-14)
 ------------------------
 

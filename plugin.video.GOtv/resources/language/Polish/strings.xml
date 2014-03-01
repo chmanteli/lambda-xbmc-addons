@@ -14,7 +14,6 @@
 	<string id="30010">Katalog Pobierania</string>
 	<string id="30011">Informacja o odtwarzaniu</string>
 	<string id="30012">Wznów Odtwarzanie</string>
-	<string id="30030">Hosty</string>
 	<string id="30031">Priorytet 1</string>
 	<string id="30032">Priorytet 2</string>
 	<string id="30033">Priorytet 3</string>
@@ -25,8 +24,8 @@
 	<string id="30038">Priorytet 8</string>
 	<string id="30039">Priorytet 9</string>
 	<string id="30040">Priorytet 10</string>
-	<string id="30041">JAKOŚĆ HD</string>
-	<string id="30042">JAKOŚĆ SD</string>
+	<string id="30041">Hosty HD</string>
+	<string id="30042">Hosty SD</string>
 	<string id="30060">Źródła</string>
 	<string id="30080">Biblioteka</string>
 	<string id="30081">Subskrybcje zostaną zaimportowane do Biblioteki po dodaniu tego folderu jako źródło.</string>
@@ -42,9 +41,9 @@
 	<string id="30120">Napisy</string>
 	<string id="30121">Napisy mogą być niedostępne bądź działać nieprawidłowo.</string>
 	<string id="30122">W takim przypadku użyj własnego pliku z napisami.</string>
-	<string id="30123">Napisy</string>
-	<string id="30124">Wyłączone</string>
-	<string id="30125">Greckie</string>
+	<string id="30123">Włącz napisy</string>
+	<string id="30124">Pierwszy język</string>
+	<string id="30125">Drugi język</string>
 	<!-- Info -->
 	<string id="30301"></string>
 	<string id="30302"> domyślnie włączone</string>
@@ -128,7 +127,7 @@
 	<string id="30432">Wybierz Źródło</string>
 	<string id="30433">Auto-odtwarzanie</string>
 	<!-- Description -->
-	<string id="40450">Oglądaj seriale z różnych źródeł</string>
+	<string id="30450">Oglądaj seriale z różnych źródeł</string>
 	<!-- Labels -->
 	<string id="30501">Najnowsze Odcinki</string>
 	<string id="30502">Popularne</string>
