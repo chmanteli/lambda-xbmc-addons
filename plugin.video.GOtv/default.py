@@ -1313,6 +1313,13 @@ class link:
         self.tvdb_poster = 'http://thetvdb.com/banners/posters/'
         self.tvdb_thumb = 'http://thetvdb.com/banners/_cache/'
 
+        self.trakt_base = 'http://api.trakt.tv'
+        self.trakt_key = base64.urlsafe_b64decode('YmU2NDI5MWFhZmJiYmU2MmZkYzRmM2FhMGVkYjQwNzM=')
+        self.trakt_summary = 'http://api.trakt.tv/show/summary.json/%s/%s'
+
+        self.tvrage_base = 'http://www.tvrage.com'
+        self.tvrage_info = 'http://www.tvrage.com/feeds/full_show_info.php?sid=%s'
+
 class genres:
     def __init__(self):
         self.list = []
@@ -1471,37 +1478,53 @@ class shows:
 class seasons:
     def __init__(self):
         self.list = []
+        self.list2 = []
 
     def get(self, url, image, year, imdb, genre, plot, show, idx=True):
         if idx == True:
-            #self.list = self.imdb_list(url, image, year, imdb, genre, plot, show)
-            self.list = cache2(self.imdb_list, url, image, year, imdb, genre, plot, show)
+            #self.list = self.get_list(url, image, year, imdb, genre, plot, show)
+            self.list = cache2(self.get_list, url, image, year, imdb, genre, plot, show)
             index().seasonList(self.list)
         else:
-            self.list = self.imdb_list(url, image, year, imdb, genre, plot, show)
+            self.list = self.get_list(url, image, year, imdb, genre, plot, show)
             return self.list
 
-    def imdb_list(self, url, image, year, imdb, genre, plot, show):
+    def get_list(self, url, image, year, imdb, genre, plot, show):
         try:
             if imdb == '0': imdb = re.sub('[^0-9]', '', url.rsplit('tt', 1)[-1])
 
             try:
-                tvdb = link().tvdb_series % imdb
-                tvdb = getUrl(tvdb).result
-                tvdb = common.parseDOM(tvdb, "seriesid")[0]
+                result = getUrl(link().tvdb_series % imdb).result
+                show_alt = common.parseDOM(result, "SeriesName")[0]
+                tvdb = common.parseDOM(result, "seriesid")[0]
             except:
-                tvdb = link().tvdb_series2 % urllib.quote_plus(show)
-                tvdb = getUrl(tvdb).result
-                tvdb = common.parseDOM(tvdb, "Series")
-                tvdb = [i for i in tvdb if show == common.parseDOM(i, "SeriesName")[0] and year in common.parseDOM(i, "FirstAired")[0]][0]
-                tvdb = common.parseDOM(tvdb, "seriesid")[0]
+                result = getUrl(link().tvdb_series2 % urllib.quote_plus(show)).result
+                result = common.parseDOM(result, "Series")
+                result = [i for i in result if show == common.parseDOM(i, "SeriesName")[0] and year in common.parseDOM(i, "FirstAired")[0]][0]
+                show_alt = common.parseDOM(result, "SeriesName")[0]
+                tvdb = common.parseDOM(result, "seriesid")[0]
 
-            tvdbUrl = link().tvdb_episodes % (link().tvdb_key, tvdb)
-            result = getUrl(tvdbUrl).result
-
-            show_alt = common.parseDOM(result, "SeriesName")[0]
             show_alt = common.replaceHTMLCodes(show_alt)
             show_alt = show_alt.encode('utf-8')
+            tvdb = common.replaceHTMLCodes(tvdb)
+            tvdb = tvdb.encode('utf-8')
+
+            self.list = self.tvdb_list(url, image, year, imdb, tvdb, genre, plot, show, show_alt)
+
+            fallback = [i['season'] for i in self.list if not len(i['season']) < 4]
+            if fallback == []: return self.list
+
+            self.list2 = self.tvrage_list(url, image, year, imdb, tvdb, genre, plot, show, show_alt)
+            if not self.list2 == []: return self.list2
+
+            return self.list
+        except:
+            return
+
+    def tvdb_list(self, url, image, year, imdb, tvdb, genre, plot, show, show_alt):
+        try:
+            tvdbUrl = link().tvdb_episodes % (link().tvdb_key, tvdb)
+            result = getUrl(tvdbUrl).result
 
             seasons = common.parseDOM(result, "Episode")
             seasons = [i for i in seasons if common.parseDOM(i, "EpisodeNumber")[0] == '1']
@@ -1523,12 +1546,47 @@ class seasons:
                 name = '%s %s' % ('Season', num)
                 name = name.encode('utf-8')
 
-                self.list.append({'name': name, 'url': url, 'image': image, 'year': year, 'imdb': imdb, 'tvdb': tvdb, 'genre': genre, 'plot': plot, 'show': show, 'show_alt': show_alt, 'season': num, 'sort': '%10d' % int(num)})
+                self.list.append({'name': name, 'url': link().tvdb_base, 'image': image, 'year': year, 'imdb': imdb, 'tvdb': tvdb, 'genre': genre, 'plot': plot, 'show': show, 'show_alt': show_alt, 'season': num, 'sort': '%10d' % int(num)})
             except:
                 pass
 
         self.list = sorted(self.list, key=itemgetter('sort'))
         return self.list
+
+    def tvrage_list(self, url, image, year, imdb, tvdb, genre, plot, show, show_alt):
+        try:
+            traktUrl = link().trakt_summary % (link().trakt_key, tvdb)
+            result = getUrl(traktUrl).result
+            result = json.loads(result)
+            tvrage = result['tvrage_id']
+
+            tvrageUrl = link().tvrage_info % tvrage
+            result = getUrl(tvrageUrl).result
+
+            seasons = common.parseDOM(result, "Season", ret="no")
+            seasons = [i for i in seasons if not i == '0']
+        except:
+            return
+
+        for season in seasons:
+            try:
+                date = common.parseDOM(result, "Season", attrs = { "no": season })[0]
+                date = common.parseDOM(date, "airdate")[0]
+                date = date.encode('utf-8')
+                if int(date.replace('-','')) + 1 > int((datetime.datetime.utcnow() - datetime.timedelta(hours = 5)).strftime("%Y%m%d")): raise Exception()
+
+                num = '%01d' % int(season)
+                num = num.encode('utf-8')
+
+                name = '%s %s' % ('Season', num)
+                name = name.encode('utf-8')
+
+                self.list2.append({'name': name, 'url': tvrageUrl, 'image': image, 'year': year, 'imdb': imdb, 'tvdb': tvdb, 'genre': genre, 'plot': plot, 'show': show, 'show_alt': show_alt, 'season': num, 'sort': '%10d' % int(num)})
+            except:
+                pass
+
+        self.list2 = sorted(self.list2, key=itemgetter('sort'))
+        return self.list2
 
 class episodes:
     def __init__(self):
@@ -1536,18 +1594,24 @@ class episodes:
 
     def get(self, name, url, image, year, imdb, tvdb, genre, plot, show, show_alt, idx=True):
         if idx == True:
-            #self.list = self.imdb_list(name, url, image, year, imdb, tvdb, genre, plot, show, show_alt)
-            self.list = cache(self.imdb_list, name, url, image, year, imdb, tvdb, genre, plot, show, show_alt)
+            #self.list = self.get_list(name, url, image, year, imdb, tvdb, genre, plot, show, show_alt)
+            self.list = cache(self.get_list, name, url, image, year, imdb, tvdb, genre, plot, show, show_alt)
             index().episodeList(self.list)
         else:
-            self.list = self.imdb_list(name, url, image, year, imdb, tvdb, genre, plot, show, show_alt)
+            self.list = self.get_list(name, url, image, year, imdb, tvdb, genre, plot, show, show_alt)
             return self.list
 
-    def imdb_list(self, name, url, image, year, imdb, tvdb, genre, plot, show, show_alt):
+    def get_list(self, name, url, image, year, imdb, tvdb, genre, plot, show, show_alt):
+        if url == link().tvdb_base:
+            self.list = self.tvdb_list(name, url, image, year, imdb, tvdb, genre, plot, show, show_alt)
+        else:
+            self.list = self.tvrage_list(name, url, image, year, imdb, tvdb, genre, plot, show, show_alt)
+        return self.list
+
+    def tvdb_list(self, name, url, image, year, imdb, tvdb, genre, plot, show, show_alt):
         try:
             season = re.sub('[^0-9]', '', name)
             season = season.encode('utf-8')
-            if imdb == '0': imdb = re.sub('[^0-9]', '', url.rsplit('tt', 1)[-1])
 
             tvdbUrl = link().tvdb_episodes % (link().tvdb_key, tvdb)
             result = getUrl(tvdbUrl).result
@@ -1585,6 +1649,53 @@ class episodes:
 
                 try: desc = common.parseDOM(episode, "Overview")[0]
                 except: desc = plot
+                desc = common.replaceHTMLCodes(desc)
+                desc = desc.encode('utf-8')
+
+                self.list.append({'name': name, 'url': name, 'image': thumb, 'date': date, 'year': year, 'imdb': imdb, 'tvdb': tvdb, 'genre': genre, 'plot': desc, 'title': title, 'show': show, 'show_alt': show_alt, 'season': season, 'episode': num, 'sort': '%10d' % int(num)})
+            except:
+                pass
+
+        self.list = sorted(self.list, key=itemgetter('sort'))
+        return self.list
+
+    def tvrage_list(self, name, url, image, year, imdb, tvdb, genre, plot, show, show_alt):
+        try:
+            season = re.sub('[^0-9]', '', name)
+            season = season.encode('utf-8')
+
+            result = getUrl(url).result
+            episodes = common.parseDOM(result, "Season", attrs = { "no": season })[0]
+            episodes = common.parseDOM(episodes, "episode")
+            episodes = [i for i in episodes if not common.parseDOM(i, "seasonnum")[0] == '0']
+        except:
+            return
+
+        for episode in episodes:
+            try:
+                date = common.parseDOM(episode, "airdate")[0]
+                date = common.replaceHTMLCodes(date)
+                date = date.encode('utf-8')
+                if int(date.replace('-','')) + 1 > int((datetime.datetime.utcnow() - datetime.timedelta(hours = 5)).strftime("%Y%m%d")): raise Exception()
+
+                title = common.parseDOM(episode, "title")[0]
+                title = common.replaceHTMLCodes(title)
+                title = title.encode('utf-8')
+
+                num = common.parseDOM(episode, "seasonnum")[0]
+                num = re.sub('[^0-9]', '', '%01d' % int(num))
+                num = num.encode('utf-8')
+
+                name = show_alt + ' S' + '%02d' % int(season) + 'E' + '%02d' % int(num)
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                try: thumb = common.parseDOM(episode, "screencap")[0]
+                except: thumb = image
+                thumb = common.replaceHTMLCodes(thumb)
+                thumb = thumb.encode('utf-8')
+
+                desc = plot
                 desc = common.replaceHTMLCodes(desc)
                 desc = desc.encode('utf-8')
 
