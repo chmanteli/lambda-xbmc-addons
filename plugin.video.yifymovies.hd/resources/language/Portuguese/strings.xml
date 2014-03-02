@@ -19,9 +19,9 @@
 	<string id="30080">Legendas</string>
 	<string id="30081">As legendas podem não estar disponíveis ou não sincronizadas.</string>
 	<string id="30082">Nesse caso procure manualmente por legendas.</string>
-	<string id="30083">Legendas</string>
-	<string id="30084">Desactivado</string>
-	<string id="30085">Grego</string>
+	<string id="30083">Activar legendas</string>
+	<string id="30084">Idioma Principal</string>
+	<string id="30085">Idioma Secundário</string>
 	<!-- Info -->
 	<string id="30301"></string>
 	<string id="30302"> está activado por defeito</string>

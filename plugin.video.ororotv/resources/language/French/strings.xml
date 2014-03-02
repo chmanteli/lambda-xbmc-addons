@@ -19,9 +19,9 @@
 	<string id="30080">Sous-titres</string>
 	<string id="30081">Certains sous-titres peuvent être indisponibles ou décalés.</string>
 	<string id="30082">Dans ce cas utilisez vos fichiers ou extension de sous-titres.</string>
-	<string id="30083">Sous-titres</string>
-	<string id="30084">Désactivés</string>
-	<string id="30085">Grec</string>
+	<string id="30083">Activer les sous-titres</string>
+	<string id="30084">Langue principale</string>
+	<string id="30085">Seconde Langue</string>
 	<!-- Info -->
 	<string id="30301"></string>
 	<string id="30302"> est actif par défaut</string>

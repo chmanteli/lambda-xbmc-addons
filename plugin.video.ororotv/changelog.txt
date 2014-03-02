@@ -1,4 +1,13 @@
 ------------------------
+Ororo TV v2.0.1 (2-Mar-14)
+------------------------
+
+- Re-work of subtitles (66 languages are now available).
+- Update all existing translations.
+- Code cosmetics.
+
+
+------------------------
 Ororo TV v2.0.0 (27-Feb-13)
 ------------------------
 

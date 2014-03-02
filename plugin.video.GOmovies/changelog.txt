@@ -1,4 +1,12 @@
 ------------------------
+GOmovies v1.3.0 (2-Mar-14)
+------------------------
+
+- Fixed various playback issues.
+- Code cosmetics.
+
+
+------------------------
 GOmovies v1.2.9 (1-Mar-14)
 ------------------------
 

@@ -279,11 +279,16 @@ class player(xbmc.Player):
         try:
             xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.SetMovieDetails", "params": {"movieid" : %s, "playcount" : 1 }, "id": 1 }' % str(self.meta['movieid']))
         except:
-            params = {}
             metaget.change_watched(self.content, '', self.imdb, season='', episode='', year='', watched=7)
+
+    def container_refresh(self):
+        try:
+            params = {}
             query = self.folderPath[self.folderPath.find('?') + 1:].split('&')
             for i in query: params[i.split('=')[0]] = i.split('=')[1]
             if not params["action"].endswith('_search'): index().container_refresh()
+        except:
+            pass
 
     def resume_playback(self):
         offset = float(self.offset)
@@ -309,12 +314,14 @@ class player(xbmc.Player):
     def onPlayBackEnded(self):
         self.change_watched()
         self.offset_delete()
+        self.container_refresh()
 
     def onPlayBackStopped(self):
         if self.currentTime / self.totalTime >= .9:
             self.change_watched()
         self.offset_delete()
         self.offset_add()
+        self.container_refresh()
 
 class subtitles:
     def get(self, name, imdb, season, episode):

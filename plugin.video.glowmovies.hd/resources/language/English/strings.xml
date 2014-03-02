@@ -16,9 +16,9 @@
 	<string id="30080">Subtitles</string>
 	<string id="30081">Subtitles could be unavailable or out of sync.</string>
 	<string id="30082">In that case use your own subtitles.</string>
-	<string id="30083">Subtitles</string>
-	<string id="30084">Disabled</string>
-	<string id="30085">Greek</string>
+	<string id="30083">Enable subtitles</string>
+	<string id="30084">Primary Language</string>
+	<string id="30085">Secondary Language</string>
 	<!-- Info -->
 	<string id="30301"></string>
 	<string id="30302"> is on by default</string>

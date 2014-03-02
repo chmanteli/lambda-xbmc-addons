@@ -19,9 +19,9 @@
 	<string id="30080">Sous-titres</string>
 	<string id="30081">Certains sous-titres peuvent être indisponibles ou décalés.</string>
 	<string id="30082">Dans ce cas utilisez vos fichiers ou extension de sous-titres.</string>
-	<string id="30083">Sous-titres</string>
-	<string id="30084">Désactivés</string>
-	<string id="30085">Grec</string>
+	<string id="30083">Activer les sous-titres</string>
+	<string id="30084">Langue principale</string>
+	<string id="30085">Seconde Langue</string>
 	<!-- Info -->
 	<string id="30301"></string>
 	<string id="30302"> est actif par défaut</string>
@@ -81,7 +81,7 @@
 	<string id="30408">Marquer comme vu</string>
 	<string id="30409">Paramètres de l'extension</string>
 	<string id="30410">Liste de lecture...</string>
-	<string id="30411">Retour à l'acceuil...</string>
+	<string id="30411">Retour à l'accueil...</string>
 	<string id="30412">Information du Film</string>
 	<string id="30413">Information de la Série TV</string>
 	<string id="30414">Information de l'Episode</string>
@@ -105,12 +105,12 @@
 	<string id="30432">Sources</string>
 	<string id="30433">Auto-play</string>
 	<!-- Description -->
-	<string id="40450">Une sélection de Films en Version Originale (Anglais)</string>
+	<string id="30450">Une sélection de Films en Version Originale (Anglais)</string>
 	<!-- Labels -->
 	<string id="30501">Titre</string>
 	<string id="30502">Classement IMDb</string>
 	<string id="30503">Version du</string>
-	<string id="30504">Ajouté le</string>
+	<string id="30504">Les plus récents</string>
 	<string id="30505">Les Mieux Notées</string>
 	<string id="30506">Les Plus Vues</string>
 	<string id="30507">Par Pages</string>

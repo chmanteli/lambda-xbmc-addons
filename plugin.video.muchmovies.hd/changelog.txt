@@ -1,4 +1,13 @@
 ------------------------
+Much Movies HD v1.4.4 (2-Mar-14)
+------------------------
+
+- Re-work of subtitles (66 languages are now available).
+- Update all existing translations.
+- Code cosmetics.
+
+
+------------------------
 Much Movies HD v1.4.3 (25-Feb-14)
 ------------------------
 

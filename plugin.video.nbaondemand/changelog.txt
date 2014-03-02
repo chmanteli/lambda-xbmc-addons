@@ -1,4 +1,13 @@
 ------------------------
+NBA On-demand v1.1.5 (2-Mar-14)
+------------------------
+
+- Tweaked page listings.
+- Update all existing translations.
+- Code cosmetics.
+
+
+------------------------
 NBA On-demand v1.1.4 (25-Feb-14)
 ------------------------
 

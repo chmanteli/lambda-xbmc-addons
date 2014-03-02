@@ -1,4 +1,13 @@
 ------------------------
+Yify Movies HD v1.3.2 (2-Mar-14)
+------------------------
+
+- Re-work of subtitles (66 languages are now available).
+- Update all existing translations.
+- Code cosmetics.
+
+
+------------------------
 Yify Movies HD v1.3.1 (25-Feb-14)
 ------------------------
 

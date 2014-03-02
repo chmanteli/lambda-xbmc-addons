@@ -210,13 +210,14 @@ class Thread(threading.Thread):
 
 class player(xbmc.Player):
     def __init__ (self):
-        self.property = addonName+'player_status'
+        self.folderPath = xbmc.getInfoLabel('Container.FolderPath')
+        self.loadingStarting = time.time()
         xbmc.Player.__init__(self)
 
     def run(self, name, url, imdb='0'):
         self.video_info(name, imdb)
 
-        if xbmc.getInfoLabel('Container.FolderPath').startswith(sys.argv[0]):
+        if self.folderPath.startswith(sys.argv[0]):
             item = xbmcgui.ListItem(path=url)
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
         else:
@@ -229,10 +230,10 @@ class player(xbmc.Player):
                 meta = json.loads(meta)
                 meta = meta['result']['episodes']
                 self.meta = [i for i in meta if i['file'].endswith(file)][0]
-                meta = {'title' : self.meta['title'], 'tvshowtitle': self.meta['showtitle'], 'season': self.meta['season'], 'episode': self.meta['episode'], 'writer': str(self.meta['writer']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'director': str(self.meta['director']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'rating': self.meta['rating'], 'duration': self.meta['runtime'], 'premiered': self.meta['firstaired'], 'plot': self.meta['plot']}
+                meta = {'title': self.meta['title'], 'tvshowtitle': self.meta['showtitle'], 'season': self.meta['season'], 'episode': self.meta['episode'], 'writer': str(self.meta['writer']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'director': str(self.meta['director']).replace("[u'", '').replace("']", '').replace("', u'", ' / '), 'rating': self.meta['rating'], 'duration': self.meta['runtime'], 'premiered': self.meta['firstaired'], 'plot': self.meta['plot']}
                 poster = self.meta['thumbnail']
             except:
-                meta = {'label' : self.name, 'title' : self.name}
+                meta = {'label': self.name, 'title': self.name}
                 poster = ''
             item = xbmcgui.ListItem(path=url, iconImage="DefaultVideo.png", thumbnailImage=poster)
             item.setInfo( type="Video", infoLabels= meta )
@@ -258,7 +259,7 @@ class player(xbmc.Player):
         self.imdb = re.sub('[^0-9]', '', imdb)
         self.season = '%01d' % int(name.rsplit(' ', 1)[-1].split('S')[-1].split('E')[0])
         self.episode = '%01d' % int(name.rsplit(' ', 1)[-1].split('E')[-1])
-        return
+        self.subtitle = subtitles().get(self.name, self.imdb, self.season, self.episode)
 
     def offset_add(self):
         try:
@@ -298,6 +299,15 @@ class player(xbmc.Player):
         except:
             metaget.change_watched(self.content, '', self.imdb, season=self.season, episode=self.episode, year='', watched=7)
 
+    def container_refresh(self):
+        try:
+            params = {}
+            query = self.folderPath[self.folderPath.find('?') + 1:].split('&')
+            for i in query: params[i.split('=')[0]] = i.split('=')[1]
+            if not params["action"].endswith('_search'): index().container_refresh()
+        except:
+            pass
+
     def resume_playback(self):
         offset = float(self.offset)
         if not offset > 0: return
@@ -307,109 +317,81 @@ class player(xbmc.Player):
         yes = index().yesnoDialog('%s %s' % (language(30353).encode("utf-8"), offset_time), '', self.name, language(30354).encode("utf-8"), language(30355).encode("utf-8"))
         if yes: self.seekTime(offset)
 
-    def status(self):
-        getProperty = index().getProperty(self.property)
-        index().clearProperty(self.property)
-        if not xbmc.getInfoLabel('Container.FolderPath') == '': return
-        if getProperty == 'true': return True
-        return
-
     def onPlayBackStarted(self):
+        try: self.setSubtitles(self.subtitle)
+        except: pass
+
+        if getSetting("playback_info") == 'true':
+            elapsedTime = '%s %.2f seconds' % (language(30319).encode("utf-8"), (time.time() - self.loadingStarting))     
+            index().infoDialog(elapsedTime, header=self.name)
+
         if getSetting("resume_playback") == 'true':
             self.offset_read()
             self.resume_playback()
 
-        subtitles().get(re.sub('\s[(].+?[)]','', self.name))
-
     def onPlayBackEnded(self):
-        if xbmc.getInfoLabel('Container.FolderPath') == '': index().setProperty(self.property, 'true')
         self.change_watched()
         self.offset_delete()
-        index().container_refresh()
+        self.container_refresh()
 
     def onPlayBackStopped(self):
-        index().clearProperty(self.property)
         if self.currentTime / self.totalTime >= .9:
             self.change_watched()
         self.offset_delete()
         self.offset_add()
-        index().container_refresh()
+        self.container_refresh()
 
 class subtitles:
-    def get(self, name):
-        subs = getSetting("subs")
-        if subs == '1': self.greek(name)
+    def get(self, name, imdb, season, episode):
+        lang = ''
+        subtitles = []
+        quality = ['bluray', 'hdrip', 'brrip', 'bdrip', 'dvdrip', 'webrip', 'hdtv']
+        langDict = {'Afrikaans': 'afr', 'Albanian': 'alb', 'Arabic': 'ara', 'Armenian': 'arm', 'Basque': 'baq', 'Bengali': 'ben', 'Bosnian': 'bos', 'Breton': 'bre', 'Bulgarian': 'bul', 'Burmese': 'bur', 'Catalan': 'cat', 'Chinese': 'chi', 'Croatian': 'hrv', 'Czech': 'cze', 'Danish': 'dan', 'Dutch': 'dut', 'English': 'eng', 'Esperanto': 'epo', 'Estonian': 'est', 'Finnish': 'fin', 'French': 'fre', 'Galician': 'glg', 'Georgian': 'geo', 'German': 'ger', 'Greek': 'ell', 'Hebrew': 'heb', 'Hindi': 'hin', 'Hungarian': 'hun', 'Icelandic': 'ice', 'Indonesian': 'ind', 'Italian': 'ita', 'Japanese': 'jpn', 'Kazakh': 'kaz', 'Khmer': 'khm', 'Korean': 'kor', 'Latvian': 'lav', 'Lithuanian': 'lit', 'Luxembourgish': 'ltz', 'Macedonian': 'mac', 'Malay': 'may', 'Malayalam': 'mal', 'Manipuri': 'mni', 'Mongolian': 'mon', 'Montenegrin': 'mne', 'Norwegian': 'nor', 'Occitan': 'oci', 'Persian': 'per', 'Polish': 'pol', 'Portuguese': 'por,pob', 'Romanian': 'rum', 'Russian': 'rus', 'Serbian': 'scc', 'Sinhalese': 'sin', 'Slovak': 'slo', 'Slovenian': 'slv', 'Spanish': 'spa', 'Swahili': 'swa', 'Swedish': 'swe', 'Syriac': 'syr', 'Tagalog': 'tgl', 'Tamil': 'tam', 'Telugu': 'tel', 'Thai': 'tha', 'Turkish': 'tur', 'Ukrainian': 'ukr', 'Urdu': 'urd'}
 
-    def greek(self, name):
+        if not getSetting("subtitles") == 'true': return
+        lang1 = getSetting("sublang1")
+        lang2 = getSetting("sublang2")
+
         try:
-            import shutil, zipfile, time
-            sub_tmp = os.path.join(dataPath,'sub_tmp')
-            sub_tmp2 = os.path.join(sub_tmp, "subs")
-            sub_stream = os.path.join(dataPath,'sub_stream')
-            sub_file = os.path.join(sub_tmp, 'sub_tmp.zip')
-            try: os.makedirs(dataPath)
-            except: pass
-            try: os.remove(sub_tmp)
-            except: pass
-            try: shutil.rmtree(sub_tmp)
-            except: pass
-            try: os.makedirs(sub_tmp)
-            except: pass
-            try: os.remove(sub_stream)
-            except: pass
-            try: shutil.rmtree(sub_stream)
-            except: pass
-            try: os.makedirs(sub_stream)
-            except: pass
+            import xmlrpclib
+            server = xmlrpclib.Server('http://api.opensubtitles.org/xml-rpc', verbose=0)
+            token = server.LogIn('', '', 'en', 'XBMC_Subtitles_v1')['token']
+        except:
+            return
 
-            subtitles = []
-            query = ''.join(e for e in name if e.isalnum() or e == ' ')
-            query = urllib.quote_plus(query)
-            url = 'http://www.greeksubtitles.info/search.php?name=' + query
-            result = getUrl(url).result
-            result = result.decode('iso-8859-7').encode('utf-8')
-            result = result.lower().replace('"',"'")
-            match = "get_greek_subtitles[.]php[?]id=(.+?)'.+?%s.+?<"
-            quality = ['bluray', 'brrip', 'bdrip', 'dvdrip', 'hdtv']
-            for q in quality:
-                subtitles += re.compile(match % q).findall(result)
-            if subtitles == []: raise Exception()
-            for subtitle in subtitles:
-                url = 'http://www.findsubtitles.eu/getp.php?id=' + subtitle
-                response = urllib.urlopen(url)
-                content = response.read()
-                response.close()
-                if content[:4] == 'PK': break
+        try:
+            result = server.SearchSubtitles(token, [{'sublanguageid': langDict[lang1], 'imdbid': imdb, 'season': season, 'episode': episode}])['data']
+            result = [i for i in result if i['SubSumCD'] == '1']
+            for q in quality: subtitles += [i for i in result if q in i['MovieReleaseName'].lower()]
+            subtitles += [i for i in result if not any(x in i['MovieReleaseName'].lower() for x in quality)]
+            lang = xbmc.convertLanguage(langDict[lang1][:3], xbmc.ISO_639_1)
+        except:
+            pass
+        try:
+            if not subtitles == []: raise Exception()
+            result = server.SearchSubtitles(token, [{'sublanguageid': langDict[lang2], 'imdbid': imdb, 'season': season, 'episode': episode}])['data']
+            result = [i for i in result if i['SubSumCD'] == '1']
+            for q in quality: subtitles += [i for i in result if q in i['MovieReleaseName'].lower()]
+            subtitles += [i for i in result if not any(x in i['MovieReleaseName'].lower() for x in quality)]
+            lang = xbmc.convertLanguage(langDict[lang2][:3], xbmc.ISO_639_1)
+        except:
+            pass
 
-            file = open(sub_file, 'wb')
+        try:
+            import zlib, base64
+            content = [subtitles[0]["IDSubtitleFile"],]
+            content = server.DownloadSubtitles(token, content)
+            content = base64.b64decode(content['data'][0]['data'])
+            content = zlib.decompressobj(16+zlib.MAX_WBITS).decompress(content)
+
+            subtitle = xbmc.translatePath('special://temp/')
+            subtitle = os.path.join(subtitle, 'TemporarySubs.%s.srt' % lang)
+            file = open(subtitle, 'wb')
             file.write(content)
             file.close()
-            file = zipfile.ZipFile(sub_file, 'r')
-            file.extractall(sub_tmp)
-            file.close()
-            files = os.listdir(sub_tmp2)
-            if files == []: raise Exception()
-            file = [i for i in files if i.endswith('.srt') or i.endswith('.sub')]
-            if file == []:
-                pack = [i for i in files if i.endswith('.zip') or i.endswith('.rar')]
-                pack = os.path.join(sub_tmp2, pack[0])
-                xbmc.executebuiltin('Extract("%s","%s")' % (pack, sub_tmp2))
-                time.sleep(1)
-            files = os.listdir(sub_tmp2)
-            file = [i for i in files if i.endswith('.srt') or i.endswith('.sub')][0]
-            copy = os.path.join(sub_tmp2, file)
-            shutil.copy(copy, sub_stream)
-            try: shutil.rmtree(sub_tmp)
-            except: pass
-            file = os.path.join(sub_stream, file)
-            if not os.path.isfile(file): raise Exception()
 
-            xbmc.Player().setSubtitles(file)
+            return subtitle
         except:
-            try: shutil.rmtree(sub_tmp)
-            except: pass
-            try: shutil.rmtree(sub_stream)
-            except: pass
             index().infoDialog(language(30317).encode("utf-8"), name)
             return
 
@@ -1515,7 +1497,6 @@ class episodes:
 class resolver:
     def run(self, url, name, download=False):
         try:
-            if player().status() is True: return
             url = self.ororo(url)
             if url is None: raise Exception()
 

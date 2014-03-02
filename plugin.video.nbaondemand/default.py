@@ -38,7 +38,7 @@ addonVersion        = xbmcaddon.Addon().getAddonInfo("version")
 addonId             = xbmcaddon.Addon().getAddonInfo("id")
 addonPath           = xbmcaddon.Addon().getAddonInfo("path")
 addonFullId         = addonName + addonVersion
-addonDesc           = language(40450).encode("utf-8")
+addonDesc           = language(30450).encode("utf-8")
 cache               = StorageServer.StorageServer(addonFullId,1).cacheFunction
 cache2              = StorageServer.StorageServer(addonFullId,24).cacheFunction
 cache3              = StorageServer.StorageServer(addonFullId,720).cacheFunction
@@ -470,6 +470,7 @@ class link:
         self.livetv_base = 'http://livetv.sx'
         self.livetv_nba = 'http://livetv.sx/en/videotourney/3'
         self.livetv_nbateams = 'http://livetv.sx/en/tables/3'
+        self.livetv_nbamatch = '/en/videotourney/3/'
         self.livetv_euroleague = 'http://livetv.sx/en/videotourney/41'
 
 class pages:
@@ -500,6 +501,7 @@ class pages:
             monthDict = {'01': 'January', '02': 'February', '03': 'March', '04': 'April', '05': 'May', '06': 'June', '07': 'July', '08': 'August', '09': 'September', '10': 'October', '11': 'November', '12' : 'December'}
 
             name = '%s %s' % (monthDict[month], year)
+            if any(name == i['name'] for i in self.list): continue
             name = name.encode('utf-8')
             url = '%s/%s%s' % (base, year, month)
             url = url.encode('utf-8')
@@ -522,6 +524,8 @@ class pages:
                 name = common.parseDOM(page, "a")[0]
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
+
+                if any(name == i['name'] for i in self.list): continue
 
                 url = common.parseDOM(page, "a", ret="href")[0]
                 url = '%s%svideo' % (link().livetv_base, url)
@@ -645,7 +649,7 @@ class videos:
             result = getUrl(url).result
             result = result.decode('iso-8859-1').encode('utf-8')
             result = result.split('class="main"')
-            result = [i for i in result if i.startswith(' href="/en/videotourney/3/"')][-1]
+            result = [i for i in result if i.startswith(' href="%s"' % link().livetv_nbamatch)][-1]
             videos = common.parseDOM(result, "table", attrs = { "height": "27" })
         except:
             return
@@ -769,8 +773,9 @@ class resolver:
             except: pass
             try: url = re.compile('url480=(.+?)&').findall(result)[0]
             except: pass
-            try: url = re.compile('url720=(.+?)&').findall(result)[0]
-            except: pass
+            if getSetting("quality") == 'true' or url is None:
+                try: url = re.compile('url720=(.+?)&').findall(result)[0]
+                except: pass
 
             if url == None: raise Exception()
             return url
@@ -798,6 +803,5 @@ class resolver:
             return url
         except:
             pass
-
 
 main()

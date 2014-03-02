@@ -19,9 +19,9 @@
 	<string id="30080">Ondertiteling</string>
 	<string id="30081">Ondertiteling kan niet beschikbaar zijn of niet synchroon lopen.</string>
 	<string id="30082">In dat geval moet je je eigen ondertitels gebruiken.</string>
-	<string id="30083">Ondertiteling</string>
-	<string id="30084">Uitgeschakeld</string>
-	<string id="30085">Grieks</string>
+	<string id="30083">Ondertitels gebruiken</string>
+	<string id="30084">Eerste taal</string>
+	<string id="30085">Tweede taal</string>
 	<!-- Info -->
 	<string id="30301"></string>
 	<string id="30302"> is als standaard ingesteld</string>

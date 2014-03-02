@@ -16,9 +16,9 @@
 	<string id="30080">Subtitrări</string>
 	<string id="30081">Subtitrările pot fi indisponibile sau desincronizate</string>
 	<string id="30082">În acest caz poți utiliza propriile subtitrări</string>
-	<string id="30083">Subtitrări</string>
-	<string id="30084">Dezactivat</string>
-	<string id="30085">Greacă</string>
+	<string id="30083">Activare subtitrări</string>
+	<string id="30084">Limba principală</string>
+	<string id="30085">Limba secundară</string>
 	<!-- Info -->
 	<string id="30301"></string>
 	<string id="30302"> este activat implicit</string>
@@ -102,7 +102,7 @@
 	<string id="30432">Surse</string>
 	<string id="30433">Auto-rulare</string>
 	<!-- Description -->
-	<string id="40450">Urmărește filme de glowgaze.com</string>
+	<string id="30450">Urmărește filme de glowgaze.com</string>
 	<!-- Labels -->
 	<string id="30501">Toate</string>
 	<string id="30502">Data adăugării</string>

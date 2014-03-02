@@ -26,11 +26,11 @@
 	<string id="30409">Home...</string>
 	<string id="30410">Stel video-weergave in</string>
 	<!-- Description -->
-	<string id="40450">NBA video's kijken wanneer je wilt</string>
+	<string id="30450">NBA video's kijken wanneer je wilt</string>
 	<!-- Labels -->
 	<string id="30501">Meest recent</string>
 	<string id="30502">Wedstrijden</string>
-	<string id="30503">Highlights</string>
-	<string id="30504">Hoogtepunten</string>
-	<string id="30505">Teams</string>
+	<string id="30503">Hoogtepunten</string>
+	<string id="30504">Teams</string>
+	<string id="30505">Euroleague</string>
 </strings>
