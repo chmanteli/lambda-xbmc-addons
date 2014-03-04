@@ -1342,11 +1342,14 @@ class resolver:
 
             result = getUrl(url).result
             url = common.parseDOM(result, "media:content", ret="url")
-            url = [i for i in url if 'videoplayback?' in i][-1]
-            url = common.replaceHTMLCodes(url)
+            url = [common.replaceHTMLCodes(i) for i in url]
+            url = [i for i in url if 'videoplayback?' in i]
+            try: url = [i for i in url if not any(x in i for x in ['&itag=43&', '&itag=35&', '&itag=34&', '&itag=5&'])][-1]
+            except: url = url[-1]
 
-            url = url.replace('http://', 'https://')
             url = getUrl(url, output='geturl').result
+            if 'requiressl=yes' in url: url = url.replace('http://', 'https://')
+            else: url = url.replace('https://', 'http://')
             return url
         except:
             return
@@ -1358,11 +1361,15 @@ class resolver:
             url = 'http://yify.tv/reproductor2/pk/pk/plugins/player_p.php?url=' + url
 
             result = getUrl(url).result
-            result = re.compile('{(.+?)}').findall(result)[-1]
-            url = re.compile('"url":"(.+?)"').findall(result)[0]
+            url = re.compile('"url":"(.+?)"').findall(result)
+            url = [common.replaceHTMLCodes(i) for i in url]
+            url = [i for i in url if 'videoplayback?' in i]
+            try: url = [i for i in url if not any(x in i for x in ['&itag=43&', '&itag=35&', '&itag=34&', '&itag=5&'])][-1]
+            except: url = url[-1]
 
-            url = url.replace('http://', 'https://')
             url = getUrl(url, output='geturl').result
+            if 'requiressl=yes' in url: url = url.replace('http://', 'https://')
+            else: url = url.replace('https://', 'http://')
             return url
         except:
             return

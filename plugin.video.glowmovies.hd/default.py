@@ -1268,19 +1268,25 @@ class resolver:
             google = common.replaceHTMLCodes(google)
 
             result = getUrl(google, referer=url).result
-
-            u = re.findall('{file:"(.+?)"', result, re.I)
-            if u == []:
+            try:
+                url = re.compile('{file:"(.+?)"').findall(result)
+                if url == []: raise Exception()
+                url = [common.replaceHTMLCodes(i) for i in url]
+                url = [i for i in url if 'videoplayback?' in i]
+                try: url = [i for i in url if not any(x in i for x in ['&itag=43&', '&itag=35&', '&itag=34&', '&itag=5&'])][-1]
+                except: url = url[-1]
+            except:
                 url = common.parseDOM(result, "iframe", ret="src")[0]
                 url = getUrl(url).result
                 url = re.findall('("fmt_stream_map":".+?")', url, re.I)[0]
                 url = json.loads('{' + url + '}')['fmt_stream_map']
-                url = re.findall('[|](.+?)[,]', url, re.I)[0]
-            else:
-                url = u[-1]
+                url = [i.split('|')[-1] for i in url.split(',')]
+                try: url = [i for i in url if not any(x in i for x in ['&itag=43&', '&itag=35&', '&itag=34&', '&itag=5&'])][0]
+                except: url = url[0]
 
-            url = url.replace('http://', 'https://')
             url = getUrl(url, output='geturl').result
+            if 'requiressl=yes' in url: url = url.replace('http://', 'https://')
+            else: url = url.replace('https://', 'http://')
             return url
         except:
             pass
@@ -1298,17 +1304,17 @@ class resolver:
             result = common.replaceHTMLCodes(result)
 
             token = re.findall('"token":"(.+?)"', result, re.I)[0]
-            token = urllib.unquote(token).decode('utf-8').replace('\\/', '/')
+            token = urllib.unquote(token).replace('\\/', '/')
             if token.startswith('//'): token = 'http:' + token
             token = getUrl(token).result
             token = re.findall('<token>(.+?)</token>', token, re.I)[0]
 
             file = re.findall('"mp4":{(.+?)}}}', result, re.I)[0]
             file = re.findall('"file":"(.+?)"', file, re.I)[-1]
-            file = urllib.unquote(file).decode('utf-8').replace('\\/', '/')
+            file = urllib.unquote(file).replace('\\/', '/')
 
             url = re.findall('"video":"(.+?)"', result, re.I)[0]
-            url = urllib.unquote(url).decode('utf-8').replace('\\/', '/')
+            url = urllib.unquote(url).replace('\\/', '/')
             if url.startswith('//'): url = 'http:' + url
             url = '%s%s.mp4?token=%s' % (url, file, token)
             url = getUrl(url, output='geturl').result
