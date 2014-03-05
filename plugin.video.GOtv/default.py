@@ -353,39 +353,35 @@ class player(xbmc.Player):
 
 class subtitles:
     def get(self, name, imdb, season, episode):
-        lang = ''
-        subtitles = []
-        quality = ['bluray', 'hdrip', 'brrip', 'bdrip', 'dvdrip', 'webrip', 'hdtv']
-        langDict = {'Afrikaans': 'afr', 'Albanian': 'alb', 'Arabic': 'ara', 'Armenian': 'arm', 'Basque': 'baq', 'Bengali': 'ben', 'Bosnian': 'bos', 'Breton': 'bre', 'Bulgarian': 'bul', 'Burmese': 'bur', 'Catalan': 'cat', 'Chinese': 'chi', 'Croatian': 'hrv', 'Czech': 'cze', 'Danish': 'dan', 'Dutch': 'dut', 'English': 'eng', 'Esperanto': 'epo', 'Estonian': 'est', 'Finnish': 'fin', 'French': 'fre', 'Galician': 'glg', 'Georgian': 'geo', 'German': 'ger', 'Greek': 'ell', 'Hebrew': 'heb', 'Hindi': 'hin', 'Hungarian': 'hun', 'Icelandic': 'ice', 'Indonesian': 'ind', 'Italian': 'ita', 'Japanese': 'jpn', 'Kazakh': 'kaz', 'Khmer': 'khm', 'Korean': 'kor', 'Latvian': 'lav', 'Lithuanian': 'lit', 'Luxembourgish': 'ltz', 'Macedonian': 'mac', 'Malay': 'may', 'Malayalam': 'mal', 'Manipuri': 'mni', 'Mongolian': 'mon', 'Montenegrin': 'mne', 'Norwegian': 'nor', 'Occitan': 'oci', 'Persian': 'per', 'Polish': 'pol', 'Portuguese': 'por,pob', 'Romanian': 'rum', 'Russian': 'rus', 'Serbian': 'scc', 'Sinhalese': 'sin', 'Slovak': 'slo', 'Slovenian': 'slv', 'Spanish': 'spa', 'Swahili': 'swa', 'Swedish': 'swe', 'Syriac': 'syr', 'Tagalog': 'tgl', 'Tamil': 'tam', 'Telugu': 'tel', 'Thai': 'tha', 'Turkish': 'tur', 'Ukrainian': 'ukr', 'Urdu': 'urd'}
-
         if not getSetting("subtitles") == 'true': return
-        lang1 = getSetting("sublang1")
-        lang2 = getSetting("sublang2")
+        quality = ['bluray', 'hdrip', 'brrip', 'bdrip', 'dvdrip', 'webrip', 'hdtv']
+        langDict = {'Afrikaans': 'afr', 'Albanian': 'alb', 'Arabic': 'ara', 'Armenian': 'arm', 'Basque': 'baq', 'Bengali': 'ben', 'Bosnian': 'bos', 'Breton': 'bre', 'Bulgarian': 'bul', 'Burmese': 'bur', 'Catalan': 'cat', 'Chinese': 'chi', 'Croatian': 'hrv', 'Czech': 'cze', 'Danish': 'dan', 'Dutch': 'dut', 'English': 'eng', 'Esperanto': 'epo', 'Estonian': 'est', 'Finnish': 'fin', 'French': 'fre', 'Galician': 'glg', 'Georgian': 'geo', 'German': 'ger', 'Greek': 'ell', 'Hebrew': 'heb', 'Hindi': 'hin', 'Hungarian': 'hun', 'Icelandic': 'ice', 'Indonesian': 'ind', 'Italian': 'ita', 'Japanese': 'jpn', 'Kazakh': 'kaz', 'Khmer': 'khm', 'Korean': 'kor', 'Latvian': 'lav', 'Lithuanian': 'lit', 'Luxembourgish': 'ltz', 'Macedonian': 'mac', 'Malay': 'may', 'Malayalam': 'mal', 'Manipuri': 'mni', 'Mongolian': 'mon', 'Montenegrin': 'mne', 'Norwegian': 'nor', 'Occitan': 'oci', 'Persian': 'per', 'Polish': 'pol', 'Portuguese': 'por,pob', 'Portuguese(Brazil)': 'pob,por', 'Romanian': 'rum', 'Russian': 'rus', 'Serbian': 'scc', 'Sinhalese': 'sin', 'Slovak': 'slo', 'Slovenian': 'slv', 'Spanish': 'spa', 'Swahili': 'swa', 'Swedish': 'swe', 'Syriac': 'syr', 'Tagalog': 'tgl', 'Tamil': 'tam', 'Telugu': 'tel', 'Thai': 'tha', 'Turkish': 'tur', 'Ukrainian': 'ukr', 'Urdu': 'urd'}
+
+        langs = []
+        try: langs.append(langDict[getSetting("sublang1")])
+        except: pass
+        try: langs.append(langDict[getSetting("sublang2")])
+        except: pass
+        langs = ','.join(langs)
 
         try:
             import xmlrpclib
             server = xmlrpclib.Server('http://api.opensubtitles.org/xml-rpc', verbose=0)
             token = server.LogIn('', '', 'en', 'XBMC_Subtitles_v1')['token']
+            result = server.SearchSubtitles(token, [{'sublanguageid': langs, 'imdbid': imdb, 'season': season, 'episode': episode}])['data']
+            result = [i for i in result if i['SubSumCD'] == '1']
         except:
             return
 
-        try:
-            result = server.SearchSubtitles(token, [{'sublanguageid': langDict[lang1], 'imdbid': imdb, 'season': season, 'episode': episode}])['data']
-            result = [i for i in result if i['SubSumCD'] == '1']
-            for q in quality: subtitles += [i for i in result if q in i['MovieReleaseName'].lower()]
-            subtitles += [i for i in result if not any(x in i['MovieReleaseName'].lower() for x in quality)]
-            lang = xbmc.convertLanguage(langDict[lang1][:3], xbmc.ISO_639_1)
-        except:
-            pass
-        try:
-            if not subtitles == []: raise Exception()
-            result = server.SearchSubtitles(token, [{'sublanguageid': langDict[lang2], 'imdbid': imdb, 'season': season, 'episode': episode}])['data']
-            result = [i for i in result if i['SubSumCD'] == '1']
-            for q in quality: subtitles += [i for i in result if q in i['MovieReleaseName'].lower()]
-            subtitles += [i for i in result if not any(x in i['MovieReleaseName'].lower() for x in quality)]
-            lang = xbmc.convertLanguage(langDict[lang2][:3], xbmc.ISO_639_1)
-        except:
-            pass
+        subtitles = []
+        for lang in langs.split(','):
+            filter = [i for i in result if lang == i['SubLanguageID']]
+            if filter == []: continue
+            for q in quality: subtitles += [i for i in filter if q in i['MovieReleaseName'].lower()]
+            subtitles += [i for i in filter if not any(x in i['MovieReleaseName'].lower() for x in quality)]
+            try: lang = xbmc.convertLanguage(lang, xbmc.ISO_639_1)
+            except: pass
+            break
 
         try:
             import zlib, base64
@@ -1509,15 +1505,23 @@ class seasons:
             tvdb = common.replaceHTMLCodes(tvdb)
             tvdb = tvdb.encode('utf-8')
 
-            self.list = self.tvdb_list(url, image, year, imdb, tvdb, genre, plot, show, show_alt)
+            threads = []
+            threads.append(Thread(self.tvdb_list, url, image, year, imdb, tvdb, genre, plot, show, show_alt))
+            threads.append(Thread(self.tvrage_list, url, image, year, imdb, tvdb, genre, plot, show, show_alt))
+            [i.start() for i in threads]
+            [i.join() for i in threads]
 
-            fallback = [i['season'] for i in self.list if not len(i['season']) < 4]
-            if fallback == []: return self.list
+            if self.list == None: self.list = []
+            if self.list2 == None: self.list2 = []
 
-            self.list2 = self.tvrage_list(url, image, year, imdb, tvdb, genre, plot, show, show_alt)
-            if not self.list2 == []: return self.list2
-
-            return self.list
+            if len(self.list) == 0:
+                return self.list2
+            elif len(self.list2) > len(self.list):
+                return self.list2
+            elif any(len(i['season']) > 3 for i in self.list):
+                return self.list2
+            elif len(self.list) > 0:
+                return self.list
         except:
             return
 

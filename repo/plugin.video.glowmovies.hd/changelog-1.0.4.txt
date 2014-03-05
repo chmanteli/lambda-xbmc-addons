@@ -1,4 +1,12 @@
 ------------------------
+Glow Movies HD v1.0.4 (5-Mar-14)
+------------------------
+
+- Tweaked internal subtitles.
+- Code cosmetics.
+
+
+------------------------
 Glow Movies HD v1.0.3 (4-Mar-14)
 ------------------------
 

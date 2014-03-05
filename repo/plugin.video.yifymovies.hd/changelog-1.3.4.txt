@@ -1,4 +1,12 @@
 ------------------------
+Yify Movies HD v1.3.4 (5-Mar-14)
+------------------------
+
+- Tweaked internal subtitles.
+- Code cosmetics.
+
+
+------------------------
 Yify Movies HD v1.3.3 (4-Mar-14)
 ------------------------
 
