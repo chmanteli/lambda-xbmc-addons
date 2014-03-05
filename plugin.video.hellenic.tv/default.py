@@ -364,6 +364,7 @@ class player:
                 'viiideo'           : self.viiideo,
                 'dailymotion'       : self.dailymotion,
                 'livestream'        : self.livestream,
+                'livestream_new'    : self.livestream_new,
                 'ustream'           : self.ustream,
                 'veetle'            : self.veetle,
                 'justin'            : self.justin
@@ -481,6 +482,20 @@ class player:
             isLive = str(result.find('isLive":true'))
             if isLive == '-1': return
             url = re.compile('"httpUrl".+?"(.+?)"').findall(result)[0]
+            return url
+        except:
+            return
+
+    def livestream_new(self, url):
+        try:
+            result = getUrl(url).result
+            url = re.compile('"play_url":"(.+?)"').findall(result)[0]
+
+            result = getUrl(url).result
+            http = common.parseDOM(result, "meta", ret="content", attrs = { "name": "httpBase" })[0]
+            video = common.parseDOM(result, "video", ret="src")[0]
+            url = '%s/%s' % (http, video)
+
             return url
         except:
             return

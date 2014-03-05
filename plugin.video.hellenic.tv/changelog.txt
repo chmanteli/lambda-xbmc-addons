@@ -1,4 +1,13 @@
 ------------------------
+Hellenic TV v2.5.7 (5-Mar-14)
+------------------------
+
+- Added ACTION 24.
+- Added livestream_new resolver.
+- Updated SKAI, EDT, MEGA CYPRUS, ANT1 CYPRUS, SIGMA, CAPITAL and CY SPORTS.
+
+
+------------------------
 Hellenic TV v2.5.6 (18-Feb-14)
 ------------------------
 
