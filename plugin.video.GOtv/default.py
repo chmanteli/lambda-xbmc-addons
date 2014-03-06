@@ -146,6 +146,7 @@ class main:
         elif action == 'shows_views':               shows().imdb_views()
         elif action == 'shows_active':              shows().imdb_active()
         elif action == 'shows_search':              shows().imdb_search(query)
+        elif action == 'shows_trending':            shows().trakt_trending()
         elif action == 'genres_shows':              genres().imdb()
         elif action == 'seasons':                   seasons().get(url, image, year, imdb, genre, plot, show)
         elif action == 'episodes':                  episodes().get(name, url, image, year, imdb, tvdb, genre, plot, show, show_alt)
@@ -1283,9 +1284,10 @@ class root:
         rootList.append({'name': 30504, 'image': 'Views.png', 'action': 'shows_views'})
         rootList.append({'name': 30505, 'image': 'Active.png', 'action': 'shows_active'})
         rootList.append({'name': 30506, 'image': 'Genres.png', 'action': 'genres_shows'})
-        rootList.append({'name': 30507, 'image': 'Favourites.png', 'action': 'shows_favourites'})
-        rootList.append({'name': 30508, 'image': 'Subscriptions.png', 'action': 'shows_subscriptions'})
-        rootList.append({'name': 30509, 'image': 'Search.png', 'action': 'shows_search'})
+        rootList.append({'name': 30507, 'image': 'Trakt.png', 'action': 'shows_trending'})
+        rootList.append({'name': 30508, 'image': 'Favourites.png', 'action': 'shows_favourites'})
+        rootList.append({'name': 30509, 'image': 'Subscriptions.png', 'action': 'shows_subscriptions'})
+        rootList.append({'name': 30510, 'image': 'Search.png', 'action': 'shows_search'})
         index().rootList(rootList)
         index().downloadList()
 
@@ -1293,6 +1295,7 @@ class link:
     def __init__(self):
         self.imdb_base = 'http://www.imdb.com'
         self.imdb_akas = 'http://akas.imdb.com'
+        self.imdb_title = 'http://www.imdb.com/title/tt%s/'
         self.imdb_genre = 'http://akas.imdb.com/genre/'
         self.imdb_genres = 'http://akas.imdb.com/search/title?title_type=tv_series,mini_series&sort=moviemeter,asc&count=25&start=1&genres=%s'
         self.imdb_popular = 'http://akas.imdb.com/search/title?title_type=tv_series,mini_series&sort=moviemeter,asc&count=25&start=1'
@@ -1312,6 +1315,7 @@ class link:
         self.trakt_base = 'http://api.trakt.tv'
         self.trakt_key = base64.urlsafe_b64decode('YmU2NDI5MWFhZmJiYmU2MmZkYzRmM2FhMGVkYjQwNzM=')
         self.trakt_summary = 'http://api.trakt.tv/show/summary.json/%s/%s'
+        self.trakt_trending = 'http://api.trakt.tv/shows/trending.json/%s'
 
         self.tvrage_base = 'http://www.tvrage.com'
         self.tvrage_info = 'http://www.tvrage.com/feeds/full_show_info.php?sid=%s'
@@ -1387,6 +1391,11 @@ class shows:
         self.list = cache(self.imdb_list, link().imdb_active)
         index().showList(self.list)
         index().nextList(self.list)
+
+    def trakt_trending(self):
+        #self.list = self.trakt_list(link().trakt_trending % link().trakt_key)
+        self.list = cache(self.trakt_list, link().trakt_trending % link().trakt_key)
+        index().showList(self.list)
 
     def imdb_search(self, query=None):
         if query is None:
@@ -1466,6 +1475,56 @@ class shows:
                     plot = ''
 
                 self.list.append({'name': name, 'url': url, 'image': image, 'year': year, 'imdb': imdb, 'genre': genre, 'plot': plot, 'next': next})
+            except:
+                pass
+
+        return self.list
+
+    def trakt_list(self, url):
+        try:
+            result = getUrl(url).result
+            shows = json.loads(result)
+        except:
+            return
+
+        for show in shows:
+            try:
+                name = show['title']
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                year = show['year']
+                year = re.sub('[^0-9]', '', str(year))
+                year = year.encode('utf-8')
+
+                imdb = show['imdb_id']
+                imdb = re.sub('[^0-9]', '', str(imdb))
+                imdb = imdb.encode('utf-8')
+
+                url = link().imdb_title % imdb
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+
+                image = show['poster']
+                image = common.replaceHTMLCodes(image)
+                image = image.encode('utf-8')
+
+                try:
+                    genre = show['genres']
+                    genre = " / ".join(genre)
+                    genre = common.replaceHTMLCodes(genre)
+                    genre = genre.encode('utf-8')
+                except:
+                    genre = ''
+
+                try:
+                    plot = show['overview']
+                    plot = common.replaceHTMLCodes(plot)
+                    plot = plot.encode('utf-8')
+                except:
+                    plot = ''
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'year': year, 'imdb': imdb, 'genre': genre, 'plot': plot})
             except:
                 pass
 

@@ -135,7 +135,8 @@
 	<string id="30504">Views</string>
 	<string id="30505">Active</string>
 	<string id="30506">Genres</string>
-	<string id="30507">Favourites</string>
-	<string id="30508">Subscriptions</string>
-	<string id="30509">Search</string>
+	<string id="30507">Trakt</string>
+	<string id="30508">Favourites</string>
+	<string id="30509">Subscriptions</string>
+	<string id="30510">Search</string>
 </strings>

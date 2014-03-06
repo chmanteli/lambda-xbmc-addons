@@ -135,7 +135,8 @@
 	<string id="30504">Les Plus Vues</string>
 	<string id="30505">Les Séries TV En Cours</string>
 	<string id="30506">Par Genres</string>
-	<string id="30507">Mes Favoris</string>
-	<string id="30508">Mes Séries TV suivies</string>
-	<string id="30509">Recherche</string>
+	<string id="30507">Classement Trakt</string>
+	<string id="30508">Mes Favoris</string>
+	<string id="30509">Mes Séries TV suivies</string>
+	<string id="30510">Recherche</string>
 </strings>

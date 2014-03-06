@@ -120,10 +120,10 @@ class main:
         elif action == 'movies_views':              movies().imdb_views()
         elif action == 'movies_oscars':             movies().imdb_oscars()
         elif action == 'movies_search':             movies().imdb_search(query)
+        elif action == 'movies_trending':           movies().trakt_trending()
         elif action == 'movies_favourites':         favourites().movies()
         elif action == 'genres_movies':             genres().imdb()
         elif action == 'years_movies':              years().imdb()
-        elif action == 'movies_added':              movies().imdb_added()
         elif action == 'mymovies':                  mymovies().imdb(url)
         elif action == 'mymovies_list':             mymovies().imdb_watchlist()
         elif action == 'mymovies_added':            mymovies().imdb_watchadded()
@@ -933,7 +933,7 @@ class root:
         rootList.append({'name': 30504, 'image': 'Oscars.png', 'action': 'movies_oscars'})
         rootList.append({'name': 30505, 'image': 'Genres.png', 'action': 'genres_movies'})
         rootList.append({'name': 30506, 'image': 'Years.png', 'action': 'years_movies'})
-        rootList.append({'name': 30507, 'image': 'Amazon.png', 'action': 'movies_added'})
+        rootList.append({'name': 30507, 'image': 'Trakt.png', 'action': 'movies_trending'})
         if not (getSetting("imdb_mail") == '' or getSetting("imdb_password") == ''):
             rootList.append({'name': 30508, 'image': 'IMDb.png', 'action': 'root_mymovies'})
         rootList.append({'name': 30509, 'image': 'Favourites.png', 'action': 'movies_favourites'})
@@ -954,8 +954,8 @@ class link:
         self.imdb_base = 'http://www.imdb.com'
         self.imdb_akas = 'http://akas.imdb.com'
         self.imdb_mobile = 'http://m.imdb.com'
+        self.imdb_title = 'http://www.imdb.com/title/tt%s/'
         self.imdb_login = 'https://secure.imdb.com/oauth/m_login?origpath=/&ref_=m_nv_usr_lgin'
-        self.imdb_added = 'http://akas.imdb.com/watchnow/'
         self.imdb_genre = 'http://akas.imdb.com/genre/'
         self.imdb_genres = 'http://akas.imdb.com/search/title?title_type=feature,tv_movie&sort=boxoffice_gross_us&count=25&start=1&genres=%s'
         self.imdb_years = 'http://akas.imdb.com/search/title?title_type=feature,tv_movie&sort=boxoffice_gross_us&count=25&start=1&&year=%s,%s'
@@ -967,6 +967,11 @@ class link:
         self.imdb_user = 'http://akas.imdb.com/user/%s/lists?tab=all&sort=modified:desc&filter=titles'
         self.imdb_watchlist ='http://m.imdb.com/list/userlist_json?list_class=watchlist&limit=10000'
         self.imdb_list ='http://m.imdb.com/list/userlist_json?list_class=%s&limit=10000'
+
+        self.trakt_base = 'http://api.trakt.tv'
+        self.trakt_key = base64.urlsafe_b64decode('YmU2NDI5MWFhZmJiYmU2MmZkYzRmM2FhMGVkYjQwNzM=')
+        self.trakt_summary = 'http://api.trakt.tv/show/summary.json/%s/%s'
+        self.trakt_trending = 'http://api.trakt.tv/movies/trending.json/%s'
 
 class genres:
     def __init__(self):
@@ -1059,9 +1064,9 @@ class movies:
         index().movieList(self.list)
         index().nextList(self.list)
 
-    def imdb_added(self):
-        #self.list = self.imdb_list2(link().imdb_added)
-        self.list = cache(self.imdb_list2, link().imdb_added)
+    def trakt_trending(self):
+        #self.list = self.trakt_list(link().trakt_trending % link().trakt_key)
+        self.list = cache(self.trakt_list, link().trakt_trending % link().trakt_key)
         index().movieList(self.list)
 
     def imdb_search(self, query=None):
@@ -1144,54 +1149,55 @@ class movies:
 
         return self.list
 
-    def imdb_list2(self, url):
+    def trakt_list(self, url):
         try:
-            result = getUrl(url.replace(link().imdb_base, link().imdb_akas)).result
-            result = result.decode('iso-8859-1').encode('utf-8')
-            movies = common.parseDOM(result, "div", attrs = { "class": "list_item.+?" })
+            result = getUrl(url).result
+            movies = json.loads(result)
         except:
             return
 
         for movie in movies:
             try:
-                title = common.parseDOM(movie, "a")[1]
+                title = movie['title']
                 title = common.replaceHTMLCodes(title)
                 title = title.encode('utf-8')
 
-                year = common.parseDOM(movie, "span", attrs = { "class": "year_type" })[0]
-                year = re.sub("\n|[(]|[)]|\s", "", year)
+                year = movie['year']
+                year = re.sub('[^0-9]', '', str(year))
                 year = year.encode('utf-8')
-
-                if not year.isdigit(): raise Exception()
 
                 name = '%s (%s)' % (title, year)
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
 
-                url = common.parseDOM(movie, "a", ret="href")[0]
-                url = '%s%s' % (link().imdb_base, url)
+                imdb = movie['imdb_id']
+                imdb = re.sub('[^0-9]', '', str(imdb))
+                imdb = imdb.encode('utf-8')
+
+                url = link().imdb_title % imdb
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
 
-                try: image = common.parseDOM(movie, "img", ret="loadlate")[0]
-                except: image = common.parseDOM(movie, "img", ret="src")[0]
-                if not ('._SX' in image or '._SY' in image): raise Exception()
-                image = image.rsplit('._SX', 1)[0].rsplit('._SY', 1)[0] + '._SX500.' + image.rsplit('.', 1)[-1]
+                image = movie['poster']
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
 
-                imdb = re.sub('[^0-9]', '', url.rsplit('tt', 1)[-1])
-                imdb = imdb.encode('utf-8')
+                try:
+                    genre = movie['genres']
+                    genre = " / ".join(genre)
+                    genre = common.replaceHTMLCodes(genre)
+                    genre = genre.encode('utf-8')
+                except:
+                    genre = ''
 
                 try:
-                    plot = common.parseDOM(movie, "div", attrs = { "class": "item_description" })[0]
-                    plot = plot.rsplit('<', 1)[0].rsplit('<', 1)[0].strip()
+                    plot = movie['overview']
                     plot = common.replaceHTMLCodes(plot)
                     plot = plot.encode('utf-8')
                 except:
                     plot = ''
 
-                self.list.append({'name': name, 'url': url, 'image': image, 'title': title, 'year': year, 'imdb': imdb, 'genre': '', 'plot': plot})
+                self.list.append({'name': name, 'url': url, 'image': image, 'title': title, 'year': year, 'imdb': imdb, 'genre': genre, 'plot': plot})
             except:
                 pass
 
