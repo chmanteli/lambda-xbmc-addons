@@ -26,6 +26,8 @@ try:    import CommonFunctions
 except: import commonfunctionsdummy as CommonFunctions
 
 
+action              = None
+common              = CommonFunctions
 language            = xbmcaddon.Addon().getLocalizedString
 setSetting          = xbmcaddon.Addon().setSetting
 getSetting          = xbmcaddon.Addon().getSetting
@@ -33,18 +35,18 @@ addonName           = xbmcaddon.Addon().getAddonInfo("name")
 addonVersion        = xbmcaddon.Addon().getAddonInfo("version")
 addonId             = xbmcaddon.Addon().getAddonInfo("id")
 addonPath           = xbmcaddon.Addon().getAddonInfo("path")
+addonFullId         = addonName + addonVersion
 addonIcon           = os.path.join(addonPath,'icon.png')
-addonChannels       = os.path.join(addonPath,'channels.xml')
+addonFanart         = os.path.join(addonPath,'fanart.jpg')
 addonEPG            = os.path.join(addonPath,'xmltv.xml')
+addonChannels       = os.path.join(addonPath,'channels.xml')
 addonFanart         = os.path.join(addonPath,'fanart.jpg')
 addonLogos          = os.path.join(addonPath,'resources/logos')
 addonSlideshow      = os.path.join(addonPath,'resources/slideshow')
-akamaiProxy         = os.path.join(addonPath,'akamaisecurehd.py')
-fallback            = os.path.join(addonPath,'resources/fallback/fallback.mp4')
 addonStrings        = os.path.join(addonPath,'resources/language/Greek/strings.xml')
 dataPath            = xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
-common              = CommonFunctions
-action              = None
+fallback            = os.path.join(addonPath,'resources/fallback/fallback.mp4')
+akamaiProxy         = os.path.join(addonPath,'akamaisecurehd.py')
 
 
 class main:
@@ -69,8 +71,7 @@ class main:
         elif action == 'dialog':                    channels().dialog()
         elif action == 'epg_menu':                  contextMenu().epg(channel)
         elif action == 'refresh':                   index().container_refresh()
-        elif action == 'play':                      player().run(channel)
-
+        elif action == 'play':                      resolver().run(channel)
 
         xbmcplugin.setContent(int(sys.argv[1]), 'Episodes')
         xbmcplugin.setPluginFanart(int(sys.argv[1]), addonFanart)
@@ -129,6 +130,25 @@ class Thread(threading.Thread):
     def run(self):
         self._target(*self._args)
 
+class player(xbmc.Player):
+    def __init__ (self):
+        xbmc.Player.__init__(self)
+
+    def run(self, name, title, url, image, epg):
+        meta = {'label': title, 'title': title, 'studio': name, 'duration': '1440', 'plot': epg}
+        item = xbmcgui.ListItem(path=url, iconImage=image, thumbnailImage=image)
+        item.setInfo( type="Video", infoLabels = meta )
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+
+    def onPlayBackStarted(self):
+        return
+
+    def onPlayBackEnded(self):
+        return
+
+    def onPlayBackStopped(self):
+        return
+
 class index:
     def infoDialog(self, str, header=addonName):
         try: xbmcgui.Dialog().notification(header, str, addonIcon, 3000, sound=False)
@@ -160,13 +180,7 @@ class index:
         if not check == addonName: return True
 
     def container_refresh(self):
-        xbmc.executebuiltin('Container.Refresh')
-
-    def resolve(self, name, title, url, image, epg):
-        meta = {'label': title, 'title': title, 'studio': name, 'duration': '1440', 'plot': epg}
-        item = xbmcgui.ListItem(path=url, iconImage=image, thumbnailImage=image)
-        item.setInfo( type="Video", infoLabels = meta )
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+        xbmc.executebuiltin("Container.Refresh")
 
     def dialogList(self, dialogList):
         selectList = []
@@ -189,17 +203,15 @@ class index:
         name = playerList[select]['name']
         title = playerList[select]['title']
         epg = playerList[select]['epg']
-        url = player().run(name)
+        url = resolver().run(name)
+        if url is None: return
         meta = {'label': title, 'title': title, 'studio': name, 'duration': '1440', 'plot': epg}
         image = '%s/%s.png' % (addonLogos, name)
 
         item = xbmcgui.ListItem(path=url, iconImage=image, thumbnailImage=image)
-        item.setInfo( type="Video", infoLabels = meta )
+        item.setInfo( type="Video", infoLabels= meta )
         item.setProperty("IsPlayable", "true")
-        playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-        playlist.clear()
-        playlist.add(url,item)
-        xbmc.Player().play(playlist)
+        xbmc.Player().play(url, item)
 
     def channelList(self, channelList):
         count = 0
@@ -269,23 +281,22 @@ class contextMenu:
 
 class channels:
     def __init__(self):
+        self.list = []
+        self.epg = {}
         if not (os.path.isfile(addonEPG) and index().getProperty("htv_Service_Running") == ''):
             index().infoDialog(language(30301).encode("utf-8"))
 
     def get(self):
-        list = channelList().channelList
-        index().channelList(list)
+        self.list = self.channel_list()
+        index().channelList(self.list)
 
     def dialog(self):
-        list = channelList().channelList
-        index().dialogList(list)
+        self.list = self.channel_list()
+        index().dialogList(self.list)
 
-class channelList:
-    def __init__(self):
+    def channel_list(self):
         try:
-            self.epgList = {}
-            channelList = []
-            self.epg()
+            self.epg_list()
 
             file = open(addonChannels,'r')
             result = file.read()
@@ -293,28 +304,35 @@ class channelList:
             channels = common.parseDOM(result, "channel", attrs = { "active": "True" })
         except:
             return
+
         for channel in channels:
             try:
                 name = common.parseDOM(channel, "name")[0]
+
                 type = common.parseDOM(channel, "type")[0]
+
                 url = common.parseDOM(channel, "url")[0]
                 url = common.replaceHTMLCodes(url)
+
                 try: type2 = common.parseDOM(channel, "type2")[0]
                 except: type2 = "False"
+
                 try: url2 = common.parseDOM(channel, "url2")[0]
                 except: url2 = "False"
                 url2 = common.replaceHTMLCodes(url2)
+
                 epg = common.parseDOM(channel, "epg")[0]
-                try: epg = self.epgList[name]
+                try: epg = self.epg[name]
                 except: epg = "[B][%s] - %s[/B]\n%s" % (language(30361), name, language(int(epg)))
                 epg = common.replaceHTMLCodes(epg)
-                channelList.append({'name': name, 'epg': epg, 'url': url, 'type': type, 'url2': url2, 'type2': type2})
+
+                self.list.append({'name': name, 'epg': epg, 'url': url, 'type': type, 'url2': url2, 'type2': type2})
             except:
                 pass
 
-        self.channelList = channelList
+        return self.list
 
-    def epg(self):
+    def epg_list(self):
         try:
             now = datetime.datetime.now()
             now = '%04d' % now.year + '%02d' % now.month + '%02d' % now.day + '%02d' % now.hour + '%02d' % now.minute + '%02d' % now.second
@@ -325,32 +343,39 @@ class channelList:
             programmes = re.compile('(<programme.+?</programme>)').findall(read)
         except:
             return
+
         for programme in programmes:
             try:
                 start = re.compile('start="(.+?)"').findall(programme)[0]
                 start = re.split('\s+', start)[0]
+
                 stop = re.compile('stop="(.+?)"').findall(programme)[0]
                 stop = re.split('\s+', stop)[0]
                 if not int(start) <= int(now) <= int(stop): raise Exception()
+
                 channel = common.parseDOM(programme, "programme", ret="channel")[0]
+
                 title = common.parseDOM(programme, "title")[0]
                 title = common.replaceHTMLCodes(title).encode('utf-8')
+
                 desc = common.parseDOM(programme, "desc")[0]
                 desc = common.replaceHTMLCodes(desc).encode('utf-8')
+
                 epg = "[B][%s] - %s[/B]\n%s" % ('ÔÙÑÁ'.decode('iso-8859-7').encode('utf-8'), title, desc)
-                self.epgList.update({channel: epg})
+
+                self.epg.update({channel: epg})
             except:
                 pass
 
-class player:
+class resolver:
     def run(self, channel):
         try:
             xbmc.Player().stop()
             xbmc.PlayList(xbmc.PLAYLIST_VIDEO).clear()
-            list = channelList().channelList
+            data = channels().channel_list()
             channel = channel.replace('_',' ')
 
-            i = [x for x in list if channel == x['name']]
+            i = [x for x in data if channel == x['name']]
             name, epg, url, type, url2, type2 = i[0]['name'], i[0]['epg'], i[0]['url'], i[0]['type'], i[0]['url2'], i[0]['type2']
             image = '%s/%s.png' % (addonLogos, name)
 
@@ -376,7 +401,8 @@ class player:
 
             if not xbmc.getInfoLabel('ListItem.Plot') == '' : epg = xbmc.getInfoLabel('ListItem.Plot')
             title = epg.split('\n')[0].split('-', 1)[-1].rsplit('[', 1)[0].strip()
-            index().resolve(name, title, url, image, epg)
+
+            player().run(name, title, url, image, epg)
             return url
         except:
             index().infoDialog(language(30302).encode("utf-8"))

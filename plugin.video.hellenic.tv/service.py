@@ -26,6 +26,8 @@ try:    import CommonFunctions
 except: import commonfunctionsdummy as CommonFunctions
 
 
+action              = None
+common              = CommonFunctions
 language            = xbmcaddon.Addon().getLocalizedString
 setSetting          = xbmcaddon.Addon().setSetting
 getSetting          = xbmcaddon.Addon().getSetting
@@ -33,17 +35,18 @@ addonName           = xbmcaddon.Addon().getAddonInfo("name")
 addonVersion        = xbmcaddon.Addon().getAddonInfo("version")
 addonId             = xbmcaddon.Addon().getAddonInfo("id")
 addonPath           = xbmcaddon.Addon().getAddonInfo("path")
+addonFullId         = addonName + addonVersion
 addonIcon           = os.path.join(addonPath,'icon.png')
-addonChannels       = os.path.join(addonPath,'channels.xml')
+addonFanart         = os.path.join(addonPath,'fanart.jpg')
 addonEPG            = os.path.join(addonPath,'xmltv.xml')
+addonChannels       = os.path.join(addonPath,'channels.xml')
 addonFanart         = os.path.join(addonPath,'fanart.jpg')
 addonLogos          = os.path.join(addonPath,'resources/logos')
-akamaiProxy         = os.path.join(addonPath,'akamaisecurehd.py')
-fallback            = os.path.join(addonPath,'resources/fallback/fallback.mp4')
+addonSlideshow      = os.path.join(addonPath,'resources/slideshow')
 addonStrings        = os.path.join(addonPath,'resources/language/Greek/strings.xml')
 dataPath            = xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
-common              = CommonFunctions
-action              = None
+fallback            = os.path.join(addonPath,'resources/fallback/fallback.mp4')
+akamaiProxy         = os.path.join(addonPath,'akamaisecurehd.py')
 
 
 class main:
@@ -138,7 +141,7 @@ class index:
         if not check == addonName: return True
 
     def container_refresh(self):
-        xbmc.executebuiltin('Container.Refresh')
+        xbmc.executebuiltin("Container.Refresh")
 
 class epg:
     def __init__(self):
@@ -258,8 +261,8 @@ class epg:
         threads = []
         self.tvcData = []
         for date in self.dates:
-            url = 'http://www.tvcontrol.gr/Ajax_ListingsPerChannel.php?channel_id=%s&dateDayValue=%s' % (id, date)
             date = date.replace('-','')
+            url = 'http://www.tvcontrol.gr/json/events/channel_%s_0.json?d=%s000000' % (id, date)
             threads.append(Thread(self.tvc_data2, date, url))
         [i.start() for i in threads]
         [i.join() for i in threads]
@@ -282,8 +285,9 @@ class epg:
         for data in self.tvcData:
             try:
                 date = data["date"]
-                data = data["value"]
-                data = json.loads(data)
+                d = json.loads(data["value"])
+                data = []
+                for i in range(0, len(d)): data += d[i]["events"]
                 [programmes.append({'date': date, 'value': value}) for value in data]
             except:
                 pass
@@ -292,14 +296,15 @@ class epg:
             try:
                 date = programme["date"]
                 programme = programme["value"]
-                start = programme["time"]
+                start = programme["event_time"].replace(':','')
                 start = date + str('%04d' % int(start)) + '00'
                 start = self.start_processor(start)
-                title = common.parseDOM(programme["html"], "div", attrs = { "class": "ListingBubbleTitle" })[0]
+                title = programme["constructed_titlegr"]
                 title = self.title_prettify(title)
-                desc = common.parseDOM(programme["html"], "div", attrs = { "id": "BubbleDescriptionHeight.+?" })[0]
-                desc = desc.split("</div>", 1)[-1].split("<div", 1)[0]
-                desc = self.desc_prettify(desc)
+                descDict = {'1': 'Αθλητικά', '3': 'Ειδήσεις', '4': 'Ντοκιμαντέρ', '5': 'Παιδικά', '6': 'Ταινία', '8': 'Σειρά', '10': 'Ψυχαγωγία'}
+                desc = programme["main_genre_id"]
+                try: desc = descDict[desc].decode('iso-8859-7')
+                except: desc = descDict['10'].decode('iso-8859-7')
                 programmeList.append({'start': start, 'title': title, 'desc': desc})
             except:
                 pass
@@ -457,7 +462,8 @@ class epg:
             'SIGMA'                     : self.tvc_programme("SIGMA", "305"),
             #'TV PLUS'                  : self.tvc_programme("TV PLUS", "289"),
             #'EXTRA TV'                 : self.tvc_programme("EXTRA TV", "290"),
-            'CAPITAL'                   : self.tvc_programme("CAPITAL", "282")
+            'CAPITAL'                   : self.tvc_programme("CAPITAL", "282"),
+            'RIK SAT'                   : self.tvc_programme("RIK SAT", "83")
         }
 
     def get_titleDict(self):

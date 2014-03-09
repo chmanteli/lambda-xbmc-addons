@@ -1,4 +1,17 @@
 ------------------------
+Hellenic TV v2.6.0 (9-Mar-14)
+------------------------
+
+- Re-work of addon.
+- Fixed TVControl EPG Source.
+- Fixed EPG for E TV, ACTION 24, MEGA CYPRUS, ANT1 CYPRUS, SIGMA and CAPITAL.
+- Added  EPG for RIK SAT.
+- Updated MEGA CYPRUS.
+- Added MUSIC TV.
+- Code cosmetics.
+
+
+------------------------
 Hellenic TV v2.5.7 (5-Mar-14)
 ------------------------
 
