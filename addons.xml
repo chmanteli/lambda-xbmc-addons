@@ -247,7 +247,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.hellenic.player" name="Hellenic Player" version="1.2.1" provider-name="lambda">
+<addon id="plugin.video.hellenic.player" name="Hellenic Player" version="2.0.0" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="plugin.video.hellenic.tv" version="2.4.0"/>

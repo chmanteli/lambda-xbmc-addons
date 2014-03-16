@@ -1,4 +1,27 @@
 ------------------------
+Hellenic Player v2.0.0 (16-Mar-14)
+------------------------
+
+- Re-work of addon.
+- Added RIK network.
+- Added SIGMA network.
+- Removed Nickelodeon network.
+- Fixed Novasports.gr videos.
+- Added SuperBALL (contra.gr) videos.
+- Added MTV charts.
+- Added RYTHMOS FM charts.
+- Removed MAD TV charts.
+- Tweaked ANT1 episode listings.
+- Tweaked ANT1 resolver.
+- Added proxy support for ANT1 videos.
+- Tweaked ALPHA episode listings.
+- Tweaked STAR show listings.
+- Added sorting methods for favourites.
+- Tweaked context menus.
+- Code cosmetics.
+
+
+------------------------
 Hellenic Player v1.2.1 (18-Dec-13)
 ------------------------
 

@@ -2,7 +2,7 @@
 
 '''
     Hellenic Player XBMC Addon
-    Copyright (C) 2013 lambda
+    Copyright (C) 2014 lambda
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import urllib,urllib2,re,os,threading,datetime,time,xbmc,xbmcplugin,xbmcgui,xbmcaddon
+import urllib,urllib2,re,os,threading,datetime,time,base64,xbmc,xbmcplugin,xbmcgui,xbmcaddon,xbmcvfs
 from operator import itemgetter
 try:    import json
 except: import simplejson as json
@@ -28,6 +28,8 @@ try:    import StorageServer
 except: import storageserverdummy as StorageServer
 
 
+action              = None
+common              = CommonFunctions
 language            = xbmcaddon.Addon().getLocalizedString
 setSetting          = xbmcaddon.Addon().setSetting
 getSetting          = xbmcaddon.Addon().getSetting
@@ -35,19 +37,18 @@ addonName           = xbmcaddon.Addon().getAddonInfo("name")
 addonVersion        = xbmcaddon.Addon().getAddonInfo("version")
 addonId             = xbmcaddon.Addon().getAddonInfo("id")
 addonPath           = xbmcaddon.Addon().getAddonInfo("path")
+addonFullId         = addonName + addonVersion
 addonDesc           = language(30450).encode("utf-8")
+cache               = StorageServer.StorageServer(addonFullId,1).cacheFunction
+cache2              = StorageServer.StorageServer(addonFullId,24).cacheFunction
+cache3              = StorageServer.StorageServer(addonFullId,720).cacheFunction
 addonIcon           = os.path.join(addonPath,'icon.png')
 addonFanart         = os.path.join(addonPath,'fanart.jpg')
 addonArt            = os.path.join(addonPath,'resources/art')
 addonSlideshow      = os.path.join(addonPath,'resources/slideshow')
-addonNickelodeon    = os.path.join(addonPath,'resources/data/nickelodeon.xml')
-addonSkaiDoc        = os.path.join(addonPath,'resources/data/skaidoc.xml')
 dataPath            = xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
 viewData            = os.path.join(dataPath,'views.cfg')
 favData             = os.path.join(dataPath,'favourites.cfg')
-cache               = StorageServer.StorageServer(addonName+addonVersion,1).cacheFunction
-common              = CommonFunctions
-action              = None
 
 
 class main:
@@ -72,102 +73,97 @@ class main:
         except:     url = None
         try:        image = urllib.unquote_plus(params["image"])
         except:     image = None
-        try:        query = urllib.unquote_plus(params["query"])
-        except:     query = None
-        try:        imdb = urllib.unquote_plus(params["imdb"])
-        except:     imdb = None
+        try:        date = urllib.unquote_plus(params["date"])
+        except:     date = None
         try:        genre = urllib.unquote_plus(params["genre"])
         except:     genre = None
         try:        plot = urllib.unquote_plus(params["plot"])
         except:     plot = None
+        try:        title = urllib.unquote_plus(params["title"])
+        except:     title = None
         try:        show = urllib.unquote_plus(params["show"])
         except:     show = None
-        try:        season = urllib.unquote_plus(params["season"])
-        except:     season = None
-        try:        episode = urllib.unquote_plus(params["episode"])
-        except:     episode = None
+        try:        query = urllib.unquote_plus(params["query"])
+        except:     query = None
 
-        if action == None:                          root().get()
-        elif action == 'item_live':                 item().live()
-        elif action == 'root_shows':                root().shows()
-        elif action == 'root_archive':              root().archives()
-        elif action == 'root_news':                 root().news()
-        elif action == 'root_sports':               root().sports()
-        elif action == 'root_music':                root().music()
-        elif action == 'item_play':                 contextMenu().item_play()
-        elif action == 'item_random_play':          contextMenu().item_random_play()
-        elif action == 'item_queue':                contextMenu().item_queue()
-        elif action == 'item_play_from_here':       contextMenu().item_play_from_here(url)
-        elif action == 'favourite_add':             contextMenu().favourite_add(favData, name, url, image, imdb)
-        elif action == 'favourite_delete':          contextMenu().favourite_delete(favData, name, url)
-        elif action == 'favourite_moveUp':          contextMenu().favourite_moveUp(favData, name, url)
-        elif action == 'favourite_moveDown':        contextMenu().favourite_moveDown(favData, name, url)
-        elif action == 'playlist_open':             contextMenu().playlist_open()
-        elif action == 'settings_open':             contextMenu().settings_open()
-        elif action == 'addon_home':                contextMenu().addon_home()
-        elif action == 'view_root':                 contextMenu().view('root')
-        elif action == 'view_archives':             contextMenu().view('archives')
-        elif action == 'view_tvshows':              contextMenu().view('tvshows')
-        elif action == 'view_episodes':             contextMenu().view('videos')
-        elif action == 'shows_mega':                shows().megatv()
-        elif action == 'shows_ant1':                shows().antenna()
-        elif action == 'shows_alpha':               shows().alphatv()
-        elif action == 'shows_star':                shows().star()
-        elif action == 'shows_skai':                shows().skai()
-        elif action == 'shows_madtv':               shows().madtv()
-        elif action == 'shows_nickelodeon':         shows().nickelodeon()
-        elif action == 'shows_skaidoc':             shows().skaidoc()
-        elif action == 'archives_mega':             archives().megatv()
-        elif action == 'archives_ant1':             archives().antenna()
-        elif action == 'archives_alpha':            archives().alphatv()
-        elif action == 'archives_star':             archives().star()
-        elif action == 'archives_ert':              archives().ert()
-        elif action == 'archives_rik':              archives().rik()
-        elif action == 'archives_favourites':       favourites().archives()
-        elif action == 'episodes_meganews':         news().megatv()
-        elif action == 'episodes_ant1news':         news().antenna()
-        elif action == 'episodes_alphanews':        news().alphatv()
-        elif action == 'episodes_starnews':         news().star()
-        elif action == 'episodes_skainews':         news().skai()
-        elif action == 'episodes_enikosnews':       news().enikos()
-        elif action == 'episodes_megasports':       sports().megatv()
-        elif action == 'episodes_ant1sports':       sports().antenna()
-        elif action == 'episodes_greeksuperleague': sports().greeksuperleague()
-        elif action == 'episodes_novasports':       sports().novasports()
-        elif action == 'episodes_novasportsnews':   sports().novasportsnews()
-        elif action == 'episodes_madgreekzmusic':   music().madgreekz()
-        elif action == 'episodes_madtop50':         music().madtop50()
-        elif action == 'episodes_itunesgr':         music().itunesgr()
-        elif action == 'episodes_uschart':          music().uschart()
-        elif action == 'episodes_itunesus':         music().itunesus()
-        elif action == 'episodes_ukchart':          music().ukchart()
-        elif action == 'episodes_itunesuk':         music().itunesuk()
-        elif action == 'episodes':                  episodeList().get(name, url, image, imdb, genre, plot, show)
-        elif action == 'play':                      resolver().run(url, name)
+        if action == None:                                 root().get()
+        elif action == 'item_play':                        contextMenu().item_play()
+        elif action == 'item_random_play':                 contextMenu().item_random_play()
+        elif action == 'item_queue':                       contextMenu().item_queue()
+        elif action == 'item_play_from_here':              contextMenu().item_play_from_here(url)
+        elif action == 'playlist_open':                    contextMenu().playlist_open()
+        elif action == 'settings_open':                    contextMenu().settings_open()
+        elif action == 'addon_home':                       contextMenu().addon_home()
+        elif action == 'view_tvshows':                     contextMenu().view('tvshows')
+        elif action == 'view_videos':                      contextMenu().view('videos')
+        elif action == 'favourite_add':                    contextMenu().favourite_add(favData, name, url, image)
+        elif action == 'favourite_delete':                 contextMenu().favourite_delete(favData, name, url)
+        elif action == 'favourite_moveUp':                 contextMenu().favourite_moveUp(favData, name, url)
+        elif action == 'favourite_moveDown':               contextMenu().favourite_moveDown(favData, name, url)
+        elif action == 'root_shows':                       root().shows()
+        elif action == 'root_archive':                     root().archives()
+        elif action == 'root_news':                        root().news()
+        elif action == 'root_sports':                      root().sports()
+        elif action == 'root_music':                       root().music()
+        elif action == 'item_live':                        item().live()
+        elif action == 'shows_favourites':                 favourites().shows()
+        elif action == 'shows_mega':                       mega().shows()
+        elif action == 'shows_ant1':                       ant1().shows()
+        elif action == 'shows_alpha':                      alpha().shows()
+        elif action == 'shows_star':                       star().shows()
+        elif action == 'shows_skai':                       skai().shows()
+        elif action == 'shows_rik':                        cybc().shows()
+        elif action == 'shows_sigma':                      sigma().shows()
+        elif action == 'shows_youtube.madtv':              youtube().madtv()
+        elif action == 'shows_skai.docs':                  skai().docs()
+        elif action == 'shows_cinegreece.mega':            cinegreece().mega()
+        elif action == 'shows_cinegreece.ant1':            cinegreece().ant1()
+        elif action == 'shows_cinegreece.alpha':           cinegreece().alpha()
+        elif action == 'shows_cinegreece.star':            cinegreece().star()
+        elif action == 'shows_cinegreece.ert':             cinegreece().ert()
+        elif action == 'shows_cinegreece.rik':             cinegreece().rik()
+        elif action == 'episodes_mega.news':               mega().news()
+        elif action == 'episodes_ant1.news':               ant1().news()
+        elif action == 'episodes_alpha.news':              alpha().news()
+        elif action == 'episodes_star.news':               star().news()
+        elif action == 'episodes_skai.news':               skai().news()
+        elif action == 'episodes_cybc.news':               cybc().news()
+        elif action == 'episodes_sigma.news':              sigma().news()
+        elif action == 'episodes_youtube.enikos':          youtube().enikos()
+        elif action == 'episodes_mega.sports':             mega().sports()
+        elif action == 'episodes_ant1.sports':             ant1().sports()
+        elif action == 'episodes_cybc.sports':             cybc().sports()
+        elif action == 'episodes_novasports.news':         novasports().news()
+        elif action == 'episodes_dailymotion.superleague': dailymotion().superleague()
+        elif action == 'episodes_novasports.shows':        novasports().shows()
+        elif action == 'episodes_dailymotion.superball':   dailymotion().superball()
+        elif action == 'episodes_mtvhitlisthellas':        mtvchart().mtvhitlisthellas()
+        elif action == 'episodes_rythmoshitlist':          rythmoschart().rythmoshitlist()
+        elif action == 'episodes_mtvdancefloor':           mtvchart().mtvdancefloor()
+        elif action == 'episodes_eurotop20':               mtvchart().eurotop20()
+        elif action == 'episodes_usatop20':                mtvchart().usatop20()
+        elif action == 'episodes':                         episodes().get(name, url, image, genre, plot, show)
+        elif action == 'play':                             resolver().run(url)
 
-        if action is None or action.startswith('root'):
-            index().container_view('root', {'skin.confluence' : 500})
-        elif action.startswith('archives'):
-            xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
-            index().container_view('archives', {'skin.confluence' : 500})
+        if action is None:
+            pass
         elif action.startswith('shows'):
             xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
             index().container_view('tvshows', {'skin.confluence' : 500})
         elif action.startswith('episodes'):
             xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
             index().container_view('videos', {'skin.confluence' : 504})
-
         xbmcplugin.setPluginFanart(int(sys.argv[1]), addonFanart)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
         return
 
 class getUrl(object):
-    def __init__(self, url, fetch=True, close=True, cookie=False, mobile=False, proxy=None, post=None, referer=None):
+    def __init__(self, url, close=True, proxy=None, post=None, mobile=False, referer=None, cookie=None, output='', timeout='10'):
         if not proxy is None:
             proxy_handler = urllib2.ProxyHandler({'http':'%s' % (proxy)})
             opener = urllib2.build_opener(proxy_handler, urllib2.HTTPHandler)
             opener = urllib2.install_opener(opener)
-        if cookie == True:
+        if output == 'cookie' or not close == True:
             import cookielib
             cookie_handler = urllib2.HTTPCookieProcessor(cookielib.LWPCookieJar())
             opener = urllib2.build_opener(cookie_handler, urllib2.HTTPBasicAuthHandler(), urllib2.HTTPHandler())
@@ -182,11 +178,15 @@ class getUrl(object):
             request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0')
         if not referer is None:
             request.add_header('Referer', referer)
-        response = urllib2.urlopen(request, timeout=10)
-        if fetch == True:
-            result = response.read()
-        else:
+        if not cookie is None:
+            request.add_header('cookie', cookie)
+        response = urllib2.urlopen(request, timeout=int(timeout))
+        if output == 'cookie':
+            result = str(response.headers.get('Set-Cookie'))
+        elif output == 'geturl':
             result = response.geturl()
+        else:
+            result = response.read()
         if close == True:
             response.close()
         self.result = result
@@ -213,25 +213,23 @@ class player(xbmc.Player):
     def __init__ (self):
         xbmc.Player.__init__(self)
 
-    def status(self):
-        return
-
-    def run(self, name, url):
+    def run(self, url):
         item = xbmcgui.ListItem(path=url)
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
-        xbmc.sleep(3000)
-        if not xbmc.getCondVisibility('Player.Paused') == 0:
-            xbmc.executebuiltin('Action(Play)')
+
+    def onPlayBackStarted(self):
+        return
 
     def onPlayBackEnded(self):
-        index().container_refresh()
+        return
 
     def onPlayBackStopped(self):
-        index().container_refresh()
+        return
 
 class index:
     def infoDialog(self, str, header=addonName):
-        xbmc.executebuiltin("Notification(%s,%s, 3000, %s)" % (header, str, addonIcon))
+        try: xbmcgui.Dialog().notification(header, str, addonIcon, 3000, sound=False)
+        except: xbmc.executebuiltin("Notification(%s,%s, 3000, %s)" % (header, str, addonIcon))
 
     def okDialog(self, str1, str2, header=addonName):
         xbmcgui.Dialog().ok(header, str1, str2)
@@ -240,8 +238,8 @@ class index:
         select = xbmcgui.Dialog().select(header, list)
         return select
 
-    def yesnoDialog(self, str1, str2, header=addonName):
-        answer = xbmcgui.Dialog().yesno(header, str1, str2)
+    def yesnoDialog(self, str1, str2, header=addonName, str3='', str4=''):
+        answer = xbmcgui.Dialog().yesno(header, str1, str2, '', str4, str3)
         return answer
 
     def getProperty(self, str):
@@ -259,24 +257,24 @@ class index:
         if not check == addonName: return True
 
     def container_refresh(self):
-        xbmc.executebuiltin('Container.Refresh')
+        xbmc.executebuiltin("Container.Refresh")
 
     def container_data(self):
-        if not os.path.exists(dataPath):
-            os.makedirs(dataPath)
-        if not os.path.isfile(favData):
-            file = open(favData, 'w')
+        if not xbmcvfs.exists(dataPath):
+            xbmcvfs.mkdir(dataPath)
+        if not xbmcvfs.exists(favData):
+            file = xbmcvfs.File(favData, 'w')
             file.write('')
             file.close()
-        if not os.path.isfile(viewData):
-            file = open(viewData, 'w')
+        if not xbmcvfs.exists(viewData):
+            file = xbmcvfs.File(viewData, 'w')
             file.write('')
             file.close()
 
     def container_view(self, content, viewDict):
         try:
             skin = xbmc.getSkinDir()
-            file = open(viewData,'r')
+            file = xbmcvfs.File(viewData)
             read = file.read().replace('\n','')
             file.close()
             view = re.compile('"%s"[|]"%s"[|]"(.+?)"' % (skin, content)).findall(read)[0]
@@ -303,10 +301,9 @@ class index:
                 cm = []
                 if action.startswith('episodes'): cm.append((language(30401).encode("utf-8"), 'RunPlugin(%s?action=item_play)' % (sys.argv[0])))
                 if action.startswith('episodes'): cm.append((language(30402).encode("utf-8"), 'RunPlugin(%s?action=item_random_play)' % (sys.argv[0])))
-                cm.append((language(30427).encode("utf-8"), 'RunPlugin(%s?action=view_root)' % (sys.argv[0])))
 
                 item = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=image)
-                item.setInfo( type="Video", infoLabels = {'label': name, 'title': name, 'plot': addonDesc} )
+                item.setInfo( type="Video", infoLabels={ "Label": name, "Title": name, "Plot": addonDesc } )
                 item.setProperty("Fanart_Image", fanart)
                 item.addContextMenuItems(cm, replaceItems=False)
                 xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=item,totalItems=total,isFolder=True)
@@ -323,19 +320,19 @@ class index:
                 u = '%s?action=%s' % (sys.argv[0], action)
 
                 cm = []
-                cm.append((language(30427).encode("utf-8"), 'RunPlugin(%s?action=view_root)' % (sys.argv[0])))
-                cm.append((language(30409).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
-                cm.append((language(30410).encode("utf-8"), 'RunPlugin(%s?action=playlist_open)' % (sys.argv[0])))
+
                 item = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=image)
-                item.setInfo( type="Video", infoLabels = {'label': name, 'title': name, 'plot': addonDesc} )
+                item.setInfo( type="Video", infoLabels={ "Label": name, "Title": name, "Plot": addonDesc } )
                 item.setProperty("Fanart_Image", addonFanart)
-                item.addContextMenuItems(cm, replaceItems=True)
+                item.addContextMenuItems(cm, replaceItems=False)
                 xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=item,totalItems=total,isFolder=False)
             except:
                 pass
 
     def showList(self, showList):
-        file = open(favData,'r')
+        if showList == None: return
+
+        file = xbmcvfs.File(favData)
         favRead = file.read()
         file.close()
 
@@ -343,45 +340,40 @@ class index:
         total = len(showList)
         for i in showList:
             try:
-                name, url, image, imdb, genre, plot = i['name'], i['url'], i['image'], i['imdb'], i['genre'], i['plot']
+                name, url, image, genre, plot = i['name'], i['url'], i['image'], i['genre'], i['plot']
+                if image == '': image = addonFanart
                 if plot == '': plot = addonDesc
                 if genre == '': genre = ' '
-                title = name
 
-                sysname, sysurl, sysimage, sysimdb, sysgenre, sysplot, systitle = urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(image), urllib.quote_plus(imdb), urllib.quote_plus(genre), urllib.quote_plus(plot), urllib.quote_plus(title)
-                u = '%s?action=episodes&url=%s&image=%s&imdb=%s&genre=%s&plot=%s&show=%s' % (sys.argv[0], sysurl, sysimage, sysimdb, sysgenre, sysplot, sysname)
+                sysname, sysurl, sysimage, sysgenre, sysplot, sysshow = urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(image), urllib.quote_plus(genre), urllib.quote_plus(plot), urllib.quote_plus(name)
+                u = '%s?action=episodes&name=%s&url=%s&image=%s&genre=%s&plot=%s&show=%s' % (sys.argv[0], sysname, sysurl, sysimage, sysgenre, sysplot, sysshow)
                 fanart = '%s/%s.jpg' % (addonSlideshow, str(count)[-1])
                 count = count + 1
                 try: fanart = i['fanart']
                 except: pass
 
-                meta = {'label': title, 'title': title, 'tvshowtitle': title, 'imdb_id' : imdb, 'genre' : genre, 'plot': plot}
-                poster, banner = image, image
-                meta.update({'art(banner)': banner, 'art(poster)': poster})
+                meta = {'label': name, 'title': name, 'tvshowtitle': name, 'genre' : genre, 'plot': plot}
 
                 cm = []
                 cm.append((language(30401).encode("utf-8"), 'RunPlugin(%s?action=item_play)' % (sys.argv[0])))
-                cm.append((language(30402).encode("utf-8"), 'RunPlugin(%s?action=item_random_play)' % (sys.argv[0])))
-                if action == 'archives_favourites':
-                    cm.append((language(30432).encode("utf-8"), 'RunPlugin(%s?action=view_archives)' % (sys.argv[0])))
-                    cm.append((language(30409).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
-                    cm.append((language(30419).encode("utf-8"), 'RunPlugin(%s?action=favourite_moveUp&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
-                    cm.append((language(30420).encode("utf-8"), 'RunPlugin(%s?action=favourite_moveDown&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
-                    cm.append((language(30421).encode("utf-8"), 'RunPlugin(%s?action=favourite_delete&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
-                elif action.startswith('archives'):
-                    if not '"%s"' % url in favRead: cm.append((language(30417).encode("utf-8"), 'RunPlugin(%s?action=favourite_add&name=%s&imdb=%s&url=%s&image=%s)' % (sys.argv[0], sysname, sysimdb, sysurl, sysimage)))
-                    else: cm.append((language(30418).encode("utf-8"), 'RunPlugin(%s?action=favourite_delete&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
-                    cm.append((language(30432).encode("utf-8"), 'RunPlugin(%s?action=view_archives)' % (sys.argv[0])))
-                    cm.append((language(30409).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
-                    cm.append((language(30410).encode("utf-8"), 'RunPlugin(%s?action=playlist_open)' % (sys.argv[0])))
-                    cm.append((language(30411).encode("utf-8"), 'RunPlugin(%s?action=addon_home)' % (sys.argv[0])))
+                cm.append((language(30404).encode("utf-8"), 'RunPlugin(%s?action=item_queue)' % (sys.argv[0])))
+                if action.startswith('shows_cinegreece'):
+                    if not '"%s"' % url in favRead: cm.append((language(30421).encode("utf-8"), 'RunPlugin(%s?action=favourite_add&name=%s&url=%s&image=%s)' % (sys.argv[0], sysname, sysurl, sysimage)))
+                    else: cm.append((language(30422).encode("utf-8"), 'RunPlugin(%s?action=favourite_delete&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
+                if action == 'shows_favourites':
+                    cm.append((language(30411).encode("utf-8"), 'RunPlugin(%s?action=view_tvshows)' % (sys.argv[0])))
+                    cm.append((language(30407).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
+                    cm.append((language(30408).encode("utf-8"), 'RunPlugin(%s?action=playlist_open)' % (sys.argv[0])))
+                    if getSetting("fav_sort") == '1': cm.append((language(30423).encode("utf-8"), 'RunPlugin(%s?action=favourite_moveUp&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
+                    if getSetting("fav_sort") == '1': cm.append((language(30424).encode("utf-8"), 'RunPlugin(%s?action=favourite_moveDown&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
+                    cm.append((language(30425).encode("utf-8"), 'RunPlugin(%s?action=favourite_delete&name=%s&url=%s)' % (sys.argv[0], sysname, sysurl)))
                 else:
-                    cm.append((language(30429).encode("utf-8"), 'RunPlugin(%s?action=view_tvshows)' % (sys.argv[0])))
-                    cm.append((language(30409).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
-                    cm.append((language(30410).encode("utf-8"), 'RunPlugin(%s?action=playlist_open)' % (sys.argv[0])))
-                    cm.append((language(30411).encode("utf-8"), 'RunPlugin(%s?action=addon_home)' % (sys.argv[0])))
+                    cm.append((language(30411).encode("utf-8"), 'RunPlugin(%s?action=view_tvshows)' % (sys.argv[0])))
+                    cm.append((language(30407).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
+                    cm.append((language(30408).encode("utf-8"), 'RunPlugin(%s?action=playlist_open)' % (sys.argv[0])))
+                    cm.append((language(30409).encode("utf-8"), 'RunPlugin(%s?action=addon_home)' % (sys.argv[0])))
 
-                item = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=poster)
+                item = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=image)
                 item.setInfo( type="Video", infoLabels = meta )
                 item.setProperty("IsPlayable", "true")
                 item.setProperty("Video", "true")
@@ -392,36 +384,37 @@ class index:
                 pass
 
     def episodeList(self, episodeList):
+        if episodeList == None: return
+
         count = 0
         total = len(episodeList)
         for i in episodeList:
             try:
-                name, url, image, imdb, genre, plot = i['name'], i['url'], i['image'], i['imdb'], i['genre'], i['plot']
-                title, show, season, episode = i['title'], i['show'], i['season'], i['episode']
+                name, url, image, date, genre, plot, title, show = i['name'], i['url'], i['image'], i['date'], i['genre'], i['plot'], i['title'], i['show']
+                if show == '': show = addonName
+                if image == '': image = addonFanart
                 if plot == '': plot = addonDesc
+                if genre == '': genre = ' '
+                if date == '': date = ' '
 
-                sysname, sysurl, sysimage = urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(image)
-                u = '%s?action=play&name=%s&url=%s' % (sys.argv[0], sysname, sysurl)
-                if url.startswith(link().youtube_base) or url.startswith(link().youtube_search):
-                    u = '%s?action=play&name=%s&url=%s&t=%s' % (sys.argv[0], sysname, sysurl, datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"))
-                meta = {'label': title, 'title': title, 'studio': show, 'imdb_id' : imdb, 'genre' : genre, 'plot': plot}
-                try: meta.update({'premiered': i['date']})
-                except: pass
+                sysurl = urllib.quote_plus(url)
+                u = '%s?action=play&url=%s' % (sys.argv[0], sysurl)
                 fanart = '%s/%s.jpg' % (addonSlideshow, str(count)[-1])
                 count = count + 1
                 try: fanart = i['fanart']
                 except: pass
-                poster = image
+
+                meta = {'label': title, 'title': title, 'studio': show, 'premiered': date, 'genre': genre, 'plot': plot}
 
                 cm = []
                 cm.append((language(30405).encode("utf-8"), 'RunPlugin(%s?action=item_queue)' % (sys.argv[0])))
                 cm.append((language(30403).encode("utf-8"), 'RunPlugin(%s?action=item_play_from_here&url=%s)' % (sys.argv[0], sysurl)))
-                cm.append((language(30433).encode("utf-8"), 'RunPlugin(%s?action=view_episodes)' % (sys.argv[0])))
-                cm.append((language(30409).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
-                cm.append((language(30410).encode("utf-8"), 'RunPlugin(%s?action=playlist_open)' % (sys.argv[0])))
-                cm.append((language(30411).encode("utf-8"), 'RunPlugin(%s?action=addon_home)' % (sys.argv[0])))
+                cm.append((language(30410).encode("utf-8"), 'RunPlugin(%s?action=view_videos)' % (sys.argv[0])))
+                cm.append((language(30407).encode("utf-8"), 'RunPlugin(%s?action=settings_open)' % (sys.argv[0])))
+                cm.append((language(30408).encode("utf-8"), 'RunPlugin(%s?action=playlist_open)' % (sys.argv[0])))
+                cm.append((language(30409).encode("utf-8"), 'RunPlugin(%s?action=addon_home)' % (sys.argv[0])))
 
-                item = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=poster)
+                item = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=image)
                 item.setInfo( type="Video", infoLabels = meta )
                 item.setProperty("IsPlayable", "true")
                 item.setProperty("Video", "true")
@@ -450,7 +443,6 @@ class contextMenu:
         xbmc.executebuiltin('Action(Queue)')
 
     def item_play_from_here(self, url):
-        import urlparse
         playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
         playlist.clear()
         playlist.unshuffle()
@@ -460,13 +452,15 @@ class contextMenu:
             label = xbmc.getInfoLabel('ListItemNoWrap(%s).Label' % i)
             if label == '': break
 
+            params = {}
             path = xbmc.getInfoLabel('ListItemNoWrap(%s).FileNameAndPath' % i)
-            query = urlparse.urlparse(path.replace(sys.argv[0],'')).query
-            name, url = urlparse.parse_qs(query)['name'][0], urlparse.parse_qs(query)['url'][0]
-            sysname, sysurl = urllib.quote_plus(name), urllib.quote_plus(url)
-            u = '%s?action=play&name=%s&url=%s' % (sys.argv[0], sysname, sysurl)
+            path = urllib.quote_plus(path).replace('+%26+', '+&+')
+            query = path.split('%3F', 1)[-1].split('%26')
+            for i in query: params[urllib.unquote_plus(i).split('=')[0]] = urllib.unquote_plus(i).split('=')[1]
+            sysurl = urllib.quote_plus(params["url"])
+            u = '%s?action=play&url=%s' % (sys.argv[0], sysurl)
 
-            meta = {'label' : xbmc.getInfoLabel('ListItemNoWrap(%s).title' % i), 'title' : xbmc.getInfoLabel('ListItemNoWrap(%s).title' % i), 'tvshowtitle': xbmc.getInfoLabel('ListItemNoWrap(%s).tvshowtitle' % i), 'imdb_id' : xbmc.getInfoLabel('ListItemNoWrap(%s).imdb_id' % i), 'season' : xbmc.getInfoLabel('ListItemNoWrap(%s).season' % i), 'episode' : xbmc.getInfoLabel('ListItemNoWrap(%s).episode' % i), 'writer' : xbmc.getInfoLabel('ListItemNoWrap(%s).writer' % i), 'director' : xbmc.getInfoLabel('ListItemNoWrap(%s).director' % i), 'rating' : xbmc.getInfoLabel('ListItemNoWrap(%s).rating' % i), 'duration' : xbmc.getInfoLabel('ListItemNoWrap(%s).duration' % i), 'plot' : xbmc.getInfoLabel('ListItemNoWrap(%s).plot' % i), 'premiered' : xbmc.getInfoLabel('ListItemNoWrap(%s).premiered' % i), 'genre' : xbmc.getInfoLabel('ListItemNoWrap(%s).genre' % i)}
+            meta = {'title': xbmc.getInfoLabel('ListItemNoWrap(%s).title' % i), 'tvshowtitle': xbmc.getInfoLabel('ListItemNoWrap(%s).tvshowtitle' % i), 'season': xbmc.getInfoLabel('ListItemNoWrap(%s).season' % i), 'episode': xbmc.getInfoLabel('ListItemNoWrap(%s).episode' % i), 'writer': xbmc.getInfoLabel('ListItemNoWrap(%s).writer' % i), 'director': xbmc.getInfoLabel('ListItemNoWrap(%s).director' % i), 'rating': xbmc.getInfoLabel('ListItemNoWrap(%s).rating' % i), 'duration': xbmc.getInfoLabel('ListItemNoWrap(%s).duration' % i), 'premiered': xbmc.getInfoLabel('ListItemNoWrap(%s).premiered' % i), 'plot': xbmc.getInfoLabel('ListItemNoWrap(%s).plot' % i)}
             poster, fanart = xbmc.getInfoLabel('ListItemNoWrap(%s).icon' % i), xbmc.getInfoLabel('ListItemNoWrap(%s).Property(Fanart_Image)' % i)
 
             item = xbmcgui.ListItem(label, iconImage="DefaultVideo.png", thumbnailImage=poster)
@@ -489,21 +483,16 @@ class contextMenu:
     def view(self, content):
         try:
             skin = xbmc.getSkinDir()
-            try:
-                xml = xbmc.translatePath('special://xbmc/addons/%s/addon.xml' % (skin))
-                file = open(xml,'r')
-            except:
-                xml = xbmc.translatePath('special://home/addons/%s/addon.xml' % (skin))
-                file = open(xml,'r')
+            skinPath = xbmc.translatePath('special://skin/')
+            xml = os.path.join(skinPath,'addon.xml')
+            file = xbmcvfs.File(xml)
             read = file.read().replace('\n','')
             file.close()
-            src = os.path.dirname(xml) + '/'
-            try:
-                src += re.compile('defaultresolution="(.+?)"').findall(read)[0] + '/'
-            except:
-                src += re.compile('<res.+?folder="(.+?)"').findall(read)[0] + '/'
-            src += 'MyVideoNav.xml'
-            file = open(src,'r')
+            try: src = re.compile('defaultresolution="(.+?)"').findall(read)[0]
+            except: src = re.compile('<res.+?folder="(.+?)"').findall(read)[0]
+            src = os.path.join(skinPath, src)
+            src = os.path.join(src, 'MyVideoNav.xml')
+            file = xbmcvfs.File(src)
             read = file.read().replace('\n','')
             file.close()
             views = re.compile('<views>(.+?)</views>').findall(read)[0]
@@ -511,7 +500,7 @@ class contextMenu:
             for view in views:
                 label = xbmc.getInfoLabel('Control.GetLabel(%s)' % (view))
                 if not (label == '' or label is None): break
-            file = open(viewData, 'r')
+            file = xbmcvfs.File(viewData)
             read = file.read()
             file.close()
             file = open(viewData, 'w')
@@ -524,12 +513,11 @@ class contextMenu:
         except:
             return
 
-    def favourite_add(self, data, name, url, image, imdb):
+    def favourite_add(self, data, name, url, image):
         try:
             index().container_refresh()
             file = open(data, 'a+')
-            file.write('"%s"|"%s"|"%s"|"%s"\n' % (name, imdb, url, image))
-            #file.write('"%s"|"%s"|"%s"\n' % (name, url, image))
+            file.write('"%s"|"0"|"%s"|"%s"\n' % (name, url, image))
             file.close()
             index().infoDialog(language(30303).encode("utf-8"), name)
         except:
@@ -586,18 +574,34 @@ class contextMenu:
         except:
             return
 
+class favourites:
+    def __init__(self):
+        self.list = []
+
+    def shows(self):
+        file = open(favData, 'r')
+        read = file.read()
+        file.close()
+        match = re.compile('"(.+?)"[|]".+?"[|]"(.+?)"[|]"(.+?)"').findall(read)
+        for name, url, image in match:
+            self.list.append({'name': name, 'url': url, 'image': image, 'genre': 'Greek', 'plot': ''})
+
+        if getSetting("fav_sort") == '0':
+            self.list = sorted(self.list, key=itemgetter('name'))
+
+        index().showList(self.list)
+
 class root:
     def get(self):
         rootList = []
         index().itemList([{'name': 30501, 'image': 'Live.png', 'action': 'item_live'}])
         rootList.append({'name': 30502, 'image': 'Networks.png', 'action': 'root_shows'})
         rootList.append({'name': 30503, 'image': 'Archives.png', 'action': 'root_archive'})
-        rootList.append({'name': 30504, 'image': 'Favourites.png', 'action': 'archives_favourites'})
+        rootList.append({'name': 30504, 'image': 'Favourites.png', 'action': 'shows_favourites'})
         rootList.append({'name': 30505, 'image': 'News.png', 'action': 'root_news'})
         rootList.append({'name': 30506, 'image': 'Sports.png', 'action': 'root_sports'})
         rootList.append({'name': 30507, 'image': 'Music.png', 'action': 'root_music'})
-        rootList.append({'name': 30508, 'image': 'Children.png', 'action': 'shows_nickelodeon'})
-        rootList.append({'name': 30509, 'image': 'Documentaries.png', 'action': 'shows_skaidoc'})
+        rootList.append({'name': 30508, 'image': 'Documentaries.png', 'action': 'shows_skai.docs'})
         index().rootList(rootList)
 
     def shows(self):
@@ -607,48 +611,52 @@ class root:
         rootList.append({'name': 30523, 'image': 'ALPHA.png', 'action': 'shows_alpha'})
         rootList.append({'name': 30524, 'image': 'STAR.png', 'action': 'shows_star'})
         rootList.append({'name': 30525, 'image': 'SKAI.png', 'action': 'shows_skai'})
-        rootList.append({'name': 30526, 'image': 'MAD TV.png', 'action': 'shows_madtv'})
-        rootList.append({'name': 30527, 'image': 'NICKELODEON.png', 'action': 'shows_nickelodeon'})
+        rootList.append({'name': 30526, 'image': 'RIK.png', 'action': 'shows_rik'})
+        rootList.append({'name': 30527, 'image': 'SIGMA.png', 'action': 'shows_sigma'})
+        rootList.append({'name': 30528, 'image': 'MAD TV.png', 'action': 'shows_youtube.madtv'})
         index().rootList(rootList)
 
     def archives(self):
         rootList = []
-        rootList.append({'name': 30541, 'image': 'MEGA.png', 'action': 'archives_mega'})
-        rootList.append({'name': 30542, 'image': 'ANT1.png', 'action': 'archives_ant1'})
-        rootList.append({'name': 30543, 'image': 'ALPHA.png', 'action': 'archives_alpha'})
-        rootList.append({'name': 30544, 'image': 'STAR.png', 'action': 'archives_star'})
-        rootList.append({'name': 30545, 'image': 'ERT.png', 'action': 'archives_ert'})
-        rootList.append({'name': 30546, 'image': 'RIK.png', 'action': 'archives_rik'})
+        rootList.append({'name': 30541, 'image': 'MEGA.png', 'action': 'shows_cinegreece.mega'})
+        rootList.append({'name': 30542, 'image': 'ANT1.png', 'action': 'shows_cinegreece.ant1'})
+        rootList.append({'name': 30543, 'image': 'ALPHA.png', 'action': 'shows_cinegreece.alpha'})
+        rootList.append({'name': 30544, 'image': 'STAR.png', 'action': 'shows_cinegreece.star'})
+        rootList.append({'name': 30545, 'image': 'ERT.png', 'action': 'shows_cinegreece.ert'})
+        rootList.append({'name': 30546, 'image': 'RIK.png', 'action': 'shows_cinegreece.rik'})
         index().rootList(rootList)
 
     def news(self):
         rootList = []
-        rootList.append({'name': 30561, 'image': 'MEGA.png', 'action': 'episodes_meganews'})
-        rootList.append({'name': 30562, 'image': 'ANT1.png', 'action': 'episodes_ant1news'})
-        rootList.append({'name': 30563, 'image': 'ALPHA.png', 'action': 'episodes_alphanews'})
-        rootList.append({'name': 30564, 'image': 'STAR.png', 'action': 'episodes_starnews'})
-        rootList.append({'name': 30565, 'image': 'SKAI.png', 'action': 'episodes_skainews'})
-        rootList.append({'name': 30566, 'image': 'ENIKOS.png', 'action': 'episodes_enikosnews'})
+        rootList.append({'name': 30561, 'image': 'MEGA.png', 'action': 'episodes_mega.news'})
+        rootList.append({'name': 30562, 'image': 'ANT1.png', 'action': 'episodes_ant1.news'})
+        rootList.append({'name': 30563, 'image': 'ALPHA.png', 'action': 'episodes_alpha.news'})
+        rootList.append({'name': 30564, 'image': 'STAR.png', 'action': 'episodes_star.news'})
+        rootList.append({'name': 30565, 'image': 'SKAI.png', 'action': 'episodes_skai.news'})
+        rootList.append({'name': 30566, 'image': 'RIK.png', 'action': 'episodes_cybc.news'})
+        rootList.append({'name': 30567, 'image': 'SIGMA.png', 'action': 'episodes_sigma.news'})
+        rootList.append({'name': 30568, 'image': 'ENIKOS.png', 'action': 'episodes_youtube.enikos'})
         index().rootList(rootList)
 
     def sports(self):
         rootList = []
-        rootList.append({'name': 30581, 'image': 'MEGA.png', 'action': 'episodes_megasports'})
-        rootList.append({'name': 30582, 'image': 'ANT1.png', 'action': 'episodes_ant1sports'})
-        rootList.append({'name': 30583, 'image': 'Super League.png', 'action': 'episodes_greeksuperleague'})
-        rootList.append({'name': 30584, 'image': 'Novasports.png', 'action': 'episodes_novasports'})
-        rootList.append({'name': 30585, 'image': 'Novasports.png', 'action': 'episodes_novasportsnews'})
+        rootList.append({'name': 30581, 'image': 'MEGA.png', 'action': 'episodes_mega.sports'})
+        rootList.append({'name': 30582, 'image': 'ANT1.png', 'action': 'episodes_ant1.sports'})
+        rootList.append({'name': 30583, 'image': 'RIK.png', 'action': 'episodes_cybc.sports'})
+        rootList.append({'name': 30584, 'image': 'Novasports.png', 'action': 'episodes_novasports.news'})
+        rootList.append({'name': 30585, 'image': 'Super League.png', 'action': 'episodes_dailymotion.superleague'})
+        rootList.append({'name': 30586, 'image': 'Novasports.png', 'action': 'episodes_novasports.shows'})
+        rootList.append({'name': 30587, 'image': 'SuperBALL.png', 'action': 'episodes_dailymotion.superball'})
         index().rootList(rootList)
 
     def music(self):
         rootList = []
-        rootList.append({'name': 30601, 'image': 'MAD Greekz.png', 'action': 'episodes_madgreekzmusic'})
-        rootList.append({'name': 30602, 'image': 'MAD Top 50.png', 'action': 'episodes_madtop50'})
-        rootList.append({'name': 30603, 'image': 'iTunes GR Chart.png', 'action': 'episodes_itunesgr'})
-        rootList.append({'name': 30604, 'image': 'US Chart.png', 'action': 'episodes_uschart'})
-        rootList.append({'name': 30605, 'image': 'iTunes US Chart.png', 'action': 'episodes_itunesus'})
-        rootList.append({'name': 30606, 'image': 'UK Chart.png', 'action': 'episodes_ukchart'})
-        rootList.append({'name': 30607, 'image': 'iTunes UK Chart.png', 'action': 'episodes_itunesuk'})
+        rootList.append({'name': 30601, 'image': 'MAD Greekz.png', 'action': 'episodes_youtubemadgreekz'})
+        rootList.append({'name': 30602, 'image': 'MTV Hit List Hellas.png', 'action': 'episodes_mtvhitlisthellas'})
+        rootList.append({'name': 30603, 'image': 'Rythmos Hit List.png', 'action': 'episodes_rythmoshitlist'})
+        rootList.append({'name': 30604, 'image': 'MTV Dance Floor.png', 'action': 'episodes_mtvdancefloor'})
+        rootList.append({'name': 30605, 'image': 'Euro Top 20.png', 'action': 'episodes_eurotop20'})
+        rootList.append({'name': 30606, 'image': 'U.S. Top 20.png', 'action': 'episodes_usatop20'})
         index().rootList(rootList)
 
 class item:
@@ -658,355 +666,397 @@ class item:
             return
         xbmc.executebuiltin('RunPlugin(plugin://plugin.video.hellenic.tv/?action=dialog)')
 
-class favourites:
-    def __init__(self):
-        self.list = []
-
-    def archives(self):
-        file = open(favData, 'r')
-        read = file.read()
-        file.close()
-        match = re.compile('"(.+?)"[|]"(.+?)"[|]"(.+?)"[|]"(.+?)"').findall(read)
-        for name, imdb, url, image in match:
-            self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': 'Greek', 'plot': ''})
-        index().showList(self.list)
-
-class link:
-    def __init__(self):
-        self.megatv_base = 'http://www.megatv.com'
-        self.megatv_feed = 'http://megatv.feed.gr'
-        self.megatv_shows = 'http://megatv.feed.gr/mobile/mobile.asp?pageid=816&catidlocal=32623&subidlocal=20933'
-        self.megatv_episodes = 'http://megatv.feed.gr/mobile/mobile/ekpompiindex_29954.asp?pageid=816&catidlocal=%s'
-        self.megatv_news = 'http://www.megatv.com/webtv/default.asp?catid=27377&catidlocal=27377'
-        self.megatv_sports = 'http://www.megatv.com/webtv/default.asp?catid=27377&catidlocal=27387'
-        self.megatv_hls = 'http://hdflashmegatv-f.akamaihd.net'
-        self.megatv_info = 'http://www.megatv.com/XML/jw/videolists.asp?catid=%s&attributes=0&nostore=true'
-
-        self.antenna_base = 'http://www.antenna.gr'
-        self.antenna_img = 'http://www.antenna.gr/imgHandler/326'
-        self.antenna_shows = 'http://www.antenna.gr/tv/doubleip/shows?version=3.0'
-        self.antenna_episodes = 'http://www.antenna.gr/tv/doubleip/show?version=3.0&sid='
-        self.antenna_episodes2 = 'http://www.antenna.gr/tv/doubleip/categories?version=3.0&howmany=100&cid='
-        self.antenna_news = 'http://www.antenna.gr/tv/doubleip/show?version=3.0&sid=222903'
-        self.antenna_sports = 'http://www.antenna.gr/tv/doubleip/categories?version=3.0&howmany=100&cid=3062'
-        self.antenna_watch = 'http://www.antenna.gr/webtv/watch?cid=%s'
-        self.antenna_info = 'http://www.antenna.gr/webtv/templates/data/player?cid=%s'
-
-        self.alphatv_base = 'http://www.alphatv.gr'
-        self.alphatv_shows = 'http://www.alphatv.gr/shows'
-        self.alphatv_shows2 = 'http://www.alphatv.gr/views/ajax?view_name=alpha_shows_category_view&view_display_id=page_3&view_path=shows&view_base_path=shows&page=%s'
-        self.alphatv_news = 'http://www.alphatv.gr/shows/informative/news'
-
-        self.star_base = 'http://www.star.gr'
-        self.star_shows = 'http://www.star.gr/_layouts/handlers/tv/feeds.program.ashx?catTitle=hosts'
-        self.star_episodes = 'http://www.star.gr/_layouts/handlers/tv/feeds.program.ashx?catTitle=%s&artId=%s'
-        self.star_news = 'http://www.star.gr/_layouts/handlers/tv/feeds.program.ashx?catTitle=News&artId=9'
-        self.star_watch = 'http://cdnapi.kaltura.com/p/21154092/sp/2115409200/playManifest/entryId/%s/flavorId/%s/format/url/protocol/http/a.mp4'
-
-        self.skai_base = 'http://www.skai.gr'
-        self.skai_shows = 'http://www.skai.gr/Ajax.aspx?m=Skai.TV.ProgramListView&la=0&Type=TV&Day=%s'
-        self.skai_episodes = 'http://www.skai.gr/Ajax.aspx?m=Skai.Player.ItemView&type=TV&cid=6&alid=%s'
-        self.skai_news = 'http://www.skai.gr/player/TV/?mmid=243980'
-
-        self.nickelodeon_base = 'http://www.nickelodeon.gr'
-
-        self.enikos_news = 'http://gdata.youtube.com/feeds/api/users/enikosgr/uploads'
-        self.enikos_show = 'http://gdata.youtube.com/feeds/api/users/enikoslive/uploads'
-
-        self.novasports_base = 'http://www.novasports.gr'
-        self.novasports_episodes = 'http://www.novasports.gr/LiveWebTV.aspx%s'
-        self.novasports_series = 'http://www.novasports.gr/handlers/LiveWebTv/LiveWebTvMediaGallery.ashx?containerid=-1&mediafiletypeid=0&latest=true&isBroadcast=true&tabid=shows'
-        self.novasports_news = 'http://www.novasports.gr/handlers/LiveWebTv/LiveWebTvMediaGallery.ashx?containerid=-1&mediafiletypeid=2&latest=true&tabid=categories'
-
-        self.madtv_base = 'http://www.mad.tv'
-        self.madtv_charts = 'http://www.mad.tv/data/chart.php?service=chart&chid=NaN'
-        self.madtv_chart = 'http://www.mad.tv/data/chart.php?service=chart&chid=%s'
-        self.madtv_oldchart = 'http://www.mad.tv/data/chart.php?service=oldchart&chdt=%s'
-
-        self.youtube_base = 'http://www.youtube.com'
-        self.youtube_api = 'http://gdata.youtube.com'
-        self.youtube_playlists = 'http://gdata.youtube.com/feeds/api/users/%s/playlists'
-        self.youtube_playlist = 'http://gdata.youtube.com/feeds/api/playlists/%s'
-        self.youtube_search = 'http://gdata.youtube.com/feeds/api/videos?q='
-        self.youtube_watch = 'http://www.youtube.com/watch?v=%s'
-        self.youtube_info = 'http://gdata.youtube.com/feeds/api/videos/%s?v=2'
-
-        self.dailymotion_base = 'http://www.dailymotion.com'
-        self.dailymotion_api = 'https://api.dailymotion.com'
-        self.dailymotion_playlist = 'https://api.dailymotion.com/user/%s/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&sort=recent&family_filter=1'
-        self.dailymotion_watch = 'http://www.dailymotion.com/video/%s'
-        self.dailymotion_info = 'http://www.dailymotion.com/embed/video/%s'
-
-        self.cinegreece_base = 'http://www.cinegreece.com'
-        self.cinegreece_mega = 'http://www.cinegreece.com/2012/05/mega.html'
-        self.cinegreece_ant1 = 'http://www.cinegreece.com/2012/05/ant1.html'
-        self.cinegreece_alpha = 'http://www.cinegreece.com/2012/05/alpha.html'
-        self.cinegreece_star = 'http://www.cinegreece.com/2012/05/star.html'
-        self.cinegreece_ert = 'http://www.cinegreece.com/2012/05/ert.html'
-        self.cinegreece_rik = 'http://www.cinegreece.com/2012/05/rik.html'
-
-class shows:
-    def __init__(self):
-        self.list = []
-
-    def megatv(self):
-        self.list = showList().megatv_list()
-        #self.list = cache(showList().megatv_list)
-        index().showList(self.list)
-
-    def antenna(self):
-        self.list = showList().antenna_list()
-        #self.list = cache(showList().antenna_list)
-        index().showList(self.list)
-
-    def alphatv(self):
-        self.list = showList().alphatv_list()
-        #self.list = cache(showList().alphatv_list)
-        index().showList(self.list)
-
-    def star(self):
-        self.list = showList().star_list()
-        #self.list = cache(showList().star_list)
-        index().showList(self.list)
-
-    def skai(self):
-        self.list = showList().skai_list()
-        #self.list = cache(showList().skai_list)
-        index().showList(self.list)
-
-    def madtv(self):
-        channel = 'MADTVGREECE'
-        filter = ["PL1RY_6CEqdtnxJYgudDydiG4fKVoQouHf", "PL1RY_6CEqdtlu30q6SyuNe6Tk5IYjAiks", "PLE4B3F6B7F753D97C", "PL85C952EA930B9E90", "PL04B2C2D8B304BA48", "PL46B9D152167BA727"]
-        self.list = showList().youtube_list(channel, filter)
-        #self.list = cache(showList().youtube_list, channel, filter)
-        index().showList(self.list)
-
-    def nickelodeon(self):
-        self.list = showList().data_list(addonNickelodeon)
-        index().showList(self.list)
-
-    def skaidoc(self):
-        self.list = showList().data_list(addonSkaiDoc)
-        index().showList(self.list)
-
-class archives:
-    def __init__(self):
-        self.list = []
-
-    def megatv(self):
-        self.list = showList().cinegreece_list(link().cinegreece_mega)
-        #self.list = cache(showList().cinegreece_list, link().cinegreece_mega)
-        index().showList(self.list)
-
-    def antenna(self):
-        self.list = showList().cinegreece_list(link().cinegreece_ant1)
-        #self.list = cache(showList().cinegreece_list, link().cinegreece_ant1)
-        index().showList(self.list)
-
-    def alphatv(self):
-        self.list = showList().cinegreece_list(link().cinegreece_alpha)
-        #self.list = cache(showList().cinegreece_list, link().cinegreece_alpha)
-        index().showList(self.list)
-
-    def star(self):
-        self.list = showList().cinegreece_list(link().cinegreece_star)
-        #self.list = cache(showList().cinegreece_list, link().cinegreece_star)
-        index().showList(self.list)
-
-    def ert(self):
-        self.list = showList().cinegreece_list(link().cinegreece_ert)
-        #self.list = cache(showList().cinegreece_list, link().cinegreece_ert)
-        index().showList(self.list)
-
-    def rik(self):
-        self.list = showList().cinegreece_list(link().cinegreece_rik)
-        #self.list = cache(showList().cinegreece_list, link().cinegreece_rik)
-        index().showList(self.list)
-
-class news:
-    def __init__(self):
-        self.list = []
-
-    def megatv(self):
-        name = 'MEGA GEGONOTA'
-        url = link().megatv_news
-        self.list = episodeList().megatv_list2(name, url, ' ', '0', 'Greek', '', name)
+class episodes:
+    def get(self, name, url, image, genre, plot, show):
+        if url.startswith(mega().feed_link):
+            self.list = mega().episodes_list(name, url, image, genre, plot, show)
+        elif url.startswith(mega().base_link):
+            self.list = mega().episodes_list2(name, url, image, genre, plot, show)
+        elif url.startswith(ant1().base_link):
+            self.list = ant1().episodes_list(name, url, image, genre, plot, show)
+        elif url.startswith(alpha().base_link):
+            self.list = alpha().episodes_list(name, url, image, genre, plot, show)
+        elif url.startswith(star().base_link):
+            self.list = star().episodes_list(name, url, image, genre, plot, show)
+        elif url.startswith(skai().base_link):
+            self.list = skai().episodes_list(name, url, image, genre, plot, show)
+        elif url.startswith(cybc().base_link):
+            self.list = cybc().episodes_list(name, url, image, genre, plot, show)
+        elif url.startswith(sigma().base_link):
+            self.list = sigma().episodes_list(name, url, image, genre, plot, show)
+        elif url.startswith(cinegreece().base_link):
+            self.list = cinegreece().episodes_list(name, url, image, genre, plot, show)
+        elif url.startswith(novasports().base_link):
+            self.list = novasports().episodes_list(name, url, image, genre, plot, show)
+        elif url.startswith(mtvchart().base_link):
+            self.list = mtvchart().episodes_list(name, url, image, genre, plot, show)
+        elif url.startswith(rythmoschart().base_link):
+            self.list = rythmoschart().episodes_list(name, url, image, genre, plot, show)
+        elif url.startswith(dailymotion().api_link):
+            self.list = dailymotion().episodes_list(name, url, image, genre, plot, show)
+        elif url.startswith(youtube().api_link):
+            self.list = youtube().episodes_list(name, url, image, genre, plot, show)
         index().episodeList(self.list)
 
-    def antenna(self):
-        name = 'ANT1 NEWS'
-        url = link().antenna_news
-        self.list = episodeList().antenna_list(name, url, ' ', '0', 'Greek', '', name)
-        index().episodeList(self.list)
-
-    def alphatv(self):
-        name = 'ALPHA NEWS'
-        url = link().alphatv_news
-        self.list = episodeList().alphatv_list(name, url, ' ', '0', 'Greek', '', name)
-        index().episodeList(self.list)
-
-    def star(self):
-        name = 'STAR NEWS'
-        url = link().star_news
-        image = 'http://www.star.gr/tv/PublishingImages/160913114342_2118.jpg'
-        self.list = episodeList().star_list(name, url, image, '0', 'Greek', ' ', name)
-        index().episodeList(self.list)
-
-    def skai(self):
-        name = 'SKAI NEWS'
-        url = link().skai_news
-        self.list = episodeList().skai_list(name, url, ' ', '0', 'Greek', '', name)
-        index().episodeList(self.list)
-
-    def enikos(self):
-        name = 'ENIKOS'
-        url = link().enikos_news
-        self.list = episodeList().youtube_list(name, url, ' ', '0', 'Greek', '', name)
-        index().episodeList(self.list[:100])
-
-class sports:
-    def __init__(self):
-        self.list = []
-
-    def megatv(self):
-        name = 'MEGA SPORTS'
-        url = link().megatv_sports
-        self.list = episodeList().megatv_list2(name, url, ' ', '0', 'Greek', '', name)
-        index().episodeList(self.list)
-
-    def antenna(self):
-        name = 'ANT1 SPORTS'
-        url = link().antenna_sports
-        self.list = episodeList().antenna_list(name, url, ' ', '0', 'Greek', '', name)
-        index().episodeList(self.list)
-
-    def greeksuperleague(self):
-        name = 'Super League'
-        channel = 'greeksuperleague'
-        url = link().dailymotion_playlist % channel
-        self.list = episodeList().dailymotion_list(name, url, ' ', '0', 'Greek', '', name)
-        index().episodeList(self.list)
-
-    def novasports(self):
-        name = 'Novasports'
-        url = link().novasports_series
-        self.list = episodeList().novasports_list(name, url, ' ', '0', 'Greek', '', name)
-        index().episodeList(self.list)
-
-    def novasportsnews(self):
-        name = 'Novasports News'
-        url = link().novasports_news
-        self.list = episodeList().novasports_list(name, url, ' ', '0', 'Greek', '', name)
-        index().episodeList(self.list)
-
-class music:
-    def __init__(self):
-        self.list = []
-
-    def madgreekz(self):
-        channel = 'madtvgreekz'
-        filter = ["PL20iPi-qHKiz1wJCqvbvy5ffrtWT1VcVF", "PL20iPi-qHKiyWnRbBdnSF7RlDdAePiKzj", "PL20iPi-qHKiyZGlOs5DTElzAK_YNCDJn0", "PL20iPi-qHKiwyRhqqmOnbDvPSUgRzzxgq"]
-        self.list = showList().youtube_list(channel, filter)
-        #self.list = cache(showList().youtube_list, channel, filter)
-        self.list = sorted(self.list, key=itemgetter('name'))
-        index().showList(self.list)
-
-    def madtop50(self):
-        name = 'MAD Top 50'
-        self.list = episodeList().madchart_list(name, ' ', ' ', '0', 'Greek', '', name)
-        index().episodeList(self.list)
-
-    def itunesgr(self):
-        name = 'iTunes GR Chart'
-        self.list = episodeList().madchart_list(name, ' ', ' ', '0', 'Greek', '', name)
-        index().episodeList(self.list)
-
-    def uschart(self):
-        name = 'US Chart'
-        self.list = episodeList().madchart_list(name, ' ', ' ', '0', 'Greek', '', name)
-        index().episodeList(self.list)
-
-    def itunesus(self):
-        name = 'iTunes US Chart'
-        self.list = episodeList().madchart_list(name, ' ', ' ', '0', 'Greek', '', name)
-        index().episodeList(self.list)
-
-    def ukchart(self):
-        name = 'UK Chart'
-        self.list = episodeList().madchart_list(name, ' ', ' ', '0', 'Greek', '', name)
-        index().episodeList(self.list)
-
-    def itunesuk(self):
-        name = 'iTunes UK Chart'
-        self.list = episodeList().madchart_list(name, ' ', ' ', '0', 'Greek', '', name)
-        index().episodeList(self.list)
-
-class showList:
-    def __init__(self):
-        self.list = []
-        self.data = []
-
-    def megatv_list(self):
+class resolver:
+    def run(self, url):
         try:
-            result = getUrl(link().megatv_shows, mobile=True).result
+            if url.startswith(mega().hls_link): url = mega().resolve_hls(url)
+            elif url.startswith(mega().base_link): url = mega().resolve(url)
+            elif url.startswith(ant1().base_link): url = ant1().resolve(url)
+            elif url.startswith(alpha().base_link): url = alpha().resolve(url)
+            elif url.startswith(cybc().base_link): url = cybc().resolve(url)
+            elif url.startswith(sigma().base_link): url = sigma().resolve(url)
+            elif url.startswith(novasports().base_link): url = novasports().resolve(url)
+            elif url.startswith(dailymotion().base_link): url = dailymotion().resolve(url)
+            elif url.startswith(youtube().search_link): url = youtube().resolve_search(url)
+            elif url.startswith(youtube().base_link): url = youtube().resolve(url)
+
+            if url is None: raise Exception()
+            player().run(url)
+            return url
+        except:
+            index().infoDialog(language(30307).encode("utf-8"))
+            return
+
+
+class mega:
+    def __init__(self):
+        self.list = []
+        self.base_link = 'http://www.megatv.com'
+        self.feed_link = 'http://megatv.feed.gr'
+        self.shows_link = 'http://megatv.feed.gr/mobile/mobile.asp?pageid=816&catidlocal=32623&subidlocal=20933'
+        self.episodes_link = 'http://megatv.feed.gr/mobile/mobile/ekpompiindex_29954.asp?pageid=816&catidlocal=%s'
+        self.news_link = 'http://www.megatv.com/webtv/default.asp?catid=27377&catidlocal=27377'
+        self.sports_link = 'http://www.megatv.com/webtv/default.asp?catid=27377&catidlocal=27387'
+        self.info_link = 'http://www.megatv.com/XML/jw/videolists.asp?catid=%s&attributes=0&nostore=true'
+        self.hls_link = 'http://hdflashmegatv-f.akamaihd.net'
+
+    def shows(self):
+        self.list = self.shows_list()
+        #self.list = cache(self.shows_list)
+        index().showList(self.list)
+
+    def news(self):
+        name = 'MEGA GEGONOTA'
+        self.list = self.episodes_list2(name, self.news_link, '', 'Greek', '', name)
+        index().episodeList(self.list)
+
+    def sports(self):
+        name = 'MEGA SPORTS'
+        self.list = self.episodes_list2(name, self.sports_link, '', 'Greek', '', name)
+        index().episodeList(self.list)
+
+    def shows_list(self):
+        try:
+            result = getUrl(self.shows_link, mobile=True).result
             shows = common.parseDOM(result, "li")
         except:
             return
+
         for show in shows:
             try:
                 name = common.parseDOM(show, "h5")[0]
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
+
                 url = common.parseDOM(show, "a", ret="data-params")[0]
                 tpl = common.parseDOM(show, "a", ret="data-tpl")[0]
-                if tpl == 'ekpompiindex': url = link().megatv_episodes % url.split("catid=")[-1]
-                elif tpl == 'gegonota_home': url = link().megatv_news
+                if tpl == 'ekpompiindex': url = self.episodes_link % url.split("catid=")[-1]
+                elif tpl == 'gegonota_home': url = self.news_link
                 else: raise Exception()
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
+
                 image = common.parseDOM(show, "img", ret="src")[0]
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': 'Greek', 'plot': ''})
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'genre': 'Greek', 'plot': ''})
             except:
                 pass
 
         return self.list
 
-    def antenna_list(self):
+    def episodes_list(self, name, url, image, genre, plot, show):
         try:
-            result = getUrl(link().antenna_shows, mobile=True).result
-            shows = re.compile('({.+?})').findall(result)
-            self.list.append({'name': 'ANT1 NEWS', 'url': link().antenna_news, 'image': 'http://www.antenna.gr/imgHandler/326/5a7c9f1a-79b6-47e0-b8ac-304d4e84c591.jpg', 'imdb': '0', 'genre': 'Greek', 'plot': ''})
+            result = getUrl(url, mobile=True).result
+            result = common.parseDOM(result, "section", attrs = { "class": "ekpompes.+?" })[0]
+            episodes = common.parseDOM(result, "li")
         except:
             return
+
+        for episode in episodes:
+            try:
+                name = common.parseDOM(episode, "h5")[0]
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                url = common.parseDOM(episode, "a", ret="data-vUrl")[0]
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+
+                image = common.parseDOM(episode, "img", ret="src")[0]
+                image = common.replaceHTMLCodes(image)
+                image = image.encode('utf-8')
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'date': '', 'genre': genre, 'plot': plot, 'title': name, 'show': show})
+            except:
+                pass
+
+        return self.list
+
+    def episodes_list2(self, name, url, image, genre, plot, show):
+        try:
+            result = getUrl(url).result
+            result = result.decode('iso-8859-7').encode('utf-8')
+
+            v1 = '/megagegonota/'
+            match = re.search("addPrototypeElement[(]'.+?','REST','(.+?)','(.+?)'.+?[)]", result)
+            v2,v3 = match.groups()
+            redirect = '%s%s%s?%s' % (self.base_link, v1, v2, v3)
+
+            result = getUrl(redirect).result
+            result = result.decode('iso-8859-7').encode('utf-8')
+            result = common.parseDOM(result, "div", attrs = { "class": "rest" })[0]
+            episodes = common.parseDOM(result, "li")
+        except:
+            return
+
+        for episode in episodes:
+            try:
+                name = common.parseDOM(episode, "a")[1]
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                url = common.parseDOM(episode, "a", ret="href")[0]
+                url = url.split("catid=")[-1].replace("')",'')
+                url = '%s/r.asp?catid=%s' % (self.base_link, url)
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+
+                image = common.parseDOM(episode, "img", ret="src")[0]
+                if not image.startswith('http://'):
+                    image = '%s%s%s' % (self.base_link, v1, image)
+                image = common.replaceHTMLCodes(image)
+                image = image.encode('utf-8')
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'date': '', 'genre': genre, 'plot': plot, 'title': name, 'show': show})
+            except:
+                pass
+
+        return self.list
+
+    def resolve(self, url):
+        try:
+            url = url.split("catid=")[-1]
+            url = self.info_link % url
+            result = getUrl(url).result
+
+            playpath = common.parseDOM(result, "location")[-1]
+            try: rtmp = common.parseDOM(result, "meta", attrs = { "rel": "streamer" })[0]
+            except: rtmp = ''
+
+            if playpath.endswith("/manifest.f4m"):
+                rtmp = 'rtmp://cp78455.edgefcs.net/ondemand/vod/'
+                try: playpath = re.compile('.+?,.+?,(.+?),.csmil/manifest.f4m').findall(playpath)[0]
+                except: playpath = re.compile('.+?,(.+?),.csmil/manifest.f4m').findall(playpath)[0]
+
+            url = '%s%s timeout=10' % (rtmp, playpath)
+            if not url.startswith('rtmp://'): url = '%s%s' % (rtmp, playpath)
+            return url
+        except:
+            return
+
+    def resolve_hls(self, url):
+        try:
+            rtmp = 'rtmp://cp78455.edgefcs.net/ondemand/vod/'
+            playpath = url.replace(',', '')
+            playpath = re.compile('/i/(.+?)[.]csmil').findall(playpath)[0]
+            url = '%s%s timeout=10' % (rtmp, playpath)
+            return url
+        except:
+            return
+
+class ant1:
+    def __init__(self):
+        self.list = []
+        self.base_link = 'http://www.antenna.gr'
+        self.img_link = 'http://www.antenna.gr/imgHandler/326'
+        self.shows_link = 'http://www.antenna.gr/tv/doubleip/shows?version=3.0'
+        self.episodes_link = 'http://www.antenna.gr/tv/doubleip/show?version=3.0&sid='
+        self.episodes_link2 = 'http://www.antenna.gr/tv/doubleip/categories?version=3.0&howmany=100&cid='
+        self.news_link = 'http://www.antenna.gr/tv/doubleip/show?version=3.0&sid=222903'
+        self.sports_link = 'http://www.antenna.gr/tv/doubleip/categories?version=3.0&howmany=100&cid=3062'
+        self.watch_link = 'http://www.antenna.gr/webtv/watch?cid=%s'
+        self.info_link = 'http://www.antenna.gr/webtv/templates/data/player?cid=%s'
+
+    def shows(self):
+        self.list = self.shows_list()
+        #self.list = cache(self.shows_list)
+        index().showList(self.list)
+
+    def news(self):
+        name = 'ANT1 NEWS'
+        self.list = self.episodes_list(name, self.news_link, '', 'Greek', '', name)
+        index().episodeList(self.list)
+
+    def sports(self):
+        name = 'ANT1 SPORTS'
+        self.list = self.episodes_list(name, self.sports_link, '', 'Greek', '', name)
+        index().episodeList(self.list)
+
+    def shows_list(self):
+        try:
+            self.list.append({'name': 'ANT1 NEWS', 'url': self.news_link, 'image': 'http://www.antenna.gr/imgHandler/326/5a7c9f1a-79b6-47e0-b8ac-304d4e84c591.jpg', 'genre': 'Greek', 'plot': 'ANT1 NEWS'})
+
+            result = getUrl(self.shows_link, mobile=True).result
+            shows = re.compile('({.+?})').findall(result)
+        except:
+            return
+
         for show in shows:
             try:
                 i = json.loads(show)
+
                 name = i['teasertitle'].strip()
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
+
                 image = i['webpath'].strip()
-                image = '%s/%s' % (link().antenna_img, image)
+                image = '%s/%s' % (self.img_link, image)
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
+
                 url = i['id'].strip()
-                url = link().antenna_episodes + url
+                url = self.episodes_link + url
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
+
                 try: plot = i['teasertext'].strip()
-                except: plot = ' '
+                except: plot = ''
                 plot = common.replaceHTMLCodes(plot)
                 plot = plot.encode('utf-8')
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': 'Greek', 'plot': plot})
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'genre': 'Greek', 'plot': plot})
             except:
                 pass
 
         return self.list
 
-    def alphatv_list(self):
+    def episodes_list(self, name, url, image, genre, plot, show):
         try:
-            result = getUrl(link().alphatv_shows).result
+            result = getUrl(url, mobile=True).result
+
+            if url.startswith(self.episodes_link):
+                id = json.loads(result)
+                id = id['feed']['show']['videolib']
+                if url.endswith('sid=223077'): id = '3110'#EUROPA LEAGUE
+                elif url.endswith('sid=318756'): id = '3246'#ΟΛΑ ΤΡΕΛΑ
+                elif url.endswith('sid=314594'): id = '4541'#THE VOICE
+            elif url.startswith(self.episodes_link2):
+                id = ''
+
+            if id == '':
+                episodes = result.replace("'",'"').replace('"title"','"caption"').replace('"image"','"webpath"').replace('"trailer_contentid"','"contentid"')
+                episodes = re.compile('({.+?})').findall(episodes)
+            else:
+                url = self.episodes_link2 + id
+                episodes = getUrl(url, mobile=True).result
+                episodes = re.compile('({.+?})').findall(episodes)
+        except:
+            return
+
+        for episode in episodes:
+            try:
+                i = json.loads(episode)
+
+                name = i['caption'].strip()
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                image = i['webpath'].strip()
+                image = '%s/%s' % (self.img_link, image)
+                image = common.replaceHTMLCodes(image)
+                image = image.encode('utf-8')
+
+                url = i['contentid'].strip()
+                url = self.watch_link % url
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'date': '', 'genre': genre, 'plot': plot, 'title': name, 'show': show})
+            except:
+                pass
+
+        return self.list
+
+    def resolve(self, url):
+        id = url.split("?")[-1].split("cid=")[-1].split("&")[0]
+        dataUrl = self.info_link % id
+        pageUrl = self.watch_link % id
+        swfUrl = 'http://www.antenna.gr/webtv/images/fbplayer.swf'
+
+        try:
+            result = getUrl(dataUrl).result
+            rtmp = common.parseDOM(result, "FMS")[0]
+            playpath = common.parseDOM(result, "appStream")[0]
+            if playpath.endswith('/GR.flv'): raise Exception()
+            url = '%s playpath=%s pageUrl=%s swfUrl=%s swfVfy=true timeout=10' % (rtmp, playpath, pageUrl, swfUrl)
+            if playpath.startswith('http://'): url = playpath
+            return url
+        except:
+            pass
+
+        try:
+            result = getUrl('http://9proxy.in/b.php?u=' + dataUrl, referer='http://9proxy.in').result
+            rtmp = common.parseDOM(result, "FMS")[0]
+            playpath = common.parseDOM(result, "appStream")[0]
+            if playpath.endswith('/GR.flv'): raise Exception()
+            url = '%s playpath=%s pageUrl=%s swfUrl=%s swfVfy=true timeout=10' % (rtmp, playpath, pageUrl, swfUrl)
+            if playpath.startswith('http://'): url = playpath
+            return url
+        except:
+            pass
+
+        try:
+            proxy = None
+            proxy = '%s:%s' % (getSetting("proxy_ip"), getSetting("proxy_port"))
+            if (getSetting("proxy_ip") == '' or getSetting("proxy_port") == ''): raise Exception()
+
+            result = getUrl(dataUrl, proxy=proxy, timeout='30').result
+            rtmp = common.parseDOM(result, "FMS")[0]
+            playpath = common.parseDOM(result, "appStream")[0]
+            if playpath.endswith('/GR.flv'): raise Exception()
+            url = '%s playpath=%s pageUrl=%s swfUrl=%s swfVfy=true timeout=10' % (rtmp, playpath, pageUrl, swfUrl)
+            if playpath.startswith('http://'): url = playpath
+            return url
+        except:
+            yes = index().yesnoDialog(language(30341).encode("utf-8"), language(30342).encode("utf-8"))
+            if yes: contextMenu().settings_open()
+
+class alpha:
+    def __init__(self):
+        self.list = []
+        self.data = []
+        self.base_link = 'http://www.alphatv.gr'
+        self.shows_link = 'http://www.alphatv.gr/shows'
+        self.shows_link2 = 'http://www.alphatv.gr/views/ajax?view_name=alpha_shows_category_view&view_display_id=page_3&view_path=shows&view_base_path=shows&page=%s'
+        self.news_link = 'http://www.alphatv.gr/shows/informative/news'
+
+    def shows(self):
+        self.list = self.shows_list()
+        #self.list = cache(self.shows_list)
+        index().showList(self.list)
+
+    def news(self):
+        name = 'ALPHA NEWS'
+        self.list = self.episodes_list(name, self.news_link, '', 'Greek', '', name)
+        index().episodeList(self.list)
+
+    def shows_list(self):
+        try:
+            result = getUrl(self.shows_link).result
             filter = common.parseDOM(result, "span", attrs = { "class": "field-content" })
             filter = common.parseDOM(filter, "a", ret="href")
             filter = uniqueList(filter).list
@@ -1015,7 +1065,7 @@ class showList:
             result = ''
             for i in range(0, 5):
                 self.data.append('')
-                showsUrl = link().alphatv_shows2 % str(i)
+                showsUrl = self.shows_link2 % str(i)
                 threads.append(Thread(self.thread, showsUrl, i))
             [i.start() for i in threads]
             [i.join() for i in threads]
@@ -1024,62 +1074,230 @@ class showList:
             shows = common.parseDOM(result, "li")
         except:
             return
+
         for show in shows:
             try:
                 name = common.parseDOM(show, "span")[0]
                 name = common.parseDOM(name, "a")[0]
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
+
                 url = common.parseDOM(show, "a", ret="href")[0]
                 if not any(url == i for i in filter): raise Exception()
-                url = '%s%s' % (link().alphatv_base, url)
+                url = '%s%s' % (self.base_link, url)
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
+
                 image = common.parseDOM(show, "img", ret="src")[0]
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': 'Greek', 'plot': ''})
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'genre': 'Greek', 'plot': ''})
             except:
                 pass
 
         return self.list
 
-    def star_list(self):
+    def episodes_list(self, name, url, image, genre, plot, show):
         try:
-            result = getUrl(link().star_shows, mobile=True).result
+            redirects = [url + '/webtv/shows?page=0', url + '/webtv/shows?page=1', url + '/webtv/shows?page=2', url + '/webtv/shows?page=3', url + '/webtv/episodes?page=0', url + '/webtv/episodes?page=1', url + '/webtv/episodes?page=2', url + '/webtv/episodes?page=3', url + '/webtv/news?page=0', url + '/webtv/news?page=1']
+
+            count = 0
+            threads = []
+            result = ''
+            for redirect in redirects:
+                self.data.append('')
+                threads.append(Thread(self.thread, redirect, count))
+                count = count + 1
+            [i.start() for i in threads]
+            [i.join() for i in threads]
+            for i in self.data: result += i
+
+            episodes = common.parseDOM(result, "div", attrs = { "class": "views-field.+?" })
+        except:
+        	return
+
+        for episode in episodes:
+            try:
+                name = common.parseDOM(episode, "img", ret="alt")[-1]
+                if name == '': raise Exception()
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                url = common.parseDOM(episode, "a", ret="href")[-1]
+                url = '%s%s' % (self.base_link, url)
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+
+                image = common.parseDOM(episode, "img", ret="src")[-1]
+                if not image.startswith('http://'): image = '%s%s' % (self.base_link, image)
+                image = common.replaceHTMLCodes(image)
+                image = image.encode('utf-8')
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'date': '', 'genre': genre, 'plot': plot, 'title': name, 'show': show})
+            except:
+                pass
+
+        return self.list
+
+    def resolve(self, url):
+        try:
+            result = getUrl(url).result
+            result = result.replace('\n','')
+
+            try:
+                url = re.compile("playlist:.+?file: '(.+?[.]m3u8)'").findall(result)[0]
+                if "EXTM3U" in getUrl(url).result: return url
+            except:
+                pass
+
+            url = re.compile('playlist:.+?"(rtmp[:].+?)"').findall(result)[0]
+            url += ' timeout=10'
+            return url
+        except:
+            return
+
+    def thread(self, url, i):
+        try:
+            result = getUrl(url).result
+            self.data[i] = result
+        except:
+            return
+
+class star:
+    def __init__(self):
+        self.list = []
+        self.base_link = 'http://www.star.gr'
+        self.shows_link = 'http://www.star.gr/_layouts/handlers/tv/feeds.program.ashx?catTitle=hosts'
+        self.episodes_link = 'http://www.star.gr/_layouts/handlers/tv/feeds.program.ashx?catTitle=%s&artId=%s'
+        self.news_link = 'http://www.star.gr/_layouts/handlers/tv/feeds.program.ashx?catTitle=News&artId=9'
+        self.watch_link = 'http://cdnapi.kaltura.com/p/21154092/sp/2115409200/playManifest/entryId/%s/flavorId/%s/format/url/protocol/http/a.mp4'
+        self.enikos_link = 'http://gdata.youtube.com/feeds/api/users/enikoslive/uploads'
+
+    def shows(self):
+        self.list = self.shows_list()
+        #self.list = cache(self.shows_list)
+        index().showList(self.list)
+
+    def news(self):
+        name = 'STAR NEWS'
+        image = 'http://www.star.gr/tv/PublishingImages/160913114342_2118.jpg'
+        self.list = self.episodes_list(name, self.news_link, image, 'Greek', '', name)
+        index().episodeList(self.list)
+
+    def shows_list(self):
+        try:
+            result = getUrl(self.shows_link, mobile=True).result
             result = json.loads(result)
             shows = result['hosts']
         except:
             return
+
         for show in shows:
             try:
-                i = show
-                name = i['Title'].strip()
+                name = show['Title'].strip()
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
-                image = i['Image'].strip()
-                image = '%s%s' % (link().star_base, image)
+
+                image = show['Image'].strip()
+                image = '%s%s' % (self.base_link, image)
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
-                id = i['ProgramId']
-                cat = i['ProgramCat'].strip()
-                url = link().star_episodes % (cat, id)
+
+                id = show['ProgramId']
+                cat = show['ProgramCat'].strip()
+                url = self.episodes_link % (cat, id)
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': 'Greek', 'plot': ' '})
+
+                if url.endswith('artId=42'): url = self.enikos_link
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'genre': 'Greek', 'plot': ''})
             except:
                 pass
 
-        self.list.append({'name': 'STON ENIKO', 'url': link().enikos_show, 'image': '%s/STON ENIKO.jpg' % addonArt, 'imdb': '0', 'genre': 'Greek', 'plot': 'STON ENIKO'})
+        return self.list
+
+    def episodes_list(self, name, url, image, genre, plot, show):
+        try:
+            result = getUrl(url, mobile=True).result
+            result = json.loads(result)
+
+            try: plot = result['programme']['StoryLinePlain'].strip()
+            except: plot = ''
+            plot = common.replaceHTMLCodes(plot)
+            plot = plot.encode('utf-8')
+
+            episodes = result['videosprogram']
+        except:
+        	return
+
+        for episode in episodes:
+            try:
+                name = episode['Title'].strip()
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                url = episode['VideoID'].strip()
+                url = self.watch_link % (url, url)
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'date': '', 'genre': genre, 'plot': plot, 'title': name, 'show': show})
+            except:
+                pass
 
         return self.list
 
-    def skai_list(self):
+class skai:
+    def __init__(self):
+        self.list = []
+        self.data = []
+        self.base_link = 'http://www.skai.gr'
+        self.shows_link = 'http://www.skai.gr/Ajax.aspx?m=Skai.TV.ProgramListView&la=0&Type=TV&Day=%s'
+        self.episodes_link = 'http://www.skai.gr/Ajax.aspx?m=Skai.Player.ItemView&type=TV&cid=6&alid=%s'
+        self.news_link = 'http://www.skai.gr/player/TV/?mmid=243980'
+
+    def shows(self):
+        self.list = self.shows_list()
+        #self.list = cache(self.shows_list)
+        index().showList(self.list)
+
+    def news(self):
+        name = 'SKAI NEWS'
+        self.list = self.episodes_list(name, self.news_link, '', 'Greek', '', name)
+        index().episodeList(self.list)
+
+    def docs(self):
+        self.list.append({'name': '1821', 'url': '212286', 'image': '103D3757BC656810AC691936864E49DC'})
+        self.list.append({'name': '1821 .. Σήμερα', 'url': '212553', 'image': 'E3D27CCD6D665DDFCC3E1640D5BDA3A4'})
+        self.list.append({'name': 'Βατοπαίδι...Όλη η Ιστορία', 'url': '222624', 'image': 'B2CC9280E741C03798070106B70D135C'})
+        self.list.append({'name': 'Έλληνες του Πνεύματος και της Τέχνης', 'url': '237922', 'image': 'EBF431B4C010691F2C413AA88EFAB970'})
+        self.list.append({'name': 'Ιαπωνία: 9 ριχτερ', 'url': '225869', 'image': '536726829DB3BCD79F48A8EFBB53D66E'})
+        self.list.append({'name': 'Μάχες των Ελλήνων', 'url': '215411', 'image': 'DE9D8BABEB908FAD0F343AF3713EB8F4'})
+        self.list.append({'name': 'Μάχες των Ελλήνων - Θεματική', 'url': '215434', 'image': 'DE9D8BABEB908FAD0F343AF3713EB8F4'})
+        self.list.append({'name': 'Μεγάλοι Έλληνες', 'url': '240386', 'image': '726CDE5CBA10F5E8F7FA08D826D1DBDD'})
+        self.list.append({'name': 'Μίκης Θεοδωράκης', 'url': '102819', 'image': '779D513A0FDDA7F61C2A9F3413F655EC'})
+        self.list.append({'name': 'Ναυτίλος', 'url': '217362', 'image': 'B490C451013D93C9BAF99F2B343B2798'})
+        self.list.append({'name': 'Ξεχασμένα Βαλκάνια', 'url': '226754', 'image': '50C20F6750CC31944937C60933D4B85A'})
+        self.list.append({'name': 'Οι Δρόμοι της Ελιάς', 'url': '102527', 'image': '94B08523EB84D83CBD374A7F955091C9'})
+        self.list.append({'name': 'Τα Παιδία Δεν Παίζει', 'url': '215848', 'image': 'E1C308853845C7ECD4B6F5B999D812DF'})
+
+        for i in range(len(self.list)):
+            self.list[i]['name'] = self.list[i]['name'].decode('iso-8859-7').encode('utf-8')
+            self.list[i]['url'] = 'http://www.skai.gr/player/TV/?mmid=%s' % self.list[i]['url']
+            self.list[i]['image'] = 'http://www.skai.gr/files/temp/%s.jpg' % self.list[i]['image']
+            self.list[i]['genre'] = 'Greek'
+            self.list[i]['plot'] = ''
+
+        index().showList(self.list)
+
+    def shows_list(self):
         try:
             url = []
             d = datetime.datetime.utcnow()
             for i in range(0, 7):
-                url.append(link().skai_shows % d.strftime("%d.%m.%Y"))
+                url.append(self.shows_link % d.strftime("%d.%m.%Y"))
                 d = d - datetime.timedelta(hours=24)
             url = url[::-1]
 
@@ -1096,36 +1314,348 @@ class showList:
             shows = common.parseDOM(result, "Show", attrs = { "TVonly": "0" })
         except:
             return
+
         for show in shows:
             try:
                 name = common.parseDOM(show, "Show")[0]
                 name = name.split('[')[-1].split(']')[0]
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
+
                 url = common.parseDOM(show, "Link")[0]
                 url = url.split('[')[-1].split(']')[0]
-                url = '%s%s' % (link().skai_base, url)
+                url = '%s%s' % (self.base_link, url)
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
+
                 image = common.parseDOM(show, "ShowImage")[0]
                 image = image.split('[')[-1].split(']')[0]
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
+
                 plot = common.parseDOM(show, "Description")[0]
                 plot = plot.split('[')[-1].split(']')[0]
                 plot = plot.replace('<br>','').replace('</br>','').replace('\n','').split('<')[0].strip()
                 plot = common.replaceHTMLCodes(plot)
                 plot = plot.encode('utf-8')
+
                 if image in str(self.list): raise Exception()
                 if not 'mmid=' in url: raise Exception()
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': 'Greek', 'plot': plot})
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'genre': 'Greek', 'plot': plot})
             except:
                 pass
 
         self.list = sorted(self.list, key=itemgetter('name'))
         return self.list
 
-    def cinegreece_list(self, url):
+    def episodes_list(self, name, url, image, genre, plot, show):
+        try:
+            result = getUrl(url).result
+            url = common.parseDOM(result, "li", ret="id", attrs = { "class": "active_sub" })[0]
+
+            threads = []
+            result = ''
+            for i in range(1, 3):
+                self.data.append('')
+                episodesUrl = self.episodes_link % url + '&Page=%s' % str(i)
+                threads.append(Thread(self.thread, episodesUrl, i-1))
+            [i.start() for i in threads]
+            [i.join() for i in threads]
+            for i in self.data: result += i
+
+            episodes = common.parseDOM(result, "Item")
+        except:
+        	return
+
+        for episode in episodes:
+            try:
+                title = common.parseDOM(episode, "Title")[0]
+                title = title.split('[')[-1].split(']')[0]
+
+                date = common.parseDOM(episode, "Date")[0]
+                date = date.split('[')[-1].split(']')[0]
+                date = date.split('T')[0]
+
+                name = '%s (%s)' % (title, date)
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                url = common.parseDOM(episode, "File")[0]
+                url = url.split('[')[-1].split(']')[0]
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+
+                image = common.parseDOM(episode, "Photo1")[0]
+                image = common.replaceHTMLCodes(image)
+                image = image.encode('utf-8')
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'date': '', 'genre': genre, 'plot': plot, 'title': name, 'show': show})
+            except:
+                pass
+
+        return self.list
+
+    def thread(self, url, i):
+        try:
+            result = getUrl(url).result
+            self.data[i] = result
+        except:
+            return
+
+class cybc:
+    def __init__(self):
+        self.list = []
+        self.base_link = 'http://www.cybc-media.com'
+        self.shows_link = 'http://www.cybc-media.com/video/index.php?option=com_videoflow&task=categories&Itemid=102'
+        self.news_link = 'http://www.cybc-media.com/video/index.php/video-on-demand?task=cats&cat=16'
+        self.sports_link = 'http://www.cybc-media.com/video/index.php/video-on-demand?task=cats&cat=17'
+
+    def shows(self):
+        self.list = self.shows_list()
+        #self.list = cache(self.shows_list)
+        index().showList(self.list)
+
+    def news(self):
+        name = 'RIK NEWS'
+        self.list = self.episodes_list(name, self.news_link, '', 'Greek', '', name)
+        index().episodeList(self.list)
+
+    def sports(self):
+        name = 'RIK SPORTS'
+        self.list = self.episodes_list(name, self.sports_link, '', 'Greek', '', name)
+        index().episodeList(self.list)
+
+    def shows_list(self):
+        try:
+            result = getUrl(self.shows_link).result
+            result = result.replace(' = ', '=')
+            shows = common.parseDOM(result, "td", attrs = { "class": "vfbox" })
+        except:
+            return
+
+        for show in shows:
+            try:
+                name = common.parseDOM(show, "a")[0]
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                url = common.parseDOM(show, "a", ret="href")[0]
+                url = '%s%s' % (self.base_link, url)
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+
+                image = common.parseDOM(show, "img", ret="src")[0]
+                image = common.replaceHTMLCodes(image)
+                image = image.encode('utf-8')
+
+                try: plot = common.parseDOM(show, "div", attrs = { "class": "vfmedia_details" })[0]
+                except: plot = ''
+                plot = common.replaceHTMLCodes(plot)
+                plot = plot.encode('utf-8')
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'genre': 'Greek', 'plot': plot})
+            except:
+                pass
+
+        return self.list
+
+    def episodes_list(self, name, url, image, genre, plot, show):
+        try:
+            result = getUrl(url).result
+            result = result.replace(' = ', '=')
+            episodes = common.parseDOM(result, "td", attrs = { "class": "vfbox" })
+        except:
+            return
+
+        for episode in episodes:
+            try:
+                name = common.parseDOM(episode, "a")[0]
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                url = common.parseDOM(episode, "a", ret="href")[0]
+                url = '%s%s' % (self.base_link, url)
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+
+                image = common.parseDOM(episode, "img", ret="src")[0]
+                image = common.replaceHTMLCodes(image)
+                image = image.encode('utf-8')
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'date': '', 'genre': genre, 'plot': plot, 'title': name, 'show': show})
+            except:
+                pass
+
+        return self.list
+
+    def resolve(self, url):
+        try:
+            result = getUrl(url).result
+            result = result.replace('\n','')
+            url = re.compile("'vfmediaspace'.+?'file'.+?'(.+?)'").findall(result)[0]
+            return url
+        except:
+            return
+
+class sigma:
+    def __init__(self):
+        self.list = []
+        self.data = []
+        self.base_link = 'http://www.sigmatv.com'
+        self.shows_link = 'http://www.sigmatv.com/shows'
+        self.news_link = 'http://www.sigmatv.com/shows/tomes-sta-gegonota/episodes'
+
+    def shows(self):
+        self.list = self.shows_list()
+        #self.list = cache(self.shows_list)
+        index().showList(self.list)
+
+    def news(self):
+        name = 'SIGMA NEWS'
+        self.list = self.episodes_list(name, self.news_link, '', 'Greek', '', name)
+        index().episodeList(self.list)
+
+    def shows_list(self):
+        try:
+            result = getUrl(self.shows_link).result
+            shows = common.parseDOM(result, "div", attrs = { "class": "show_entry.+?" })
+        except:
+            return
+
+        for show in shows:
+            try:
+                name = common.parseDOM(show, "div", attrs = { "class": "body" })[0]
+                name = common.parseDOM(name, "a")[0]
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                url = common.parseDOM(show, "a", ret="href")[0]
+                filter = ['/uefa-champions-league', '/seirestainies', '/tilenouveles', '/alpha']
+                if any(url.endswith(i) for i in filter): raise Exception()
+                url = '%s/%s/episodes' % (self.base_link, url)
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+
+                image = common.parseDOM(show, "img", ret="src")[0]
+                image = image.replace('/./', '')
+                image = '%s/%s' % (self.base_link, image)
+                image = common.replaceHTMLCodes(image)
+                image = image.encode('utf-8')
+
+                try: plot = common.parseDOM(show, "div", attrs = { "style": "min.+?" })[-1]
+                except: plot = ''
+                plot = common.replaceHTMLCodes(plot)
+                plot = plot.encode('utf-8')
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'genre': 'Greek', 'plot': plot})
+            except:
+                pass
+
+        return self.list
+
+    def episodes_list(self, name, url, image, genre, plot, show):
+        try:
+            count = 0
+            threads = []
+            result = ''
+            for i in range(0, 100, 20):
+                self.data.append('')
+                episodesUrl = url + '/page/%s' % str(i)
+                threads.append(Thread(self.thread, episodesUrl, count))
+                count = count + 1
+            [i.start() for i in threads]
+            [i.join() for i in threads]
+            for i in self.data: result += i
+
+            episodes = common.parseDOM(result, "div", attrs = { "class": "entry .+?" })
+        except:
+            return
+
+        for episode in episodes:
+            try:
+                name = common.parseDOM(episode, "img", ret="alt")[0]
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                url = common.parseDOM(episode, "a", ret="href")[0]
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+
+                image = common.parseDOM(episode, "img", ret="src")[0]
+                if '/no-image' in image: raise Exception()
+                image = common.replaceHTMLCodes(image)
+                image = image.encode('utf-8')
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'date': '', 'genre': genre, 'plot': plot, 'title': name, 'show': show})
+            except:
+                pass
+
+        return self.list
+
+    def resolve(self, url):
+        try:
+            result = getUrl(url).result
+
+            try: url = common.parseDOM(result, "source", ret="src", attrs = { "type": "video/mp4" })[0]
+            except: url = common.parseDOM(result, "source", ret="src", attrs = { "type": "video/flash" })[0]
+            url = common.replaceHTMLCodes(url)
+
+            url = getUrl(url, output='geturl').result
+            return url
+        except:
+            return
+
+    def thread(self, url, i):
+        try:
+            result = getUrl(url).result
+            self.data[i] = result
+        except:
+            return
+
+class cinegreece:
+    def __init__(self):
+        self.list = []
+        self.data = []
+        self.base_link = 'http://www.cinegreece.com'
+        self.mega_link = 'http://www.cinegreece.com/2012/05/mega.html'
+        self.ant1_link = 'http://www.cinegreece.com/2012/05/ant1.html'
+        self.alpha_link = 'http://www.cinegreece.com/2012/05/alpha.html'
+        self.star_link = 'http://www.cinegreece.com/2012/05/star.html'
+        self.ert_link = 'http://www.cinegreece.com/2012/05/ert.html'
+        self.rik_link = 'http://www.cinegreece.com/2012/05/rik.html'
+
+    def mega(self):
+        self.list = self.shows_list(self.mega_link)
+        #self.list = cache(self.shows_list, self.mega_link)
+        index().showList(self.list)
+
+    def ant1(self):
+        self.list = self.shows_list(self.ant1_link)
+        #self.list = cache(self.shows_list, self.ant1_link)
+        index().showList(self.list)
+
+    def alpha(self):
+        self.list = self.shows_list(self.alpha_link)
+        #self.list = cache(self.shows_list, self.alpha_link)
+        index().showList(self.list)
+
+    def star(self):
+        self.list = self.shows_list(self.star_link)
+        #self.list = cache(self.shows_list, self.star_link)
+        index().showList(self.list)
+
+    def ert(self):
+        self.list = self.shows_list(self.ert_link)
+        #self.list = cache(self.shows_list, self.ert_link)
+        index().showList(self.list)
+
+    def rik(self):
+        self.list = self.shows_list(self.rik_link)
+        #self.list = cache(self.shows_list, self.rik_link)
+        index().showList(self.list)
+
+    def shows_list(self, url):
         try:
             showsUrl = [url]
             for i in range(2, 5): showsUrl.append(url.replace('.html', 'p%s.html' % str(i)))
@@ -1144,6 +1674,7 @@ class showList:
             shows = re.compile('(<a.+?</a>)').findall(result)
         except:
             return
+
         for show in shows:
             try:
                 name = common.parseDOM(show, "img", ret="title")[0]
@@ -1154,80 +1685,57 @@ class showList:
                 elif name.endswith('(Τα)'.decode('iso-8859-7')): name = 'Τα '.decode('iso-8859-7') + name.replace('(Τα)'.decode('iso-8859-7'), '').strip()
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
+
                 url = common.parseDOM(show, "a", ret="href")[0]
                 url = common.replaceHTMLCodes(url)
-                url = url.replace(url.split("/")[2], link().cinegreece_base.split("//")[-1])
+                url = url.replace(url.split("/")[2], self.base_link.split("//")[-1])
                 url = url.encode('utf-8')
+
                 image = common.parseDOM(show, "img", ret="src")[0]
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': 'Greek', 'plot': ''})
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'genre': 'Greek', 'plot': ''})
             except:
                 pass
 
         self.list = sorted(self.list, key=itemgetter('name'))
         return self.list
 
-    def youtube_list(self, channel, filter):
+    def episodes_list(self, name, url, image, genre, plot, show):
         try:
-            count = 0
-            threads = []
-            result = ''
-            for i in range(1, 250, 25):
-                self.data.append('')
-                showsUrl = link().youtube_playlists % channel + '?max-results=25&start-index=%s' % str(i)
-                threads.append(Thread(self.thread, showsUrl, count))
-                count = count + 1
-            [i.start() for i in threads]
-            [i.join() for i in threads]
-            for i in self.data: result += i
+            result = getUrl(url).result
 
-            shows = common.parseDOM(result, "entry")
+            image = common.parseDOM(result, "a", attrs = { "imageanchor": ".+?" })[0]
+            image = common.parseDOM(image, "img", ret="src")[0]
+            image = common.replaceHTMLCodes(image)
+            image = image.encode('utf-8')
+
+            episodes = re.compile('(<button.+?</button>)').findall(result)
+            episodes = uniqueList(episodes).list
         except:
             return
-        for show in shows:
+
+        for episode in episodes:
             try:
-                name = common.parseDOM(show, "title")[0]
+                name = common.parseDOM(episode, "button")[0]
+                try: name = common.parseDOM(name, "span")[0]
+                except: pass
+                if '#' in name: raise Exception()
+                name = name.replace('&nbsp;&nbsp;&nbsp;','-').strip()
+                name = 'Επεισόδιο '.decode('iso-8859-7') + name
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
-                url = common.parseDOM(show, "id")[0]
-                url = link().youtube_playlist % url.split("/")[-1]
+
+                url = common.parseDOM(episode, "button", ret="onclick")[0]
+                url = re.compile("'(.+?)'").findall(url)[0]
+                if url.startswith('popvid'):
+                    url = common.parseDOM(result, "div", attrs = { "id": url })[0]
+                    url = common.parseDOM(url, "embed", ret="src")[0]
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
-                image = common.parseDOM(show, "media:thumbnail", ret="url")[0]
-                image = image.replace(image.split("/")[-1], '0.jpg')
-                image = image.encode('utf-8')
-                if image.endswith("/00000000000/0.jpg"): raise Exception() #empty playlist
-                if any(url.endswith(i) for i in filter): raise Exception()
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': '0', 'genre': 'Greek', 'plot': '', 'channel': channel})
-            except:
-                pass
 
-        return self.list
-
-    def data_list(self, file):
-        try:
-            file = open(file,'r')
-            result = file.read()
-            file.close()
-            shows = common.parseDOM(result, "show")
-        except:
-            return
-        for show in shows:
-            try:
-                name = common.parseDOM(show, "name")[0]
-                name = common.replaceHTMLCodes(name)
-                name = name.encode('utf-8')
-                url = common.parseDOM(show, "url")[0]
-                url = common.replaceHTMLCodes(url)
-                url = url.encode('utf-8')
-                image = common.parseDOM(show, "poster")[0]
-                image = common.replaceHTMLCodes(image)
-                image = image.encode('utf-8')
-                fanart = common.parseDOM(show, "fanart")[0]
-                fanart = common.replaceHTMLCodes(fanart)
-                fanart = fanart.encode('utf-8')
-                self.list.append({'name': name, 'url': url, 'image': image, 'fanart': fanart, 'imdb': '0', 'genre': 'Greek', 'plot': ''})
+                self.list.append({'name': name, 'url': url, 'image': image, 'date': '', 'genre': genre, 'plot': plot, 'title': name, 'show': show})
             except:
                 pass
 
@@ -1240,430 +1748,341 @@ class showList:
         except:
             return
 
-class episodeList:
+class novasports:
     def __init__(self):
         self.list = []
-        self.data = []
+        self.base_link = 'http://www.novasports.gr'
+        self.episodes_link = 'http://www.novasports.gr/LiveWebTV.aspx%s'
+        self.series_link = 'http://www.novasports.gr/handlers/LiveWebTv/LiveWebTvMediaGallery.ashx?containerid=-1&mediafiletypeid=0&latest=true&isBroadcast=true&tabid=shows'
+        self.news_link = 'http://www.novasports.gr/handlers/LiveWebTv/LiveWebTvMediaGallery.ashx?containerid=-1&mediafiletypeid=2&latest=true&tabid=categories'
 
-    def get(self, name, url, image, imdb, genre, plot, show):
-        if url.startswith(link().megatv_feed):
-            self.list = self.megatv_list(name, url, image, imdb, genre, plot, show)
-        elif url.startswith(link().megatv_base):
-            self.list = self.megatv_list2(name, url, image, imdb, genre, plot, show)
-        elif url.startswith(link().antenna_base):
-            self.list = self.antenna_list(name, url, image, imdb, genre, plot, show)
-        elif url.startswith(link().alphatv_base):
-            self.list = self.alphatv_list(name, url, image, imdb, genre, plot, show)
-        elif url.startswith(link().star_base):
-            self.list = self.star_list(name, url, image, imdb, genre, plot, show)
-        elif url.startswith(link().skai_base):
-            self.list = self.skai_list(name, url, image, imdb, genre, plot, show)
-        elif url.startswith(link().nickelodeon_base):
-            self.list = self.nickelodeon_list(name, url, image, imdb, genre, plot, show)
-        elif url.startswith(link().cinegreece_base):
-            self.list = self.cinegreece_list(name, url, image, imdb, genre, plot, show)
-        elif url.startswith(link().novasports_base):
-            self.list = self.novasports_list(name, url, image, imdb, genre, plot, show)
-        elif url.startswith(link().madtv_base):
-            self.list = self.madchart_list(name, url, image, imdb, genre, plot, show)
-        elif url.startswith(link().youtube_api):
-            self.list = self.youtube_list(name, url, image, imdb, genre, plot, show)
-        elif url.startswith(link().dailymotion_api):
-            self.list = self.dailymotion_list(name, url, image, imdb, genre, plot, show)
+    def shows(self):
+        name = 'Novasports'
+        self.list = self.episodes_list(name, self.series_link, '', 'Greek', '', name)
         index().episodeList(self.list)
 
+    def news(self):
+        name = 'Novasports News'
+        self.list = self.episodes_list(name, self.news_link, '', 'Greek', '', name)
+        index().episodeList(self.list)
 
-    def megatv_list(self, name, url, image, imdb, genre, plot, show):
-        try:
-        	result = getUrl(url, mobile=True).result
-        	result = common.parseDOM(result, "section", attrs = { "class": "ekpompes.+?" })[0]
-        	episodes = common.parseDOM(result, "li")
-        except:
-        	return
-        for episode in episodes:
-        	try:
-        	    name = common.parseDOM(episode, "h5")[0]
-        	    name = common.replaceHTMLCodes(name)
-        	    name = name.encode('utf-8')
-        	    url = common.parseDOM(episode, "a", ret="data-vUrl")[0]
-        	    url = common.replaceHTMLCodes(url)
-        	    url = url.encode('utf-8')
-        	    image = common.parseDOM(episode, "img", ret="src")[0]
-        	    image = common.replaceHTMLCodes(image)
-        	    image = image.encode('utf-8')
-        	    self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1'})
-        	except:
-        	    pass
-
-        return self.list
-
-    def megatv_list2(self, name, url, image, imdb, genre, plot, show):
-        try:
-        	result = getUrl(url).result
-        	result = result.decode('iso-8859-7').encode('utf-8')
-
-        	v1 = '/megagegonota/'
-        	match = re.search("addPrototypeElement[(]'.+?','REST','(.+?)','(.+?)'.+?[)]", result)
-        	v2,v3 = match.groups()
-        	redirect = '%s%s%s?%s' % (link().megatv_base, v1, v2, v3)
-
-        	result = getUrl(redirect).result
-        	result = result.decode('iso-8859-7').encode('utf-8')
-        	result = common.parseDOM(result, "div", attrs = { "class": "rest" })[0]
-        	episodes = common.parseDOM(result, "li")
-        except:
-        	return
-        for episode in episodes:
-        	try:
-        	    name = common.parseDOM(episode, "a")[1]
-        	    name = common.replaceHTMLCodes(name)
-        	    name = name.encode('utf-8')
-        	    url = common.parseDOM(episode, "a", ret="href")[0]
-        	    url = url.split("catid=")[-1].replace("')",'')
-        	    url = '%s/r.asp?catid=%s' % (link().megatv_base, url)
-        	    url = common.replaceHTMLCodes(url)
-        	    url = url.encode('utf-8')
-        	    image = common.parseDOM(episode, "img", ret="src")[0]
-        	    if not image.startswith('http://'):
-        	        image = '%s%s%s' % (link().megatv_base, v1, image)
-        	    image = common.replaceHTMLCodes(image)
-        	    image = image.encode('utf-8')
-        	    self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1'})
-        	except:
-        	    pass
-
-        return self.list
-
-    def antenna_list(self, name, url, image, imdb, genre, plot, show):
-        try:
-            result = getUrl(url, mobile=True).result
-
-            if url.startswith(link().antenna_episodes):
-                id = json.loads(result)
-                id = id['feed']['show']['videolib']
-                if url.endswith('sid=223077'): id = '3110'#EUROPA LEAGUE
-                elif url.endswith('sid=318756'): id = '3246'#ΟΛΑ ΤΡΕΛΑ
-            elif url.startswith(link().antenna_episodes2):
-                id = ''
-
-            if id == '':
-                episodes = result.replace("'",'"').replace('"title"','"caption"').replace('"image"','"webpath"').replace('"trailer_contentid"','"contentid"')
-                episodes = re.compile('({.+?})').findall(episodes)
-            else:
-                url = link().antenna_episodes2 + id
-                episodes = getUrl(url, mobile=True).result
-                episodes = re.compile('({.+?})').findall(episodes)
-        except:
-            return
-
-        for episode in episodes:
-            try:
-                i = json.loads(episode)
-                name = i['caption'].strip()
-                name = common.replaceHTMLCodes(name)
-                name = name.encode('utf-8')
-                image = i['webpath'].strip()
-                image = '%s/%s' % (link().antenna_img, image)
-                image = common.replaceHTMLCodes(image)
-                image = image.encode('utf-8')
-                url = i['contentid'].strip()
-                url = link().antenna_watch % url
-                url = common.replaceHTMLCodes(url)
-                url = url.encode('utf-8')
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1'})
-            except:
-                pass
-
-        return self.list
-
-    def alphatv_list(self, name, url, image, imdb, genre, plot, show):
-        try:
-        	redirects = [url + '/webtv/shows?page=0', url + '/webtv/shows?page=1' , url + '/webtv/episodes?page=0', url + '/webtv/episodes?page=1', url + '/webtv/news?page=0', url + '/webtv/news?page=1']
-
-        	count = 0
-        	threads = []
-        	result = ''
-        	for redirect in redirects:
-        	    self.data.append('')
-        	    threads.append(Thread(self.thread, redirect, count))
-        	    count = count + 1
-        	[i.start() for i in threads]
-        	[i.join() for i in threads]
-        	for i in self.data: result += i
-
-        	episodes = common.parseDOM(result, "div", attrs = { "class": "views-field.+?" })
-        except:
-        	return
-        for episode in episodes:
-        	try:
-        	    name = common.parseDOM(episode, "img", ret="alt")[-1]
-        	    if name == '': raise Exception()
-        	    name = common.replaceHTMLCodes(name)
-        	    name = name.encode('utf-8')
-        	    url = common.parseDOM(episode, "a", ret="href")[-1]
-        	    url = '%s%s' % (link().alphatv_base, url)
-        	    url = common.replaceHTMLCodes(url)
-        	    url = url.encode('utf-8')
-        	    if url in str(self.list): raise Exception()
-        	    image = common.parseDOM(episode, "img", ret="src")[-1]
-        	    if not image.startswith('http://'): image = '%s%s' % (link().alphatv_base, image)
-        	    image = common.replaceHTMLCodes(image)
-        	    image = image.encode('utf-8')
-        	    self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1'})
-        	except:
-        	    pass
-
-        return self.list
-
-    def star_list(self, name, url, image, imdb, genre, plot, show):
-        try:
-            result = getUrl(url, mobile=True).result
-            result = json.loads(result)
-
-            try: plot = result['programme']['StoryLinePlain'].strip()
-            except: plot = ' '
-            plot = common.replaceHTMLCodes(plot)
-            plot = plot.encode('utf-8')
-
-            episodes = result['videosprogram']
-        except:
-        	return
-        for episode in episodes:
-            try:
-                i = episode
-                name = i['Title'].strip()
-                name = common.replaceHTMLCodes(name)
-                name = name.encode('utf-8')
-                url = i['VideoID'].strip()
-                url = link().star_watch % (url, url)
-                url = common.replaceHTMLCodes(url)
-                url = url.encode('utf-8')
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1'})
-            except:
-                pass
-
-        return self.list
-
-    def skai_list(self, name, url, image, imdb, genre, plot, show):
+    def episodes_list(self, name, url, image, genre, plot, show):
         try:
             result = getUrl(url).result
-            url = common.parseDOM(result, "li", ret="id", attrs = { "class": "active_sub" })[0]
-
-            threads = []
-            result = ''
-            for i in range(1, 3):
-                self.data.append('')
-                episodesUrl = link().skai_episodes % url + '&Page=%s' % str(i)
-                threads.append(Thread(self.thread, episodesUrl, i-1))
-            [i.start() for i in threads]
-            [i.join() for i in threads]
-            for i in self.data: result += i
-
-            episodes = common.parseDOM(result, "Item")
-        except:
-        	return
-        for episode in episodes:
-            try:
-                title = common.parseDOM(episode, "Title")[0]
-                title = title.split('[')[-1].split(']')[0]
-                date = common.parseDOM(episode, "Date")[0]
-                date = date.split('[')[-1].split(']')[0]
-                date = date.split('T')[0]
-                name = '%s (%s)' % (title, date)
-                name = common.replaceHTMLCodes(name)
-                name = name.encode('utf-8')
-                url = common.parseDOM(episode, "File")[0]
-                url = url.split('[')[-1].split(']')[0]
-                url = common.replaceHTMLCodes(url)
-                url = url.encode('utf-8')
-                image = common.parseDOM(episode, "Photo1")[0]
-                image = common.replaceHTMLCodes(image)
-                image = image.encode('utf-8')
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1'})
-            except:
-                pass
-
-        return self.list
-
-    def nickelodeon_list(self, name, url, image, imdb, genre, plot, show):
-        try:
-            file = open(addonNickelodeon,'r')
-            result = file.read()
-            file.close()
-            result = common.parseDOM(result, "show")
-            filter = [i for i in result if url in common.replaceHTMLCodes(i)][0]
-            image = common.parseDOM(filter, "fanart")[0]
-            image = common.replaceHTMLCodes(image)
-            image = image.encode('utf-8')
-        except:
-            pass
-        try:
-            count = 0
-            threads = []
-            result = ''
-            for i in range(0, 75, 15):
-                self.data.append('')
-                episodesUrl = url + '?start=%s' % str(i)
-                threads.append(Thread(self.thread, episodesUrl, count))
-                count = count + 1
-            [i.start() for i in threads]
-            [i.join() for i in threads]
-            for i in self.data: result += i
-
-            episodes = common.parseDOM(result, "div", attrs = { "class": "catItemImageBlock" })
-            if episodes == []:
-                result = getUrl(url).result
-                episodes = common.parseDOM(result, "div", attrs = { "class": "catItemImageBlock" })
-        except:
-        	return
-        for episode in episodes:
-            try:
-                name = common.parseDOM(episode, "a", ret="title")[0]
-                sort = re.sub("\D", "", name)
-                sort = '%0100d' % int(sort)
-                sort = sort.encode('utf-8')
-                name = common.replaceHTMLCodes(name)
-                name = name.encode('utf-8')
-                url = common.parseDOM(episode, "a", ret="href")[0]
-                url = '%s%s' % (link().nickelodeon_base, url)
-                url = url.encode('utf-8')
-                for i in self.list:
-                    if name == i['name']: raise Exception()
-                self.list.append({'name': name, 'url': url, 'image': image, 'fanart': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1', 'sort': sort})
-            except:
-                pass
-
-        self.list = sorted(self.list, key=itemgetter('sort'))
-        return self.list
-
-    def cinegreece_list(self, name, url, image, imdb, genre, plot, show):
-        try:
-            result = getUrl(url).result
-            image = common.parseDOM(result, "a", attrs = { "imageanchor": ".+?" })[0]
-            image = common.parseDOM(image, "img", ret="src")[0]
-            image = common.replaceHTMLCodes(image)
-            image = image.encode('utf-8')
-            episodes = re.compile('(<button.+?</button>)').findall(result)
-            episodes = uniqueList(episodes).list
-        except:
-            return
-        for episode in episodes:
-            try:
-                name = common.parseDOM(episode, "button")[0]
-                try: name = common.parseDOM(name, "span")[0]
-                except: pass
-                if '#' in name: raise Exception()
-                name = name.replace('&nbsp;&nbsp;&nbsp;','-').strip()
-                name = 'Επεισόδιο '.decode('iso-8859-7') + name
-                name = common.replaceHTMLCodes(name)
-                name = name.encode('utf-8')
-                url = common.parseDOM(episode, "button", ret="onclick")[0]
-                url = re.compile("'(.+?)'").findall(url)[0]
-                if url.startswith('popvid'):
-                    url = common.parseDOM(result, "div", attrs = { "id": url })[0]
-                    url = common.parseDOM(url, "embed", ret="src")[0]
-                url = common.replaceHTMLCodes(url)
-                url = url.encode('utf-8')
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1'})
-            except:
-                pass
-
-        return self.list
-
-    def novasports_list(self, name, url, image, imdb, genre, plot, show):
-        try:
-            result = getUrl(url).result
+            result = json.loads(result)['HTML']
             episodes = common.parseDOM(result, "li")
         except:
             return
+
         for episode in episodes:
             try:
-                name = common.parseDOM(episode, "a", ret="title")[0]
+                title = common.parseDOM(episode, "a", ret="title")[0]
+                title = common.replaceHTMLCodes(title)
+                title = title.encode('utf-8')
+
+                try:
+                    name = common.parseDOM(episode, "a", ret="title")[0]
+                    date = common.parseDOM(episode, "span", attrs = { "class": "date" })[0]
+                    name = '%s (%s)' % (name, date.rsplit(',', 1)[0])
+                except:
+                    pass
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
-                url = common.parseDOM(episode, "a", ret="href")[-1]
-                url = link().novasports_episodes % url
+
+                url = common.parseDOM(episode, "a", ret="href")[0]
+                url = self.episodes_link % url
                 url = common.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
-                image = common.parseDOM(episode, "img", ret="src")[-1]
-                image = '%s/%s' % (link().novasports_base, image)
+
+                image = common.parseDOM(episode, "img", ret="src")[0]
+                image = '%s/%s' % (self.base_link, image)
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1'})
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'date': '', 'genre': genre, 'plot': plot, 'title': title, 'show': show})
             except:
                 pass
 
         return self.list
 
-    def madchart_list(self, name, url, image, imdb, genre, plot, show):
+    def resolve(self, url):
         try:
-            result = getUrl(link().madtv_charts).result
-            result = '{' + result.split('{', 1)[1].rsplit('}', 1)[0] + '}'
-            result = json.loads(result)
-            result = result['chartmenu']
+            result = getUrl(url).result
+            url = re.compile("type: 'html5'.+?'file': '(.+?)'").findall(result)[0]
+            return url
+        except:
+            return
 
-            url = [i['link'] for i in result if i['item'] == name][0]
-            url = url.split('=')[-1]
+class mtvchart:
+    def __init__(self):
+        self.list = []
+        self.base_link = 'http://www.mtvgreece.gr'
+        self.mtvhitlisthellas_link = 'http://www.mtvgreece.gr/hitlisthellas'
+        self.mtvdancefloor_link = 'http://www.mtvgreece.gr/mtv-dance-flour-chart'
+        self.eurotop20_link = 'http://www.mtvgreece.gr/mtv-euro-top-20'
+        self.usatop20_link = 'http://www.mtvgreece.gr/mtv-usa-top-20'
+        self.youtube_search = 'http://gdata.youtube.com/feeds/api/videos?q='
 
-            result = getUrl(link().madtv_chart % url).result
-            result = '{' + result.split('{', 1)[1].rsplit('}', 1)[0] + '}'
-            result = json.loads(result)
-            result = result['oldcharts']
+    def mtvhitlisthellas(self):
+        name = 'MTV Hit List Hellas'
+        self.list = self.episodes_list(name, self.mtvhitlisthellas_link, '', 'Greek', '', name)
+        index().episodeList(self.list)
 
-            links = []
-            if len(str(result[0]['id'])) == 4:
-                for i in result[:4]: links.append(link().madtv_chart % i['id'])
-            else:
-                links.append(link().madtv_chart % url)
-                for i in result[:3]: links.append(link().madtv_oldchart % i['id'])
+    def mtvdancefloor(self):
+        name = 'MTV Dance Floor'
+        self.list = self.episodes_list(name, self.mtvdancefloor_link, '', 'Greek', '', name)
+        index().episodeList(self.list)
 
-            count = 0
-            threads = []
-            for i in links:
-                self.data.append('')
-                threads.append(Thread(self.thread, i, count))
-                count = count + 1
-            [i.start() for i in threads]
-            [i.join() for i in threads]
-            result = []
-            date = ''
-            for i in self.data:
-                i = '{' + i.split('{', 1)[1].rsplit('}', 1)[0] + '}'
-                i = json.loads(i)
-                i = i['chart']
-                if date == '': date = i['to']
-                i = i['songs']
-                result += i
+    def eurotop20(self):
+        name = 'Euro Top 20'
+        self.list = self.episodes_list(name, self.eurotop20_link, '', 'Greek', '', name)
+        index().episodeList(self.list)
 
-            episodes = result
-            date = date.replace('/','-').replace('.','-')
-            date = common.replaceHTMLCodes(date)
-            date = date.encode('utf-8')
+    def usatop20(self):
+        name = 'U.S. Top 20'
+        self.list = self.episodes_list(name, self.usatop20_link, '', 'Greek', '', name)
+        index().episodeList(self.list)
+
+    def episodes_list(self, name, url, image, genre, plot, show):
+        try:
+            result = getUrl(url).result
+
             image = '%s/%s_wide.png' % (addonArt, name)
             image = common.replaceHTMLCodes(image)
             image = image.encode('utf-8')
+
+            episodes = common.parseDOM(result, "span", attrs = { "class": "artistRow" })
         except:
             return
+
         for episode in episodes:
             try:
-                name = '%s - %s' % (episode['artist'].strip(), episode['title'].strip())
+                name = ' '.join(re.sub('<.+?>', '', episode).split()).strip()
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
-                show = episode['artist'].strip()
+
+                show = common.parseDOM(result, "strong")[0]
                 show = common.replaceHTMLCodes(show)
                 show = show.encode('utf-8')
-                query = name.replace('=','').replace('&','').replace("'",'')
-                url = link().youtube_search + query + ' official'
+
+                query = ' '.join(re.sub('=|&|:|;|-|"|,|\'|\.|\?|\/', ' ', name).split())
+                url = self.youtube_search + query + ' official'
                 url = common.replaceHTMLCodes(url)
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1', 'date': date})
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'date': '', 'genre': genre, 'plot': plot, 'title': name, 'show': show})
             except:
                 pass
 
-        enumerate_list = [x for i,x in enumerate(self.list) if x not in self.list[i+1:]]
-        self.list = enumerate_list
         return self.list
 
-    def youtube_list(self, name, url, image, imdb, genre, plot, show):
+class rythmoschart:
+    def __init__(self):
+        self.list = []
+        self.base_link = 'http://www.rythmosfm.gr'
+        self.top20_link = 'http://www.rythmosfm.gr/community/top20/'
+        self.youtube_search = 'http://gdata.youtube.com/feeds/api/videos?q='
+
+    def rythmoshitlist(self):
+        name = 'Rythmos Hit List'
+        self.list = self.episodes_list(name, self.top20_link, '', 'Greek', '', name)
+        index().episodeList(self.list)
+
+    def episodes_list(self, name, url, image, genre, plot, show):
+        try:
+            result = getUrl(url).result
+
+            image = '%s/%s_wide.png' % (addonArt, name)
+            image = common.replaceHTMLCodes(image)
+            image = image.encode('utf-8')
+
+            episodes = common.parseDOM(result, "span", attrs = { "class": "toptitle" })
+        except:
+            return
+
+        for episode in episodes:
+            try:
+                name = episode
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                show = episode.rsplit('-', 1)[-1].strip()
+                show = common.replaceHTMLCodes(show)
+                show = show.encode('utf-8')
+
+                query = ' '.join(re.sub('=|&|:|;|-|"|,|\'|\.|\?|\/', ' ', name).split())
+                url = self.youtube_search + query + ' official'
+                url = common.replaceHTMLCodes(url)
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'date': '', 'genre': genre, 'plot': plot, 'title': name, 'show': show})
+            except:
+                pass
+
+        return self.list
+
+class dailymotion:
+    def __init__(self):
+        self.list = []
+        self.data = []
+        self.base_link = 'http://www.dailymotion.com'
+        self.api_link = 'https://api.dailymotion.com'
+        self.playlist_link = 'https://api.dailymotion.com/user/%s/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&sort=recent&family_filter=1'
+        self.watch_link = 'http://www.dailymotion.com/video/%s'
+        self.info_link = 'http://www.dailymotion.com/embed/video/%s'
+
+    def superleague(self):
+        name = 'Super League'
+        channel = 'greeksuperleague'
+        url = self.playlist_link % channel
+        self.list = self.episodes_list(name, url, '', 'Greek', '', name)
+        index().episodeList(self.list)
+
+    def superball(self):
+        name = 'Super Ball'
+        channel = 'Super-Ball'
+        url = self.playlist_link % channel
+        self.list = self.episodes_list(name, url, '', 'Greek', '', name)
+        index().episodeList(self.list)
+
+    def episodes_list(self, name, url, image, genre, plot, show):
+        try:
+            threads = []
+            result = []
+            for i in range(1, 3):
+                self.data.append('')
+                episodesUrl = url + '&limit=100&page=%s' % str(i)
+                threads.append(Thread(self.thread, episodesUrl, i-1))
+            [i.start() for i in threads]
+            [i.join() for i in threads]
+            for i in self.data: result += json.loads(i)['list']
+
+            episodes = result
+        except:
+        	return
+
+        for episode in episodes:
+            try:
+                name = episode['title']
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                url = episode['id']
+                url = self.watch_link % url
+                url = url.encode('utf-8')
+
+                image = episode['thumbnail_large_url']
+                image = common.replaceHTMLCodes(image)
+                image = image.encode('utf-8')
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'date': '', 'genre': genre, 'plot': plot, 'title': name, 'show': show})
+            except:
+                pass
+
+        return self.list
+
+    def resolve(self, url):
+        try:
+            id = url.split("/")[-1].split("?")[0]
+            result = getUrl(self.info_link % id).result
+
+            url = None
+            try: url = re.compile('"stream_h264_ld_url":"(.+?)"').findall(result)[0]
+            except: pass
+            try: url = re.compile('"stream_h264_url":"(.+?)"').findall(result)[0]
+            except: pass
+            try: url = re.compile('"stream_h264_hq_url":"(.+?)"').findall(result)[0]
+            except: pass
+            try: url = re.compile('"stream_h264_hd_url":"(.+?)"').findall(result)[0]
+            except: pass
+
+            url = urllib.unquote(url).decode('utf-8').replace('\\/', '/')
+            url = getUrl(url, output='geturl').result
+            return url
+        except:
+            return
+
+    def thread(self, url, i):
+        try:
+            result = getUrl(url).result
+            self.data[i] = result
+        except:
+            return
+
+class youtube:
+    def __init__(self):
+        self.list = []
+        self.data = []
+        self.base_link = 'http://www.youtube.com'
+        self.api_link = 'http://gdata.youtube.com'
+        self.playlists_link = 'http://gdata.youtube.com/feeds/api/users/%s/playlists'
+        self.playlist_link = 'http://gdata.youtube.com/feeds/api/playlists/%s'
+        self.search_link = 'http://gdata.youtube.com/feeds/api/videos?q='
+        self.watch_link = 'http://www.youtube.com/watch?v=%s'
+        self.info_link = 'http://gdata.youtube.com/feeds/api/videos/%s?v=2'
+        self.enikos_link = 'http://gdata.youtube.com/feeds/api/users/enikosgr/uploads'
+
+    def madtv(self):
+        channel = 'MADTVGREECE'
+        filter = ["PL1RY_6CEqdtnxJYgudDydiG4fKVoQouHf", "PL1RY_6CEqdtlu30q6SyuNe6Tk5IYjAiks", "PLE4B3F6B7F753D97C", "PL85C952EA930B9E90", "PL04B2C2D8B304BA48", "PL46B9D152167BA727"]
+        self.list = self.shows_list(channel, filter)
+        #self.list = cache(self.shows_list, channel, filter)
+        index().showList(self.list)
+
+    def madgreekz(self):
+        channel = 'madtvgreekz'
+        filter = ["PL20iPi-qHKiz1wJCqvbvy5ffrtWT1VcVF", "PL20iPi-qHKiyWnRbBdnSF7RlDdAePiKzj", "PL20iPi-qHKiyZGlOs5DTElzAK_YNCDJn0", "PL20iPi-qHKiwyRhqqmOnbDvPSUgRzzxgq"]
+        self.list = self.shows_list(channel, filter)
+        #self.list = cache(self.shows_list, channel, filter)
+        self.list = sorted(self.list, key=itemgetter('name'))
+        index().showList(self.list)
+
+    def enikos(self):
+        name = 'ENIKOS'
+        self.list = self.episodes_list(name, self.enikos_link, '', 'Greek', '', name)
+        index().episodeList(self.list[:100])
+
+    def shows_list(self, channel, filter):
+        try:
+            count = 0
+            threads = []
+            result = ''
+            for i in range(1, 250, 25):
+                self.data.append('')
+                showsUrl = self.playlists_link % channel + '?max-results=25&start-index=%s' % str(i)
+                threads.append(Thread(self.thread, showsUrl, count))
+                count = count + 1
+            [i.start() for i in threads]
+            [i.join() for i in threads]
+            for i in self.data: result += i
+
+            shows = common.parseDOM(result, "entry")
+        except:
+            return
+
+        for show in shows:
+            try:
+                name = common.parseDOM(show, "title")[0]
+                name = common.replaceHTMLCodes(name)
+                name = name.encode('utf-8')
+
+                url = common.parseDOM(show, "id")[0]
+                url = self.playlist_link % url.split("/")[-1]
+                url = common.replaceHTMLCodes(url)
+                url = url.encode('utf-8')
+
+                image = common.parseDOM(show, "media:thumbnail", ret="url")[0]
+                image = image.replace(image.split("/")[-1], '0.jpg')
+                image = image.encode('utf-8')
+
+                if image.endswith("/00000000000/0.jpg"): raise Exception() #empty playlist
+                if any(url.endswith(i) for i in filter): raise Exception()
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'genre': 'Greek', 'plot': ''})
+            except:
+                pass
+
+        return self.list
+
+    def episodes_list(self, name, url, image, genre, plot, show):
         try:
             count = 0
             threads = []
@@ -1680,198 +2099,30 @@ class episodeList:
             episodes = common.parseDOM(result, "entry")
         except:
         	return
+
         for episode in episodes:
             try:
                 name = common.parseDOM(episode, "title")[0]
                 name = common.replaceHTMLCodes(name)
                 name = name.encode('utf-8')
+
                 url = common.parseDOM(episode, "media:player", ret="url")[0]
                 url = url.split("&amp;")[0].split("=")[-1]
-                url = link().youtube_watch % url
+                url = self.watch_link % url
                 url = url.encode('utf-8')
+
                 image = common.parseDOM(episode, "media:thumbnail", ret="url")[0]
                 image = image.replace(image.split("/")[-1], '0.jpg')
                 image = common.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1'})
+
+                self.list.append({'name': name, 'url': url, 'image': image, 'date': '', 'genre': genre, 'plot': plot, 'title': name, 'show': show})
             except:
                 pass
 
         return self.list
 
-    def dailymotion_list(self, name, url, image, imdb, genre, plot, show):
-        try:
-            threads = []
-            result = []
-            for i in range(1, 3):
-                self.data.append('')
-                episodesUrl = url + '&limit=100&page=%s' % str(i)
-                threads.append(Thread(self.thread, episodesUrl, i-1))
-            [i.start() for i in threads]
-            [i.join() for i in threads]
-            for i in self.data: result += json.loads(i)['list']
-
-            episodes = result
-        except:
-        	return
-        for episode in episodes:
-            try:
-                name = episode['title']
-                name = common.replaceHTMLCodes(name)
-                name = name.encode('utf-8')
-                url = episode['id']
-                url = link().dailymotion_watch % url
-                url = url.encode('utf-8')
-                image = episode['thumbnail_large_url']
-                image = common.replaceHTMLCodes(image)
-                image = image.encode('utf-8')
-                self.list.append({'name': name, 'url': url, 'image': image, 'imdb': imdb, 'genre': genre, 'plot': plot, 'title': name, 'show': show, 'season': '1', 'episode': '1'})
-            except:
-                pass
-
-        return self.list
-
-    def thread(self, url, i):
-        try:
-            result = getUrl(url).result
-            self.data[i] = result
-        except:
-            return
-
-class resolver:
-    def __init__(self):
-        self.data = []
-
-    def run(self, url, name=None, play=True):
-        try:
-            if player().status() is True: return
-
-            if url.startswith(link().megatv_hls): url = self.megatv_hls(url)
-            elif url.startswith(link().megatv_base): url = self.megatv(url)
-            elif url.startswith(link().antenna_base): url = self.antenna(url)
-            elif url.startswith(link().alphatv_base): url = self.alphatv(url)
-            elif url.startswith(link().nickelodeon_base): url = self.nickelodeon(url)
-            elif url.startswith(link().novasports_base): url = self.novasports(url)
-            elif url.startswith(link().youtube_search): url = self.youtube_search(url)
-            elif url.startswith(link().youtube_base): url = self.youtube(url)
-            elif url.startswith(link().dailymotion_base): url = self.dailymotion(url)
-            if url is None: raise Exception()
-
-            if play == False: return url
-            player().run(name, url)
-            return url
-        except:
-            index().infoDialog(language(30317).encode("utf-8"))
-            return
-
-    def megatv(self, url):
-        try:
-            url = url.split("catid=")[-1]
-            url = link().megatv_info % url
-            result = getUrl(url).result
-
-            playpath = common.parseDOM(result, "location")[-1]
-            try: rtmp = common.parseDOM(result, "meta", attrs = { "rel": "streamer" })[0]
-            except: rtmp = ''
-
-            if playpath.endswith("/manifest.f4m"):
-                rtmp = 'rtmp://cp78455.edgefcs.net/ondemand/vod/'
-                try: playpath = re.compile('.+?,.+?,(.+?),.csmil/manifest.f4m').findall(playpath)[0]
-                except: playpath = re.compile('.+?,(.+?),.csmil/manifest.f4m').findall(playpath)[0]
-
-            url = '%s%s timeout=10' % (rtmp, playpath)
-            if not url.startswith('rtmp://'): url = '%s%s' % (rtmp, playpath)
-            return url
-        except:
-            return
-
-    def megatv_hls(self, url):
-        try:
-            rtmp = 'rtmp://cp78455.edgefcs.net/ondemand/vod/'
-            playpath = url.replace(',', '')
-            playpath = re.compile('/i/(.+?)[.]csmil').findall(playpath)[0]
-            url = '%s%s timeout=10' % (rtmp, playpath)
-            return url
-        except:
-            return
-
-    def antenna(self, url):
-        id = url.split("?")[-1].split("cid=")[-1].split("&")[0]
-        dataUrl = link().antenna_info % id
-        pageUrl = link().antenna_watch % id
-        swfUrl = 'http://www.antenna.gr/webtv/images/fbplayer.swf'
-
-        try:
-            result = getUrl(dataUrl).result
-            rtmp = common.parseDOM(result, "FMS")[0]
-            playpath = common.parseDOM(result, "appStream")[0]
-            if playpath.endswith('/GR.flv'): raise Exception()
-            url = '%s playpath=%s pageUrl=%s swfUrl=%s swfVfy=true timeout=10' % (rtmp, playpath, pageUrl, swfUrl)
-            if playpath.startswith('http://'): url = playpath
-            return url
-        except:
-            pass
-
-        try:
-            proxies = self.proxynova()
-            if proxies == []: raise Exception()
-
-            count = 0
-            threads = []
-            result = ''
-            for proxy in proxies:
-                self.data.append('')
-                threads.append(Thread(self.thread, dataUrl, proxy, count))
-                count = count + 1
-            [i.start() for i in threads]
-            [i.join() for i in threads]
-            for i in self.data: result += i
-
-            rtmp = common.parseDOM(result, "FMS")[0]
-            playpath = common.parseDOM(result, "appStream")[0]
-            if playpath.endswith('/GR.flv'): raise Exception()
-            url = '%s playpath=%s pageUrl=%s swfUrl=%s swfVfy=true timeout=10' % (rtmp, playpath, pageUrl, swfUrl)
-            if playpath.startswith('http://'): url = playpath
-            return url
-        except:
-            pass
-
-    def alphatv(self, url):
-        try:
-            result = getUrl(url).result
-            result = result.replace('\n','')
-
-            try:
-                url = re.compile("playlist:.+?file: '(.+?[.]m3u8)'").findall(result)[0]
-                if "EXTM3U" in getUrl(url).result: return url
-            except:
-                pass
-
-            url = re.compile('playlist:.+?"(rtmp[:].+?)"').findall(result)[0]
-            url += ' timeout=10'
-            return url
-        except:
-            return
-
-    def nickelodeon(self, url):
-        try:
-            result = getUrl(url).result
-            url = common.parseDOM(result, "span", attrs = { "class": "itemVideo" })[0]
-            url = re.compile("url: '(.+?manifest.f4m)'").findall(url)[-1]
-            url = url.replace("/z/", "/i/").replace("manifest.f4m","master.m3u8")
-            return url
-        except:
-            return
-
-    def novasports(self, url):
-        try:
-            result = getUrl(url).result
-            url = re.compile("type: 'html5'.+?'file': '(.+?)'").findall(result)[0]
-            return url
-        except:
-            return
-
-    def youtube_search(self, url):
+    def resolve_search(self, url):
         try:
             if index().addon_status('plugin.video.youtube') is None:
                 index().okDialog(language(30321).encode("utf-8"), language(30322).encode("utf-8"))
@@ -1885,20 +2136,20 @@ class resolver:
 
             for url in result[:5]:
                 url = url.split("/")[-1]
-                url = link().youtube_watch % url
-                url = self.youtube(url)
+                url = self.watch_link % url
+                url = self.resolve(url)
                 if not url is None: return url
         except:
             return
 
-    def youtube(self, url):
+    def resolve(self, url):
         try:
             if index().addon_status('plugin.video.youtube') is None:
                 index().okDialog(language(30321).encode("utf-8"), language(30322).encode("utf-8"))
                 return
             id = url.split("?v=")[-1].split("/")[-1].split("?")[0].split("&")[0]
             state, reason = None, None
-            result = getUrl(link().youtube_info % id).result
+            result = getUrl(self.info_link % id).result
             try:
                 state = common.parseDOM(result, "yt:state", ret="name")[0]
                 reason = common.parseDOM(result, "yt:state", ret="reasonCode")[0]
@@ -1906,7 +2157,7 @@ class resolver:
                 pass
             if state == 'deleted' or state == 'rejected' or state == 'failed' or reason == 'requesterRegion' : return
             try:
-                result = getUrl(link().youtube_watch % id).result
+                result = getUrl(self.watch_link % id).result
                 alert = common.parseDOM(result, "div", attrs = { "id": "watch7-notification-area" })[0]
                 return
             except:
@@ -1916,54 +2167,11 @@ class resolver:
         except:
             return
 
-    def dailymotion(self, url):
+    def thread(self, url, i):
         try:
-            id = url.split("/")[-1].split("?")[0]
-            result = getUrl(link().dailymotion_info % id).result
-            quality = None
-            try: quality = re.compile('"stream_h264_ld_url":"(.+?)"').findall(result)[0]
-            except: pass
-            try: quality = re.compile('"stream_h264_url":"(.+?)"').findall(result)[0]
-            except: pass
-            try: quality = re.compile('"stream_h264_hq_url":"(.+?)"').findall(result)[0]
-            except: pass
-            try: quality = re.compile('"stream_h264_hd_url":"(.+?)"').findall(result)[0]
-            except: pass
-            try: quality = re.compile('"stream_h264_hd1080_url":"(.+?)"').findall(result)[0]
-            except: pass
-            url = urllib.unquote(quality).decode('utf-8').replace('\\/', '/')
-            return url
-        except:
-            return
-
-    def proxynova(self):
-        try:
-            proxyList = []
-            url = 'http://www.proxynova.com/proxy-server-list/country-gr/'
             result = getUrl(url).result
-            result = result.decode('iso-8859-1').encode('utf-8')
-            hosts = common.parseDOM(result, "tr")
-        except:
-            return proxyList
-        for host in hosts:
-            try:
-                time = common.parseDOM(host, "time", attrs = { "class": "time-ago recent" })[0]
-                ip = common.parseDOM(host, "span", attrs = { "class": "row_proxy_ip" })[0]
-                ip = ip.split('(')[-1].split(')')[0].replace(' ','').replace('"','').replace('+','')
-                ip = common.replaceHTMLCodes(ip)
-                port = common.parseDOM(host, "a", attrs = { "href": ".+?" })[0]
-                proxyList.append(ip+':'+port)
-            except:
-                pass
-
-        return proxyList
-
-    def thread(self, url, proxy, i):
-        try:
-            result = getUrl(url,proxy=proxy).result
             self.data[i] = result
         except:
             return
-
 
 main()
