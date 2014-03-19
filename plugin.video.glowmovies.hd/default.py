@@ -1263,7 +1263,7 @@ class resolver:
             google = common.parseDOM(r, "iframe", ret="src")[0]
             google = common.replaceHTMLCodes(google)
 
-            result = getUrl(google, referer=url).result
+            result = getUrl(google, referer='http://glowgaze.fm/').result
             try:
                 url = re.compile('{file:"(.+?)"').findall(result)
                 if url == []: raise Exception()

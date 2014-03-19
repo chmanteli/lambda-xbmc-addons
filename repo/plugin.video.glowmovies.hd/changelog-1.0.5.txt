@@ -1,4 +1,12 @@
 ------------------------
+Glow Movies HD v1.0.5 (19-Mar-14)
+------------------------
+
+- Fixed issues with resolver.
+- Code cosmetics.
+
+
+------------------------
 Glow Movies HD v1.0.4 (5-Mar-14)
 ------------------------
 
