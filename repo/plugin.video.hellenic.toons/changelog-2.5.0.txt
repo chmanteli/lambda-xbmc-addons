@@ -1,4 +1,20 @@
 ------------------------
+Hellenic Toons v2.5.0 (20-Mar-14)
+------------------------
+
+- Re-work of addon.
+- Added separate movie section.
+- Added separate tv show section.
+- Note: Your favourites have to be re-added.
+- Added section for movies with Greek audio.
+- Removed Nickelodeon network.
+- Added more movies from various sources.
+- Added more shows from various sources.
+- Tweaked context menus.
+- Code cosmetics.
+
+
+------------------------
 Hellenic Toons v2.1.0 (9-Dec-13)
 ------------------------
 

@@ -1,4 +1,14 @@
 ------------------------
+Hellenic Player v2.0.1 (20-Mar-14)
+------------------------
+
+- Added missing MAD Greekz section.
+- Tweaked cache of show listings.
+- Tweaked Youtube listings.
+- Code cosmetics.
+
+
+------------------------
 Hellenic Player v2.0.0 (16-Mar-14)
 ------------------------
 

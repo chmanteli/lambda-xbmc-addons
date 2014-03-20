@@ -115,7 +115,6 @@ class main:
         elif action == 'shows_rik':                        cybc().shows()
         elif action == 'shows_sigma':                      sigma().shows()
         elif action == 'shows_youtube.madtv':              youtube().madtv()
-        elif action == 'shows_skai.docs':                  skai().docs()
         elif action == 'shows_cinegreece.mega':            cinegreece().mega()
         elif action == 'shows_cinegreece.ant1':            cinegreece().ant1()
         elif action == 'shows_cinegreece.alpha':           cinegreece().alpha()
@@ -137,11 +136,13 @@ class main:
         elif action == 'episodes_dailymotion.superleague': dailymotion().superleague()
         elif action == 'episodes_novasports.shows':        novasports().shows()
         elif action == 'episodes_dailymotion.superball':   dailymotion().superball()
+        elif action == 'shows_youtube.madgreekz':          youtube().madgreekz()
         elif action == 'episodes_mtvhitlisthellas':        mtvchart().mtvhitlisthellas()
         elif action == 'episodes_rythmoshitlist':          rythmoschart().rythmoshitlist()
         elif action == 'episodes_mtvdancefloor':           mtvchart().mtvdancefloor()
         elif action == 'episodes_eurotop20':               mtvchart().eurotop20()
         elif action == 'episodes_usatop20':                mtvchart().usatop20()
+        elif action == 'shows_skai.docs':                  skai().docs()
         elif action == 'episodes':                         episodes().get(name, url, image, genre, plot, show)
         elif action == 'play':                             resolver().run(url)
 
@@ -651,7 +652,7 @@ class root:
 
     def music(self):
         rootList = []
-        rootList.append({'name': 30601, 'image': 'MAD Greekz.png', 'action': 'episodes_youtubemadgreekz'})
+        rootList.append({'name': 30601, 'image': 'MAD Greekz.png', 'action': 'shows_youtube.madgreekz'})
         rootList.append({'name': 30602, 'image': 'MTV Hit List Hellas.png', 'action': 'episodes_mtvhitlisthellas'})
         rootList.append({'name': 30603, 'image': 'Rythmos Hit List.png', 'action': 'episodes_rythmoshitlist'})
         rootList.append({'name': 30604, 'image': 'MTV Dance Floor.png', 'action': 'episodes_mtvdancefloor'})
@@ -733,8 +734,8 @@ class mega:
         self.hls_link = 'http://hdflashmegatv-f.akamaihd.net'
 
     def shows(self):
-        self.list = self.shows_list()
-        #self.list = cache(self.shows_list)
+        #self.list = self.shows_list()
+        self.list = cache(self.shows_list)
         index().showList(self.list)
 
     def news(self):
@@ -892,8 +893,8 @@ class ant1:
         self.info_link = 'http://www.antenna.gr/webtv/templates/data/player?cid=%s'
 
     def shows(self):
-        self.list = self.shows_list()
-        #self.list = cache(self.shows_list)
+        #self.list = self.shows_list()
+        self.list = cache(self.shows_list)
         index().showList(self.list)
 
     def news(self):
@@ -1045,8 +1046,8 @@ class alpha:
         self.news_link = 'http://www.alphatv.gr/shows/informative/news'
 
     def shows(self):
-        self.list = self.shows_list()
-        #self.list = cache(self.shows_list)
+        #self.list = self.shows_list()
+        self.list = cache(self.shows_list)
         index().showList(self.list)
 
     def news(self):
@@ -1175,8 +1176,8 @@ class star:
         self.enikos_link = 'http://gdata.youtube.com/feeds/api/users/enikoslive/uploads'
 
     def shows(self):
-        self.list = self.shows_list()
-        #self.list = cache(self.shows_list)
+        #self.list = self.shows_list()
+        self.list = cache(self.shows_list)
         index().showList(self.list)
 
     def news(self):
@@ -1259,8 +1260,8 @@ class skai:
         self.news_link = 'http://www.skai.gr/player/TV/?mmid=243980'
 
     def shows(self):
-        self.list = self.shows_list()
-        #self.list = cache(self.shows_list)
+        #self.list = self.shows_list()
+        self.list = cache(self.shows_list)
         index().showList(self.list)
 
     def news(self):
@@ -1412,8 +1413,8 @@ class cybc:
         self.sports_link = 'http://www.cybc-media.com/video/index.php/video-on-demand?task=cats&cat=17'
 
     def shows(self):
-        self.list = self.shows_list()
-        #self.list = cache(self.shows_list)
+        #self.list = self.shows_list()
+        self.list = cache(self.shows_list)
         index().showList(self.list)
 
     def news(self):
@@ -1507,8 +1508,8 @@ class sigma:
         self.news_link = 'http://www.sigmatv.com/shows/tomes-sta-gegonota/episodes'
 
     def shows(self):
-        self.list = self.shows_list()
-        #self.list = cache(self.shows_list)
+        #self.list = self.shows_list()
+        self.list = cache(self.shows_list)
         index().showList(self.list)
 
     def news(self):
@@ -1626,33 +1627,33 @@ class cinegreece:
         self.rik_link = 'http://www.cinegreece.com/2012/05/rik.html'
 
     def mega(self):
-        self.list = self.shows_list(self.mega_link)
-        #self.list = cache(self.shows_list, self.mega_link)
+        #self.list = self.shows_list(self.mega_link)
+        self.list = cache(self.shows_list, self.mega_link)
         index().showList(self.list)
 
     def ant1(self):
-        self.list = self.shows_list(self.ant1_link)
-        #self.list = cache(self.shows_list, self.ant1_link)
+        #self.list = self.shows_list(self.ant1_link)
+        self.list = cache(self.shows_list, self.ant1_link)
         index().showList(self.list)
 
     def alpha(self):
-        self.list = self.shows_list(self.alpha_link)
-        #self.list = cache(self.shows_list, self.alpha_link)
+        #self.list = self.shows_list(self.alpha_link)
+        self.list = cache(self.shows_list, self.alpha_link)
         index().showList(self.list)
 
     def star(self):
-        self.list = self.shows_list(self.star_link)
-        #self.list = cache(self.shows_list, self.star_link)
+        #self.list = self.shows_list(self.star_link)
+        self.list = cache(self.shows_list, self.star_link)
         index().showList(self.list)
 
     def ert(self):
-        self.list = self.shows_list(self.ert_link)
-        #self.list = cache(self.shows_list, self.ert_link)
+        #self.list = self.shows_list(self.ert_link)
+        self.list = cache(self.shows_list, self.ert_link)
         index().showList(self.list)
 
     def rik(self):
-        self.list = self.shows_list(self.rik_link)
-        #self.list = cache(self.shows_list, self.rik_link)
+        #self.list = self.shows_list(self.rik_link)
+        self.list = cache(self.shows_list, self.rik_link)
         index().showList(self.list)
 
     def shows_list(self, url):
@@ -2022,16 +2023,16 @@ class youtube:
 
     def madtv(self):
         channel = 'MADTVGREECE'
-        filter = ["PL1RY_6CEqdtnxJYgudDydiG4fKVoQouHf", "PL1RY_6CEqdtlu30q6SyuNe6Tk5IYjAiks", "PLE4B3F6B7F753D97C", "PL85C952EA930B9E90", "PL04B2C2D8B304BA48", "PL46B9D152167BA727"]
-        self.list = self.shows_list(channel, filter)
-        #self.list = cache(self.shows_list, channel, filter)
+        exclude = ["PL1RY_6CEqdtnxJYgudDydiG4fKVoQouHf", "PL1RY_6CEqdtlu30q6SyuNe6Tk5IYjAiks", "PLE4B3F6B7F753D97C", "PL85C952EA930B9E90", "PL04B2C2D8B304BA48", "PL46B9D152167BA727"]
+        #self.list = self.shows_list(channel, [], exclude)
+        self.list = cache(self.shows_list, channel, [], exclude)
         index().showList(self.list)
 
     def madgreekz(self):
         channel = 'madtvgreekz'
-        filter = ["PL20iPi-qHKiz1wJCqvbvy5ffrtWT1VcVF", "PL20iPi-qHKiyWnRbBdnSF7RlDdAePiKzj", "PL20iPi-qHKiyZGlOs5DTElzAK_YNCDJn0", "PL20iPi-qHKiwyRhqqmOnbDvPSUgRzzxgq"]
-        self.list = self.shows_list(channel, filter)
-        #self.list = cache(self.shows_list, channel, filter)
+        exclude = ["PL20iPi-qHKiz1wJCqvbvy5ffrtWT1VcVF", "PL20iPi-qHKiyWnRbBdnSF7RlDdAePiKzj", "PL20iPi-qHKiyZGlOs5DTElzAK_YNCDJn0", "PL20iPi-qHKiwyRhqqmOnbDvPSUgRzzxgq"]
+        #self.list = self.shows_list(channel, [], exclude)
+        self.list = cache(self.shows_list, channel, [], exclude)
         self.list = sorted(self.list, key=itemgetter('name'))
         index().showList(self.list)
 
@@ -2040,7 +2041,7 @@ class youtube:
         self.list = self.episodes_list(name, self.enikos_link, '', 'Greek', '', name)
         index().episodeList(self.list[:100])
 
-    def shows_list(self, channel, filter):
+    def shows_list(self, channel, include, exclude):
         try:
             count = 0
             threads = []
@@ -2074,7 +2075,8 @@ class youtube:
                 image = image.encode('utf-8')
 
                 if image.endswith("/00000000000/0.jpg"): raise Exception() #empty playlist
-                if any(url.endswith(i) for i in filter): raise Exception()
+                if not include == [] and not any(url.endswith(i) for i in include): raise Exception()
+                if any(url.endswith(i) for i in exclude): raise Exception()
 
                 self.list.append({'name': name, 'url': url, 'image': image, 'genre': 'Greek', 'plot': ''})
             except:
