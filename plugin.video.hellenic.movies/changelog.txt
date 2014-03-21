@@ -1,4 +1,16 @@
 ------------------------
+Hellenic Movies v2.5.0 (21-Mar-14)
+------------------------
+
+- Re-work of addon.
+- Added fallback to greek-movies.com when no stream is available.
+- Added sorting methods for favourites (Title, Year, Added).
+- Added caching support.
+- Tweaked context menus.
+- Code cosmetics.
+
+
+------------------------
 Hellenic Movies v2.1.0 (6-Dec-13)
 ------------------------
 
