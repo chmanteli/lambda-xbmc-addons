@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.hellenic.podcasts" name="Hellenic Podcasts" version="1.0.0" provider-name="lambda">
+<addon id="plugin.audio.hellenic.podcasts" name="Hellenic Podcasts" version="2.0.0" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
+		<import addon="script.module.simplejson" version="2.0.10"/>
 		<import addon="script.common.plugin.cache" version="0.9.1"/>
 		<import addon="script.module.parsedom" version="0.9.1"/>
 	</requires>
