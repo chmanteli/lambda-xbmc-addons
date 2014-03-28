@@ -1,4 +1,12 @@
 ------------------------
+Hellenic TV v2.6.1 (28-Mar-14)
+------------------------
+
+- Updated SKAI, ANT1 CYPRUS, SIGMA, CAPITAL, RIK SAT and ART CHANNEL.
+- Code cosmetics.
+
+
+------------------------
 Hellenic TV v2.6.0 (9-Mar-14)
 ------------------------
 

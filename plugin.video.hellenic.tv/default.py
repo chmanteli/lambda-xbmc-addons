@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import urllib,urllib2,re,os,threading,datetime,time,xbmc,xbmcplugin,xbmcgui,xbmcaddon
+import urllib,urllib2,re,os,threading,datetime,time,base64,xbmc,xbmcplugin,xbmcgui,xbmcaddon,xbmcvfs
 from operator import itemgetter
 try:    import json
 except: import simplejson as json
@@ -40,7 +40,6 @@ addonIcon           = os.path.join(addonPath,'icon.png')
 addonFanart         = os.path.join(addonPath,'fanart.jpg')
 addonEPG            = os.path.join(addonPath,'xmltv.xml')
 addonChannels       = os.path.join(addonPath,'channels.xml')
-addonFanart         = os.path.join(addonPath,'fanart.jpg')
 addonLogos          = os.path.join(addonPath,'resources/logos')
 addonSlideshow      = os.path.join(addonPath,'resources/slideshow')
 addonStrings        = os.path.join(addonPath,'resources/language/Greek/strings.xml')
@@ -135,10 +134,13 @@ class player(xbmc.Player):
         xbmc.Player.__init__(self)
 
     def run(self, name, title, url, image, epg):
-        meta = {'label': title, 'title': title, 'studio': name, 'duration': '1440', 'plot': epg}
+        meta = {'Label': title, 'Title': title, 'Studio': name, 'Duration': '1440', 'Plot': epg}
+
         item = xbmcgui.ListItem(path=url, iconImage=image, thumbnailImage=image)
         item.setInfo( type="Video", infoLabels = meta )
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+
+        xbmc.PlayList(xbmc.PLAYLIST_VIDEO).clear()
+        xbmc.Player().play(url, item)
 
     def onPlayBackStarted(self):
         return
@@ -205,12 +207,12 @@ class index:
         epg = playerList[select]['epg']
         url = resolver().run(name)
         if url is None: return
-        meta = {'label': title, 'title': title, 'studio': name, 'duration': '1440', 'plot': epg}
+        meta = {'Label': title, 'Title': title, 'Studio': name, 'Duration': '1440', 'Plot': epg}
         image = '%s/%s.png' % (addonLogos, name)
 
         item = xbmcgui.ListItem(path=url, iconImage=image, thumbnailImage=image)
         item.setInfo( type="Video", infoLabels= meta )
-        item.setProperty("IsPlayable", "true")
+        #item.setProperty("IsPlayable", "true")
         xbmc.Player().play(url, item)
 
     def channelList(self, channelList):
@@ -221,11 +223,13 @@ class index:
                 name, epg = i['name'], i['epg']
                 if getSetting(name) == "false": raise Exception()
                 sysname = urllib.quote_plus(name.replace(' ','_'))
+
+                u = '%s?action=play&channel=%s&t=%s' % (sys.argv[0], sysname, datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"))
+                meta = {'Label': name, 'Title': name, 'Studio': name, 'Duration': '1440', 'Plot': epg}
+
                 image = '%s/%s.png' % (addonLogos, name)
                 fanart = '%s/%s.jpg' % (addonSlideshow, str(count)[-1])
                 count = count + 1
-                u = '%s?action=play&channel=%s&t=%s' % (sys.argv[0], sysname, datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"))
-                meta = {'label': name, 'title': name, 'studio': name, 'duration': '1440', 'plot': epg}
 
                 cm = []
                 cm.append((language(30401).encode("utf-8"), 'RunPlugin(%s?action=epg_menu&channel=%s)' % (sys.argv[0], sysname)))
@@ -233,7 +237,7 @@ class index:
 
                 item = xbmcgui.ListItem(name, iconImage=image, thumbnailImage=image)
                 item.setInfo( type="Video", infoLabels = meta )
-                item.setProperty("IsPlayable", "true")
+                #item.setProperty("IsPlayable", "true")
                 item.setProperty("Video", "true")
                 item.setProperty("Fanart_Image", fanart)
                 item.addContextMenuItems(cm, replaceItems=False)
@@ -370,8 +374,6 @@ class channels:
 class resolver:
     def run(self, channel):
         try:
-            xbmc.Player().stop()
-            xbmc.PlayList(xbmc.PLAYLIST_VIDEO).clear()
             data = channels().channel_list()
             channel = channel.replace('_',' ')
 
