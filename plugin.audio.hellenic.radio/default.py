@@ -18,12 +18,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import urllib,urllib2,re,os,threading,datetime,time,xbmc,xbmcplugin,xbmcgui,xbmcaddon
+import urllib,urllib2,re,os,threading,datetime,time,base64,xbmc,xbmcplugin,xbmcgui,xbmcaddon,xbmcvfs
 from operator import itemgetter
 try:    import CommonFunctions
 except: import commonfunctionsdummy as CommonFunctions
 
 
+action              = None
+common              = CommonFunctions
 language            = xbmcaddon.Addon().getLocalizedString
 setSetting          = xbmcaddon.Addon().setSetting
 getSetting          = xbmcaddon.Addon().getSetting
@@ -31,8 +33,10 @@ addonName           = xbmcaddon.Addon().getAddonInfo("name")
 addonVersion        = xbmcaddon.Addon().getAddonInfo("version")
 addonId             = xbmcaddon.Addon().getAddonInfo("id")
 addonPath           = xbmcaddon.Addon().getAddonInfo("path")
-addonIcon           = os.path.join(addonPath,'icon.png')
+addonFullId         = addonName + addonVersion
+addonDesc           = language(30450).encode("utf-8")
 addonRadios         = os.path.join(addonPath,'radios.xml')
+addonIcon           = os.path.join(addonPath,'icon.png')
 addonFanart         = os.path.join(addonPath,'fanart.jpg')
 addonArt            = os.path.join(addonPath,'resources/art')
 addonLogos          = os.path.join(addonPath,'resources/logos')
@@ -40,8 +44,6 @@ addonSlideshow      = os.path.join(addonPath,'resources/slideshow')
 dataPath            = xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
 viewData            = os.path.join(dataPath,'views.cfg')
 favData             = os.path.join(dataPath,'favourites.cfg')
-common              = CommonFunctions
-action              = None
 
 
 class main:
@@ -97,8 +99,7 @@ class main:
         elif action	== 'radios_macedonia':          radios().macedonia()
         elif action	== 'radios_peloponnese':        radios().peloponnese()
         elif action	== 'radios_centralgreece':      radios().centralgreece()
-        elif action	== 'play':                      player().run(radio, area)
-
+        elif action == 'play':                      resolver().run(radio, area)
 
         if action is None or action.startswith('root'):
             xbmcplugin.setContent(int(sys.argv[1]), 'albums')
@@ -110,12 +111,12 @@ class main:
         return
 
 class getUrl(object):
-    def __init__(self, url, fetch=True, close=True, cookie=False, mobile=False, proxy=None, post=None, referer=None):
+    def __init__(self, url, close=True, proxy=None, post=None, mobile=False, referer=None, cookie=None, output='', timeout='10'):
         if not proxy is None:
             proxy_handler = urllib2.ProxyHandler({'http':'%s' % (proxy)})
             opener = urllib2.build_opener(proxy_handler, urllib2.HTTPHandler)
             opener = urllib2.install_opener(opener)
-        if cookie == True:
+        if output == 'cookie' or not close == True:
             import cookielib
             cookie_handler = urllib2.HTTPCookieProcessor(cookielib.LWPCookieJar())
             opener = urllib2.build_opener(cookie_handler, urllib2.HTTPBasicAuthHandler(), urllib2.HTTPHandler())
@@ -130,11 +131,15 @@ class getUrl(object):
             request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0')
         if not referer is None:
             request.add_header('Referer', referer)
-        response = urllib2.urlopen(request, timeout=10)
-        if fetch == True:
-            result = response.read()
-        else:
+        if not cookie is None:
+            request.add_header('cookie', cookie)
+        response = urllib2.urlopen(request, timeout=int(timeout))
+        if output == 'cookie':
+            result = str(response.headers.get('Set-Cookie'))
+        elif output == 'geturl':
             result = response.geturl()
+        else:
+            result = response.read()
         if close == True:
             response.close()
         self.result = result
@@ -157,9 +162,35 @@ class Thread(threading.Thread):
     def run(self):
         self._target(*self._args)
 
+class player(xbmc.Player):
+    def __init__ (self):
+        xbmc.Player.__init__(self)
+
+    def run(self, name, band, genre, area, desc, url, image):
+        meta = {'Label': name, 'Title': name, 'Album': name, 'Artist': band, 'Genre': genre, 'Duration': '1440', 'Comment': desc}
+
+        item = xbmcgui.ListItem(path=url, iconImage=image, thumbnailImage=image)
+        item.setInfo( type="Video", infoLabels = { "title": "" } )
+        item.setInfo( type="Music", infoLabels = meta )
+        item.setProperty("Album_Label", area)
+        item.setProperty("Album_Description", desc)
+
+        xbmc.PlayList(xbmc.PLAYLIST_MUSIC).clear()
+        xbmc.Player().play(url, item)
+
+    def onPlayBackStarted(self):
+        return
+
+    def onPlayBackEnded(self):
+        return
+
+    def onPlayBackStopped(self):
+        return
+
 class index:
     def infoDialog(self, str, header=addonName):
-        xbmc.executebuiltin("Notification(%s,%s, 3000, %s)" % (header, str, addonIcon))
+        try: xbmcgui.Dialog().notification(header, str, addonIcon, 3000, sound=False)
+        except: xbmc.executebuiltin("Notification(%s,%s, 3000, %s)" % (header, str, addonIcon))
 
     def okDialog(self, str1, str2, header=addonName):
         xbmcgui.Dialog().ok(header, str1, str2)
@@ -168,8 +199,8 @@ class index:
         select = xbmcgui.Dialog().select(header, list)
         return select
 
-    def yesnoDialog(self, str1, str2, header=addonName):
-        answer = xbmcgui.Dialog().yesno(header, str1, str2)
+    def yesnoDialog(self, str1, str2, header=addonName, str3='', str4=''):
+        answer = xbmcgui.Dialog().yesno(header, str1, str2, '', str4, str3)
         return answer
 
     def getProperty(self, str):
@@ -187,7 +218,7 @@ class index:
         if not check == addonName: return True
 
     def container_refresh(self):
-        xbmc.executebuiltin('Container.Refresh')
+        xbmc.executebuiltin("Container.Refresh")
 
     def container_data(self):
         if not os.path.exists(dataPath):
@@ -204,7 +235,7 @@ class index:
     def container_view(self, content, viewDict):
         try:
             skin = xbmc.getSkinDir()
-            file = open(viewData,'r')
+            file = xbmcvfs.File(viewData)
             read = file.read().replace('\n','')
             file.close()
             view = re.compile('"%s"[|]"%s"[|]"(.+?)"' % (skin, content)).findall(read)[0]
@@ -216,29 +247,21 @@ class index:
             except:
                 pass
 
-    def resolve(self, name, band, genre, area, desc, url, image):
-        meta = {'label': name, 'title': name, 'album': name, 'artist': band, 'genre': genre, 'duration': '1440', 'comment': desc}
-        item = xbmcgui.ListItem(path=url, iconImage=image, thumbnailImage=image)
-        item.setInfo( type="Video", infoLabels = { "title": "" } )
-        item.setInfo( type="Music", infoLabels = meta )
-        item.setProperty("Album_Label", area)
-        item.setProperty("Album_Description", desc)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
-
     def rootList(self, rootList):
         count = 0
         total = len(rootList)
         for i in rootList:
             try:
-                name, desc, action = language(i['name']).encode("utf-8"), language(i['desc']).encode("utf-8"), i['action']
+                name = language(i['name']).encode("utf-8")
                 image = '%s/%s' % (addonArt, i['image'])
+                action = i['action']
                 u = '%s?action=%s' % (sys.argv[0], action)
                 fanart = '%s/%s.jpg' % (addonSlideshow, str(count)[-1])
                 count = count + 1
 
                 item = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=image)
-                item.setInfo( type="Music", infoLabels = { 'label': name, 'title': name, 'album': name } )
-                item.setProperty("Album_Description", desc)
+                item.setInfo( type="Music", infoLabels={ "Label": name, "Title": name, 'Album': name, 'Artist': addonName } )
+                item.setProperty("Album_Description", addonDesc)
                 item.setProperty("Fanart_Image", fanart)
                 item.addContextMenuItems([], replaceItems=False)
                 xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=item,totalItems=total,isFolder=True)
@@ -246,7 +269,7 @@ class index:
                 pass
 
     def radioList(self, radioList):
-        file = open(favData,'r')
+        file = xbmcvfs.File(favData)
         favRead = file.read()
         file.close()
 
@@ -256,16 +279,18 @@ class index:
             try:
                 name, band, genre, area, desc, url = i['name'], i['band'], i['genre'], i['area'], i['desc'], i['url']
                 sysname, sysarea = urllib.quote_plus(name.replace(' ','_')), urllib.quote_plus(area.replace(' ','_'))
+
+                u = '%s?action=play&radio=%s&area=%s&t=%s' % (sys.argv[0], sysname, sysarea, datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"))
+                meta = {'Label': name, 'Title': name, 'Album': name, 'Artist': band, 'Genre': genre, 'Duration': '1440', 'Comment': desc}
+
                 image = '%s/%s/%s.png' % (addonLogos, area, name)
                 fanart = '%s/%s.jpg' % (addonSlideshow, str(count)[-1])
                 count = count + 1
-                u = '%s?action=play&radio=%s&area=%s&t=%s' % (sys.argv[0], sysname, sysarea, datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"))
-                meta = {'label': name, 'title': name, 'album': name, 'artist': band, 'genre': genre, 'duration': '1440', 'comment': desc}
 
                 cm = []
                 if action == 'radios_favourites':
-                    cm.append((language(30403).encode("utf-8"), 'RunPlugin(%s?action=favourite_moveUp&radio=%s&area=%s)' % (sys.argv[0], sysname, sysarea)))
-                    cm.append((language(30404).encode("utf-8"), 'RunPlugin(%s?action=favourite_moveDown&radio=%s&area=%s)' % (sys.argv[0], sysname, sysarea)))
+                    if getSetting("fav_sort") == '3': cm.append((language(30403).encode("utf-8"), 'RunPlugin(%s?action=favourite_moveUp&radio=%s&area=%s)' % (sys.argv[0], sysname, sysarea)))
+                    if getSetting("fav_sort") == '3': cm.append((language(30404).encode("utf-8"), 'RunPlugin(%s?action=favourite_moveDown&radio=%s&area=%s)' % (sys.argv[0], sysname, sysarea)))
                     cm.append((language(30405).encode("utf-8"), 'RunPlugin(%s?action=favourite_delete&radio=%s&area=%s)' % (sys.argv[0], sysname, sysarea)))
                 else:
                     if not '"%s"|"%s"' % (name, area) in favRead: cm.append((language(30401).encode("utf-8"), 'RunPlugin(%s?action=favourite_add&radio=%s&area=%s)' % (sys.argv[0], sysname, sysarea)))
@@ -274,7 +299,7 @@ class index:
 
                 item = xbmcgui.ListItem(name, iconImage=image, thumbnailImage=image)
                 item.setInfo( type="Music", infoLabels = meta )
-                item.setProperty("IsPlayable", "true")
+                #item.setProperty("IsPlayable", "true")
                 item.setProperty( "Music", "true" )
                 item.setProperty("Album_Label", area)
                 item.setProperty("Album_Description", desc)
@@ -288,24 +313,17 @@ class contextMenu:
     def view(self, content):
         try:
             skin = xbmc.getSkinDir()
-            try:
-                xml = xbmc.translatePath('special://xbmc/addons/%s/addon.xml' % (skin))
-                file = open(xml,'r')
-            except:
-                xml = xbmc.translatePath('special://home/addons/%s/addon.xml' % (skin))
-                file = open(xml,'r')
+            skinPath = xbmc.translatePath('special://skin/')
+            xml = os.path.join(skinPath,'addon.xml')
+            file = xbmcvfs.File(xml)
             read = file.read().replace('\n','')
             file.close()
-            src = os.path.dirname(xml) + '/'
-            try:
-                src += re.compile('defaultresolution="(.+?)"').findall(read)[0] + '/'
-            except:
-                src += re.compile('<res.+?folder="(.+?)"').findall(read)[0] + '/'
-            if xbmcgui.getCurrentWindowId() == 10501:
-                src +=  'MyMusicSongs.xml'
-            else:
-                src += 'MyMusicNav.xml'
-            file = open(src,'r')
+            try: src = re.compile('defaultresolution="(.+?)"').findall(read)[0]
+            except: src = re.compile('<res.+?folder="(.+?)"').findall(read)[0]
+            src = os.path.join(skinPath, src)
+            if xbmcgui.getCurrentWindowId() == 10501: src = os.path.join(src, 'MyMusicSongs.xml')
+            else: src = os.path.join(src, 'MyMusicNav.xml')
+            file = xbmcvfs.File(src)
             read = file.read().replace('\n','')
             file.close()
             views = re.compile('<views>(.+?)</views>').findall(read)[0]
@@ -313,7 +331,7 @@ class contextMenu:
             for view in views:
                 label = xbmc.getInfoLabel('Control.GetLabel(%s)' % (view))
                 if not (label == '' or label is None): break
-            file = open(viewData, 'r')
+            file = xbmcvfs.File(viewData)
             read = file.read()
             file.close()
             file = open(viewData, 'w')
@@ -393,7 +411,7 @@ class contextMenu:
 
 class favourites:
     def __init__(self):
-        self.list = radioList().radioList
+        self.list = radios().radio_list()
 
     def radios(self):
         filter = []
@@ -403,183 +421,197 @@ class favourites:
         match = re.compile('"(.+?)"[|]"(.+?)"').findall(read)
         for name, area in match:
             filter += [i for i in self.list if name == i['name'] and area == i['area']]
+
+        if getSetting("fav_sort") == '0':
+            filter = sorted(filter, key=itemgetter('name'))
+        elif getSetting("fav_sort") == '1':
+            sortDict = {'International': 1, 'Eclectic': 2, 'Rock': 3, 'Greek': 4, 'Laika': 5, 'Sports': 6, 'News': 7, 'Religious': 8, 'Traditional': 9}
+            for i in range(len(filter)): filter[i]['sort'] = sortDict[filter[i]['genre']]
+            filter = sorted(filter, key=itemgetter('name'))
+            filter = sorted(filter, key=itemgetter('sort'))
+        elif getSetting("fav_sort") == '2':
+            sortDict = {'Attica': 1, 'Salonica': 2, 'Internet': 3, 'Aegean': 4, 'Epirus': 5, 'Thessaly': 6, 'Thrace': 7, 'Ionian': 8, 'Crete': 9, 'Cyprus': 10, 'Macedonia': 11, 'Peloponnese': 12, 'Central Greece': 13}
+            for i in range(len(filter)): filter[i]['sort'] = sortDict[filter[i]['area']]
+            filter = sorted(filter, key=itemgetter('name'))
+            filter = sorted(filter, key=itemgetter('sort'))
+
         index().radioList(filter)
 
 class root:
     def get(self):
         rootList = []
-        rootList.append({'name': 30501, 'desc': 30601, 'image': '01.png', 'action': 'radios_favourites'})
-        rootList.append({'name': 30502, 'desc': 30602, 'image': '02.png', 'action': 'radios_all'})
-        rootList.append({'name': 30521, 'desc': 30621, 'image': '03.png', 'action': 'radios_international'})
-        rootList.append({'name': 30522, 'desc': 30622, 'image': '04.png', 'action': 'radios_eclectic'})
-        rootList.append({'name': 30523, 'desc': 30623, 'image': '05.png', 'action': 'radios_rock'})
-        rootList.append({'name': 30524, 'desc': 30624, 'image': '06.png', 'action': 'radios_greek'})
-        rootList.append({'name': 30525, 'desc': 30625, 'image': '07.png', 'action': 'radios_laika'})
-        rootList.append({'name': 30526, 'desc': 30626, 'image': '08.png', 'action': 'radios_sports'})
-        rootList.append({'name': 30527, 'desc': 30627, 'image': '09.png', 'action': 'radios_news'})
-        rootList.append({'name': 30528, 'desc': 30628, 'image': '10.png', 'action': 'radios_religious'})
-        rootList.append({'name': 30529, 'desc': 30629, 'image': '11.png', 'action': 'radios_traditional'})
-        rootList.append({'name': 30541, 'desc': 30641, 'image': '12.png', 'action': 'radios_attica'})
-        rootList.append({'name': 30542, 'desc': 30642, 'image': '13.png', 'action': 'radios_salonica'})
-        rootList.append({'name': 30543, 'desc': 30643, 'image': '14.png', 'action': 'radios_internet'})
-        rootList.append({'name': 30544, 'desc': 30644, 'image': '15.png', 'action': 'radios_aegean'})
-        rootList.append({'name': 30545, 'desc': 30645, 'image': '16.png', 'action': 'radios_epirus'})
-        rootList.append({'name': 30546, 'desc': 30646, 'image': '17.png', 'action': 'radios_thessaly'})
-        rootList.append({'name': 30547, 'desc': 30647, 'image': '18.png', 'action': 'radios_thrace'})
-        rootList.append({'name': 30548, 'desc': 30648, 'image': '19.png', 'action': 'radios_ionian'})
-        rootList.append({'name': 30549, 'desc': 30649, 'image': '20.png', 'action': 'radios_crete'})
-        rootList.append({'name': 30550, 'desc': 30650, 'image': '21.png', 'action': 'radios_cyprus'})
-        rootList.append({'name': 30551, 'desc': 30651, 'image': '22.png', 'action': 'radios_macedonia'})
-        rootList.append({'name': 30552, 'desc': 30652, 'image': '23.png', 'action': 'radios_peloponnese'})
-        rootList.append({'name': 30553, 'desc': 30653, 'image': '24.png', 'action': 'radios_centralgreece'})
+        rootList.append({'name': 30501, 'image': '01.png', 'action': 'radios_favourites'})
+        rootList.append({'name': 30502, 'image': '02.png', 'action': 'radios_all'})
+        rootList.append({'name': 30521, 'image': '03.png', 'action': 'radios_international'})
+        rootList.append({'name': 30522, 'image': '04.png', 'action': 'radios_eclectic'})
+        rootList.append({'name': 30523, 'image': '05.png', 'action': 'radios_rock'})
+        rootList.append({'name': 30524, 'image': '06.png', 'action': 'radios_greek'})
+        rootList.append({'name': 30525, 'image': '07.png', 'action': 'radios_laika'})
+        rootList.append({'name': 30526, 'image': '08.png', 'action': 'radios_sports'})
+        rootList.append({'name': 30527, 'image': '09.png', 'action': 'radios_news'})
+        rootList.append({'name': 30528, 'image': '10.png', 'action': 'radios_religious'})
+        rootList.append({'name': 30529, 'image': '11.png', 'action': 'radios_traditional'})
+        rootList.append({'name': 30541, 'image': '12.png', 'action': 'radios_attica'})
+        rootList.append({'name': 30542, 'image': '13.png', 'action': 'radios_salonica'})
+        rootList.append({'name': 30543, 'image': '14.png', 'action': 'radios_internet'})
+        rootList.append({'name': 30544, 'image': '15.png', 'action': 'radios_aegean'})
+        rootList.append({'name': 30545, 'image': '16.png', 'action': 'radios_epirus'})
+        rootList.append({'name': 30546, 'image': '17.png', 'action': 'radios_thessaly'})
+        rootList.append({'name': 30547, 'image': '18.png', 'action': 'radios_thrace'})
+        rootList.append({'name': 30548, 'image': '19.png', 'action': 'radios_ionian'})
+        rootList.append({'name': 30549, 'image': '20.png', 'action': 'radios_crete'})
+        rootList.append({'name': 30550, 'image': '21.png', 'action': 'radios_cyprus'})
+        rootList.append({'name': 30551, 'image': '22.png', 'action': 'radios_macedonia'})
+        rootList.append({'name': 30552, 'image': '23.png', 'action': 'radios_peloponnese'})
+        rootList.append({'name': 30553, 'image': '24.png', 'action': 'radios_centralgreece'})
         index().rootList(rootList)
-
-class link:
-    def __init__(self):
-        self.youtube_base = 'http://www.youtube.com'
-        self.youtube_info = 'http://gdata.youtube.com/feeds/api/videos/%s?v=2'
-        self.ustream_base = 'http://iphone-streaming.ustream.tv'
 
 class radios:
     def __init__(self):
-        self.list = radioList().radioList
+        self.list = []
 
     def all(self):
-        index().radioList(self.list)
+        filter = self.radio_list()
+        index().radioList(filter)
 
     def international(self):
-        filter = [i for i in self.list if i['genre'] == 'International']
+        filter = [i for i in self.radio_list() if i['genre'] == 'International']
         index().radioList(filter)
 
     def eclectic(self):
-        filter = [i for i in self.list if i['genre'] == 'Eclectic']
+        filter = [i for i in self.radio_list() if i['genre'] == 'Eclectic']
         index().radioList(filter)
 
     def rock(self):
-        filter = [i for i in self.list if i['genre'] == 'Rock']
+        filter = [i for i in self.radio_list() if i['genre'] == 'Rock']
         index().radioList(filter)
 
     def greek(self):
-        filter = [i for i in self.list if i['genre'] == 'Greek']
+        filter = [i for i in self.radio_list() if i['genre'] == 'Greek']
         index().radioList(filter)
 
     def laika(self):
-        filter = [i for i in self.list if i['genre'] == 'Laika']
+        filter = [i for i in self.radio_list() if i['genre'] == 'Laika']
         index().radioList(filter)
 
     def sports(self):
-        filter = [i for i in self.list if i['genre'] == 'Sports']
+        filter = [i for i in self.radio_list() if i['genre'] == 'Sports']
         index().radioList(filter)
 
     def news(self):
-        filter = [i for i in self.list if i['genre'] == 'News']
+        filter = [i for i in self.radio_list() if i['genre'] == 'News']
         index().radioList(filter)
 
     def religious(self):
-        filter = [i for i in self.list if i['genre'] == 'Religious']
+        filter = [i for i in self.radio_list() if i['genre'] == 'Religious']
         index().radioList(filter)
 
     def traditional(self):
-        filter = [i for i in self.list if i['genre'] == 'Traditional']
+        filter = [i for i in self.radio_list() if i['genre'] == 'Traditional']
         index().radioList(filter)
 
     def attica(self):
-        filter = [i for i in self.list if i['area'] == 'Attica']
+        filter = [i for i in self.radio_list() if i['area'] == 'Attica']
         index().radioList(filter)
 
     def salonica(self):
-        filter = [i for i in self.list if i['area'] == 'Salonica']
+        filter = [i for i in self.radio_list() if i['area'] == 'Salonica']
         index().radioList(filter)
 
     def internet(self):
-        filter = [i for i in self.list if i['area'] == 'Internet']
+        filter = [i for i in self.radio_list() if i['area'] == 'Internet']
         index().radioList(filter)
 
     def aegean(self):
-        filter = [i for i in self.list if i['area'] == 'Aegean']
+        filter = [i for i in self.radio_list() if i['area'] == 'Aegean']
         index().radioList(filter)
 
     def epirus(self):
-        filter = [i for i in self.list if i['area'] == 'Epirus']
+        filter = [i for i in self.radio_list() if i['area'] == 'Epirus']
         index().radioList(filter)
 
     def thessaly(self):
-        filter = [i for i in self.list if i['area'] == 'Thessaly']
+        filter = [i for i in self.radio_list() if i['area'] == 'Thessaly']
         index().radioList(filter)
 
     def thrace(self):
-        filter = [i for i in self.list if i['area'] == 'Thrace']
+        filter = [i for i in self.radio_list() if i['area'] == 'Thrace']
         index().radioList(filter)
 
     def ionian(self):
-        filter = [i for i in self.list if i['area'] == 'Ionian']
+        filter = [i for i in self.radio_list() if i['area'] == 'Ionian']
         index().radioList(filter)
 
     def crete(self):
-        filter = [i for i in self.list if i['area'] == 'Crete']
+        filter = [i for i in self.radio_list() if i['area'] == 'Crete']
         index().radioList(filter)
 
     def cyprus(self):
-        filter = [i for i in self.list if i['area'] == 'Cyprus']
+        filter = [i for i in self.radio_list() if i['area'] == 'Cyprus']
         index().radioList(filter)
 
     def macedonia(self):
-        filter = [i for i in self.list if i['area'] == 'Macedonia']
+        filter = [i for i in self.radio_list() if i['area'] == 'Macedonia']
         index().radioList(filter)
 
     def peloponnese(self):
-        filter = [i for i in self.list if i['area'] == 'Peloponnese']
+        filter = [i for i in self.radio_list() if i['area'] == 'Peloponnese']
         index().radioList(filter)
 
     def centralgreece(self):
-        filter = [i for i in self.list if i['area'] == 'Central Greece']
+        filter = [i for i in self.radio_list() if i['area'] == 'Central Greece']
         index().radioList(filter)
 
-class radioList:
-    def __init__(self):
+    def radio_list(self):
         descDict = {
             ''                  : '',
-            'International'     : language(30721).encode("utf-8"),
-            'Eclectic'          : language(30722).encode("utf-8"),
-            'Rock'              : language(30723).encode("utf-8"),
-            'Greek'             : language(30724).encode("utf-8"),
-            'Laika'             : language(30725).encode("utf-8"),
-            'Sports'            : language(30726).encode("utf-8"),
-            'News'              : language(30727).encode("utf-8"),
-            'Religious'         : language(30728).encode("utf-8"),
-            'Traditional'       : language(30729).encode("utf-8")
+            'International'     : language(30451).encode("utf-8"),
+            'Eclectic'          : language(30452).encode("utf-8"),
+            'Rock'              : language(30453).encode("utf-8"),
+            'Greek'             : language(30454).encode("utf-8"),
+            'Laika'             : language(30455).encode("utf-8"),
+            'Sports'            : language(30456).encode("utf-8"),
+            'News'              : language(30457).encode("utf-8"),
+            'Religious'         : language(30458).encode("utf-8"),
+            'Traditional'       : language(30459).encode("utf-8")
             }
 
         try:
-            radioList = []
             file = open(addonRadios,'r')
             result = file.read()
             file.close()
+
             radios = common.parseDOM(result, "radio", attrs = { "active": "True" })
         except:
             return
+
         for radio in radios:
             try:
                 name = common.parseDOM(radio, "name")[0]
+
                 band = common.parseDOM(radio, "band")[0]
+
                 genre = common.parseDOM(radio, "genre")[0]
+
                 area = common.parseDOM(radio, "area")[0]
+
                 desc = descDict[genre]
                 desc = common.replaceHTMLCodes(desc)
+
                 url = common.parseDOM(radio, "url")[0]
                 url = common.replaceHTMLCodes(url)
-                radioList.append({'name': name, 'band': band, 'genre': genre, 'area': area, 'desc': desc, 'url': url})
+
+                self.list.append({'name': name, 'band': band, 'genre': genre, 'area': area, 'desc': desc, 'url': url})
             except:
                 pass
 
-        self.radioList = radioList
+        self.list = sorted(self.list, key=itemgetter('name'))
+        return self.list
 
-class player:
+class resolver:
     def run(self, radio, area):
         try:
-            xbmc.Player().stop()
-            xbmc.PlayList(xbmc.PLAYLIST_MUSIC).clear()
-            list = radioList().radioList
+            list = radios().radio_list()
             name = radio.replace('_',' ')
             area = area.replace('_',' ')
 
@@ -587,26 +619,31 @@ class player:
             name, band, genre, area, desc, url = i[0]['name'], i[0]['band'], i[0]['genre'], i[0]['area'], i[0]['desc'], i[0]['url']
             image = '%s/%s/%s.png' % (addonLogos, area, name)
 
-            if url.startswith(link().ustream_base): url = self.ustream(url)
-            elif url.startswith(link().youtube_base): url = self.youtubelive(url)
+            if url.startswith('http://iphone-streaming.ustream.tv'): url = self.ustream(url)
+            elif url.startswith('http://www.mad.tv'): url = self.madtv(url)
 
             if url is None: raise Exception()
-            index().resolve(name, band, genre, area, desc, url, image)
+
+            player().run(name, band, genre, area, desc, url, image)
             return url
         except:
             index().infoDialog(language(30317).encode("utf-8"))
             return
 
 
-    def youtubelive(self, url):
+    def madtv(self, url):
         try:
             if index().addon_status('plugin.video.youtube') is None:
                 index().okDialog(language(30321).encode("utf-8"), language(30322).encode("utf-8"))
                 return
-            url += '/videos?view=2&flow=grid'
             result = getUrl(url).result
-            url = re.compile('"/watch[?]v=(.+?)"').findall(result)[0]
+            url = re.compile('.*src="(.+?/youtube/.+?)"').findall(result)[0]
+            if url.startswith('//'): url = 'http:' + url
+
+            result = getUrl(url).result
+            url = re.compile('/embed/(.+?)"').findall(result)[0]
             url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % url
+
             return url
         except:
             return

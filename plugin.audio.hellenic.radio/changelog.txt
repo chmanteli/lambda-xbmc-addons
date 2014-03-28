@@ -1,4 +1,19 @@
 ------------------------
+Hellenic Radio v2.5.0 (28-Mar-14)
+------------------------
+
+- Re-work of addon.
+- Added 58 new radios.
+- Updated existing radios.
+- Removed broken radios.
+- Tweaked playback.
+- Added sorting methods for favourites (Title, Genre, Area, Added).
+- Notifications are now silent in Gotham or later.
+- Tweaked context menus.
+- Code cosmetics.
+
+
+------------------------
 Hellenic Radio v2.0.3 (18-Nov-13)
 ------------------------
 
