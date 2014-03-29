@@ -295,7 +295,7 @@ class index:
                 sysname, sysurl, sysimage, sysdate, sysgenre, sysplot, systitle, sysshow = urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(image), urllib.quote_plus(date), urllib.quote_plus(genre), urllib.quote_plus(plot), urllib.quote_plus(title), urllib.quote_plus(show)
                 u = '%s?action=videos_parts&name=%s&url=%s&image=%s&date=%s&genre=%s&plot=%s&title=%s&show=%s' % (sys.argv[0], sysname, sysurl, sysimage, sysdate, sysgenre, sysplot, systitle, sysshow)
 
-                meta = {'label': title, 'title': title, 'tvshowtitle': show, 'premiered': date, 'genre': genre, 'plot': plot}
+                meta = {'label': title, 'title': title, 'studio': show, 'premiered': date, 'genre': genre, 'plot': plot}
 
                 cm = []
                 cm.append((language(30401).encode("utf-8"), 'RunPlugin(%s?action=item_play)' % (sys.argv[0])))
@@ -331,7 +331,7 @@ class index:
                 sysurl = urllib.quote_plus(url)
                 u = '%s?action=play&url=%s' % (sys.argv[0], sysurl)
 
-                meta = {'label': title, 'title': title, 'tvshowtitle': show, 'premiered': date, 'genre': genre, 'plot': plot}
+                meta = {'label': title, 'title': title, 'studio': show, 'premiered': date, 'genre': genre, 'plot': plot}
 
                 cm = []
                 cm.append((language(30405).encode("utf-8"), 'RunPlugin(%s?action=item_queue)' % (sys.argv[0])))
@@ -384,10 +384,9 @@ class contextMenu:
             path = urllib.quote_plus(path).replace('+%26+', '+&+')
             query = path.split('%3F', 1)[-1].split('%26')
             for i in query: params[urllib.unquote_plus(i).split('=')[0]] = urllib.unquote_plus(i).split('=')[1]
-            sysurl = urllib.quote_plus(params["url"])
-            u = '%s?action=play&url=%s' % (sys.argv[0], sysurl)
+            u = '%s?action=play&url=%s' % (sys.argv[0], params["url"])
 
-            meta = {'title': xbmc.getInfoLabel('ListItemNoWrap(%s).title' % i), 'tvshowtitle': xbmc.getInfoLabel('ListItemNoWrap(%s).tvshowtitle' % i), 'season': xbmc.getInfoLabel('ListItemNoWrap(%s).season' % i), 'episode': xbmc.getInfoLabel('ListItemNoWrap(%s).episode' % i), 'writer': xbmc.getInfoLabel('ListItemNoWrap(%s).writer' % i), 'director': xbmc.getInfoLabel('ListItemNoWrap(%s).director' % i), 'rating': xbmc.getInfoLabel('ListItemNoWrap(%s).rating' % i), 'duration': xbmc.getInfoLabel('ListItemNoWrap(%s).duration' % i), 'premiered': xbmc.getInfoLabel('ListItemNoWrap(%s).premiered' % i), 'plot': xbmc.getInfoLabel('ListItemNoWrap(%s).plot' % i)}
+            meta = {'title': xbmc.getInfoLabel('ListItemNoWrap(%s).title' % i), 'studio': xbmc.getInfoLabel('ListItemNoWrap(%s).studio' % i), 'writer': xbmc.getInfoLabel('ListItemNoWrap(%s).writer' % i), 'director': xbmc.getInfoLabel('ListItemNoWrap(%s).director' % i), 'rating': xbmc.getInfoLabel('ListItemNoWrap(%s).rating' % i), 'duration': xbmc.getInfoLabel('ListItemNoWrap(%s).duration' % i), 'premiered': xbmc.getInfoLabel('ListItemNoWrap(%s).premiered' % i), 'plot': xbmc.getInfoLabel('ListItemNoWrap(%s).plot' % i)}
             poster, fanart = xbmc.getInfoLabel('ListItemNoWrap(%s).icon' % i), xbmc.getInfoLabel('ListItemNoWrap(%s).Property(Fanart_Image)' % i)
 
             item = xbmcgui.ListItem(label, iconImage="DefaultVideo.png", thumbnailImage=poster)
@@ -462,18 +461,18 @@ class link:
     def __init__(self):
         self.lfv_base = 'http://livefootballvideo.com'
         self.lfv_search = 'http://www.google.com/cse?cx=partner-pub-9069051203647610:8413886168&sa=Search&ie=UTF-8&nojs=1&ref=livefootballvideo.com/&q=%s'
-        self.lfv_games = 'http://livefootballvideo.com/fullmatch/page/1'
-        self.lfv_highlights = 'http://livefootballvideo.com/highlights/page/1'
-        self.lfv_premierleague = 'http://livefootballvideo.com/competitions/premier-league/page/1'
-        self.lfv_laliga = 'http://livefootballvideo.com/competitions/la-liga/page/1'
-        self.lfv_bundesliga = 'http://livefootballvideo.com/competitions/bundesliga/page/1'
-        self.lfv_seriea = 'http://livefootballvideo.com/competitions/serie-a/page/1'
-        self.lfv_ligue1 = 'http://livefootballvideo.com/competitions/ligue-1/page/1'
-        self.lfv_eredivisie = 'http://livefootballvideo.com/competitions/eredivisie/page/1'
-        self.lfv_primeiraliga = 'http://livefootballvideo.com/competitions/primeira-liga/page/1'
-        self.lfv_uefachampionleague = 'http://livefootballvideo.com/competitions/uefa-champions-league/page/1'
-        self.lfv_uefaeuropaleague = 'http://livefootballvideo.com/competitions/uefa-europa-league/page/1'
-        self.lfv_copalibertadores = 'http://livefootballvideo.com/competitions/copa-libertadores/page/1'
+        self.lfv_games = 'http://livefootballvideo.com/fullmatch'
+        self.lfv_highlights = 'http://livefootballvideo.com/highlights'
+        self.lfv_premierleague = 'http://livefootballvideo.com/competitions/premier-league'
+        self.lfv_laliga = 'http://livefootballvideo.com/competitions/la-liga'
+        self.lfv_bundesliga = 'http://livefootballvideo.com/competitions/bundesliga'
+        self.lfv_seriea = 'http://livefootballvideo.com/competitions/serie-a'
+        self.lfv_ligue1 = 'http://livefootballvideo.com/competitions/ligue-1'
+        self.lfv_eredivisie = 'http://livefootballvideo.com/competitions/eredivisie'
+        self.lfv_primeiraliga = 'http://livefootballvideo.com/competitions/primeira-liga'
+        self.lfv_uefachampionleague = 'http://livefootballvideo.com/competitions/uefa-champions-league'
+        self.lfv_uefaeuropaleague = 'http://livefootballvideo.com/competitions/uefa-europa-league'
+        self.lfv_copalibertadores = 'http://livefootballvideo.com/competitions/copa-libertadores'
 
 class videos:
     def __init__(self):
@@ -492,16 +491,16 @@ class videos:
         elif url == 'uefaeuropaleague': url = link().lfv_uefaeuropaleague
         elif url == 'copalibertadores': url = link().lfv_copalibertadores
 
-        #self.list = self.lfv_list(url)
-        self.list = cache(self.lfv_list, url)
+        self.list = self.lfv_list(url)
+        #self.list = cache(self.lfv_list, url)
         index().videoList(self.list)
         index().nextList(self.list)
 
     def root2(self, url):
         if url == 'highlights': url = link().lfv_highlights
 
-        #self.list = self.lfv_list2(url)
-        self.list = cache(self.lfv_list2, url)
+        self.list = self.lfv_list2(url)
+        #self.list = cache(self.lfv_list2, url)
         index().videoList(self.list)
         index().nextList(self.list)
 

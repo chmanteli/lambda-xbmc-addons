@@ -1,4 +1,14 @@
 ------------------------
+NBA On-demand v1.1.6 (29-Mar-14)
+------------------------
+
+- Tweaked video listings.
+- Fixed "play from here".
+- Tweaked cache.
+- Code cosmetics.
+
+
+------------------------
 NBA On-demand v1.1.5 (2-Mar-14)
 ------------------------
 

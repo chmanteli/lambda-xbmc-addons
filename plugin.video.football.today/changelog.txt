@@ -1,4 +1,14 @@
 ------------------------
+Football Today v2.1.4 (29-Mar-14)
+------------------------
+
+- Tweaked video listings.
+- Fixed "play from here".
+- Tweaked cache.
+- Code cosmetics.
+
+
+------------------------
 Football Today v2.1.3 (27-Feb-14)
 ------------------------
 

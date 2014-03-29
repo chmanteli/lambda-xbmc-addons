@@ -301,7 +301,7 @@ class index:
                 sysname, sysurl, sysimage, sysdate, sysgenre, sysplot, systitle, sysshow = urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(image), urllib.quote_plus(date), urllib.quote_plus(genre), urllib.quote_plus(plot), urllib.quote_plus(title), urllib.quote_plus(show)
                 u = '%s?action=videos_parts&name=%s&url=%s&image=%s&date=%s&genre=%s&plot=%s&title=%s&show=%s' % (sys.argv[0], sysname, sysurl, sysimage, sysdate, sysgenre, sysplot, systitle, sysshow)
 
-                meta = {'label': title, 'title': title, 'tvshowtitle': show, 'premiered': date, 'genre': genre, 'plot': plot}
+                meta = {'label': title, 'title': title, 'studio': show, 'premiered': date, 'genre': genre, 'plot': plot}
 
                 cm = []
                 cm.append((language(30401).encode("utf-8"), 'RunPlugin(%s?action=item_play)' % (sys.argv[0])))
@@ -337,7 +337,7 @@ class index:
                 sysurl = urllib.quote_plus(url)
                 u = '%s?action=play&url=%s' % (sys.argv[0], sysurl)
 
-                meta = {'label': title, 'title': title, 'tvshowtitle': show, 'premiered': date, 'genre': genre, 'plot': plot}
+                meta = {'label': title, 'title': title, 'studio': show, 'premiered': date, 'genre': genre, 'plot': plot}
 
                 cm = []
                 cm.append((language(30405).encode("utf-8"), 'RunPlugin(%s?action=item_queue)' % (sys.argv[0])))
@@ -390,10 +390,9 @@ class contextMenu:
             path = urllib.quote_plus(path).replace('+%26+', '+&+')
             query = path.split('%3F', 1)[-1].split('%26')
             for i in query: params[urllib.unquote_plus(i).split('=')[0]] = urllib.unquote_plus(i).split('=')[1]
-            sysurl = urllib.quote_plus(params["url"])
-            u = '%s?action=play&url=%s' % (sys.argv[0], sysurl)
+            u = '%s?action=play&url=%s' % (sys.argv[0], params["url"])
 
-            meta = {'title': xbmc.getInfoLabel('ListItemNoWrap(%s).title' % i), 'tvshowtitle': xbmc.getInfoLabel('ListItemNoWrap(%s).tvshowtitle' % i), 'season': xbmc.getInfoLabel('ListItemNoWrap(%s).season' % i), 'episode': xbmc.getInfoLabel('ListItemNoWrap(%s).episode' % i), 'writer': xbmc.getInfoLabel('ListItemNoWrap(%s).writer' % i), 'director': xbmc.getInfoLabel('ListItemNoWrap(%s).director' % i), 'rating': xbmc.getInfoLabel('ListItemNoWrap(%s).rating' % i), 'duration': xbmc.getInfoLabel('ListItemNoWrap(%s).duration' % i), 'premiered': xbmc.getInfoLabel('ListItemNoWrap(%s).premiered' % i), 'plot': xbmc.getInfoLabel('ListItemNoWrap(%s).plot' % i)}
+            meta = {'title': xbmc.getInfoLabel('ListItemNoWrap(%s).title' % i), 'studio': xbmc.getInfoLabel('ListItemNoWrap(%s).studio' % i), 'writer': xbmc.getInfoLabel('ListItemNoWrap(%s).writer' % i), 'director': xbmc.getInfoLabel('ListItemNoWrap(%s).director' % i), 'rating': xbmc.getInfoLabel('ListItemNoWrap(%s).rating' % i), 'duration': xbmc.getInfoLabel('ListItemNoWrap(%s).duration' % i), 'premiered': xbmc.getInfoLabel('ListItemNoWrap(%s).premiered' % i), 'plot': xbmc.getInfoLabel('ListItemNoWrap(%s).plot' % i)}
             poster, fanart = xbmc.getInfoLabel('ListItemNoWrap(%s).icon' % i), xbmc.getInfoLabel('ListItemNoWrap(%s).Property(Fanart_Image)' % i)
 
             item = xbmcgui.ListItem(label, iconImage="DefaultVideo.png", thumbnailImage=poster)
@@ -531,30 +530,30 @@ class videos:
         self.list = []
 
     def all(self, url):
-        #self.list = self.livetv_list(url)
-        self.list = cache(self.livetv_list, url)
+        self.list = self.livetv_list(url)
+        #self.list = cache(self.livetv_list, url)
         index().videoList(self.list)
 
     def added(self):
-        #self.list = self.livetv_list(link().livetv_nhl)
-        self.list = cache(self.livetv_list, link().livetv_nhl)
+        self.list = self.livetv_list(link().livetv_nhl)
+        #self.list = cache(self.livetv_list, link().livetv_nhl)
         index().videoList(self.list)
 
     def games(self, url):
-        #self.list = self.livetv_list(url)
-        self.list = cache(self.livetv_list, url)
+        self.list = self.livetv_list(url)
+        #self.list = cache(self.livetv_list, url)
         self.list = [i for i in self.list if any(x in json.loads(i['url']) for x in ['fullmatch', 'firstperiod', 'secondperiod', 'thirdperiod'])]
         index().videoList(self.list)
 
     def highlights(self, url):
-        #self.list = self.livetv_list(url)
-        self.list = cache(self.livetv_list, url)
+        self.list = self.livetv_list(url)
+        #self.list = cache(self.livetv_list, url)
         self.list = [i for i in self.list if 'highlights' in json.loads(i['url'])]
         index().videoList(self.list)
 
     def teams(self, url):
-        #self.list = self.livetv_list2(url)
-        self.list = cache(self.livetv_list2, url)
+        self.list = self.livetv_list2(url)
+        #self.list = cache(self.livetv_list2, url)
         index().videoList(self.list)
 
     def livetv_list(self, url):

@@ -297,7 +297,7 @@ class index:
                 sysurl = urllib.quote_plus(url)
                 u = '%s?action=play&url=%s' % (sys.argv[0], sysurl)
 
-                meta = {'label': title, 'title': title, 'tvshowtitle': show, 'premiered': date, 'genre': genre, 'plot': plot}
+                meta = {'label': title, 'title': title, 'studio': show, 'premiered': date, 'genre': genre, 'plot': plot}
 
                 cm = []
                 cm.append((language(30405).encode("utf-8"), 'RunPlugin(%s?action=item_queue)' % (sys.argv[0])))
@@ -350,10 +350,9 @@ class contextMenu:
             path = urllib.quote_plus(path).replace('+%26+', '+&+')
             query = path.split('%3F', 1)[-1].split('%26')
             for i in query: params[urllib.unquote_plus(i).split('=')[0]] = urllib.unquote_plus(i).split('=')[1]
-            sysurl = urllib.quote_plus(params["url"])
-            u = '%s?action=play&url=%s' % (sys.argv[0], sysurl)
+            u = '%s?action=play&url=%s' % (sys.argv[0], params["url"])
 
-            meta = {'title': xbmc.getInfoLabel('ListItemNoWrap(%s).title' % i), 'tvshowtitle': xbmc.getInfoLabel('ListItemNoWrap(%s).tvshowtitle' % i), 'season': xbmc.getInfoLabel('ListItemNoWrap(%s).season' % i), 'episode': xbmc.getInfoLabel('ListItemNoWrap(%s).episode' % i), 'writer': xbmc.getInfoLabel('ListItemNoWrap(%s).writer' % i), 'director': xbmc.getInfoLabel('ListItemNoWrap(%s).director' % i), 'rating': xbmc.getInfoLabel('ListItemNoWrap(%s).rating' % i), 'duration': xbmc.getInfoLabel('ListItemNoWrap(%s).duration' % i), 'premiered': xbmc.getInfoLabel('ListItemNoWrap(%s).premiered' % i), 'plot': xbmc.getInfoLabel('ListItemNoWrap(%s).plot' % i)}
+            meta = {'title': xbmc.getInfoLabel('ListItemNoWrap(%s).title' % i), 'studio': xbmc.getInfoLabel('ListItemNoWrap(%s).studio' % i), 'writer': xbmc.getInfoLabel('ListItemNoWrap(%s).writer' % i), 'director': xbmc.getInfoLabel('ListItemNoWrap(%s).director' % i), 'rating': xbmc.getInfoLabel('ListItemNoWrap(%s).rating' % i), 'duration': xbmc.getInfoLabel('ListItemNoWrap(%s).duration' % i), 'premiered': xbmc.getInfoLabel('ListItemNoWrap(%s).premiered' % i), 'plot': xbmc.getInfoLabel('ListItemNoWrap(%s).plot' % i)}
             poster, fanart = xbmc.getInfoLabel('ListItemNoWrap(%s).icon' % i), xbmc.getInfoLabel('ListItemNoWrap(%s).Property(Fanart_Image)' % i)
 
             item = xbmcgui.ListItem(label, iconImage="DefaultVideo.png", thumbnailImage=poster)
@@ -470,14 +469,14 @@ class videos:
         elif url == 'wake': url = link().extreme_wake
         elif url == 'windsurf': url = link().extreme_windsurf
 
-        #self.list = self.extreme_list(url)
-        self.list = cache(self.extreme_list, url)
+        self.list = self.extreme_list(url)
+        #self.list = cache(self.extreme_list, url)
         index().videoList(self.list)
         index().nextList(self.list)
 
     def get(self, url):
-        #self.list = self.extreme_list(url)
-        self.list = cache(self.extreme_list, url)
+        self.list = self.extreme_list(url)
+        #self.list = cache(self.extreme_list, url)
         index().videoList(self.list)
         index().nextList(self.list)
 
