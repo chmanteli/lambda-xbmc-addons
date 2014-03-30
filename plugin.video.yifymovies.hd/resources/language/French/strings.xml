@@ -9,13 +9,14 @@
 	<string id="30005">Trier par: Statuts</string>
 	<string id="30006">Trier par: Date</string>
 	<string id="30007">Téléchargements</string>
-	<string id="30008">Proxy</string>
-	<string id="30009">- Serveur</string>
-	<string id="30010">- Port</string>
-	<string id="30011">Reprendre la lecture</string>
+	<string id="30008">Reprendre la lecture</string>
 	<string id="30040">Médiathèque</string>
 	<string id="30041">N'oubliez pas d'ajouter ce dossier à vos sources de média.</string>
 	<string id="30042">Dossier des films</string>
+	<string id="30060">Comptes</string>
+	<string id="30061">User</string>
+	<string id="30062">Password</string>
+	<string id="30063">Email</string>
 	<string id="30080">Sous-titres</string>
 	<string id="30081">Certains sous-titres peuvent être indisponibles ou décalés.</string>
 	<string id="30082">Dans ce cas utilisez vos fichiers ou extension de sous-titres.</string>
@@ -113,10 +114,10 @@
 	<string id="30504">Les plus récents</string>
 	<string id="30505">Les Mieux Notées</string>
 	<string id="30506">Les Plus Vues</string>
-	<string id="30507">Par Pages</string>
-	<string id="30508">Par Genres</string>
-	<string id="30509">Par Année</string>
-	<string id="30510">Par Langues</string>
-	<string id="30511">Mes Favoris</string>
+	<string id="30507">Par Genres</string>
+	<string id="30508">Par Année</string>
+	<string id="30509">Par Langues</string>
+	<string id="30510">Mes Favoris</string>
+	<string id="30511">YIFY</string>
 	<string id="30512">Recherche</string>
 </strings>

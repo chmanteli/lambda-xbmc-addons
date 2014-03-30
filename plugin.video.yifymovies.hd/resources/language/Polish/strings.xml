@@ -9,13 +9,14 @@
 	<string id="30005">Sortuj wg.: Roku Produkcji</string>
 	<string id="30006">Sortuj wg.: Ostatnio Dodane</string>
 	<string id="30007">Katalog Pobierania</string>
-	<string id="30008">Proxy</string>
-	<string id="30009">- Serwer</string>
-	<string id="30010">- Port</string>
-	<string id="30011">Wznów Odtwarzanie</string>
+	<string id="30008">Wznów Odtwarzanie</string>
 	<string id="30040">Biblioteka</string>
 	<string id="30041">Dodaj ten folder do źródeł biblioteki XBMC.</string>
 	<string id="30042">Folder Filmów</string>
+	<string id="30060">Logowanie</string>
+	<string id="30061">Login</string>
+	<string id="30062">Hasło</string>
+	<string id="30063">Email</string>
 	<string id="30080">Napisy</string>
 	<string id="30081">Napisy mogą być niedostępne bądź działać nieprawidłowo.</string>
 	<string id="30082">W takim przypadku użyj własnego pliku z napisami.</string>
@@ -113,10 +114,10 @@
 	<string id="30504">Data dodania</string>
 	<string id="30505">Ocena</string>
 	<string id="30506">Najczęściej Oglądane</string>
-	<string id="30507">Strony</string>
-	<string id="30508">Gatunki</string>
-	<string id="30509">Rok Produkcji</string>
-	<string id="30510">Wybór języka</string>
-	<string id="30511">Ulubione</string>
+	<string id="30507">Gatunki</string>
+	<string id="30508">Rok Produkcji</string>
+	<string id="30509">Wybór języka</string>
+	<string id="30510">Ulubione</string>
+	<string id="30511">YIFY</string>
 	<string id="30512">Szukaj</string>
 </strings>

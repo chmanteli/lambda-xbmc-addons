@@ -9,13 +9,14 @@
 	<string id="30005">Ταξ.: Έτος</string>
 	<string id="30006">Ταξ.: Προσθήκη</string>
 	<string id="30007">Λήψεις</string>
-	<string id="30008">Διαμεσολαβητής</string>
-	<string id="30009">- Διακομιστής</string>
-	<string id="30010">- Θύρα</string>
-	<string id="30011">Συνέχιση αναπαραγωγής</string>
+	<string id="30008">Συνέχιση αναπαραγωγής</string>
 	<string id="30040">Συλλογή</string>
 	<string id="30041">Μην ξεχάσετε να προσθέσετε το φάκελο στις πηγές πολυμέσων.</string>
 	<string id="30042">Φάκελος ταινιών</string>
+	<string id="30060">Λογαριασμοί</string>
+	<string id="30061">Χρήστης</string>
+	<string id="30062">Κωδικός</string>
+	<string id="30063">Email</string>
 	<string id="30080">Υπότιτλοι</string>
 	<string id="30081">Οι υπότιτλοι μπορεί να είναι μη διαθέσιμοι ή ασυγχρόνιστοι.</string>
 	<string id="30082">Σε αυτή τη περίπτωση χρησιμοποιήστε τους δικούς σας.</string>
@@ -113,10 +114,10 @@
 	<string id="30504">Προσθήκες</string>
 	<string id="30505">Αξιολόγηση</string>
 	<string id="30506">Προβολές</string>
-	<string id="30507">Σελίδες</string>
-	<string id="30508">Είδη</string>
-	<string id="30509">Έτη</string>
-	<string id="30510">Γλώσσες</string>
-	<string id="30511">Αγαπημένα</string>
+	<string id="30507">Είδη</string>
+	<string id="30508">Έτη</string>
+	<string id="30509">Γλώσσες</string>
+	<string id="30510">Αγαπημένα</string>
+	<string id="30511">YIFY</string>
 	<string id="30512">Αναζήτηση</string>
 </strings>

@@ -1,4 +1,16 @@
 ------------------------
+Yify Movies HD v1.4.0 (30-Mar-14)
+------------------------
+
+- Fixed issues with movie listings.
+- Added support for YIFY lists (login required).
+- Added option for importing YIFY lists to library.
+- Removed proxy support (not needed anymore).
+- Removed Pages section.
+- Code cosmetics.
+
+
+------------------------
 Yify Movies HD v1.3.4 (5-Mar-14)
 ------------------------
 

@@ -1406,8 +1406,9 @@ class seasons:
                 result = getUrl(link().ororo_sign, post=link().ororo_key, close=False).result
                 result = getUrl(url).result
 
-            seasons = common.parseDOM(result, "ul", attrs = { "id": "season-tabs" })[0]
-            seasons = common.parseDOM(seasons, "li")
+            result = common.parseDOM(result, "ul", attrs = { "id": "season-tabs" })[0]
+            result = re.sub('<li\s.+?>','<li>', result)
+            seasons = common.parseDOM(result, "li")
         except:
             return
 

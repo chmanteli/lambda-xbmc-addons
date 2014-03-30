@@ -9,13 +9,14 @@
 	<string id="30005">Sortare după: An</string>
 	<string id="30006">Sortare după: Data adăugării</string>
 	<string id="30007">Descărcări</string>
-	<string id="30008">Proxy</string>
-	<string id="30009">- Server</string>
-	<string id="30010">- Port</string>
-	<string id="30011">Redare de la ultima poziție</string>
+	<string id="30008">Redare de la ultima poziție</string>
 	<string id="30040">Mediatecă</string>
 	<string id="30041">Nu uita să adaugi directorul la Surse Media</string>
 	<string id="30042">Director filme</string>
+	<string id="30060">Conturi</string>
+	<string id="30061">Utilizator</string>
+	<string id="30062">Parola</string>
+	<string id="30063">Email</string>
 	<string id="30080">Subtitrări</string>
 	<string id="30081">Subtitrările pot fi indisponibile sau desincronizate</string>
 	<string id="30082">În acest caz poți utiliza propriile subtitrări</string>
@@ -113,10 +114,10 @@
 	<string id="30504">Data adăugării</string>
 	<string id="30505">Scor</string>
 	<string id="30506">Vizualizări</string>
-	<string id="30507">Pagini</string>
-	<string id="30508">Genuri</string>
-	<string id="30509">Ani</string>
-	<string id="30510">Limbi</string>
-	<string id="30511">Favorite</string>
+	<string id="30507">Genuri</string>
+	<string id="30508">Ani</string>
+	<string id="30509">Limbi</string>
+	<string id="30510">Favorite</string>
+	<string id="30511">YIFY</string>
 	<string id="30512">Caută</string>
 </strings>

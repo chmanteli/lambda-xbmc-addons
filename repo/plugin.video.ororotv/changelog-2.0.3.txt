@@ -1,4 +1,12 @@
 ------------------------
+Ororo TV v2.0.3 (30-Mar-14)
+------------------------
+
+- Fixed issues with season listings.
+- Code cosmetics.
+
+
+------------------------
 Ororo TV v2.0.2 (5-Mar-14)
 ------------------------
 

@@ -1,4 +1,14 @@
 ------------------------
+Viooz v1.2.0 (30-Mar-14)
+------------------------
+
+- Re-work of HD Movies section.
+- Added proxy support (UK users).
+- Added search by actor.
+- Code cosmetics.
+
+
+------------------------
 Viooz v1.1.6 (5-Mar-14)
 ------------------------
 

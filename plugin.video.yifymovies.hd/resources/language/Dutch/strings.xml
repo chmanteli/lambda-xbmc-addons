@@ -9,13 +9,14 @@
 	<string id="30005">Sorteren op: Jaar</string>
 	<string id="30006">Sorteren op: Toegevoegd</string>
 	<string id="30007">Downloads</string>
-	<string id="30008">Proxy</string>
-	<string id="30009">- Server</string>
-	<string id="30010">- Poort</string>
-	<string id="30011">Afspelen hervatten</string>
+	<string id="30008">Afspelen hervatten</string>
 	<string id="30040">Bibliotheek</string>
 	<string id="30041">Vergeet deze bron niet toe te voegen aan je bibliotheek.</string>
 	<string id="30042">Film map</string>
+	<string id="30060">Accounts</string>
+	<string id="30061">Gebruikersnaam</string>
+	<string id="30062">Wachtwoord</string>
+	<string id="30063">E-mail</string>
 	<string id="30080">Ondertiteling</string>
 	<string id="30081">Ondertiteling kan niet beschikbaar zijn of niet synchroon lopen.</string>
 	<string id="30082">In dat geval moet je je eigen ondertitels gebruiken.</string>
@@ -113,10 +114,10 @@
 	<string id="30504">Datum toegevoegd</string>
 	<string id="30505">Waardering</string>
 	<string id="30506">Bekeken</string>
-	<string id="30507">Pagina's</string>
-	<string id="30508">Genres</string>
-	<string id="30509">Years</string>
-	<string id="30510">Talen</string>
-	<string id="30511">Favorieten</string>
+	<string id="30507">Genres</string>
+	<string id="30508">Years</string>
+	<string id="30509">Talen</string>
+	<string id="30510">Favorieten</string>
+	<string id="30511">YIFY</string>
 	<string id="30512">Zoeken</string>
 </strings>
