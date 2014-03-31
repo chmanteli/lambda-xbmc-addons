@@ -458,8 +458,7 @@ class contextMenu:
             path = urllib.quote_plus(path).replace('+%26+', '+&+')
             query = path.split('%3F', 1)[-1].split('%26')
             for i in query: params[urllib.unquote_plus(i).split('=')[0]] = urllib.unquote_plus(i).split('=')[1]
-            sysurl = urllib.quote_plus(params["url"])
-            u = '%s?action=play&url=%s' % (sys.argv[0], sysurl)
+            u = '%s?action=play&url=%s' % (sys.argv[0], params["url"])
 
             meta = {'title': xbmc.getInfoLabel('ListItemNoWrap(%s).title' % i), 'tvshowtitle': xbmc.getInfoLabel('ListItemNoWrap(%s).tvshowtitle' % i), 'season': xbmc.getInfoLabel('ListItemNoWrap(%s).season' % i), 'episode': xbmc.getInfoLabel('ListItemNoWrap(%s).episode' % i), 'writer': xbmc.getInfoLabel('ListItemNoWrap(%s).writer' % i), 'director': xbmc.getInfoLabel('ListItemNoWrap(%s).director' % i), 'rating': xbmc.getInfoLabel('ListItemNoWrap(%s).rating' % i), 'duration': xbmc.getInfoLabel('ListItemNoWrap(%s).duration' % i), 'premiered': xbmc.getInfoLabel('ListItemNoWrap(%s).premiered' % i), 'plot': xbmc.getInfoLabel('ListItemNoWrap(%s).plot' % i)}
             poster, fanart = xbmc.getInfoLabel('ListItemNoWrap(%s).icon' % i), xbmc.getInfoLabel('ListItemNoWrap(%s).Property(Fanart_Image)' % i)
@@ -954,7 +953,7 @@ class ant1:
                 id = id['feed']['show']['videolib']
                 if url.endswith('sid=223077'): id = '3110'#EUROPA LEAGUE
                 elif url.endswith('sid=318756'): id = '3246'#ока тяека
-                elif url.endswith('sid=314594'): id = '4541'#THE VOICE
+                elif url.endswith('sid=314594'): id = '4542'#THE VOICE
             elif url.startswith(self.episodes_link2):
                 id = ''
 

@@ -1,4 +1,13 @@
 ------------------------
+Hellenic Player v2.0.2 (31-Mar-14)
+------------------------
+
+- Tweaked ANT1 show listings.
+- Fixed "play from here".
+- Code cosmetics.
+
+
+------------------------
 Hellenic Player v2.0.1 (20-Mar-14)
 ------------------------
 

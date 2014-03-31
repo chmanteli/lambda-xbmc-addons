@@ -775,8 +775,8 @@ class contextMenu:
             path = urllib.quote_plus(path).replace('+%26+', '+&+')
             query = path.split('%3F', 1)[-1].split('%26')
             for i in query: params[urllib.unquote_plus(i).split('=')[0]] = urllib.unquote_plus(i).split('=')[1]
-            sysname, sysurl, sysimdb, sysyear = urllib.quote_plus(params["name"]), urllib.quote_plus(params["url"]), urllib.quote_plus(params["imdb"]), urllib.quote_plus(params["year"])
-            u = '%s?action=play&name=%s&url=%s&imdb=%s&year=%s' % (sys.argv[0], sysname, sysurl, sysimdb, sysyear)
+            sysname = urllib.quote_plus(params["name"])
+            u = '%s?action=play&name=%s&url=%s&imdb=%s&year=%s' % (sys.argv[0], sysname, params["url"], params["imdb"], params["year"])
 
             meta = {'title': xbmc.getInfoLabel('ListItemNoWrap(%s).title' % i), 'tvshowtitle': xbmc.getInfoLabel('ListItemNoWrap(%s).tvshowtitle' % i), 'season': xbmc.getInfoLabel('ListItemNoWrap(%s).season' % i), 'episode': xbmc.getInfoLabel('ListItemNoWrap(%s).episode' % i), 'writer': xbmc.getInfoLabel('ListItemNoWrap(%s).writer' % i), 'director': xbmc.getInfoLabel('ListItemNoWrap(%s).director' % i), 'rating': xbmc.getInfoLabel('ListItemNoWrap(%s).rating' % i), 'duration': xbmc.getInfoLabel('ListItemNoWrap(%s).duration' % i), 'premiered': xbmc.getInfoLabel('ListItemNoWrap(%s).premiered' % i), 'plot': xbmc.getInfoLabel('ListItemNoWrap(%s).plot' % i)}
             poster, fanart = xbmc.getInfoLabel('ListItemNoWrap(%s).icon' % i), xbmc.getInfoLabel('ListItemNoWrap(%s).Property(Fanart_Image)' % i)
