@@ -101,7 +101,7 @@
 		<channel active="True">
 			<name>MEGA CYPRUS</name>
 			<type>hls</type>
-			<url>http://livenews.istoikona.net/livenews.isml/manifest(format=m3u8-aapl).m3u8</url>
+			<url>http://mlivenews.istoikona.net/livenews.isml/manifest(format=m3u8-aapl).m3u8</url>
 			<base>http://www.livenews.com.cy/cgibin/hweb?-A=5&amp;-V=livestreaming</base>
 			<epg>30521</epg>
 		</channel>
