@@ -1265,8 +1265,6 @@ class resolver:
 
             referer = 'http://g2g.fm/'
             result = getUrl(google, referer=referer).result
-            result = common.parseDOM(result, "iframe", ret="src")[0]
-            result = getUrl(result, referer=referer).result
 
             try:
                 url = re.compile('{file:"(.+?)"').findall(result)
