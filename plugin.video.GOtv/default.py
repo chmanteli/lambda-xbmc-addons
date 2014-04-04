@@ -2156,7 +2156,11 @@ class vkbox:
             url = common.replaceHTMLCodes(url)
             url = url.encode('utf-8')
 
-            result = getUrl(url).result
+            request = urllib2.Request(url,None)
+            request.add_header('User-Agent', 'android-async-http/1.4.1 (http://loopj.com/android-async-http)')
+            response = urllib2.urlopen(request, timeout=10)
+            result = response.read()
+            response.close()
             param = re.findall('"lang":"en","apple":(\d+?),"google":(\d+?),"microsoft":"(.+?)"', result, re.I)
             num = int(match) + int(season) + int(episode)
             url = 'https://vk.com/video_ext.php?oid=%s&id=%s&hash=%s' % (str(int(param[0][0]) + num), str(int(param[0][1]) + num), param[0][2])
