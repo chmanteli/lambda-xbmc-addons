@@ -1,5 +1,13 @@
 ------------------------
-GOtv v1.3.4 (4-Mar-14)
+GOtv v1.3.5 (5-Apr-14)
+------------------------
+
+- Fixed TVonline source.
+- Code cosmetics.
+
+
+------------------------
+GOtv v1.3.4 (4-Apr-14)
 ------------------------
 
 - Fixed VKBox source.

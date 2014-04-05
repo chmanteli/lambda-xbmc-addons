@@ -2126,7 +2126,7 @@ class tvonline:
             next_index = random.randrange(len(keychar))
             key3 = key3 + keychar[next_index]# friday k saturday w sunday z
 
-        url = 'http://dd.tvonline.cc/ip.mp4?key=%s-ltylz%s%s-%s' % (key1, key2, key3, key4)
+        url = 'http://ddd5.tvonline.cc/ip.mp4?key=%s-ltttl%s%s-%s' % (key1, key2, key3, key4)
         return url
 
 class vkbox:
