@@ -2062,7 +2062,6 @@ class tvonline:
     def __init__(self):
         self.tvonline_base = 'http://tvonline.cc'
         self.tvonline_search = 'http://tvonline.cc/searchlist.php'
-        self.tvonline_login = 'http://www.tvonline.cc/reg.php'
 
     def get(self, name, title, imdb, tvdb, year, season, episode, show, show_alt, hostDict):
         try:
@@ -2108,26 +2107,45 @@ class tvonline:
         return title
 
     def resolve(self, url):
-        import random
-        splitkey = url.split('?id=')[-1].split('-')
-        key1 = splitkey[0]
-        key4 = splitkey[1]
-        keychar = "beklm"
-        key_length = 3
-        key2 = ""
-        for i in range(key_length):
-            next_index = random.randrange(len(keychar))
-            key2 = key2 + keychar[next_index]
+        try:
+            self.login_link = 'http://tvonline.cc/login.php'
+            self.reg_link = 'http://tvonline.cc/reg.php'
+            self.key_link = base64.urlsafe_b64decode('X21ldGhvZD1QT1NUJiVzPWxvZ2luJlVzZXJVc2VybmFtZT1hOTQ2ODUxJnN1YnNjcmlwdGlvbnNQYXNzPWE5NDY4NTE=')
+            self.video_link = 'http://tvonline.cc/play.php?id=nktlltn-ekkn'
 
-        keychar = "ntwyz"
-        key_length = 3
-        key3 = ""
-        for i in range(key_length):
-            next_index = random.randrange(len(keychar))
-            key3 = key3 + keychar[next_index]# friday k saturday w sunday z
+            result = getUrl(self.reg_link, close=False).result
+            post = re.compile('name="(Token.+?)" value=".+?"').findall(result)[0]
+            post = self.key_link % post
 
-        url = 'http://ddd5.tvonline.cc/ip.mp4?key=%s-ltttl%s%s-%s' % (key1, key2, key3, key4)
-        return url
+            result = getUrl(self.reg_link, post=post, referer=self.login_link, close=False).result
+            result = getUrl(self.video_link).result
+            result = common.parseDOM(result, "video", ret="src", attrs = { "id": "ipadvideo" })[0]
+            key5 = re.compile('key=\w*-(\w{5})').findall(result)[0]
+            dom = re.compile('//(.+?)[.]').findall(result)[0]
+
+            import random
+            splitkey = url.split('?id=')[-1].split('-')
+            key1 = splitkey[0]
+            key4 = splitkey[1]
+            keychar = "beklm"
+            key_length = 3
+            key2 = ""
+            for i in range(key_length):
+                next_index = random.randrange(len(keychar))
+                key2 = key2 + keychar[next_index]
+
+            keychar = "ntwyz"
+            key_length = 3
+            key3 = ""
+            for i in range(key_length):
+                next_index = random.randrange(len(keychar))
+                key3 = key3 + keychar[next_index]# friday k saturday w sunday z
+
+            url = 'http://%s.tvonline.cc/ip.mp4?key=%s-%s%s%s-%s' % (dom,key1,key5, key2, key3, key4)
+            return url
+        except:
+            return
+
 
 class vkbox:
     def __init__(self):
