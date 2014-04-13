@@ -1,4 +1,29 @@
 ------------------------
+GOmovies v2.0.0 (13-Apr-14)
+------------------------
+
+- Re-work of addon.
+- Added Icefilms source.
+- Added Viooz source.
+- Added Noobroom source (login required).
+- Added full remote share support.
+- Added support for Trakt lists (login required).
+- Added support for movie channels (Sky Movies).
+- Added section for trending movies.
+- Added search by actor.
+- Fixed playback issues.
+- Fixed istreamHD source.
+- Fixed Muchmovies source.
+- Fixed Moviestorm source.
+- Tweaked movie listings.
+- Tweaked IMDb lists.
+- Tweaked filtering of hosts.
+- Tweaked available sources.
+- Tweaked context menus.
+- Code cosmetics.
+
+
+------------------------
 GOmovies v1.3.3 (6-Mar-14)
 ------------------------
 
