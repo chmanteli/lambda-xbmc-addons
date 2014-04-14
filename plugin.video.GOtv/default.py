@@ -2025,7 +2025,7 @@ class watchseries:
             result = getUrl(url).result
             for host in sorted(hostDict.keys()):
                 try:
-                    links = re.compile('<span>%s</span>.+?href="(.+?)"' % hostDict[host]).findall(result)
+                    links = re.compile('<span>%s</span>.+?href="(.+?)"' % host.lower()).findall(result)
                     for url in links:
                         url = '%s%s' % (self.watchseries_base, url)
                         watchseries_sources.append({'source': host, 'quality': 'SD', 'provider': 'Watchseries', 'url': url})
